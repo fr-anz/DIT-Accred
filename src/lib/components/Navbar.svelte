@@ -1,6 +1,14 @@
 <script>
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
-	import { Home, Search, FolderOpen, Users, ShieldCheck, Calendar, FileText } from 'lucide-svelte';
+	import {
+		Home,
+		FileSearchCorner,
+		FolderOpen,
+		Users,
+		ShieldCheck,
+		Calendar,
+		FileText
+	} from 'lucide-svelte';
 </script>
 
 <!-- Navbar container -->
@@ -22,7 +30,7 @@
 		</li>
 		<li>
 			<a href="/">
-				<span class="icon"><Search /></span>
+				<span class="icon"><FileSearchCorner /></span>
 				<span class="label">Research</span>
 			</a>
 		</li>
@@ -92,14 +100,19 @@
 	.title {
 		font-size: 0.85rem;
 		font-weight: 600;
-		color: #d97706;
 		margin: 0;
+
+		background: linear-gradient(to right, #cfa83a 0% 20%, #875f23 30% 70%, #2e0707 100% 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
 	}
 
 	.sub-title {
 		font-size: 0.7rem;
 		font-weight: 500;
-		color: #6b7280;
+		font-style: italic;
+		color: #111111;
 		margin: 0;
 	}
 
