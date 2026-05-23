@@ -91,9 +91,9 @@
 		border-radius: 1rem;
 		flex-direction: row;
 		transition:
-			top 0.35s ease,
-			left 0.35s ease,
-			border-radius 0.35s ease;
+			top 0.1s ease,
+			left 0.1s ease,
+			border-radius 0.1s ease;
 
 		background-color: #ffffff;
 		display: flex;
