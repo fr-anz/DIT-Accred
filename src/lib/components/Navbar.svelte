@@ -34,19 +34,21 @@
 		{ href: '/research', label: 'Research', icon: FileSearch },
 		{ href: '/teaching-learning', label: 'Teaching & Learning', icon: FolderOpen },
 		{ href: '/community', label: 'Community', icon: Users },
-		{ href: '/certification', label: 'Certification', icon: ShieldCheck },
-		{ href: '/planning', label: 'Planning', icon: Calendar },
-		{ href: '/compliance-report', label: 'Compliance Report', icon: FileText }
+		{ href: '/internationalization', label: 'Internationalization', icon: ShieldCheck },
+		{ href: '/planning', label: 'Planning and Quality Assurance', icon: Calendar },
+		{ href: '/compliance', label: 'Compliance', icon: FileText }
 	];
 </script>
 
 <svelte:window onkeydown={(e) => e.key === 'Escape' && (showNavbar = false)} />
 
-<button class="compact-pill" onclick={() => (showNavbar = true)} aria-label="Open menu">
-	<img class="logo" src={ditLogo} alt="DIT Logo" />
-	<span class="pill-label">Department of Information Technology</span>
-	<Menu size={18} strokeWidth={1.5} />
-</button>
+{#if !showNavbar}
+	<button class="compact-pill" onclick={() => (showNavbar = true)} aria-label="Open menu">
+		<img class="logo" src={ditLogo} alt="DIT Logo" />
+		<span class="pill-label">Department of Information Technology</span>
+		<Menu size={18} strokeWidth={1.5} />
+	</button>
+{/if}
 
 {#if showNavbar}
 	<div
