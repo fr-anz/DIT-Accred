@@ -1,196 +1,266 @@
 <script>
 	import { page } from '$app/stores';
+	import { fade } from 'svelte/transition';
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
 	import {
 		Home,
-		FileSearchCorner,
+		FileSearch,
 		FolderOpen,
 		Users,
 		ShieldCheck,
 		Calendar,
 		FileText,
-		PanelLeft
+		Menu,
+		X
 	} from 'lucide-svelte';
 
 	let showNavbar = $state(false);
+
+	function slideDownAndUp(node, { duration = 600 }) {
+		return {
+			duration,
+			css: (t) => {
+				const y = (1 - t) * -100;
+				return `
+					transform: translateY(${y}%);
+					opacity: ${t};
+				`;
+			}
+		};
+	}
+
+	const navItems = [
+		{ href: '/', label: 'Home', icon: Home },
+		{ href: '/research', label: 'Research', icon: FileSearch },
+		{ href: '/teaching-learning', label: 'Teaching & Learning', icon: FolderOpen },
+		{ href: '/community', label: 'Community', icon: Users },
+		{ href: '/certification', label: 'Certification', icon: ShieldCheck },
+		{ href: '/planning', label: 'Planning', icon: Calendar },
+		{ href: '/compliance-report', label: 'Compliance Report', icon: FileText }
+	];
 </script>
 
-<!-- Navbar container -->
-<nav class="side-navbar" class:showNavbar>
-	<div class="navbar-header">
-		<img class="logo" src={ditLogo} alt="DIT Logo" />
-		<div class="header-text">
-			<p class="title">Department of Information Technology</p>
-			<p class="sub-title">College of Computer and Information Sciences</p>
+<svelte:window onkeydown={(e) => e.key === 'Escape' && (showNavbar = false)} />
+
+<button class="compact-pill" onclick={() => (showNavbar = true)} aria-label="Open menu">
+	<img class="logo" src={ditLogo} alt="DIT Logo" />
+	<span class="pill-label">Department of Information Technology</span>
+	<Menu size={18} strokeWidth={1.5} />
+</button>
+
+{#if showNavbar}
+	<div
+		class="overlay-backdrop"
+		onclick={() => (showNavbar = false)}
+		transition:fade={{ duration: 200 }}
+	></div>
+
+	<nav
+		class="fullscreen-nav"
+		aria-label="Main navigation"
+		transition:slideDownAndUp={{ duration: 300 }}
+	>
+		<div class="nav-header">
+			<div class="brand">
+				<img class="logo" src={ditLogo} alt="DIT Logo" />
+				<div class="header-text">
+					<p class="title">Department of Information Technology</p>
+					<p class="sub-title">College of Computer and Information Sciences</p>
+				</div>
+			</div>
+
+			<button class="close-btn" onclick={() => (showNavbar = false)} aria-label="Close menu">
+				<span>Close</span>
+				<X size={22} strokeWidth={1.5} />
+			</button>
 		</div>
-		<button on:click={() => (showNavbar = !showNavbar)}>
-			{#if showNavbar}
-				<PanelLeft />
-			{:else}
-				<PanelLeft />
-			{/if}
-		</button>
-	</div>
-	<!-- Navbar Items -->
-	{#if showNavbar}
-		<ul class="navbar-items">
-			<li>
-				<a href="/" class:active={$page.url.pathname === '/'}>
-					<span class="icon"><Home /></span>
-					<span class="label">Home</span>
-				</a>
-			</li>
-			<li>
-				<a href="/research" class:active={$page.url.pathname === '/research'}>
-					<span class="icon"><FileSearchCorner /></span>
-					<span class="label">Research</span>
-				</a>
-			</li>
-			<li>
-				<a href="/teaching-learning" class:active={$page.url.pathname === '/teaching-learning'}>
-					<span class="icon"><FolderOpen /></span>
-					<span class="label">Teaching & Learning</span>
-				</a>
-			</li>
-			<li>
-				<a href="/community" class:active={$page.url.pathname === '/community'}>
-					<span class="icon"><Users /></span>
-					<span class="label">Community</span>
-				</a>
-			</li>
-			<li>
-				<a href="/certification" class:active={$page.url.pathname === '/certification'}>
-					<span class="icon"><ShieldCheck /></span>
-					<span class="label">Certification</span>
-				</a>
-			</li>
-			<li>
-				<a href="/planning" class:active={$page.url.pathname === '/planning'}>
-					<span class="icon"><Calendar /></span>
-					<span class="label">Planning</span>
-				</a>
-			</li>
-			<li>
-				<a href="/compliance-report" class:active={$page.url.pathname === '/compliance-report'}>
-					<span class="icon"><FileText /></span>
-					<span class="label">Compliance Report</span>
-				</a>
-			</li>
+
+		<ul class="nav-items">
+			{#each navItems as item, i}
+				<li style="--i: {i};">
+					<a
+						href={item.href}
+						class:active={$page.url.pathname === item.href}
+						onclick={() => (showNavbar = false)}
+					>
+						{item.label}
+					</a>
+				</li>
+			{/each}
 		</ul>
-	{/if}
-</nav>
+	</nav>
+{/if}
 
 <style>
-	/* Navbar Container */
-	.side-navbar {
+	.compact-pill {
 		position: fixed;
-		top: 0.5rem;
-		left: 0.5rem;
-		width: auto;
-		height: auto;
-		border-radius: 1rem;
-		flex-direction: row;
-		transition:
-			top 0.1s ease,
-			left 0.1s ease,
-			border-radius 0.1s ease;
-
-		background-color: #ffffff;
-		display: flex;
+		top: 0.75rem;
+		left: 0.75rem;
 		z-index: 100;
-		box-shadow: 0.5px 0 8px rgba(0, 0, 0, 0.04);
-	}
-
-	.side-navbar.showNavbar {
-		top: 0;
-		left: 0;
-		width: 400px;
-		height: 100vh;
-		flex-direction: column;
-		border-radius: 0;
-		border-left: 1px solid #e5e7eb;
-	}
-
-	.side-navbar.showNavbar .navbar-header {
-		border-bottom: 1px solid #e5e7eb;
-	}
-
-	/*Header*/
-	.navbar-header {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		padding: 1.5rem;
-		border-bottom: none;
-	}
-
-	.navbar-header button {
-		background: none;
+		padding: 0.5rem 1rem;
+		background: #ffffff;
 		border: none;
+		border-radius: 9999px;
+		box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
 		cursor: pointer;
-		margin-left: 0.5rem;
+		transition:
+			box-shadow 0.2s ease,
+			transform 0.2s ease;
 	}
 
-	.header-text {
+	.compact-pill:hover {
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+		transform: translateY(-1px);
+	}
+
+	.compact-pill .logo {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	.pill-label {
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: #111;
+	}
+
+	.overlay-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 999;
+		background: transparent;
+	}
+
+	.fullscreen-nav {
+		position: fixed;
+		inset: 0;
+		z-index: 1000;
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
+		background: rgba(0, 0, 0, 0.9);
+		padding: 2.5rem 3rem;
 	}
 
-	.title {
-		font-size: 0.85rem;
-		font-weight: 600;
-		margin: 0;
-
-		background: linear-gradient(to right, #cfa83a 0% 20%, #875f23 30% 70%, #2e0707 100% 100%);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
+	.nav-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 8vh;
 	}
 
-	.sub-title {
-		font-size: 0.7rem;
-		font-weight: 500;
-		font-style: italic;
-		color: #111111;
-		margin: 0;
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
 	}
 
-	.logo {
+	.brand .logo {
 		width: 48px;
 		height: 48px;
 		border-radius: 50%;
 		object-fit: cover;
 	}
 
-	/* Items */
-
-	.navbar-items {
-		list-style: none;
-		padding: 1rem 0;
-		margin: 1rem;
+	.header-text {
+		display: flex;
+		flex-direction: column;
 	}
 
-	.navbar-items li a {
+	.title {
+		font-size: 0.9rem;
+		font-weight: 600;
+		margin: 0;
+		background: #cfa83a;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.sub-title {
+		font-size: 0.75rem;
+		font-weight: 500;
+		font-style: italic;
+		color: #888;
+		margin: 0;
+	}
+
+	.close-btn {
 		display: flex;
 		align-items: center;
-		gap: 0.875rem;
-		padding: 1rem 1.5rem;
-		color: #374151;
-		text-decoration: none;
-		font-size: 0.95rem;
+		gap: 0.75rem;
+		background: none;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		color: #fff;
+		padding: 0.5rem 1.25rem;
+		border-radius: 9999px;
+		cursor: pointer;
+		font-size: 0.9rem;
 		font-weight: 400;
-		transition: background-color 0.15s;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
-	.navbar-items li a:hover {
-		background-color: #f3f4f6;
+	.close-btn:hover {
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.35);
 	}
 
-	.navbar-items li a.active {
-		background: linear-gradient(to right, #cca539 10% 20%, #825a22 55% 40%, #3d150c 100% 100%);
-		color: #ffffff;
-		border-radius: 15px;
-		font-weight: bold;
+	.nav-items {
+		list-style: none;
+		padding-left: 50px;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.nav-items li {
+		opacity: 0;
+		animation: slideTextIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		animation-delay: calc(0.2s + (var(--i) * 0.07s));
+	}
+
+	.nav-items li a {
+		display: block;
+		color: #fff;
+		text-decoration: none;
+		font-size: clamp(2.5rem, 5vw, 4.5rem);
+		font-weight: 300;
+		line-height: 1.15;
+		padding: 0.25rem 0;
+		transition:
+			color 0.25s ease,
+			transform 0.25s ease,
+			padding-left 0.25s ease;
+		font-family: 'Georgia', 'Times New Roman', serif;
+		letter-spacing: -0.02em;
+	}
+
+	@keyframes slideTextIn {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.nav-items li a:hover {
+		color: #cfa83a;
+		transform: translateX(12px);
+		padding-left: 4px;
+	}
+
+	.nav-items li a.active {
+		color: #cfa83a;
+		font-weight: 400;
 	}
 </style>
