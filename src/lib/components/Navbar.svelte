@@ -4,10 +4,19 @@
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
 	import { Menu, X } from 'lucide-svelte';
 
+	import researchImg from '$lib/assets/nav-images/research.jpeg';
+	import teachingImg from '$lib/assets/nav-images/teaching-learning.jpg';
+	import communityImg from '$lib/assets/nav-images/community.JPG';
+	import intlImg from '$lib/assets/nav-images/internationalization.JPG';
+	import planningImg from '$lib/assets/nav-images/planning.jpeg';
+	import complianceImg from '$lib/assets/nav-images/compliance.jpeg';
+
 	let activeIndex = $state(null);
 	let showNavbar = $state(false);
 
 	let navItemEls = [];
+
+	let activeImage = $derived(navItems[activeIndex]?.image ?? null);
 
 	let dividerHighlight = $derived.by(() => {
 		if (activeIndex === null || !navItemEls[activeIndex]) return null;
@@ -33,10 +42,11 @@
 	}
 
 	const navItems = [
-		{ href: '/', label: 'Home' },
+		{ href: '/', label: 'Home', image: null },
 		{
 			href: '/research',
 			label: 'Research',
+			image: researchImg,
 			subItems: [
 				{ label: 'Policy Framework & Governance Ecosystem', href: '/research#policy' },
 				{ label: 'Key Productivity Metrics & Faculty Engagement', href: '/research#productivity' },
@@ -52,6 +62,7 @@
 		{
 			href: '/teaching-learning',
 			label: 'Teaching & Learning',
+			image: teachingImg,
 			subItems: [
 				{
 					label: 'Program Compliance & Governance Framework',
@@ -79,6 +90,7 @@
 		{
 			href: '/community',
 			label: 'Community',
+			image: communityImg,
 			subItems: [
 				{
 					label: 'Community Extension Policy & Strategic Agenda',
@@ -98,6 +110,7 @@
 		{
 			href: '/internationalization',
 			label: 'Internationalization',
+			image: intlImg,
 			subItems: [
 				{
 					label: 'Internationalization of Research Engagement',
@@ -112,12 +125,14 @@
 		{
 			href: '/planning',
 			label: 'Planning and Quality Assurance',
+			image: planningImg,
 			description:
 				"The Planning and Quality Assurance Page serves as a dedicated portal highlighting the institution's commitment to international excellence, curricular rigor, and strategic growth."
 		},
 		{
 			href: '/compliance',
 			label: 'Compliance',
+			image: complianceImg,
 			subItems: [
 				{
 					label: 'Quality Assurance & Institutional Accreditations',
@@ -150,8 +165,10 @@
 
 	<nav
 		class="fullscreen-nav"
+		class:has-image={activeImage !== null}
 		aria-label="Main navigation"
 		transition:slideDownAndUp={{ duration: 300 }}
+		style:background-image={activeImage ? `url('${activeImage}')` : undefined}
 	>
 		<div class="nav-header">
 			<div class="brand">
@@ -172,17 +189,26 @@
 			<ul class="nav-items">
 				{#each navItems as item, i (item.href)}
 					<li style="--i: {i};" bind:this={navItemEls[i]}>
-						<button
+						<a
+							href={item.href}
 							class="nav-btn"
 							class:active={activeIndex === i}
-							onclick={() => (activeIndex = activeIndex === i ? null : i)}
+							onclick={(e) => {
+								if (item.subItems?.length) {
+									e.preventDefault();
+									activeIndex = activeIndex === i ? null : i;
+								} else {
+									showNavbar = false;
+									activeIndex = null;
+								}
+							}}
 						>
 							{item.label}
-						</button>
+						</a>
 					</li>
 				{/each}
 			</ul>
-			<div class="panel-divider">
+			<div class="panel-divider" class:hidden={activeIndex === null}>
 				{#if dividerHighlight !== null}
 					<div class="divider-index" style="top: {dividerHighlight}px;"></div>
 				{/if}
@@ -272,8 +298,25 @@
 		z-index: 1000;
 		display: flex;
 		flex-direction: column;
-		background: rgba(0, 0, 0, 0.9);
+		background: rgba(0, 0, 0, 0.7);
 		padding: 2.5rem 3rem;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
+	.fullscreen-nav::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.7);
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.fullscreen-nav > * {
+		position: relative;
+		z-index: 1;
 	}
 
 	.nav-header {
@@ -387,14 +430,22 @@
 	}
 
 	.nav-btn:hover {
-		color: #cfa83a;
+		color: transparent;
+		background-image: linear-gradient(to right, #cfa83a 25%, #d9d9d9 100%);
 		transform: translateX(12px);
 		padding-left: 4px;
+
+		-webkit-background-clip: text;
+		background-clip: text;
 	}
 
 	.nav-btn.active {
-		color: #cfa83a;
+		color: transparent;
+		background-image: linear-gradient(to right, #cfa83a 25%, #d9d9d9 100%);
 		font-weight: 400;
+
+		-webkit-background-clip: text;
+		background-clip: text;
 	}
 
 	@keyframes slideTextIn {
@@ -413,6 +464,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		height: 100%;
+		max-height: 63vh;
 	}
 
 	.sub-items {
@@ -422,19 +475,25 @@
 
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 2rem;
+		justify-content: center;
 
-		width: min(600px, 90%);
+		width: min(650px, 100%);
+		height: 100%;
+		max-height: 63vh;
+		overflow-y: auto;
 	}
 
 	.sub-items a {
 		display: block;
 		padding: 0.6rem 1.25rem;
-		border: 1px solid rgba(255, 255, 255, 0.25);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		background-color: rgba(255, 255, 255, 0.1);
 		border-radius: 8px;
 		text-decoration: none;
-		color: rgba(255, 255, 255, 0.85);
-		font-size: clamp(1rem, 1.2vw, 1.1rem);
+		color: rgba(217, 217, 217, 1);
+		font-size: clamp(1rem, 1.2vw, 1.2em);
+		font-weight: 700;
 		transition:
 			background 0.2s ease,
 			border-color 0.2s ease,
@@ -448,9 +507,8 @@
 	}
 
 	.sub-items a.active {
-		background: rgba(207, 168, 58, 0.15);
-		border-color: #cfa83a;
-		color: #cfa83a;
+		background: rgba(255, 255, 255, 0.8);
+		color: #875f23;
 		font-weight: 600;
 	}
 
@@ -468,18 +526,23 @@
 
 	.panel-divider {
 		position: relative;
-		width: 1px;
+		width: 5px;
 		background: rgba(255, 255, 255, 0.15);
 		align-self: stretch;
+		max-height: 63vh;
+	}
+
+	.panel-divider.hidden {
+		visibility: hidden;
 	}
 
 	.divider-index {
 		position: absolute;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 1px;
+		width: 5px;
 		height: 80px;
-		background: #cfa83a;
+		background: linear-gradient(to top, #ffe59f 30%, #fffefc 100%);
 		border-radius: 9999px;
 		transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
