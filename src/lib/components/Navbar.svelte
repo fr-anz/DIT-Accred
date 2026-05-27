@@ -2,18 +2,9 @@
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
-	import {
-		Home,
-		FileSearch,
-		FolderOpen,
-		Users,
-		ShieldCheck,
-		Calendar,
-		FileText,
-		Menu,
-		X
-	} from 'lucide-svelte';
+	import { Menu, X } from 'lucide-svelte';
 
+	let activeIndex = $state(null);
 	let showNavbar = $state(false);
 
 	function slideDownAndUp(node, { duration = 600 }) {
@@ -30,13 +21,80 @@
 	}
 
 	const navItems = [
-		{ href: '/', label: 'Home', icon: Home },
-		{ href: '/research', label: 'Research', icon: FileSearch },
-		{ href: '/teaching-learning', label: 'Teaching & Learning', icon: FolderOpen },
-		{ href: '/community', label: 'Community', icon: Users },
-		{ href: '/internationalization', label: 'Internationalization', icon: ShieldCheck },
-		{ href: '/planning', label: 'Planning and Quality Assurance', icon: Calendar },
-		{ href: '/compliance', label: 'Compliance', icon: FileText }
+		{ href: '/', label: 'Home' },
+		{
+			href: '/research',
+			label: 'Research',
+			subItems: [
+				{ label: 'Criterion 2: Culture of Research and Creativity', href: '#criterion' },
+				{ label: 'Policy Framework & Governance Ecosystem', href: '#policy' },
+				{ label: 'Key Productivity Metrics & Faculty Engagement', href: '#productivity' },
+				{ label: 'Completed Research Repository', href: '#research-repository' },
+				{ label: 'Published & Indexed Research Directory', href: '#published-research' },
+				{
+					label: 'Competitive Research Distinctions & International Awards',
+					href: '#research-awards'
+				},
+				{ label: 'Strategic Future Research Development Blueprint', href: '#rd-blueprint' }
+			]
+		},
+		{
+			href: '/teaching-learning',
+			label: 'Teaching & Learning',
+			subItems: [
+				{ label: 'Program Compliance & Governance Framework', href: '#program-compliance' },
+				{
+					label: 'Curriculum Architecture & Instruction Delivery',
+					href: '#curriculum-architecture'
+				},
+				{ label: 'Academic Staff & Faculty Profiles', href: '#staff-faculty-profile' },
+				{ label: 'Student Outcomes', href: '#student-outcomes' },
+				{ label: 'Learner & Graduates Quality Assessment', href: '#learner-graduate-qa' },
+				{ label: 'External Program Quality Assurance Badges', href: '#external-program-qa' }
+			]
+		},
+		{
+			href: '/community',
+			label: 'Community',
+			subItems: [
+				{
+					label: 'Community Extension Policy & Strategic Agenda',
+					href: '#community-extension-agenda'
+				},
+				{
+					label: 'Master Registry of Completed & Ongoing Extension Projects',
+					href: '#registry-of-projects'
+				},
+				{ label: 'Deep-Dive Profiles of Featured Extensions', href: '#profiles-extensions' },
+				{ label: 'The PUP iVote++ System', href: '#vote-system' }
+			]
+		},
+		{
+			href: '/internationalization',
+			label: 'Internationalization',
+			subItems: [
+				{ label: 'Internationalization of Research Engagement', href: '#research-engagement' },
+				{
+					label: 'Internationalization of the Student Learning Experience',
+					href: '#internationalization-experience'
+				}
+			]
+		},
+		{
+			href: '/planning',
+			label: 'Planning and Quality Assurance',
+			description:
+				"The Planning and Quality Assurance Page serves as a dedicated portal highlighting the institution's commitment to international excellence, curricular rigor, and strategic growth."
+		},
+		{
+			href: '/compliance',
+			label: 'Compliance',
+			subItems: [
+				{ label: 'Quality Assurance & Institutional Accreditations', href: '#qa-accreditations' },
+				{ label: 'Core Operational Pillars', href: '#core-pillars' },
+				{ label: 'Quality Management Systems (ISO 9001:2015)', href: '#qms' }
+			]
+		}
 	];
 </script>
 
@@ -51,11 +109,12 @@
 {/if}
 
 {#if showNavbar}
-	<div
+	<button
 		class="overlay-backdrop"
 		onclick={() => (showNavbar = false)}
 		transition:fade={{ duration: 200 }}
-	></div>
+		aria-label="Close menu"
+	></button>
 
 	<nav
 		class="fullscreen-nav"
@@ -70,26 +129,56 @@
 					<p class="sub-title">College of Computer and Information Sciences</p>
 				</div>
 			</div>
-
 			<button class="close-btn" onclick={() => (showNavbar = false)} aria-label="Close menu">
 				<span>Close</span>
 				<X size={22} strokeWidth={1.5} />
 			</button>
 		</div>
 
-		<ul class="nav-items">
-			{#each navItems as item, i}
-				<li style="--i: {i};">
-					<a
-						href={item.href}
-						class:active={$page.url.pathname === item.href}
-						onclick={() => (showNavbar = false)}
-					>
-						{item.label}
-					</a>
-				</li>
-			{/each}
-		</ul>
+		<div class="nav-body">
+			<!-- Left panel -->
+			<ul class="nav-items">
+				{#each navItems as item, i (item.href)}
+					<li style="--i: {i};">
+						<button
+							class="nav-btn"
+							class:active={activeIndex === i}
+							onclick={() => (activeIndex = activeIndex === i ? null : i)}
+						>
+							{item.label}
+						</button>
+					</li>
+				{/each}
+			</ul>
+			<div class="panel-divider"></div>
+			<!-- Right panel -->
+			{#if activeIndex !== null}
+				<div class="nav-right">
+					{#if navItems[activeIndex].subItems?.length}
+						<ul class="sub-items">
+							{#each navItems[activeIndex].subItems as sub (sub.href)}
+								<li>
+									<a
+										href={sub.href}
+										class:active={$page.url.hash === sub.href}
+										onclick={() => {
+											showNavbar = false;
+											activeIndex = null;
+										}}
+									>
+										{sub.label}
+									</a>
+								</li>
+							{/each}
+						</ul>
+					{:else if navItems[activeIndex].description}
+						<div class="nav-description">
+							<p>{navItems[activeIndex].description}</p>
+						</div>
+					{/if}
+				</div>
+			{/if}
+		</div>
 	</nav>
 {/if}
 
@@ -136,6 +225,9 @@
 		inset: 0;
 		z-index: 999;
 		background: transparent;
+		border: none;
+		cursor: pointer;
+		padding: 0;
 	}
 
 	.fullscreen-nav {
@@ -196,7 +288,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		background: none;
-		border: 1px solid rgba(255, 255, 255, 0.2);
+
 		color: #fff;
 		padding: 0.5rem 1.25rem;
 		border-radius: 9999px;
@@ -213,6 +305,16 @@
 		border-color: rgba(255, 255, 255, 0.35);
 	}
 
+	/* Two-panel body */
+	.nav-body {
+		display: flex;
+		flex-direction: row;
+		flex: 1;
+		gap: 4rem;
+		overflow: hidden;
+	}
+
+	/* Left panel */
 	.nav-items {
 		list-style: none;
 		padding-left: 50px;
@@ -220,6 +322,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+		min-width: max-content;
 	}
 
 	.nav-items li {
@@ -228,7 +331,11 @@
 		animation-delay: calc(0.2s + (var(--i) * 0.07s));
 	}
 
-	.nav-items li a {
+	.nav-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		text-align: left;
 		display: block;
 		color: #fff;
 		text-decoration: none;
@@ -244,6 +351,17 @@
 		letter-spacing: -0.02em;
 	}
 
+	.nav-btn:hover {
+		color: #cfa83a;
+		transform: translateX(12px);
+		padding-left: 4px;
+	}
+
+	.nav-btn.active {
+		color: #cfa83a;
+		font-weight: 400;
+	}
+
 	@keyframes slideTextIn {
 		from {
 			opacity: 0;
@@ -255,14 +373,67 @@
 		}
 	}
 
-	.nav-items li a:hover {
-		color: #cfa83a;
-		transform: translateX(12px);
-		padding-left: 4px;
+	/* Right panel */
+	.nav-right {
+		flex: 1;
+		display: flex;
+		align-items: flex-start;
+		padding-top: 0.5rem;
+		overflow-y: auto;
 	}
 
-	.nav-items li a.active {
+	.sub-items {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		width: 100%;
+	}
+
+	.sub-items a {
+		display: block;
+		padding: 0.6rem 1.25rem;
+		border: 1px solid rgba(255, 255, 255, 0.25);
+		border-radius: 8px;
+		text-decoration: none;
+		color: rgba(255, 255, 255, 0.85);
+		font-size: 0.95rem;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.sub-items a:hover {
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.4);
+		color: #fff;
+	}
+
+	.sub-items a.active {
+		background: rgba(207, 168, 58, 0.15);
+		border-color: #cfa83a;
 		color: #cfa83a;
-		font-weight: 400;
+		font-weight: 600;
+	}
+
+	.nav-description {
+		padding: 1rem 0;
+	}
+
+	.nav-description p {
+		color: rgba(255, 255, 255, 0.6);
+		font-size: 1rem;
+		line-height: 1.7;
+		max-width: 420px;
+		font-style: italic;
+	}
+
+	.panel-divider {
+		width: 1px;
+		background: rgba(255, 255, 255, 0.15);
+		align-self: stretch;
 	}
 </style>
