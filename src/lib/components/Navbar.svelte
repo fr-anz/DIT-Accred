@@ -7,6 +7,18 @@
 	let activeIndex = $state(null);
 	let showNavbar = $state(false);
 
+	let navItemEls = [];
+
+	let dividerHighlight = $derived.by(() => {
+		if (activeIndex === null || !navItemEls[activeIndex]) return null;
+		const el = navItemEls[activeIndex];
+		const parent = el.closest('.nav-body');
+		if (!parent) return null;
+		const elRect = el.getBoundingClientRect();
+		const parentRect = parent.getBoundingClientRect();
+		return elRect.top - parentRect.top + elRect.height / 2;
+	});
+
 	function slideDownAndUp(node, { duration = 600 }) {
 		return {
 			duration,
@@ -26,31 +38,42 @@
 			href: '/research',
 			label: 'Research',
 			subItems: [
-				{ label: 'Criterion 2: Culture of Research and Creativity', href: '#criterion' },
-				{ label: 'Policy Framework & Governance Ecosystem', href: '#policy' },
-				{ label: 'Key Productivity Metrics & Faculty Engagement', href: '#productivity' },
-				{ label: 'Completed Research Repository', href: '#research-repository' },
-				{ label: 'Published & Indexed Research Directory', href: '#published-research' },
+				{ label: 'Policy Framework & Governance Ecosystem', href: '/research#policy' },
+				{ label: 'Key Productivity Metrics & Faculty Engagement', href: '/research#productivity' },
+				{ label: 'Completed Research Repository', href: '/research#research-repository' },
+				{ label: 'Published & Indexed Research Directory', href: '/research#published-research' },
 				{
 					label: 'Competitive Research Distinctions & International Awards',
-					href: '#research-awards'
+					href: '/research#research-awards'
 				},
-				{ label: 'Strategic Future Research Development Blueprint', href: '#rd-blueprint' }
+				{ label: 'Strategic Future Research Development Blueprint', href: '/research#rd-blueprint' }
 			]
 		},
 		{
 			href: '/teaching-learning',
 			label: 'Teaching & Learning',
 			subItems: [
-				{ label: 'Program Compliance & Governance Framework', href: '#program-compliance' },
+				{
+					label: 'Program Compliance & Governance Framework',
+					href: '/teaching-learning#program-compliance'
+				},
 				{
 					label: 'Curriculum Architecture & Instruction Delivery',
-					href: '#curriculum-architecture'
+					href: '/teaching-learning#curriculum-architecture'
 				},
-				{ label: 'Academic Staff & Faculty Profiles', href: '#staff-faculty-profile' },
-				{ label: 'Student Outcomes', href: '#student-outcomes' },
-				{ label: 'Learner & Graduates Quality Assessment', href: '#learner-graduate-qa' },
-				{ label: 'External Program Quality Assurance Badges', href: '#external-program-qa' }
+				{
+					label: 'Academic Staff & Faculty Profiles',
+					href: '/teaching-learning#staff-faculty-profile'
+				},
+				{ label: 'Student Outcomes', href: '/teaching-learning#student-outcomes' },
+				{
+					label: 'Learner & Graduates Quality Assessment',
+					href: '/teaching-learning#learner-graduate-qa'
+				},
+				{
+					label: 'External Program Quality Assurance Badges',
+					href: '/teaching-learning#external-program-qa'
+				}
 			]
 		},
 		{
@@ -59,24 +82,30 @@
 			subItems: [
 				{
 					label: 'Community Extension Policy & Strategic Agenda',
-					href: '#community-extension-agenda'
+					href: '/community#community-extension-agenda'
 				},
 				{
 					label: 'Master Registry of Completed & Ongoing Extension Projects',
-					href: '#registry-of-projects'
+					href: '/community#registry-of-projects'
 				},
-				{ label: 'Deep-Dive Profiles of Featured Extensions', href: '#profiles-extensions' },
-				{ label: 'The PUP iVote++ System', href: '#vote-system' }
+				{
+					label: 'Deep-Dive Profiles of Featured Extensions',
+					href: '/community#profiles-extensions'
+				},
+				{ label: 'The PUP iVote++ System', href: '/community#vote-system' }
 			]
 		},
 		{
 			href: '/internationalization',
 			label: 'Internationalization',
 			subItems: [
-				{ label: 'Internationalization of Research Engagement', href: '#research-engagement' },
+				{
+					label: 'Internationalization of Research Engagement',
+					href: '/internationalization#research-engagement'
+				},
 				{
 					label: 'Internationalization of the Student Learning Experience',
-					href: '#internationalization-experience'
+					href: '/internationalization#internationalization-experience'
 				}
 			]
 		},
@@ -90,9 +119,12 @@
 			href: '/compliance',
 			label: 'Compliance',
 			subItems: [
-				{ label: 'Quality Assurance & Institutional Accreditations', href: '#qa-accreditations' },
-				{ label: 'Core Operational Pillars', href: '#core-pillars' },
-				{ label: 'Quality Management Systems (ISO 9001:2015)', href: '#qms' }
+				{
+					label: 'Quality Assurance & Institutional Accreditations',
+					href: '/compliance#qa-accreditations'
+				},
+				{ label: 'Core Operational Pillars', href: '/compliance#core-pillars' },
+				{ label: 'Quality Management Systems (ISO 9001:2015)', href: '/compliance#qms' }
 			]
 		}
 	];
@@ -139,7 +171,7 @@
 			<!-- Left panel -->
 			<ul class="nav-items">
 				{#each navItems as item, i (item.href)}
-					<li style="--i: {i};">
+					<li style="--i: {i};" bind:this={navItemEls[i]}>
 						<button
 							class="nav-btn"
 							class:active={activeIndex === i}
@@ -150,7 +182,11 @@
 					</li>
 				{/each}
 			</ul>
-			<div class="panel-divider"></div>
+			<div class="panel-divider">
+				{#if dividerHighlight !== null}
+					<div class="divider-index" style="top: {dividerHighlight}px;"></div>
+				{/if}
+			</div>
 			<!-- Right panel -->
 			{#if activeIndex !== null}
 				<div class="nav-right">
@@ -160,7 +196,7 @@
 								<li>
 									<a
 										href={sub.href}
-										class:active={$page.url.hash === sub.href}
+										class:active={$page.url.pathname + $page.url.hash === sub.href}
 										onclick={() => {
 											showNavbar = false;
 											activeIndex = null;
@@ -194,7 +230,7 @@
 		padding: 0.5rem 1rem;
 		background: #ffffff;
 		border: none;
-		border-radius: 9999px;
+		border-radius: 15px;
 		box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
 		cursor: pointer;
 		transition:
@@ -307,13 +343,12 @@
 
 	/* Two-panel body */
 	.nav-body {
-		display: flex;
-		flex-direction: row;
-		flex: 1;
-		gap: 4rem;
+		display: grid;
+		grid-template-columns: 1fr 1px 1fr;
+		height: 100vh;
+		column-gap: 4rem;
 		overflow: hidden;
 	}
-
 	/* Left panel */
 	.nav-items {
 		list-style: none;
@@ -339,7 +374,7 @@
 		display: block;
 		color: #fff;
 		text-decoration: none;
-		font-size: clamp(2.5rem, 5vw, 4.5rem);
+		font-size: clamp(2rem, 4vw, 3.5rem);
 		font-weight: 300;
 		line-height: 1.15;
 		padding: 0.25rem 0;
@@ -375,21 +410,21 @@
 
 	/* Right panel */
 	.nav-right {
-		flex: 1;
 		display: flex;
-		align-items: flex-start;
-		padding-top: 0.5rem;
-		overflow-y: auto;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.sub-items {
 		list-style: none;
 		padding: 0;
 		margin: 0;
+
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-		width: 100%;
+		gap: 1rem;
+
+		width: min(600px, 90%);
 	}
 
 	.sub-items a {
@@ -399,7 +434,7 @@
 		border-radius: 8px;
 		text-decoration: none;
 		color: rgba(255, 255, 255, 0.85);
-		font-size: 0.95rem;
+		font-size: clamp(1rem, 1.2vw, 1.1rem);
 		transition:
 			background 0.2s ease,
 			border-color 0.2s ease,
@@ -425,15 +460,27 @@
 
 	.nav-description p {
 		color: rgba(255, 255, 255, 0.6);
-		font-size: 1rem;
+		font-size: clamp(1rem, 2vw, 2rem);
 		line-height: 1.7;
-		max-width: 420px;
+		max-width: 512px;
 		font-style: italic;
 	}
 
 	.panel-divider {
+		position: relative;
 		width: 1px;
 		background: rgba(255, 255, 255, 0.15);
 		align-self: stretch;
+	}
+
+	.divider-index {
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 1px;
+		height: 80px;
+		background: #cfa83a;
+		border-radius: 9999px;
+		transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 </style>
