@@ -1,6 +1,8 @@
 <script>
 	import { page } from '$app/stores';
+	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
 	import { Menu, X } from 'lucide-svelte';
 
@@ -143,7 +145,21 @@
 			]
 		}
 	];
+
+	onMount(() => {
+		navItems
+			.map(item => item.image)
+			.filter(Boolean)
+			.forEach(src => {
+				const img = new Image();
+				img.src = src;
+			});
+	});
 </script>
+
+<svelte:head>
+	<link rel="preload" as="image" href={researchImg} />
+</svelte:head>
 
 <svelte:window onkeydown={(e) => e.key === 'Escape' && (showNavbar = false)} />
 
@@ -168,8 +184,24 @@
 		class:has-image={activeImage !== null}
 		aria-label="Main navigation"
 		transition:slideDownAndUp={{ duration: 300 }}
-		style:background-image={activeImage ? `url('${activeImage}')` : undefined}
 	>
+		<div class="bg-images">
+			{#each navItems as item}
+				{#if item.image}
+					<div
+						class="bg-image"
+						class:visible={activeImage === item.image}
+						style="background-image: url('{item.image}')"
+					></div>
+				{/if}
+			{/each}
+		</div>
+		{#if activeImage}
+			<div class="bg-overlay-base"></div>
+			<div class="bg-overlay-left"></div>
+			<div class="bg-overlay-bottom"></div>
+		{/if}
+
 		<div class="nav-header">
 			<div class="brand">
 				<img class="logo" src={ditLogo} alt="DIT Logo" />
@@ -190,7 +222,7 @@
 				{#each navItems as item, i (item.href)}
 					<li style="--i: {i};" bind:this={navItemEls[i]}>
 						<a
-							href={item.href}
+							href={resolve(item.href)}
 							class="nav-btn"
 							class:active={activeIndex === i}
 							onclick={(e) => {
@@ -221,7 +253,8 @@
 							{#each navItems[activeIndex].subItems as sub (sub.href)}
 								<li>
 									<a
-										href={sub.href}
+										href={resolve(sub.href)}
+										class="sub-item"
 										class:active={$page.url.pathname + $page.url.hash === sub.href}
 										onclick={() => {
 											showNavbar = false;
@@ -298,23 +331,68 @@
 		z-index: 1000;
 		display: flex;
 		flex-direction: column;
-		background: rgba(0, 0, 0, 0.7);
 		padding: 2.5rem 3rem;
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
+		background: rgba(0, 0, 0, 0.7);
 	}
 
-	.fullscreen-nav::before {
-		content: '';
+	.bg-images {
 		position: absolute;
 		inset: 0;
-		background: rgba(0, 0, 0, 0.7);
 		z-index: 0;
 		pointer-events: none;
 	}
 
-	.fullscreen-nav > * {
+	.bg-image {
+		position: absolute;
+		inset: 0;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		opacity: 0;
+		transition: opacity 0.6s ease;
+	}
+
+	.bg-image.visible {
+		opacity: 1;
+		animation: kenBurns 8s ease-out forwards;
+	}
+
+	@keyframes kenBurns {
+		from {
+			transform: scale(1.08);
+		}
+		to {
+			transform: scale(1);
+		}
+	}
+
+	.bg-overlay-base {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.55);
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.bg-overlay-left {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, transparent 55%);
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.bg-overlay-bottom {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 40%);
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.fullscreen-nav
+		> *:not(.bg-images):not(.bg-overlay-base):not(.bg-overlay-left):not(.bg-overlay-bottom) {
 		position: relative;
 		z-index: 1;
 	}
@@ -431,7 +509,7 @@
 
 	.nav-btn:hover {
 		color: transparent;
-		background-image: linear-gradient(to right, #cfa83a 25%, #d9d9d9 100%);
+		background-image: linear-gradient(to right, #cfa83a 10%, #d9d9d9 80%);
 		transform: translateX(12px);
 		padding-left: 4px;
 
@@ -441,7 +519,7 @@
 
 	.nav-btn.active {
 		color: transparent;
-		background-image: linear-gradient(to right, #cfa83a 25%, #d9d9d9 100%);
+		background-image: linear-gradient(to right, #cfa83a 10%, #d9d9d9 80%);
 		font-weight: 400;
 
 		-webkit-background-clip: text;
@@ -484,7 +562,7 @@
 		overflow-y: auto;
 	}
 
-	.sub-items a {
+	.sub-item {
 		display: block;
 		padding: 0.6rem 1.25rem;
 		border: 1px solid rgba(255, 255, 255, 0.2);
@@ -500,13 +578,13 @@
 			color 0.2s ease;
 	}
 
-	.sub-items a:hover {
+	.sub-item:hover {
 		background: rgba(255, 255, 255, 0.08);
 		border-color: rgba(255, 255, 255, 0.4);
 		color: #fff;
 	}
 
-	.sub-items a.active {
+	.sub-item.active {
 		background: rgba(255, 255, 255, 0.8);
 		color: #875f23;
 		font-weight: 600;
