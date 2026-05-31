@@ -1,65 +1,9 @@
 <script>
 	import Card from '$lib/components/Card.svelte';
 	import { Handshake, GraduationCap, CirclePile } from 'lucide-svelte';
+	import { sections } from '$lib/data/homeData';
 
 	let videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
-
-	const sections = [
-		{
-			id: 'research',
-			image: '$lib/assets/nav-images/research.jpeg',
-			title: 'Research',
-			subtitle: 'Innovating the future.',
-			titleStyle: 'left: 42px; top: 451px; width: 235px; height: 51.82px;',
-			subtitleStyle: 'left: 74px; top: 670px; width: 172px; height: 68px;',
-			imageStyle: 'left: 0px;'
-		},
-		{
-			id: 'teaching-learning',
-			image: '$lib/assets/nav-images/teaching-learning.jpg',
-			title: 'Teaching & Learning',
-			subtitle: 'Knowledge into practice.',
-			titleStyle: 'left: 350px; top: 421px; width: 260px; height: 103.63px;',
-			subtitleStyle: 'left: 383px; top: 669px; width: 194px; height: 75px;',
-			imageStyle: 'left: 320px;'
-		},
-		{
-			id: 'community',
-			image: '$lib/assets/nav-images/community.JPG',
-			title: 'Community',
-			subtitle: 'Technology for everyone.',
-			titleStyle: 'left: 663px; top: 446px; width: 273px; height: 51.82px;',
-			subtitleStyle: 'left: 703px; top: 666px; width: 194px; height: 75px;',
-			imageStyle: 'left: 640px;'
-		},
-		{
-			id: 'internationalization',
-			image: '$lib/assets/nav-images/internationalization.JPG',
-			title: 'Internationalization',
-			subtitle: 'Interlinked global minds.',
-			titleStyle: 'left: 983px; top: 429px; width: 273px; height: 95.99px;',
-			subtitleStyle: 'left: 1023px; top: 666px; width: 194px; height: 75px;',
-			imageStyle: 'left: 960px;'
-		},
-		{
-			id: 'planning',
-			image: '$lib/assets/nav-images/planning.jpeg',
-			title: 'Planning & Quality Assurance',
-			subtitle: 'Excellence by design.',
-			titleStyle: 'left: 1316px; top: 393px; width: 273px; height: 183px;',
-			subtitleStyle: 'left: 1356px; top: 666px; width: 194px; height: 75px;',
-			imageStyle: 'left: 1280px;'
-		},
-		{
-			id: 'compliance',
-			image: '$lib/assets/nav-images/compliance.jpeg',
-			title: 'Compliance',
-			subtitle: 'Standards you trust.',
-			titleStyle: 'left: 1623px; top: 451px; width: 273px; height: 51.82px;',
-			subtitleStyle: 'left: 1663px; top: 666px; width: 194px; height: 75px;',
-			imageStyle: 'left: 1600px;'
-		}
-	];
 </script>
 
 <header class="video-container">
@@ -69,9 +13,9 @@
 <section class="bento-section">
 	<div class="bento-grid">
 		<Card class="bsit-card" variant="maroon" size="md">
-			<h1>BSIT</h1>
-			<h2>Bachelor of Science in Information Technology</h2>
-			<p>
+			<h1 class="bsit-title">BSIT</h1>
+			<h2 class="bsit-subtitle">Bachelor of Science in Information Technology</h2>
+			<p class="bsit-desc">
 				The Bachelor of Science in Information Technology (BSIT) program is a four-year degree
 				program which focuses on the study of computer utilization and computer software to plan,
 				install, customize, operate, manage, administer and maintain information technology
@@ -80,7 +24,7 @@
 		</Card>
 
 		<Card class="innovation-card" variant="dark" size="md">
-			<h2>Innovation. Excellence. Future Ready</h2>
+			<h2 class="innovation-heading">Innovation. Excellence. Future Ready</h2>
 			<div class="highlights">
 				<div class="highlight-item">
 					<div class="highlight-text">
@@ -111,13 +55,15 @@
 				<span class="number">47</span>
 				<span class="text">years</span>
 			</div>
-			<p>of Department’s existence.<br />Coding the <strong>PUP Spirit since 1979</strong></p>
+			<p class="years-desc">
+				of Department's existence.<br />Coding the <strong>PUP Spirit since 1979</strong>
+			</p>
 		</Card>
 
 		<Card class="objectives-card" variant="gold" size="md">
 			<div class="obj-header">
-				<h2>Program Educational Objectives</h2>
-				<p>
+				<h2 class="obj-title">Program Educational Objectives</h2>
+				<p class="obj-intro">
 					Within 3–5 years of graduation, Bachelor of Science in Information Technology graduates
 					are expected to:
 				</p>
@@ -125,15 +71,15 @@
 			<div class="obj-grid">
 				<Card class="obj-subcard" variant="maroon" size="sm">
 					<span class="obj-num">01</span>
-					<h3>Professional IT Practice</h3>
+					<h3 class="obj-heading">Professional IT Practice</h3>
 				</Card>
 				<Card class="obj-subcard" variant="maroon" size="sm">
 					<span class="obj-num">02</span>
-					<h3>Innovation & Ethical Contributions</h3>
+					<h3 class="obj-heading">Innovation & Ethical Contributions</h3>
 				</Card>
 				<Card class="obj-subcard" variant="maroon" size="sm">
 					<span class="obj-num">03</span>
-					<h3>Career Advancement & Lifelong Growth</h3>
+					<h3 class="obj-heading">Career Advancement & Lifelong Growth</h3>
 				</Card>
 			</div>
 		</Card>
@@ -251,23 +197,24 @@
 
 <section class="quick-links">
 	{#each sections as section}
-		<img class="panel-image" style={section.imageStyle} src={section.image} alt={section.title} />
-		<div class="panel-title" style={section.titleStyle}>
-			<span>{section.title}</span>
-		</div>
-		<div class="panel-subtitle" style={section.subtitleStyle}>
-			<span>{section.subtitle}</span>
-		</div>
+		<a href="/{section.id}" class="panel">
+			<img
+				src={section.image}
+				alt={section.title}
+				class="panel-image"
+				loading="lazy"
+				decoding="async"
+			/>
+			<div class="panel-overlay"></div>
+			<div class="panel-content">
+				<h2 class="panel-title">{section.title}</h2>
+				<p class="panel-subtitle">{section.subtitle}</p>
+			</div>
+		</a>
 	{/each}
 </section>
 
 <style>
-	:global(body) {
-		margin: 0;
-		padding: 0;
-		font-family: 'Inter', 'Overpass', sans-serif;
-	}
-
 	.video-container {
 		position: relative;
 		width: 100%;
@@ -330,21 +277,21 @@
 	}
 
 	/* --- Box 1: BSIT --- */
-	:global(.bsit-card) h1 {
+	.bsit-title {
 		font-size: 72px;
 		font-weight: 700;
 		letter-spacing: 4px;
 		margin: 0;
 		margin-top: -50px;
 	}
-	:global(.bsit-card) h2 {
+	.bsit-subtitle {
 		margin: -5px 0 20px 0;
 		font-size: 20px;
 		font-style: italic;
 		color: #cfa83a;
 		font-weight: 600;
 	}
-	:global(.bsit-card) p {
+	.bsit-desc {
 		font-size: 16px;
 		text-align: justify;
 		line-height: 1.6;
@@ -352,7 +299,7 @@
 	}
 
 	/* --- Box 2: Innovation --- */
-	:global(.innovation-card) h2 {
+	.innovation-heading {
 		font-size: 32px;
 		font-weight: 700;
 		margin: 0 0 1.5rem 0;
@@ -404,20 +351,20 @@
 		font-size: 48px;
 		font-style: italic;
 	}
-	:global(.years-card) p {
+	.years-desc {
 		font-size: 18px;
 		margin: 0;
 		line-height: 1.5;
 	}
 
 	/* --- Box 4: Objectives --- */
-	.obj-header h2 {
+	.obj-title {
 		font-size: 32px;
 		font-weight: 700;
 		color: #000;
 		margin: 0 0 10px 0;
 	}
-	.obj-header p {
+	.obj-intro {
 		font-size: 18px;
 		color: #000;
 		margin: 0 0 1.5rem 0;
@@ -434,11 +381,11 @@
 		padding: 1.25rem;
 		min-height: 140px;
 	}
-	:global(.obj-subcard) .obj-num {
+	.obj-num {
 		font-size: 16px;
 		opacity: 0.8;
 	}
-	:global(.obj-subcard) h3 {
+	.obj-heading {
 		font-size: 18px;
 		font-weight: 700;
 		text-align: right;
@@ -744,48 +691,91 @@
 		line-height: 1.3;
 	}
 
-	/* quick links */
 	.quick-links {
-		width: 1920px;
-		height: 1151px;
+		display: flex;
+		width: 100%;
+		height: 480px;
+		overflow: hidden;
+	}
+
+	.panel {
+		flex: 1;
 		position: relative;
+		overflow: hidden;
+		cursor: pointer;
+		text-decoration: none;
+		transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.panel:hover {
+		flex: 2.5;
 	}
 
 	.panel-image {
-		width: 320px;
-		height: 1151px;
-		top: 0px;
 		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		object-fit: cover;
-		/* fallback bg matches original gradient overlay on #941518 */
-		background:
-			linear-gradient(180deg, rgba(102, 102, 102, 0) 0%, rgba(0, 0, 0, 0.5) 100%), #941518;
+		transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		background-color: #941518;
+	}
+
+	.panel:hover .panel-image {
+		transform: scale(1.05);
+	}
+
+	.panel-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(148, 21, 24, 0.55);
+		transition: background 0.3s ease;
+	}
+
+	.panel:hover .panel-overlay {
+		background: rgba(148, 21, 24, 0.35);
+	}
+
+	.panel-content {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		padding: 1.5rem 1rem;
+		gap: 0.5rem;
 	}
 
 	.panel-title {
-		position: absolute;
-		text-align: center;
-	}
-
-	.panel-title span {
 		color: white;
-		font-size: 48px;
+		font-size: clamp(1rem, 1.5vw, 1.5rem);
 		font-family: Overpass, sans-serif;
 		font-weight: 800;
-		word-wrap: break-word;
+		text-align: center;
+		margin: 0;
+		line-height: 1.2;
+		transition: font-size 0.3s ease;
+	}
+
+	.panel:hover .panel-title {
+		font-size: clamp(1.1rem, 1.8vw, 1.75rem);
 	}
 
 	.panel-subtitle {
-		position: absolute;
-		text-align: center;
-	}
-
-	.panel-subtitle span {
-		color: white;
-		font-size: 28px;
+		color: rgba(255, 255, 255, 0.9);
+		font-size: clamp(0.7rem, 0.9vw, 0.95rem);
 		font-family: Inter, sans-serif;
 		font-weight: 400;
-		word-wrap: break-word;
+		text-align: center;
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	.panel:hover .panel-subtitle {
+		opacity: 1;
+		transform: translateY(0);
 	}
 
 	/* media query */
@@ -798,15 +788,14 @@
 		.radial-hub {
 			min-height: 600px;
 		}
-	}
 
-	@media (max-width: 1200px) {
 		:global(.bsit-card),
 		:global(.innovation-card),
 		:global(.years-card),
 		:global(.objectives-card) {
 			grid-column: span 12;
 		}
+
 		.obj-grid {
 			grid-template-columns: 1fr;
 		}
