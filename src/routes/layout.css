@@ -1,3 +1,39 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/* Global body font */
+body {
+	font-family: 'Inter', sans-serif;
+}
+
+/* Hero section headings — Helvetica */
+.hero h1,
+.hero h2,
+.hero h3,
+.hero h4,
+.hero h5,
+.hero h6,
+.video-container h1,
+.video-container h2,
+.video-container h3,
+.video-container h4,
+.video-container h5,
+.video-container h6 {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Subheadings outside hero — Overpass */
+h2,
+h3,
+h4,
+h5,
+h6,
+.subheading {
+	font-family: 'Overpass', sans-serif;
+}
+
+/* H1 outside hero — Overpass for consistency */
+h1 {
+	font-family: 'Overpass', sans-serif;
+}
