@@ -83,6 +83,17 @@
 	</div>
 </section>
 
+<section class="welcome-container">
+	<div class="line"></div>
+
+	<h1 class="welcome-text">
+		WELCOME AACCUP<br />
+		ACCREDITORS
+	</h1>
+
+	<div class="line"></div>
+</section>
+
 <style>
 	:global(body) {
 		margin: 0;
@@ -115,14 +126,13 @@
 		padding: 4rem 2rem;
 		display: flex;
 		justify-content: center;
-		background-color: #f5f5f5;
 	}
 
 	.bento-grid {
 		display: grid;
 		grid-template-columns: repeat(12, 1fr);
-		gap: 1.5rem; /* Scaled down from 2rem */
-		max-width: 1400px; /* Scaled down from 1600px */
+		gap: 1.5rem;
+		max-width: 1400px;
 		width: 100%;
 	}
 
@@ -269,6 +279,40 @@
 		line-height: 1.3;
 	}
 
+	/* Welcome AACUP */
+	.welcome-container {
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 2rem;
+		width: 100%;
+
+		margin: 0 auto;
+		padding: 4rem 2rem;
+		box-sizing: border-box;
+	}
+
+	.line {
+		height: 2px;
+		background-color: #cfa83a;
+		width: 100%;
+	}
+
+	.welcome-text {
+		font-family: 'Overpass', sans-serif;
+		font-weight: 800;
+		text-align: center;
+		line-height: 1.2;
+		margin: 0;
+		font-size: clamp(2rem, 5vw, 72px);
+
+		background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(145, 21, 24, 1) 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		color: transparent;
+	}
+
 	/* media query */
 	@media (max-width: 1200px) {
 		:global(.bsit-card),
@@ -279,6 +323,12 @@
 		}
 		.obj-grid {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.welcome-container {
+			gap: 1rem;
 		}
 	}
 </style>
