@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
@@ -12,36 +12,6 @@
 	import intlImg from '$lib/assets/nav-images/internationalization.JPG';
 	import planningImg from '$lib/assets/nav-images/planning.jpeg';
 	import complianceImg from '$lib/assets/nav-images/compliance.jpeg';
-
-	let activeIndex = $state(null);
-	let showNavbar = $state(false);
-
-	let navItemEls = [];
-
-	let activeImage = $derived(navItems[activeIndex]?.image ?? null);
-
-	let dividerHighlight = $derived.by(() => {
-		if (activeIndex === null || !navItemEls[activeIndex]) return null;
-		const el = navItemEls[activeIndex];
-		const parent = el.closest('.nav-body');
-		if (!parent) return null;
-		const elRect = el.getBoundingClientRect();
-		const parentRect = parent.getBoundingClientRect();
-		return elRect.top - parentRect.top + elRect.height / 2;
-	});
-
-	function slideDownAndUp(node, { duration = 600 }) {
-		return {
-			duration,
-			css: (t) => {
-				const y = (1 - t) * -100;
-				return `
-					transform: translateY(${y}%);
-					opacity: ${t};
-				`;
-			}
-		};
-	}
 
 	const navItems = [
 		{ href: '/', label: 'Home', image: null },
@@ -146,13 +116,43 @@
 		}
 	];
 
+	let activeIndex = $state<number | null>(null);
+	let showNavbar = $state(false);
+
+	let navItemEls: HTMLElement[] = $state([]);
+
+	let activeImage = $derived(activeIndex !== null ? (navItems[activeIndex]?.image ?? null) : null);
+
+	let dividerHighlight = $derived.by(() => {
+		if (activeIndex === null || !navItemEls[activeIndex]) return null;
+		const el = navItemEls[activeIndex];
+		const parent = el.closest('.nav-body');
+		if (!parent) return null;
+		const elRect = el.getBoundingClientRect();
+		const parentRect = parent.getBoundingClientRect();
+		return elRect.top - parentRect.top + elRect.height / 2;
+	});
+
+	function slideDownAndUp(node: HTMLElement, { duration = 600 }: { duration?: number }) {
+		return {
+			duration,
+			css: (t: number) => {
+				const y = (1 - t) * -100;
+				return `
+					transform: translateY(${y}%);
+					opacity: ${t};
+				`;
+			}
+		};
+	}
+
 	onMount(() => {
 		navItems
 			.map(item => item.image)
 			.filter(Boolean)
 			.forEach(src => {
 				const img = new Image();
-				img.src = src;
+				img.src = src as string;
 			});
 	});
 </script>
@@ -222,7 +222,7 @@
 				{#each navItems as item, i (item.href)}
 					<li style="--i: {i};" bind:this={navItemEls[i]}>
 						<a
-							href={resolve(item.href)}
+							href={resolve(item.href as any)}
 							class="nav-btn"
 							class:active={activeIndex === i}
 							onclick={(e) => {
@@ -253,7 +253,7 @@
 							{#each navItems[activeIndex].subItems as sub (sub.href)}
 								<li>
 									<a
-										href={resolve(sub.href)}
+										href={resolve(sub.href as any)}
 										class="sub-item"
 										class:active={$page.url.pathname + $page.url.hash === sub.href}
 										onclick={() => {

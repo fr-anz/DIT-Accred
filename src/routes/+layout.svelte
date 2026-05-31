@@ -2,6 +2,7 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/footer.svelte';
 
 	let { children } = $props();
 </script>
@@ -9,4 +10,9 @@
 <Navbar></Navbar>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
-{@render children()}
+
+<main class="min-h-screen">
+	{@render children()}
+</main>
+
+<Footer />
