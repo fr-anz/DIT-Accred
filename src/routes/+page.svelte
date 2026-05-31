@@ -1,5 +1,6 @@
 <script>
 	import Card from '$lib/components/Card.svelte';
+	import { Handshake, GraduationCap, CirclePile } from 'lucide-svelte';
 
 	let videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
 </script>
@@ -26,18 +27,21 @@
 			<div class="highlights">
 				<div class="highlight-item">
 					<div class="highlight-text">
+						<Handshake></Handshake>
 						<span class="stat">100+</span>
 						<span class="desc">Industry partnerships worldwide</span>
 					</div>
 				</div>
 				<div class="highlight-item">
 					<div class="highlight-text">
+						<GraduationCap></GraduationCap>
 						<span class="stat">95.31%</span>
 						<span class="desc">Graduate employability rate within 12 months</span>
 					</div>
 				</div>
 				<div class="highlight-item">
 					<div class="highlight-text">
+						<CirclePile></CirclePile>
 						<span class="stat">10 Orgs</span>
 						<span class="desc">Student Built Organizations<br />(academic and tech)</span>
 					</div>
@@ -80,24 +84,6 @@
 </section>
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Overpass:ital,wght@0,400;0,700;1,400;1,600&display=swap');
-
-	:global(body) {
-		margin: 0;
-		padding: 0;
-		/* Set Inter as the default text */
-		font-family: 'Inter', sans-serif;
-	}
-
-	/* Force all headings to use Overpass */
-	h1,
-	h2,
-	h3,
-	.number,
-	.stat {
-		font-family: 'Overpass', sans-serif;
-	}
-
 	:global(body) {
 		margin: 0;
 		padding: 0;
