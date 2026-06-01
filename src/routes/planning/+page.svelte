@@ -5,7 +5,7 @@
 		BadgeCheck,
 		SquareCheck,
 		BookOpen,
-		Users,
+		Award,
 		Building2,
 		PenLine,
 		FileText,
@@ -295,7 +295,7 @@
 		<div class="ranking_card qs_card">
 			<div class="qs_header">
 				<div class="qs_logo_row">
-					<Users size={18} strokeWidth={1.5} />
+					<Award size={18} strokeWidth={1.5} class="qs_logo_icon" />
 					<span class="qs_org">QS Stars</span>
 				</div>
 				<div class="qs_stars_row" aria-label="3 out of 5 stars">
@@ -1046,9 +1046,25 @@
 	/* ── RANKINGS SECTION ── */
 	.rankings_grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: repeat(3, 393px); /* 1:1 figma width */
 		gap: 1.5rem;
-		align-items: stretch; /* Stretch columns to equal heights */
+		justify-content: center;
+	}
+
+	@media (max-width: 1240px) {
+		.rankings_grid {
+			grid-template-columns: repeat(2, 1fr);
+			max-width: 900px;
+			margin: 0 auto;
+		}
+	}
+
+	@media (max-width: 680px) {
+		.rankings_grid {
+			grid-template-columns: 1fr;
+			max-width: 420px;
+			margin: 0 auto;
+		}
 	}
 
 	@media (max-width: 900px) {
@@ -1070,13 +1086,20 @@
 		background: #fff;
 		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 		box-sizing: border-box;
+		height: 537px; /* 1:1 figma height on desktop */
+	}
+
+	@media (max-width: 1240px) {
+		.ranking_card {
+			height: auto;
+			min-height: 537px;
+		}
 	}
 
 	/* QS Stars card */
 	.qs_card {
 		display: flex;
 		flex-direction: column;
-		height: 100%;
 		box-sizing: border-box;
 	}
 
@@ -1086,14 +1109,16 @@
 		justify-content: space-between;
 	}
 
-	.qs_logo_row {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+	:global(.qs_logo_icon) {
+		color: #8c0f13;
+		flex-shrink: 0;
+	}
+
+	.qs_org {
 		font-family: var(--font-body);
-		font-size: 0.9rem;
-		font-weight: 700;
-		color: #222;
+		font-size: 0.95rem;
+		font-weight: 800;
+		color: #8c0f13; /* Maroon matching Figma */
 	}
 
 	.qs_stars_row {
@@ -1171,7 +1196,6 @@
 	.wuri_card {
 		display: flex;
 		flex-direction: column;
-		height: 100%;
 		box-sizing: border-box;
 	}
 
@@ -1289,20 +1313,35 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
-		height: 100%;
+		height: 537px;
 		box-sizing: border-box;
+	}
+
+	@media (max-width: 1240px) {
+		.impact_column {
+			height: auto;
+		}
 	}
 
 	.impact_card {
 		/* 3-stop linear gradient from Figma metadata */
-		background: linear-gradient(180deg, #451516 0%, #1A1614 70%, #392E1F 100%);
+		background: linear-gradient(180deg, #451516 0%, #1A1614 65%, #392E1F 100%);
 		border: none;
 		color: #fff;
-		flex: 1; /* Stretch to fill column height, matching WURI and QS Stars card bottom */
+		height: 363px; /* Exact height for math alignment: 363 + 24 (gap) + 150 = 537 */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		box-sizing: border-box;
+		border-radius: 25px;
+		padding: 2rem;
+	}
+
+	@media (max-width: 1240px) {
+		.impact_card {
+			height: auto;
+			min-height: 360px;
+		}
 	}
 
 	.impact_label {
@@ -1435,6 +1474,18 @@
 		flex-direction: column;
 		gap: 0.75rem;
 		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
+		height: 150px; /* Exact height */
+		justify-content: center;
+		box-sizing: border-box;
+		border-radius: 25px;
+	}
+
+	@media (max-width: 1240px) {
+		.aunqa_card {
+			height: auto;
+			min-height: 150px;
+			padding: 2rem;
+		}
 	}
 
 	.aunqa_header {
