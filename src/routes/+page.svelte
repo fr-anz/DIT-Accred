@@ -937,6 +937,7 @@
 		justify-content: flex-end;
 		gap: 40px;
 		margin-top: 60px;
+		flex-wrap: wrap;
 	}
 	.mv-card {
 		background: #ffffff;
@@ -948,13 +949,13 @@
 			-4px 4px 4px rgba(109, 23, 25, 0.5);
 		padding: 40px;
 		box-sizing: border-box;
+		flex: 1 1 auto;
+		max-width: 566px;
+		min-width: 280px;
 	}
-	.mv-container .mv-card:nth-child(1) {
-		width: 566px;
-	} /* Mission width */
 	.mv-container .mv-card:nth-child(2) {
-		width: 357px;
-	} /* Vision width */
+		max-width: 357px;
+	}
 
 	.mv-card h3 {
 		font-family: 'Overpass', sans-serif;
@@ -1501,14 +1502,6 @@
 		.mv-card p {
 			font-size: 18px;
 		}
-		.mv-container .mv-card:nth-child(1) {
-			width: auto;
-			flex: 1.5;
-		}
-		.mv-container .mv-card:nth-child(2) {
-			width: auto;
-			flex: 1;
-		}
 		.stat-number {
 			font-size: 56px;
 		}
@@ -1624,13 +1617,13 @@
 			line-height: 28px;
 		}
 		.mv-container {
-			flex-wrap: wrap;
 			gap: 24px;
 		}
 		.mv-container .mv-card:nth-child(1),
 		.mv-container .mv-card:nth-child(2) {
 			width: 100%;
 			flex: none;
+			max-width: 100%;
 		}
 		.mv-card h3 {
 			font-size: 36px;
