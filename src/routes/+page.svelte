@@ -1467,37 +1467,401 @@
 		color: #ffffff;
 	}
 
-	/* media query */
-	@media (max-width: 1200px) {
-	
+	/* ---- Responsive Breakpoints ---- */
 
-	@media (max-width: 768px) {
-		.welcome-container {
-			gap: 1rem;
+	/* ≥1400px extra-wide — min adjustments */
+	@media (min-width: 1401px) {
+		.qc-visualizer {
+			width: 874px;
+			height: 750px;
 		}
 	}
 
+	/* ≤1400px — shrink large elements */
+	@media (max-width: 1400px) {
+		.about-section {
+			padding: 40px 60px;
+		}
+		.intro-container {
+			gap: 40px;
+		}
+		.intro-image {
+			width: 100%;
+			max-width: 500px;
+			height: auto;
+			aspect-ratio: 634/854;
+		}
+		.intro-text p {
+			font-size: 24px;
+			line-height: 34px;
+		}
+		.mv-card h3 {
+			font-size: 48px;
+		}
+		.mv-card p {
+			font-size: 18px;
+		}
+		.mv-container .mv-card:nth-child(1) {
+			width: auto;
+			flex: 1.5;
+		}
+		.mv-container .mv-card:nth-child(2) {
+			width: auto;
+			flex: 1;
+		}
+		.stat-number {
+			font-size: 56px;
+		}
+		.stat-card {
+			width: 220px;
+		}
+		.goals-title {
+			font-size: 90px;
+		}
+		.goal-card {
+			width: 100%;
+			height: 150px;
+		}
+		.qc-visualizer {
+			width: 740px;
+			height: 650px;
+		}
+	}
+
+	/* ≤1200px — tablets / small desktops */
+	@media (max-width: 1200px) {
+		:global(.bsit-card),
+		:global(.innovation-card),
+		:global(.years-card),
+		:global(.objectives-card) {
+			grid-column: span 12;
+		}
+		.obj-grid {
+			grid-template-columns: 1fr;
+		}
+		.about-section {
+			padding: 30px 40px;
+		}
+		.intro-container {
+			grid-template-columns: 1fr;
+			gap: 30px;
+		}
+		.intro-image {
+			max-width: 400px;
+			margin: 0 auto;
+		}
+		.intro-text p {
+			margin: 0;
+			font-size: 22px;
+			line-height: 32px;
+		}
+		.intro-text {
+			align-items: center;
+		}
+		.intro-text p {
+			text-align: center;
+			max-width: 100%;
+		}
+		.mv-container {
+			justify-content: center;
+		}
+		.stats-banner {
+			flex-wrap: wrap;
+			gap: 30px;
+			padding: 40px 30px;
+		}
+		.stat-card {
+			width: 200px;
+		}
+		.stat-number {
+			font-size: 48px;
+		}
+		.goals-section {
+			flex-direction: column;
+			align-items: center;
+		}
+		.goals-title {
+			font-size: 72px;
+			text-align: center;
+		}
+		.goal-card {
+			width: 100%;
+			height: 140px;
+		}
+		.qc-visualizer {
+			width: 640px;
+			height: 580px;
+			flex-shrink: 0;
+		}
+	}
+
+	/* ≤1024px — tablets */
 	@media (max-width: 1024px) {
 		.leadership-container {
 			grid-template-columns: 1fr;
 		}
-
 		.leader-pane {
 			min-height: 800px;
 			padding: 3rem 2rem;
 		}
-
 		.quote {
 			max-width: 100%;
 		}
-
 		.dustin-img,
 		.melvin-img {
 			left: 50%;
 			transform: translateX(-50%);
 			max-height: 60%;
 		}
+		.about-section {
+			padding: 24px 24px;
+		}
+		.intro-image {
+			max-width: 320px;
+		}
+		.intro-text p {
+			font-size: 20px;
+			line-height: 28px;
+		}
+		.mv-container {
+			flex-wrap: wrap;
+			gap: 24px;
+		}
+		.mv-container .mv-card:nth-child(1),
+		.mv-container .mv-card:nth-child(2) {
+			width: 100%;
+			flex: none;
+		}
+		.mv-card h3 {
+			font-size: 36px;
+		}
+		.mv-card p {
+			font-size: 16px;
+		}
+		.mv-card {
+			padding: 24px;
+		}
+		.stats-banner {
+			gap: 20px;
+			padding: 30px 20px;
+		}
+		.stat-card {
+			width: 160px;
+		}
+		.stat-number {
+			font-size: 40px;
+		}
+		.stat-label {
+			font-size: 18px;
+		}
+		.qc-visualizer {
+			width: 520px;
+			height: 450px;
+		}
+		.goals-title {
+			font-size: 56px;
+		}
+		.goal-card {
+			height: 130px;
+		}
+		.goal-text {
+			font-size: 16px;
+		}
+		.bsit-title {
+			font-size: 48px;
+		}
+		.innovation-heading {
+			font-size: 24px;
+		}
+		.years-header .number {
+			font-size: 60px;
+		}
+		.years-header .text {
+			font-size: 36px;
+		}
 	}
+
+	/* ≤768px — large phones */
+	@media (max-width: 768px) {
+		.welcome-container {
+			gap: 1rem;
+			padding: 2rem 1rem;
+		}
+		.about-section {
+			padding: 16px 16px;
+		}
+		.about-title {
+			font-size: 20px;
+			letter-spacing: 4px;
+		}
+		.intro-image {
+			max-width: 240px;
+		}
+		.intro-text p {
+			font-size: 16px;
+			line-height: 24px;
+		}
+		.mv-card {
+			padding: 16px;
+		}
+		.mv-card h3 {
+			font-size: 28px;
+		}
+		.about-header {
+			gap: 10px;
+		}
+		.stats-banner {
+			flex-direction: column;
+			align-items: center;
+			gap: 24px;
+			padding: 24px 16px;
+		}
+		.stat-card {
+			width: 100%;
+			max-width: 240px;
+		}
+		.stat-number {
+			font-size: 36px;
+		}
+		.stat-label {
+			font-size: 16px;
+		}
+		.leadership-container {
+			min-height: auto;
+		}
+		.leader-pane {
+			padding: 2rem 1.5rem;
+			min-height: 600px;
+		}
+		.profile-img {
+			max-height: 70%;
+		}
+		.profile-info h3 {
+			font-size: clamp(1.2rem, 5vw, 1.8rem);
+		}
+		.profile-info p {
+			font-size: clamp(0.9rem, 3vw, 1.2rem);
+		}
+		.qc-visualizer {
+			width: 100%;
+			max-width: 640px;
+			height: 420px;
+		}
+		.goals-title {
+			font-size: 40px;
+			margin-bottom: 20px;
+		}
+		.goals-grid {
+			gap: 16px;
+		}
+		.goal-card {
+			width: 100%;
+			height: 120px;
+			padding: 14px;
+		}
+		.goal-num {
+			font-size: 22px;
+		}
+		.goal-text {
+			font-size: 14px;
+		}
+		.quick-links {
+			height: 300px;
+		}
+		.bento-section {
+			padding: 2rem 1rem;
+		}
+		.bsit-title {
+			font-size: 36px;
+			margin-top: 0;
+		}
+		.bsit-subtitle {
+			font-size: 16px;
+		}
+		.innovation-heading {
+			font-size: 20px;
+		}
+		.years-header .number {
+			font-size: 48px;
+		}
+		.years-header .text {
+			font-size: 28px;
+		}
+		.years-desc {
+			font-size: 14px;
+		}
+		:global(.bsit-card),
+		:global(.innovation-card),
+		:global(.years-card),
+		:global(.objectives-card) {
+			padding: 20px;
+		}
+	}
+
+	/* ≤480px — small phones */
+	@media (max-width: 480px) {
+		.about-section {
+			padding: 12px 12px;
+		}
+		.intro-image {
+			max-width: 180px;
+		}
+		.intro-text p {
+			font-size: 14px;
+			line-height: 20px;
+		}
+		.mv-card {
+			padding: 12px;
+		}
+		.mv-card h3 {
+			font-size: 22px;
+		}
+		.about-title {
+			font-size: 16px;
+			letter-spacing: 2px;
+		}
+		.stat-number {
+			font-size: 28px;
+		}
+		.stat-label {
+			font-size: 14px;
+		}
+		.goals-title {
+			font-size: 32px;
+		}
+		.goal-card {
+			height: 100px;
+			padding: 10px;
+		}
+		.goal-num {
+			font-size: 18px;
+		}
+		.goal-text {
+			font-size: 12px;
+		}
+		.qc-visualizer {
+			width: 100%;
+			max-width: 360px;
+			height: 320px;
+		}
+		.bsit-title {
+			font-size: 28px;
+		}
+		.quick-links {
+			height: auto;
+			flex-wrap: wrap;
+		}
+		.quick-links .panel {
+			min-width: 50%;
+			min-height: 140px;
+		}
+		.leader-pane {
+			padding: 1.5rem 1rem;
+			min-height: 500px;
+		}
+		.profile-img {
+			max-height: 65%;
+		}
 	}
 </style>
 
