@@ -83,7 +83,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="strategic-benchmarking">
 	<div class="section_label">
-		<Globe size={18} strokeWidth={1.5} class="section_icon" />
+		<Globe size={22} strokeWidth={1.5} class="section_icon maroon" />
 		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
 	</div>
 	<hr class="section_divider" />
@@ -112,7 +112,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="university-support">
 	<div class="section_label">
-		<Flag size={18} strokeWidth={1.5} class="section_icon" />
+		<Flag size={22} strokeWidth={1.5} class="section_icon maroon" />
 		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
 	</div>
 	<hr class="section_divider" />
@@ -214,7 +214,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="dept-process">
 	<div class="section_label">
-		<Flag size={18} strokeWidth={1.5} class="section_icon maroon" />
+		<Flag size={22} strokeWidth={1.5} class="section_icon maroon" />
 		<span>DEPARTMENT-LEVEL PROCESS</span>
 	</div>
 	<hr class="section_divider" />
@@ -284,7 +284,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="rankings">
 	<div class="section_label">
-		<BadgeCheck size={18} strokeWidth={1.5} class="section_icon" />
+		<BadgeCheck size={22} strokeWidth={1.5} class="section_icon maroon" />
 		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
@@ -460,8 +460,8 @@
 	/* ── HERO ── */
 	.hero_section {
 		position: relative;
-		height: calc(100vh - 80px); /* Covers screen when clicking Planning on navbar */
-		min-height: 520px;
+		height: 100dvh; /* Covers the screen completely when landing/clicking Planning */
+		min-height: 600px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -494,32 +494,27 @@
 
 	.hero_title {
 		font-family: var(--font-heading);
-		font-size: clamp(2.5rem, 6vw, 5rem);
+		font-size: clamp(2.5rem, 6vw, 5.5rem);
 		font-weight: 900;
 		color: var(--color-maroon);
-		line-height: 1.1;
+		line-height: 1.15;
 		letter-spacing: -0.01em;
 		margin: 0;
+		text-transform: uppercase;
 	}
 
 	/* ── SHARED SECTION WRAPPER ── */
-	.content_section {
-		max-width: var(--section-max-width);
-		margin: 0 auto;
-		padding: 4rem 2rem;
-	}
-
 	.section_label {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 0.85rem;
 		color: var(--color-gold-dark);
 		font-family: var(--font-body);
-		font-size: 0.78rem;
-		font-weight: 700;
-		letter-spacing: 0.12em;
+		font-size: 1.05rem;
+		font-weight: 800;
+		letter-spacing: 0.15em;
 		text-transform: uppercase;
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.85rem;
 	}
 
 	:global(.section_icon) {
@@ -533,54 +528,55 @@
 
 	.section_divider {
 		border: none;
-		border-top: 1px solid rgba(0, 0, 0, 0.12);
-		margin: 0 0 2.5rem 0;
+		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+		margin: 0.5rem 0 3rem 0;
 	}
 
 	/* ── STRATEGIC BENCHMARKING ── */
 	.benchmarking_grid {
 		display: grid;
-		grid-template-columns: 1fr 434px; /* 1:1 figma width */
-		gap: 4rem;
+		grid-template-columns: 1fr 380px;
+		gap: 4.5rem;
 		align-items: center;
 	}
 
 	@media (max-width: 900px) {
 		.benchmarking_grid {
 			grid-template-columns: 1fr;
-			gap: 2rem;
+			gap: 2.5rem;
 		}
 	}
 
 	.benchmarking_text p {
 		font-family: var(--font-body);
-		font-size: 1.05rem;
-		color: #333;
-		line-height: 1.8;
-		max-width: 680px;
+		font-size: 1.15rem;
+		color: #2c2c2c;
+		line-height: 1.85;
+		max-width: 720px;
 		margin: 0;
 	}
 
 	.aaccup_card {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%); /* 1:1 figma gradient */
-		border-radius: 25px; /* 1:1 figma radius */
-		padding: 2.25rem;
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		border-radius: 20px;
+		padding: 1.75rem 2rem;
 		text-align: center;
-		width: 434px;
-		height: 311px;
-		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.22);
+		width: 380px;
+		height: 250px;
+		box-shadow: 0 8px 24px rgba(202, 129, 6, 0.15);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.5rem;
+		gap: 0.4rem;
 		box-sizing: border-box;
 	}
 
 	@media (max-width: 900px) {
 		.aaccup_card {
 			width: 100%;
-			max-width: 434px;
+			max-width: 380px;
+			margin: 0 auto;
 		}
 	}
 
@@ -592,7 +588,7 @@
 	.aaccup_level {
 		font-family: var(--font-heading);
 		font-size: 1.6rem;
-		font-weight: 900;
+		font-weight: 800;
 		color: #1a1a1a;
 		margin: 0;
 		letter-spacing: 0.05em;
@@ -602,21 +598,22 @@
 		font-family: var(--font-body);
 		font-size: 0.8rem;
 		font-weight: 800;
-		letter-spacing: 0.14em;
-		color: #8c0f13; /* Figma dark red */
+		letter-spacing: 0.12em;
+		color: #8c0f13;
 		margin: 0;
+		text-transform: uppercase;
 	}
 
 	.aaccup_divider {
 		border: none;
-		border-top: 1.5px solid rgba(26, 26, 26, 0.15);
-		width: 50%;
-		margin: 0.5rem 0;
+		border-top: 1px solid rgba(140, 15, 19, 0.25);
+		width: 60px;
+		margin: 0.4rem 0;
 	}
 
 	.aaccup_sub {
 		font-family: var(--font-body);
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 		font-style: italic;
 		color: #1a1a1a;
 		margin: 0;
