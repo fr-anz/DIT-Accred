@@ -83,7 +83,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="strategic-benchmarking">
 	<div class="section_label">
-		<Globe size={28} strokeWidth={1.75} class="section_icon maroon" />
+		<Globe size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
 	</div>
 	<hr class="section_divider" />
@@ -112,7 +112,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="university-support">
 	<div class="section_label">
-		<Flag size={28} strokeWidth={1.75} class="section_icon maroon" />
+		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
 	</div>
 	<hr class="section_divider" />
@@ -214,7 +214,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="dept-process">
 	<div class="section_label">
-		<Flag size={28} strokeWidth={1.75} class="section_icon maroon" />
+		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>DEPARTMENT-LEVEL PROCESS</span>
 	</div>
 	<hr class="section_divider" />
@@ -288,7 +288,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="rankings">
 	<div class="section_label">
-		<BadgeCheck size={28} strokeWidth={1.75} class="section_icon maroon" />
+		<BadgeCheck size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
@@ -520,14 +520,14 @@
 	.section_label {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
+		gap: 0.85rem;
 		font-family: var(--font-body);
-		font-size: 2rem; /* 32px matching Figma sidebar */
-		font-weight: 600; /* Semi Bold matching Figma sidebar */
-		letter-spacing: 0.27em; /* 27% letter-spacing matching Figma sidebar */
+		font-size: 1.15rem; /* Proportional scale to match figma reference */
+		font-weight: 700;
+		letter-spacing: 0.2em; /* 20% letter-spacing for the adjusted font scale */
 		text-transform: uppercase;
 		margin-bottom: 0.85rem;
-		line-height: 1.25;
+		line-height: 1.3;
 	}
 
 	.section_label span {
