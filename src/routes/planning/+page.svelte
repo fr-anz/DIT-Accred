@@ -13,7 +13,8 @@
 		Plane,
 		Star,
 		Share2,
-		CircleDot
+		CircleDot,
+		CheckCircle2
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 
@@ -283,7 +284,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="rankings">
 	<div class="section_label">
-		<Globe size={18} strokeWidth={1.5} class="section_icon" />
+		<BadgeCheck size={18} strokeWidth={1.5} class="section_icon" />
 		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
@@ -302,7 +303,7 @@
 						<Star
 							size={14}
 							strokeWidth={0}
-							fill={s <= 3 ? '#D4A843' : '#E0E0E0'}
+							fill={s <= 3 ? '#FAC549' : '#FCEFCA'}
 						/>
 					{/each}
 				</div>
@@ -323,7 +324,7 @@
 			</div>
 
 			<div class="qs_validated_row">
-				<SquareCheck size={14} strokeWidth={2} class="validated_icon" />
+				<CheckCircle2 size={16} class="validated_icon_circle" />
 				<span>Validated Module: Teaching &amp; IT Systems</span>
 			</div>
 		</div>
@@ -1101,15 +1102,15 @@
 
 	.qs_rating_title {
 		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 700;
-		color: var(--color-maroon);
+		font-size: 1.05rem;
+		font-weight: 800;
+		color: #ca8106; /* Figma gold */
 		margin: 0;
 	}
 
 	.qs_rating_desc {
 		font-family: var(--font-body);
-		font-size: 0.8rem;
+		font-size: 0.82rem;
 		color: #555;
 		line-height: 1.6;
 		margin: 0;
@@ -1122,41 +1123,46 @@
 	}
 
 	.qs_cat_tile {
-		background: var(--color-maroon);
-		border-radius: 6px;
-		padding: 0.6rem 0.85rem;
+		background: #8c0f13; /* Figma dark red tiles */
+		border-radius: 10px;
+		padding: 0.75rem 0.85rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.1rem;
+		gap: 0.2rem;
 	}
 
 	.qs_cat_stars {
 		font-family: var(--font-heading);
-		font-size: 1rem;
+		font-size: 1.25rem;
 		font-weight: 900;
 		color: #fff;
+		line-height: 1.1;
 	}
 
 	.qs_cat_label {
 		font-family: var(--font-body);
-		font-size: 0.7rem;
-		color: rgba(255, 255, 255, 0.75);
+		font-size: 0.72rem;
+		color: #fac549; /* Figma light gold */
 		font-style: italic;
+		font-weight: 600;
 	}
 
 	.qs_validated_row {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.6rem;
 		font-family: var(--font-body);
-		font-size: 0.78rem;
-		font-weight: 600;
-		color: var(--color-maroon);
-		padding-top: 0.25rem;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: #8c0f13;
+		padding-top: 0.85rem;
+		border-top: 1.5px solid rgba(0, 0, 0, 0.08); /* 1:1 figma line above text */
+		margin-top: 0.5rem;
 	}
 
-	:global(.validated_icon) {
-		color: var(--color-maroon);
+	:global(.validated_icon_circle) {
+		fill: #8c0f13;
+		color: #ffffff;
 		flex-shrink: 0;
 	}
 
@@ -1178,7 +1184,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.1rem;
 		font-weight: 900;
-		color: #222;
+		color: #8c0f13; /* WURI title color matching header */
 		margin: 0;
 		line-height: 1.2;
 	}
@@ -1197,9 +1203,9 @@
 
 	.wuri_rank_num {
 		font-family: var(--font-heading);
-		font-size: 1.2rem;
+		font-size: 1.25rem;
 		font-weight: 900;
-		color: #2879e0;
+		color: #8c0f13; /* Maroon/red instead of blue */
 	}
 
 	.wuri_desc {

@@ -87,7 +87,7 @@
 		color: #ffffff;
 		font-family: 'Inter', sans-serif;
 		width: 100%;
-		border-top: 4px solid #0056b3; /* Vibrant blue top border from Figma */
+		border-top: none;
 	}
 
 	.footer_content {
