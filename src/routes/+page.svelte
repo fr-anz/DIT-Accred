@@ -1498,5 +1498,6 @@
 			max-height: 60%;
 		}
 	}
+	}
 </style>
 
