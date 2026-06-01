@@ -1046,25 +1046,9 @@
 	/* ── RANKINGS SECTION ── */
 	.rankings_grid {
 		display: grid;
-		grid-template-columns: repeat(3, 393px); /* 1:1 figma width */
-		gap: 1.5rem;
-		justify-content: center;
-	}
-
-	@media (max-width: 1240px) {
-		.rankings_grid {
-			grid-template-columns: repeat(2, 1fr);
-			max-width: 900px;
-			margin: 0 auto;
-		}
-	}
-
-	@media (max-width: 680px) {
-		.rankings_grid {
-			grid-template-columns: 1fr;
-			max-width: 420px;
-			margin: 0 auto;
-		}
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1.25rem;
+		align-items: stretch;
 	}
 
 	@media (max-width: 900px) {
@@ -1080,33 +1064,31 @@
 	}
 
 	.ranking_card {
-		border-radius: 25px; /* 1:1 figma radius */
-		padding: 2.25rem 2rem;
-		border: 2px solid #fac549; /* 1:1 figma border */
+		border-radius: 20px;
+		padding: 1.75rem 1.5rem;
+		border: 1.5px dashed rgba(180, 150, 80, 0.35);
 		background: #fff;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 		box-sizing: border-box;
-		height: 537px; /* 1:1 figma height on desktop */
-	}
-
-	@media (max-width: 1240px) {
-		.ranking_card {
-			height: auto;
-			min-height: 537px;
-		}
 	}
 
 	/* QS Stars card */
 	.qs_card {
 		display: flex;
 		flex-direction: column;
-		box-sizing: border-box;
+		gap: 0.75rem;
 	}
 
 	.qs_header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		margin-bottom: 0.5rem;
+	}
+
+	.qs_logo_row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	:global(.qs_logo_icon) {
@@ -1118,48 +1100,49 @@
 		font-family: var(--font-body);
 		font-size: 0.95rem;
 		font-weight: 800;
-		color: #8c0f13; /* Maroon matching Figma */
+		color: #1a1a1a;
 	}
 
 	.qs_stars_row {
 		display: flex;
-		gap: 2px;
+		gap: 3px;
 	}
 
 	.qs_rating_title {
 		font-family: var(--font-heading);
-		font-size: 1.05rem;
+		font-size: 1.15rem;
 		font-weight: 800;
-		color: #ca8106; /* Figma gold */
+		color: #8c0f13;
 		margin: 0;
 	}
 
 	.qs_rating_desc {
 		font-family: var(--font-body);
 		font-size: 0.82rem;
-		color: #555;
-		line-height: 1.6;
+		color: #444;
+		line-height: 1.55;
 		margin: 0;
 	}
 
 	.qs_category_grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 0.65rem;
+		gap: 0.6rem;
+		margin-top: 0.25rem;
 	}
 
 	.qs_cat_tile {
-		background: #8c0f13; /* Figma dark red tiles */
+		background: #8c0f13;
 		border-radius: 10px;
-		padding: 0.75rem 0.85rem;
+		padding: 0.85rem 1rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.2rem;
+		gap: 0.15rem;
 	}
 
 	.qs_cat_stars {
 		font-family: var(--font-heading);
-		font-size: 1.25rem;
+		font-size: 1.3rem;
 		font-weight: 900;
 		color: #fff;
 		line-height: 1.1;
@@ -1168,7 +1151,7 @@
 	.qs_cat_label {
 		font-family: var(--font-body);
 		font-size: 0.72rem;
-		color: #fac549; /* Figma light gold */
+		color: #fac549;
 		font-style: italic;
 		font-weight: 600;
 	}
@@ -1176,14 +1159,14 @@
 	.qs_validated_row {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
+		gap: 0.5rem;
 		font-family: var(--font-body);
 		font-size: 0.82rem;
 		font-weight: 700;
 		color: #8c0f13;
-		padding-top: 0.85rem;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08); /* 1:1 figma line above text */
-		margin-top: 0.5rem;
+		padding-top: 1rem;
+		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+		margin-top: auto;
 	}
 
 	:global(.validated_icon_circle) {
@@ -1196,7 +1179,7 @@
 	.wuri_card {
 		display: flex;
 		flex-direction: column;
-		box-sizing: border-box;
+		gap: 0.75rem;
 	}
 
 	.wuri_header {
@@ -1204,15 +1187,16 @@
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: 1rem;
+		margin-bottom: 0.25rem;
 	}
 
 	.wuri_title {
 		font-family: var(--font-heading);
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 		font-weight: 900;
-		color: #8c0f13; /* WURI title color matching header */
+		color: #1a1a1a;
 		margin: 0;
-		line-height: 1.2;
+		line-height: 1.25;
 	}
 
 	.wuri_world_rank {
@@ -1222,7 +1206,7 @@
 
 	.wuri_rank_label {
 		display: block;
-		font-size: 0.65rem;
+		font-size: 0.6rem;
 		color: #888;
 		font-family: var(--font-body);
 	}
@@ -1231,20 +1215,21 @@
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
 		font-weight: 900;
-		color: #8c0f13; /* Maroon/red instead of blue */
+		color: #8c0f13;
 	}
 
 	.wuri_desc {
 		font-family: var(--font-body);
-		font-size: 0.8rem;
-		color: #555;
-		line-height: 1.6;
+		font-size: 0.82rem;
+		color: #444;
+		line-height: 1.55;
 		margin: 0;
 	}
 
 	.wuri_divider {
 		border: none;
-		border-top: 1px solid rgba(0, 0, 0, 0.1);
+		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+		margin: 0.25rem 0;
 	}
 
 	.wuri_rankings_list {
@@ -1253,26 +1238,28 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 1.15rem;
-		margin-top: auto; /* Pushes the list items to the bottom of the card */
+		gap: 1rem;
+		margin-top: auto;
 	}
 
 	.wuri_rank_item {
 		display: flex;
 		align-items: center;
-		gap: 1.25rem;
+		gap: 0.85rem;
 	}
 
 	.wuri_rank_badge {
-		background: #8c0f13; /* WURI badge color */
+		background: #8c0f13;
 		color: #fff;
 		font-family: var(--font-heading);
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 		font-weight: 900;
-		border-radius: 4px;
-		padding: 0.3rem 0.75rem;
-		min-width: 44px;
-		text-align: center;
+		border-radius: 6px;
+		width: 48px;
+		height: 42px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		flex-shrink: 0;
 		box-sizing: border-box;
 	}
@@ -1280,14 +1267,14 @@
 	.wuri_rank_details {
 		display: flex;
 		flex-direction: column;
-		gap: 6px;
+		gap: 5px;
 		flex-grow: 1;
 	}
 
 	.wuri_rank_text {
 		font-family: var(--font-body);
 		font-size: 0.78rem;
-		color: #333;
+		color: #1a1a1a;
 		font-weight: 800;
 		text-transform: uppercase;
 		letter-spacing: 0.02em;
@@ -1296,8 +1283,8 @@
 
 	.wuri_progress_track {
 		width: 100%;
-		height: 4px;
-		background: #EAE5DB; /* warm sand background track */
+		height: 3px;
+		background: #EAE5DB;
 		border-radius: 2px;
 		overflow: hidden;
 	}
@@ -1312,36 +1299,20 @@
 	.impact_column {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		height: 537px;
-		box-sizing: border-box;
-	}
-
-	@media (max-width: 1240px) {
-		.impact_column {
-			height: auto;
-		}
+		gap: 1.25rem;
 	}
 
 	.impact_card {
-		/* 3-stop linear gradient from Figma metadata */
 		background: linear-gradient(180deg, #451516 0%, #1A1614 65%, #392E1F 100%);
 		border: none;
 		color: #fff;
-		height: 363px; /* Exact height for math alignment: 363 + 24 (gap) + 150 = 537 */
+		flex: 1;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		box-sizing: border-box;
-		border-radius: 25px;
-		padding: 2rem;
-	}
-
-	@media (max-width: 1240px) {
-		.impact_card {
-			height: auto;
-			min-height: 360px;
-		}
+		border-radius: 20px;
+		padding: 1.75rem 1.5rem;
 	}
 
 	.impact_label {
@@ -1466,7 +1437,6 @@
 		white-space: nowrap;
 	}
 
-	/* AUN-QA card */
 	.aunqa_card {
 		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
 		border: none;
@@ -1474,18 +1444,10 @@
 		flex-direction: column;
 		gap: 0.75rem;
 		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
-		height: 150px; /* Exact height */
 		justify-content: center;
 		box-sizing: border-box;
-		border-radius: 25px;
-	}
-
-	@media (max-width: 1240px) {
-		.aunqa_card {
-			height: auto;
-			min-height: 150px;
-			padding: 2rem;
-		}
+		border-radius: 20px;
+		padding: 1.75rem 1.5rem;
 	}
 
 	.aunqa_header {
