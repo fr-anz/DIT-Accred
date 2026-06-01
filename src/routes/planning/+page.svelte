@@ -3,6 +3,7 @@
 		Globe,
 		Flag,
 		BadgeCheck,
+		SquareCheck,
 		BookOpen,
 		Users,
 		Building2,
