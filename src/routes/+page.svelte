@@ -293,6 +293,48 @@
 					</div>
 					<p class="goal-text">Nurture Strong Relationships</p>
 				</div>
+	<div class="radial-hub dark-bg">
+		<div class="circle circle-lg"></div>
+		<div class="circle circle-md"></div>
+		<div class="circle circle-sm"></div>
+
+		<div class="node node-top">Instruction</div>
+		<div class="node node-bottom">Compliance</div>
+		<div class="node node-left">Extension</div>
+		<div class="node node-right">Research</div>
+
+		<div class="hub-center gold-bg">
+			<span>Quality Control</span>
+		</div>
+	</div>
+
+	<div class="goals-container">
+		<h2 class="goals-title">DIT GOALS</h2>
+
+		<div class="goals-grid">
+			<div class="goal-card maroon-bg">
+				<span class="goal-num">01</span>
+				<p class="goal-text">Strengthen Academic<br />Excellence</p>
+			</div>
+			<div class="goal-card maroon-bg">
+				<span class="goal-num">02</span>
+				<p class="goal-text">Advance Research<br />and Innovation</p>
+			</div>
+			<div class="goal-card maroon-bg">
+				<span class="goal-num">03</span>
+				<p class="goal-text">Enhance Faculty Excellence<br />and Engagement</p>
+			</div>
+			<div class="goal-card maroon-bg">
+				<span class="goal-num">04</span>
+				<p class="goal-text">Expand Outreach<br />Programs</p>
+			</div>
+			<div class="goal-card maroon-bg">
+				<span class="goal-num">05</span>
+				<p class="goal-text">Foster Active Student<br />Involvement and Engagement</p>
+			</div>
+			<div class="goal-card maroon-bg">
+				<span class="goal-num">06</span>
+				<p class="goal-text">Nurture Strong<br />Relationships</p>
 			</div>
 		</div>
 	</div>
@@ -772,6 +814,160 @@
 		width: 90%;
 		opacity: 0.5;
 		z-index: 0;
+	}
+
+
+	.goals-wrapper {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		width: 100%;
+		max-width: 1600px;
+		margin: 0 auto;
+		padding: 4rem 2rem;
+		box-sizing: border-box;
+	}
+
+	/* --- LEFT SIDE: Radial Diagram --- */
+	.radial-hub {
+		position: relative;
+		border-radius: 30px;
+		min-height: 700px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	.dark-bg {
+		background: linear-gradient(148deg, #451516 0%, #1a1614 64%, #392e1f 100%);
+	}
+
+	.circle {
+		position: absolute;
+		border-radius: 50%;
+		border: 1px solid rgba(255, 255, 255, 0.5);
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.circle-lg {
+		width: 60%;
+		height: 60%;
+		aspect-ratio: 1;
+	}
+	.circle-md {
+		width: 40%;
+		height: 40%;
+		aspect-ratio: 1;
+	}
+	.circle-sm {
+		width: 20%;
+		height: 20%;
+		aspect-ratio: 1;
+	}
+
+	.node {
+		position: absolute;
+		border-radius: 30px;
+		outline: 2px solid white;
+		outline-offset: -2px;
+		padding: 10px 24px;
+		color: white;
+		font-family: 'Inter', sans-serif;
+		font-size: 20px;
+		background-color: rgba(0, 0, 0, 0.3);
+		backdrop-filter: blur(4px);
+	}
+	.node-top {
+		top: 10%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.node-bottom {
+		bottom: 10%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.node-left {
+		left: 5%;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.node-right {
+		right: 5%;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.hub-center {
+		position: absolute;
+		z-index: 10;
+		padding: 12px 32px;
+		border-radius: 30px;
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+	}
+	.gold-bg {
+		background: linear-gradient(90deg, #cfa83a 0%, #ce870c 100%);
+	}
+	.hub-center span {
+		color: #b30e12;
+		font-family: 'Overpass', sans-serif;
+		font-size: 28px;
+		font-weight: 700;
+	}
+
+	/* --- RIGHT SIDE: Goals Grid --- */
+	.goals-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.goals-title {
+		color: #fac549;
+		font-family: 'Overpass', sans-serif;
+		font-size: clamp(60px, 6vw, 100px); /* Responsive title size */
+		font-weight: 700;
+		text-align: center;
+		margin: 0 0 2rem 0;
+		line-height: 1;
+	}
+
+	.goals-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5rem;
+		flex-grow: 1;
+	}
+
+	/* Individual Goal Cards */
+	.goal-card {
+		border-radius: 15px;
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		min-height: 160px;
+	}
+	.maroon-bg {
+		background: linear-gradient(137deg, #921518 0%, #6d1719 100%);
+	}
+
+	.goal-num {
+		color: #fac549;
+		font-family: 'Overpass', sans-serif;
+		font-size: 30px;
+		font-weight: 500;
+	}
+
+	.goal-text {
+		color: white;
+		font-family: 'Inter', sans-serif;
+		font-size: 18px; /* Slightly scaled down from 20px for better fit */
+		font-weight: 500;
+		text-align: right;
+		margin: 0;
+		line-height: 1.3;
 	}
 
 	.quick-links {
@@ -1463,6 +1659,15 @@
 
 	/* media query */
 	@media (max-width: 1200px) {
+		.goals-wrapper {
+			grid-template-columns: 1fr; /* Stacks the diagram above the goals on laptops/tablets */
+			gap: 4rem;
+		}
+
+		.radial-hub {
+			min-height: 600px;
+		}
+
 		:global(.bsit-card),
 		:global(.innovation-card),
 		:global(.years-card),
@@ -1503,3 +1708,4 @@
 		}
 	}
 </style>
+
