@@ -19,23 +19,23 @@
 	const sdgData = {
 		1: {
 			label: 'No Poverty',
-			color: '#E5243B',
-			description: 'End poverty in all its forms everywhere.'
+			color: '#F5C242',
+			range: '43.6 - 52.7'
 		},
 		2: {
 			label: 'Zero Hunger',
-			color: '#DDA63A',
-			description: 'End hunger, achieve food security and improved nutrition.'
+			color: '#C57E00',
+			range: '13.7 - 40.9'
 		},
 		4: {
 			label: 'Quality Education',
-			color: '#C5192D',
-			description: 'Ensure inclusive and equitable quality education for all.'
+			color: '#8C0F13',
+			range: '25.7 - 44.1'
 		},
 		17: {
 			label: 'Partnerships for the Goals',
-			color: '#19486A',
-			description: 'Strengthen the means of implementation and revitalize global partnerships.'
+			color: '#5F1013',
+			range: '36.9 - 52.8'
 		}
 	};
 
@@ -256,17 +256,22 @@
 <div class="photo_strip" aria-label="Department photo gallery">
 	<img
 		src="/planning/photo-strip-1.jpg"
-		alt="Students and faculty in a classroom setting"
+		alt="Students and faculty in an IT laboratory setting"
 		class="strip_photo"
 	/>
 	<img
 		src="/planning/photo-strip-2.jpg"
-		alt="Faculty group photo outdoors"
+		alt="Students listening to a presentation on Converge ICT Solutions"
 		class="strip_photo"
 	/>
 	<img
 		src="/planning/photo-strip-3.jpg"
-		alt="Faculty coaching a student in an IT lab"
+		alt="Faculty and staff group with Banua Palawan tribe members"
+		class="strip_photo"
+	/>
+	<img
+		src="/planning/photo-strip-4.jpg"
+		alt="Department faculty meeting and planning session"
 		class="strip_photo"
 	/>
 </div>
@@ -374,9 +379,15 @@
 
 							{#if hoveredSdg === id}
 								<div class="sdg_tooltip" role="tooltip">
-									<span class="sdg_tooltip_num">SDG {id}</span>
-									<strong class="sdg_tooltip_label">{sdgData[id].label}</strong>
-									<span class="sdg_tooltip_desc">{sdgData[id].description}</span>
+									<div class="sdg_tooltip_left">
+										<span class="sdg_tooltip_title">SDG</span>
+										<span class="sdg_tooltip_num" style="color: {sdgData[id].color};">
+											{String(id).padStart(2, '0')}
+										</span>
+									</div>
+									<div class="sdg_tooltip_right">
+										<span class="sdg_tooltip_range">{sdgData[id].range}</span>
+									</div>
 								</div>
 							{/if}
 						</div>
@@ -960,10 +971,17 @@
 	.photo_strip {
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		height: 260px;
 		overflow: hidden;
 		margin: 1rem 0 0 0;
+	}
+
+	@media (max-width: 768px) {
+		.photo_strip {
+			grid-template-columns: repeat(2, 1fr);
+			height: 520px;
+		}
 	}
 
 	.strip_photo {
@@ -1243,8 +1261,8 @@
 
 	.sdg_badge {
 		position: relative;
-		width: 40px;
-		height: 40px;
+		width: 44px;
+		height: 44px;
 		border-radius: 6px;
 		display: flex;
 		align-items: center;
@@ -1255,68 +1273,80 @@
 	}
 
 	.sdg_badge:hover {
-		transform: scale(1.1);
-		z-index: 10;
+		transform: scale(1.08);
+		z-index: 20;
 	}
 
 	.sdg_num {
 		font-family: var(--font-heading);
-		font-size: 0.85rem;
+		font-size: 0.95rem;
 		font-weight: 900;
 		color: #fff;
 	}
 
 	.sdg_tooltip {
 		position: absolute;
-		bottom: calc(100% + 10px);
+		top: calc(100% + 12px);
 		left: 50%;
 		transform: translateX(-50%);
 		background: #fff;
-		color: #111;
-		border-radius: 10px;
-		padding: 0.85rem 1rem;
-		width: 200px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+		border-radius: 8px;
+		padding: 0.5rem 0.85rem;
+		width: 170px;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
+		align-items: center;
+		justify-content: space-between;
 		z-index: 100;
 		pointer-events: none;
+	}
 
-		/* small arrow */
-		&::after {
-			content: '';
-			position: absolute;
-			top: 100%;
-			left: 50%;
-			transform: translateX(-50%);
-			border: 7px solid transparent;
-			border-top-color: #fff;
-		}
+	/* Arrow pointing up */
+	.sdg_tooltip::after {
+		content: '';
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		border: 8px solid transparent;
+		border-bottom-color: #fff;
+	}
+
+	.sdg_tooltip_left {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		line-height: 1.1;
+	}
+
+	.sdg_tooltip_title {
+		font-family: var(--font-body);
+		font-size: 0.6rem;
+		font-weight: 800;
+		color: #555;
+		letter-spacing: 0.05em;
+		margin: 0;
 	}
 
 	.sdg_tooltip_num {
-		font-size: 0.65rem;
-		font-weight: 700;
-		color: #888;
-		letter-spacing: 0.08em;
-		font-family: var(--font-body);
-	}
-
-	.sdg_tooltip_label {
-		font-size: 0.9rem;
-		font-weight: 800;
 		font-family: var(--font-heading);
-		color: #111;
-		line-height: 1.2;
+		font-size: 1.25rem;
+		font-weight: 800;
+		margin: 1px 0 0 0;
 	}
 
-	.sdg_tooltip_desc {
-		font-size: 0.72rem;
-		color: #555;
-		line-height: 1.5;
+	.sdg_tooltip_right {
+		display: flex;
+		align-items: center;
+	}
+
+	.sdg_tooltip_range {
 		font-family: var(--font-body);
-		margin-top: 0.2rem;
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: #1a1a1a;
+		letter-spacing: -0.02em;
+		white-space: nowrap;
 	}
 
 	/* AUN-QA card */
