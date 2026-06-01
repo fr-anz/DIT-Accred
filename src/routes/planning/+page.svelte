@@ -453,7 +453,7 @@
 	.content_section {
 		max-width: var(--section-max-width);
 		margin: 0 auto;
-		padding: 5rem 2rem;
+		padding: 4rem 2rem; /* Tightened from 5rem to avoid huge 10rem gaps between consecutive sections */
 		font-size: 1.05rem;
 	}
 
@@ -778,12 +778,13 @@
 	.support_grid {
 		display: grid;
 		grid-template-columns: 1.05fr 1fr;
-		gap: 2rem;
+		gap: 3rem; /* Expanded for better breathing room on desktop */
 	}
 
 	@media (max-width: 760px) {
 		.support_grid {
 			grid-template-columns: 1fr;
+			gap: 2rem;
 		}
 	}
 
@@ -798,7 +799,7 @@
 		background: #fff;
 		border: 1px solid rgba(207, 168, 58, 0.3);
 		border-radius: 12px;
-		padding: 1.75rem;
+		padding: 2rem; /* Expanded from 1.75rem for premium feel */
 		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 	}
 
@@ -850,7 +851,7 @@
 	.core_functions_card {
 		background: var(--color-gold);
 		border-radius: 12px;
-		padding: 1.5rem 1.75rem;
+		padding: 2rem; /* Expanded padding */
 		box-shadow: 0 4px 20px rgba(207, 168, 58, 0.2);
 	}
 
@@ -885,7 +886,7 @@
 	.support_feed {
 		background: var(--color-maroon);
 		border-radius: 12px;
-		padding: 1.75rem;
+		padding: 2rem; /* Expanded padding */
 		color: #fff;
 		display: flex;
 		flex-direction: column;
@@ -943,12 +944,13 @@
 	.process_cards_grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 1.25rem;
+		gap: 1.5rem; /* Expanded from 1.25rem for alignment with rankings grid */
 	}
 
 	@media (max-width: 760px) {
 		.process_cards_grid {
 			grid-template-columns: repeat(2, 1fr);
+			gap: 1.25rem;
 		}
 	}
 
@@ -961,7 +963,7 @@
 	.process_card {
 		border: 1.5px solid rgba(92, 15, 22, 0.15);
 		border-radius: 12px;
-		padding: 1.75rem 1.25rem;
+		padding: 2rem 1.5rem; /* Expanded from 1.75rem 1.25rem */
 		text-align: center;
 		background: #fff;
 		display: flex;
@@ -1017,7 +1019,7 @@
 		grid-template-columns: repeat(4, 1fr);
 		height: 260px;
 		overflow: hidden;
-		margin: 1rem 0 0 0;
+		margin: 0; /* Let it sit perfectly flush between process and rankings sections */
 	}
 
 	@media (max-width: 768px) {
@@ -1044,7 +1046,7 @@
 	.rankings_grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1.25rem;
+		gap: 1.5rem; /* Expanded from 1.25rem */
 		align-items: stretch;
 	}
 
