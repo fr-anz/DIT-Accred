@@ -937,7 +937,6 @@
 		justify-content: flex-end;
 		gap: 40px;
 		margin-top: 60px;
-		flex-wrap: wrap;
 	}
 	.mv-card {
 		background: #ffffff;
@@ -949,12 +948,12 @@
 			-4px 4px 4px rgba(109, 23, 25, 0.5);
 		padding: 40px;
 		box-sizing: border-box;
-		flex: 1 1 auto;
-		max-width: 566px;
-		min-width: 280px;
+	}
+	.mv-container .mv-card:nth-child(1) {
+		width: 566px;
 	}
 	.mv-container .mv-card:nth-child(2) {
-		max-width: 357px;
+		width: 357px;
 	}
 
 	.mv-card h3 {
@@ -1470,31 +1469,42 @@
 
 	/* ---- Responsive Breakpoints ---- */
 
-	/* ≥1400px extra-wide — min adjustments */
-	@media (min-width: 1401px) {
-		.qc-visualizer {
-			width: 874px;
-			height: 750px;
-		}
-	}
-
-	/* ≤1400px — shrink large elements */
+	/* ≤1400px — shrink large elements, stack MV cards */
 	@media (max-width: 1400px) {
 		.about-section {
 			padding: 40px 60px;
 		}
 		.intro-container {
-			gap: 40px;
+			grid-template-columns: 1fr;
+			gap: 30px;
 		}
 		.intro-image {
 			width: 100%;
-			max-width: 500px;
+			max-width: 400px;
 			height: auto;
 			aspect-ratio: 634/854;
+			margin: 0 auto;
+		}
+		.intro-text {
+			align-items: center;
 		}
 		.intro-text p {
-			font-size: 24px;
-			line-height: 34px;
+			font-size: 22px;
+			line-height: 32px;
+			text-align: center;
+			max-width: 100%;
+			margin: 0;
+		}
+		.mv-container {
+			justify-content: center;
+			flex-direction: column;
+			align-items: center;
+			gap: 24px;
+		}
+		.mv-container .mv-card:nth-child(1),
+		.mv-container .mv-card:nth-child(2) {
+			width: 100%;
+			max-width: 600px;
 		}
 		.mv-card h3 {
 			font-size: 48px;
@@ -1508,16 +1518,22 @@
 		.stat-card {
 			width: 220px;
 		}
+		.goals-section {
+			flex-direction: column;
+			align-items: center;
+		}
 		.goals-title {
-			font-size: 90px;
+			font-size: 80px;
+			text-align: center;
 		}
 		.goal-card {
 			width: 100%;
 			height: 150px;
 		}
 		.qc-visualizer {
-			width: 740px;
-			height: 650px;
+			width: 640px;
+			height: 580px;
+			flex-shrink: 0;
 		}
 	}
 
@@ -1535,29 +1551,6 @@
 		.about-section {
 			padding: 30px 40px;
 		}
-		.intro-container {
-			grid-template-columns: 1fr;
-			gap: 30px;
-		}
-		.intro-image {
-			max-width: 400px;
-			margin: 0 auto;
-		}
-		.intro-text p {
-			margin: 0;
-			font-size: 22px;
-			line-height: 32px;
-		}
-		.intro-text {
-			align-items: center;
-		}
-		.intro-text p {
-			text-align: center;
-			max-width: 100%;
-		}
-		.mv-container {
-			justify-content: center;
-		}
 		.stats-banner {
 			flex-wrap: wrap;
 			gap: 30px;
@@ -1569,22 +1562,15 @@
 		.stat-number {
 			font-size: 48px;
 		}
-		.goals-section {
-			flex-direction: column;
-			align-items: center;
+		.qc-visualizer {
+			width: 520px;
+			height: 450px;
 		}
 		.goals-title {
-			font-size: 72px;
-			text-align: center;
+			font-size: 64px;
 		}
 		.goal-card {
-			width: 100%;
 			height: 140px;
-		}
-		.qc-visualizer {
-			width: 640px;
-			height: 580px;
-			flex-shrink: 0;
 		}
 	}
 
@@ -1609,21 +1595,9 @@
 		.about-section {
 			padding: 24px 24px;
 		}
-		.intro-image {
-			max-width: 320px;
-		}
 		.intro-text p {
 			font-size: 20px;
 			line-height: 28px;
-		}
-		.mv-container {
-			gap: 24px;
-		}
-		.mv-container .mv-card:nth-child(1),
-		.mv-container .mv-card:nth-child(2) {
-			width: 100%;
-			flex: none;
-			max-width: 100%;
 		}
 		.mv-card h3 {
 			font-size: 36px;
@@ -1648,11 +1622,11 @@
 			font-size: 18px;
 		}
 		.qc-visualizer {
-			width: 520px;
-			height: 450px;
+			width: 480px;
+			height: 420px;
 		}
 		.goals-title {
-			font-size: 56px;
+			font-size: 52px;
 		}
 		.goal-card {
 			height: 130px;
@@ -1737,11 +1711,11 @@
 		}
 		.qc-visualizer {
 			width: 100%;
-			max-width: 640px;
-			height: 420px;
+			max-width: 400px;
+			height: 350px;
 		}
 		.goals-title {
-			font-size: 40px;
+			font-size: 36px;
 			margin-bottom: 20px;
 		}
 		.goals-grid {
@@ -1820,7 +1794,7 @@
 			font-size: 14px;
 		}
 		.goals-title {
-			font-size: 32px;
+			font-size: 28px;
 		}
 		.goal-card {
 			height: 100px;
@@ -1834,8 +1808,8 @@
 		}
 		.qc-visualizer {
 			width: 100%;
-			max-width: 360px;
-			height: 320px;
+			max-width: 320px;
+			height: 280px;
 		}
 		.bsit-title {
 			font-size: 28px;
