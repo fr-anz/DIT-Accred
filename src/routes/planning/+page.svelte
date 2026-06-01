@@ -1048,7 +1048,7 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
 		gap: 1.5rem;
-		align-items: start;
+		align-items: stretch; /* Stretch columns to equal heights */
 	}
 
 	@media (max-width: 900px) {
@@ -1076,7 +1076,8 @@
 	.qs_card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.85rem;
+		height: 100%;
+		box-sizing: border-box;
 	}
 
 	.qs_header {
@@ -1170,7 +1171,8 @@
 	.wuri_card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.85rem;
+		height: 100%;
+		box-sizing: border-box;
 	}
 
 	.wuri_header {
@@ -1228,6 +1230,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.15rem;
+		margin-top: auto; /* Pushes the list items to the bottom of the card */
 	}
 
 	.wuri_rank_item {
@@ -1270,7 +1273,7 @@
 	.wuri_progress_track {
 		width: 100%;
 		height: 4px;
-		background: #f0ece5;
+		background: #EAE5DB; /* warm sand background track */
 		border-radius: 2px;
 		overflow: hidden;
 	}
@@ -1286,6 +1289,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
+		height: 100%;
+		box-sizing: border-box;
 	}
 
 	.impact_card {
@@ -1293,10 +1298,11 @@
 		background: linear-gradient(180deg, #451516 0%, #1A1614 70%, #392E1F 100%);
 		border: none;
 		color: #fff;
-		min-height: 380px;
+		flex: 1; /* Stretch to fill column height, matching WURI and QS Stars card bottom */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		box-sizing: border-box;
 	}
 
 	.impact_label {
