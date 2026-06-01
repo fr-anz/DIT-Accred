@@ -296,6 +296,7 @@
 		</div>
 	</div>
 </div>
+</section>
 
 <section class="quick-links">
 	{#each sections as section}
