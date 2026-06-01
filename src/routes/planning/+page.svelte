@@ -2,7 +2,7 @@
 	import {
 		Globe,
 		Flag,
-		SquareCheck,
+		BadgeCheck,
 		BookOpen,
 		Users,
 		Building2,
@@ -14,6 +14,7 @@
 		Share2,
 		CircleDot
 	} from 'lucide-svelte';
+	import Footer from '$lib/components/footer.svelte';
 
 	// SDG data for hover cards
 	const sdgData = {
@@ -95,7 +96,7 @@
 			</p>
 		</div>
 		<div class="aaccup_card">
-			<SquareCheck size={32} strokeWidth={1.5} class="aaccup_icon" />
+			<BadgeCheck size={42} strokeWidth={1.5} class="aaccup_icon" />
 			<p class="aaccup_level">LEVEL IV</p>
 			<p class="aaccup_status_label">AACCUP STATUS</p>
 			<hr class="aaccup_divider" />
@@ -340,12 +341,33 @@
 			<p class="wuri_desc">Innovative Universities globally among 1,072 institutions.</p>
 			<hr class="wuri_divider" />
 			<ul class="wuri_rankings_list">
-				{#each wuriRankings as item}
-					<li class="wuri_rank_item">
-						<span class="wuri_rank_badge">{item.rank}</span>
-						<span class="wuri_rank_text">{item.label}</span>
-					</li>
-				{/each}
+				<li class="wuri_rank_item">
+					<span class="wuri_rank_badge">21</span>
+					<div class="wuri_rank_details">
+						<span class="wuri_rank_text">Generative AI Application</span>
+						<div class="wuri_progress_track">
+							<div class="wuri_progress_bar" style="width: 85%;"></div>
+						</div>
+					</div>
+				</li>
+				<li class="wuri_rank_item">
+					<span class="wuri_rank_badge">39</span>
+					<div class="wuri_rank_details">
+						<span class="wuri_rank_text">Student Support Engagement</span>
+						<div class="wuri_progress_track">
+							<div class="wuri_progress_bar" style="width: 65%;"></div>
+						</div>
+					</div>
+				</li>
+				<li class="wuri_rank_item">
+					<span class="wuri_rank_badge">50</span>
+					<div class="wuri_rank_details">
+						<span class="wuri_rank_text">Symbol / Promotion</span>
+						<div class="wuri_progress_track">
+							<div class="wuri_progress_bar" style="width: 50%;"></div>
+						</div>
+					</div>
+				</li>
 			</ul>
 		</div>
 
@@ -409,6 +431,8 @@
 	</div>
 </section>
 
+<Footer />
+
 <style>
 	/* ── DESIGN TOKENS ── */
 	:root {
@@ -420,13 +444,22 @@
 		--color-bg: #ffffff;
 		--font-body: 'Inter', sans-serif;
 		--font-heading: 'Overpass', sans-serif;
-		--section-max-width: 1100px;
+		--section-max-width: 1280px; /* Zoom 125% equivalent sizing (less white space) */
+	}
+
+	/* Base scaling for 125% zoom feel */
+	.content_section {
+		max-width: var(--section-max-width);
+		margin: 0 auto;
+		padding: 5rem 2rem;
+		font-size: 1.05rem;
 	}
 
 	/* ── HERO ── */
 	.hero_section {
 		position: relative;
-		min-height: 360px;
+		height: calc(100vh - 80px); /* Covers screen when clicking Planning on navbar */
+		min-height: 520px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -505,74 +538,85 @@
 	/* ── STRATEGIC BENCHMARKING ── */
 	.benchmarking_grid {
 		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 3rem;
-		align-items: start;
+		grid-template-columns: 1fr 434px; /* 1:1 figma width */
+		gap: 4rem;
+		align-items: center;
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 900px) {
 		.benchmarking_grid {
 			grid-template-columns: 1fr;
+			gap: 2rem;
 		}
 	}
 
 	.benchmarking_text p {
 		font-family: var(--font-body);
-		font-size: 0.95rem;
+		font-size: 1.05rem;
 		color: #333;
-		line-height: 1.75;
-		max-width: 560px;
+		line-height: 1.8;
+		max-width: 680px;
 		margin: 0;
 	}
 
 	.aaccup_card {
-		background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-		border-radius: 14px;
-		padding: 2rem 2.25rem;
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%); /* 1:1 figma gradient */
+		border-radius: 25px; /* 1:1 figma radius */
+		padding: 2.25rem;
 		text-align: center;
-		min-width: 180px;
-		box-shadow: 0 8px 24px rgba(207, 168, 58, 0.3);
+		width: 434px;
+		height: 311px;
+		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.22);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.35rem;
+		justify-content: center;
+		gap: 0.5rem;
+		box-sizing: border-box;
+	}
+
+	@media (max-width: 900px) {
+		.aaccup_card {
+			width: 100%;
+			max-width: 434px;
+		}
 	}
 
 	:global(.aaccup_icon) {
-		color: rgba(255, 255, 255, 0.85);
-		margin-bottom: 0.5rem;
+		color: #ffffff;
+		margin-bottom: 0.25rem;
 	}
 
 	.aaccup_level {
 		font-family: var(--font-heading);
-		font-size: 1.3rem;
+		font-size: 1.6rem;
 		font-weight: 900;
-		color: var(--color-maroon);
+		color: #1a1a1a;
 		margin: 0;
 		letter-spacing: 0.05em;
 	}
 
 	.aaccup_status_label {
 		font-family: var(--font-body);
-		font-size: 0.65rem;
+		font-size: 0.8rem;
 		font-weight: 800;
 		letter-spacing: 0.14em;
-		color: var(--color-maroon);
+		color: #8c0f13; /* Figma dark red */
 		margin: 0;
 	}
 
 	.aaccup_divider {
 		border: none;
-		border-top: 1px solid rgba(92, 15, 22, 0.25);
-		width: 80%;
-		margin: 0.4rem 0;
+		border-top: 1.5px solid rgba(26, 26, 26, 0.15);
+		width: 50%;
+		margin: 0.5rem 0;
 	}
 
 	.aaccup_sub {
 		font-family: var(--font-body);
-		font-size: 0.75rem;
+		font-size: 0.95rem;
 		font-style: italic;
-		color: rgba(92, 15, 22, 0.8);
+		color: #1a1a1a;
 		margin: 0;
 	}
 
@@ -1018,11 +1062,12 @@
 	}
 
 	.ranking_card {
-		border-radius: 14px;
-		padding: 1.75rem;
-		border: 1px solid rgba(0, 0, 0, 0.08);
+		border-radius: 25px; /* 1:1 figma radius */
+		padding: 2.25rem 2rem;
+		border: 2px solid #fac549; /* 1:1 figma border */
 		background: #fff;
-		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+		box-sizing: border-box;
 	}
 
 	/* QS Stars card */
@@ -1175,43 +1220,58 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.85rem;
+		gap: 1.15rem;
 	}
 
 	.wuri_rank_item {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-		padding-bottom: 0.85rem;
-	}
-
-	.wuri_rank_item:last-child {
-		border-bottom: none;
-		padding-bottom: 0;
+		gap: 1.25rem;
 	}
 
 	.wuri_rank_badge {
-		background: var(--color-maroon);
+		background: #8c0f13; /* WURI badge color */
 		color: #fff;
 		font-family: var(--font-heading);
-		font-size: 1rem;
+		font-size: 1.1rem;
 		font-weight: 900;
 		border-radius: 4px;
-		padding: 0.25rem 0.65rem;
-		min-width: 42px;
+		padding: 0.3rem 0.75rem;
+		min-width: 44px;
 		text-align: center;
 		flex-shrink: 0;
+		box-sizing: border-box;
+	}
+
+	.wuri_rank_details {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		flex-grow: 1;
 	}
 
 	.wuri_rank_text {
 		font-family: var(--font-body);
-		font-size: 0.8rem;
+		font-size: 0.78rem;
 		color: #333;
-		line-height: 1.4;
-		font-weight: 500;
+		font-weight: 800;
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: 0.02em;
+		line-height: 1.2;
+	}
+
+	.wuri_progress_track {
+		width: 100%;
+		height: 4px;
+		background: #f0ece5;
+		border-radius: 2px;
+		overflow: hidden;
+	}
+
+	.wuri_progress_bar {
+		height: 100%;
+		background: linear-gradient(90deg, #ca8106 0%, #fac549 100%);
+		border-radius: 2px;
 	}
 
 	/* Impact + AUN column */
@@ -1222,22 +1282,27 @@
 	}
 
 	.impact_card {
-		background: #1a1313;
-		border-color: #1a1313;
+		/* 3-stop linear gradient from Figma metadata */
+		background: linear-gradient(180deg, #451516 0%, #1A1614 70%, #392E1F 100%);
+		border: none;
 		color: #fff;
+		min-height: 380px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
 
 	.impact_label {
 		font-family: var(--font-body);
-		font-size: 0.72rem;
-		color: rgba(255, 255, 255, 0.55);
+		font-size: 0.75rem;
+		color: rgba(255, 255, 255, 0.6);
 		margin: 0 0 0.35rem 0;
 		letter-spacing: 0.05em;
 	}
 
 	.impact_number {
 		font-family: var(--font-heading);
-		font-size: 3rem;
+		font-size: 3.5rem;
 		font-weight: 900;
 		color: #fff;
 		margin: 0 0 0.5rem 0;
@@ -1246,8 +1311,8 @@
 
 	.impact_desc {
 		font-family: var(--font-body);
-		font-size: 0.78rem;
-		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.82rem;
+		color: rgba(255, 255, 255, 0.75);
 		line-height: 1.65;
 		margin: 0 0 1.25rem 0;
 	}
@@ -1351,11 +1416,12 @@
 
 	/* AUN-QA card */
 	.aunqa_card {
-		background: var(--color-gold);
-		border-color: var(--color-gold);
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		border: none;
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
 	}
 
 	.aunqa_header {
