@@ -83,7 +83,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="strategic-benchmarking">
 	<div class="section_label">
-		<Globe size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<Globe size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
 	</div>
 	<hr class="section_divider" />
@@ -112,7 +112,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="university-support">
 	<div class="section_label">
-		<Flag size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
 	</div>
 	<hr class="section_divider" />
@@ -214,7 +214,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="dept-process">
 	<div class="section_label">
-		<Flag size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>DEPARTMENT-LEVEL PROCESS</span>
 	</div>
 	<hr class="section_divider" />
@@ -222,32 +222,36 @@
 	<div class="process_cards_grid">
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<PenLine size={28} strokeWidth={1.5} class="process_icon" />
+				<PenLine size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">Curriculum<br />Revision</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">Based on CHED Memorandum Order No. 32 series of 2017.</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<FileText size={28} strokeWidth={1.5} class="process_icon" />
+				<FileText size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">Syllabi<br />Prep</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">
 				Regular updates for industry and government sensitivity.
 			</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<Briefcase size={28} strokeWidth={1.5} class="process_icon" />
+				<Briefcase size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">Internship</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">Established MOA with strategic industry partners.</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<Plane size={28} strokeWidth={1.5} class="process_icon" />
+				<Plane size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">International<br />Affairs</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">Institutionalization of global partnerships and mobility.</p>
 		</div>
 	</div>
@@ -260,22 +264,22 @@
 	<img
 		src="/planning/photo-strip-1.jpg"
 		alt="Students and faculty in an IT laboratory setting"
-		class="strip_photo"
+		class="strip_photo img_pos_1"
 	/>
 	<img
 		src="/planning/photo-strip-2.jpg"
 		alt="Students listening to a presentation on Converge ICT Solutions"
-		class="strip_photo"
+		class="strip_photo img_pos_2"
 	/>
 	<img
 		src="/planning/photo-strip-3.jpg"
 		alt="Faculty and staff group with Banua Palawan tribe members"
-		class="strip_photo"
+		class="strip_photo img_pos_3"
 	/>
 	<img
 		src="/planning/photo-strip-4.jpg"
 		alt="Department faculty meeting and planning session"
-		class="strip_photo"
+		class="strip_photo img_pos_4"
 	/>
 </div>
 
@@ -284,7 +288,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="rankings">
 	<div class="section_label">
-		<BadgeCheck size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<BadgeCheck size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
@@ -453,8 +457,17 @@
 	.content_section {
 		max-width: var(--section-max-width);
 		margin: 0 auto;
-		padding: 5rem 2rem;
+		padding: 2.5rem 2rem 4rem 2rem;
 		font-size: 1.05rem;
+	}
+
+	#strategic-benchmarking {
+		padding-top: 4.5rem; /* Separator from hero fold */
+	}
+
+	#university-support,
+	#dept-process {
+		padding-top: 1rem; /* Reduced top padding to tighten the spacing between consecutive sections */
 	}
 
 	/* ── HERO ── */
@@ -508,13 +521,22 @@
 		display: flex;
 		align-items: center;
 		gap: 0.85rem;
-		color: var(--color-gold-dark);
 		font-family: var(--font-body);
-		font-size: 1.05rem;
-		font-weight: 800;
-		letter-spacing: 0.15em;
+		font-size: 1.15rem; /* Proportional scale to match figma reference */
+		font-weight: 700;
+		letter-spacing: 0.2em; /* 20% letter-spacing for the adjusted font scale */
 		text-transform: uppercase;
 		margin-bottom: 0.85rem;
+		line-height: 1.3;
+	}
+
+	.section_label span {
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		text-fill-color: transparent;
+		display: inline-block;
 	}
 
 	:global(.section_icon) {
@@ -778,12 +800,13 @@
 	.support_grid {
 		display: grid;
 		grid-template-columns: 1.05fr 1fr;
-		gap: 2rem;
+		gap: 3rem; /* Expanded for better breathing room on desktop */
 	}
 
 	@media (max-width: 760px) {
 		.support_grid {
 			grid-template-columns: 1fr;
+			gap: 2rem;
 		}
 	}
 
@@ -798,7 +821,7 @@
 		background: #fff;
 		border: 1px solid rgba(207, 168, 58, 0.3);
 		border-radius: 12px;
-		padding: 1.75rem;
+		padding: 2rem; /* Expanded from 1.75rem for premium feel */
 		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 	}
 
@@ -850,7 +873,7 @@
 	.core_functions_card {
 		background: var(--color-gold);
 		border-radius: 12px;
-		padding: 1.5rem 1.75rem;
+		padding: 2rem; /* Expanded padding */
 		box-shadow: 0 4px 20px rgba(207, 168, 58, 0.2);
 	}
 
@@ -885,7 +908,7 @@
 	.support_feed {
 		background: var(--color-maroon);
 		border-radius: 12px;
-		padding: 1.75rem;
+		padding: 2rem; /* Expanded padding */
 		color: #fff;
 		display: flex;
 		flex-direction: column;
@@ -943,12 +966,13 @@
 	.process_cards_grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 1.25rem;
+		gap: 1.5rem; /* Expanded from 1.25rem for alignment with rankings grid */
 	}
 
 	@media (max-width: 760px) {
 		.process_cards_grid {
 			grid-template-columns: repeat(2, 1fr);
+			gap: 1.25rem;
 		}
 	}
 
@@ -959,15 +983,17 @@
 	}
 
 	.process_card {
-		border: 1.5px solid rgba(92, 15, 22, 0.15);
-		border-radius: 12px;
-		padding: 1.75rem 1.25rem;
+		border: 1.5px solid rgba(140, 15, 19, 0.28); /* Red/maroon thin borders matching figma */
+		border-radius: 10px; /* Tighter matching figma */
+		padding: 2.25rem 1.5rem;
 		text-align: center;
 		background: #fff;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.65rem;
+		gap: 0.85rem;
+		min-height: 330px; /* Tall portrait rectangular shape */
+		box-sizing: border-box;
 		transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 		cursor: default;
 	}
@@ -978,15 +1004,18 @@
 		box-shadow: 0 8px 24px rgba(207, 168, 58, 0.15);
 	}
 
+	.process_divider {
+		border: none;
+		border-top: 1.5px solid rgba(140, 15, 19, 0.18);
+		width: 45px;
+		margin: 0.4rem auto;
+	}
+
 	.process_icon_wrapper {
-		width: 52px;
-		height: 52px;
-		border-radius: 50%;
-		background: rgba(92, 15, 22, 0.06);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.5rem; /* Clean white card backgrounds, no background circle behind icons */
 	}
 
 	:global(.process_icon) {
@@ -995,7 +1024,7 @@
 
 	.process_card_title {
 		font-family: var(--font-heading);
-		font-size: 1rem;
+		font-size: 1.15rem; /* Slightly larger matching figma */
 		font-weight: 700;
 		color: var(--color-maroon);
 		margin: 0;
@@ -1004,10 +1033,10 @@
 
 	.process_card_desc {
 		font-family: var(--font-body);
-		font-size: 0.78rem;
-		color: #555;
-		line-height: 1.55;
-		margin: 0;
+		font-size: 0.85rem; /* Matching figma */
+		color: #444;
+		line-height: 1.6;
+		margin: 0.5rem 0 0 0;
 	}
 
 	/* ── PHOTO STRIP ── */
@@ -1017,7 +1046,7 @@
 		grid-template-columns: repeat(4, 1fr);
 		height: 260px;
 		overflow: hidden;
-		margin: 1rem 0 0 0;
+		margin: 0; /* Let it sit perfectly flush between process and rankings sections */
 	}
 
 	@media (max-width: 768px) {
@@ -1040,11 +1069,28 @@
 		filter: brightness(1);
 	}
 
+	/* Target center/crop focus to show the humans clearly */
+	.img_pos_1 {
+		object-position: center 20%;
+	}
+
+	.img_pos_2 {
+		object-position: center 30%;
+	}
+
+	.img_pos_3 {
+		object-position: center 40%;
+	}
+
+	.img_pos_4 {
+		object-position: center 25%;
+	}
+
 	/* ── RANKINGS SECTION ── */
 	.rankings_grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1.25rem;
+		gap: 1.5rem; /* Expanded from 1.25rem */
 		align-items: stretch;
 	}
 
