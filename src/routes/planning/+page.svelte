@@ -261,26 +261,34 @@
   PHOTO STRIP
 ───────────────────────────────────────────── -->
 <div class="photo_strip" aria-label="Department photo gallery">
-	<img
-		src="/planning/photo-strip-1.jpg"
-		alt="Students and faculty in an IT laboratory setting"
-		class="strip_photo img_pos_1"
-	/>
-	<img
-		src="/planning/photo-strip-2.jpg"
-		alt="Students listening to a presentation on Converge ICT Solutions"
-		class="strip_photo img_pos_2"
-	/>
-	<img
-		src="/planning/photo-strip-3.jpg"
-		alt="Faculty and staff group with Banua Palawan tribe members"
-		class="strip_photo img_pos_3"
-	/>
-	<img
-		src="/planning/photo-strip-4.jpg"
-		alt="Department faculty meeting and planning session"
-		class="strip_photo img_pos_4"
-	/>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-1.jpg"
+			alt="Students and faculty in an IT laboratory setting"
+			class="strip_photo img_pos_1"
+		/>
+	</div>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-2.jpg"
+			alt="Students listening to a presentation on Converge ICT Solutions"
+			class="strip_photo img_pos_2"
+		/>
+	</div>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-3.jpg"
+			alt="Faculty and staff group with Banua Palawan tribe members"
+			class="strip_photo img_pos_3"
+		/>
+	</div>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-4.jpg"
+			alt="Department faculty meeting and planning session"
+			class="strip_photo img_pos_4"
+		/>
+	</div>
 </div>
 
 <!-- ─────────────────────────────────────────────
@@ -507,6 +515,7 @@
 			0 20px,
 			20px -20px,
 			-20px 0px;
+		animation: checkerboardFade 1.2s ease-out forwards;
 	}
 
 	.hero_content {
@@ -514,6 +523,7 @@
 		z-index: 1;
 		text-align: center;
 		padding: 4rem 2rem;
+		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
 	.hero_title {
@@ -525,6 +535,26 @@
 		letter-spacing: -0.01em;
 		margin: 0;
 		text-transform: uppercase;
+	}
+
+	@keyframes checkerboardFade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 0.85;
+		}
+	}
+
+	@keyframes heroFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	/* ── SHARED SECTION WRAPPER ── */
@@ -603,6 +633,12 @@
 		justify-content: center;
 		gap: 0.4rem;
 		box-sizing: border-box;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+
+	.aaccup_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.28);
 	}
 
 	@media (max-width: 900px) {
@@ -857,8 +893,17 @@
 		display: flex;
 		align-items: center;
 		gap: 1.25rem;
-		padding: 0.85rem 0;
+		padding: 0.85rem 1rem;
+		margin: 0 -1rem;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+		border-radius: 8px;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-bottom-color 0.3s ease;
+	}
+
+	.priority_item:hover {
+		transform: translateX(8px);
+		background-color: rgba(207, 168, 58, 0.08);
+		border-bottom-color: transparent;
 	}
 
 	.priority_item.last {
@@ -994,8 +1039,8 @@
 	}
 
 	.process_card {
-		border: 2px solid rgba(148, 21, 24, 0.45); /* Thicker red/maroon borders matching figma */
-		border-radius: 10px; /* Tighter matching figma */
+		border: 4px solid rgba(160, 22, 24, 0.45); /* Thicker red/maroon borders matching figma */
+		border-radius: 30px; /* Tighter matching figma */
 		padding: 2.25rem 1.5rem;
 		text-align: center;
 		background: #fff;
@@ -1031,6 +1076,11 @@
 
 	:global(.process_icon) {
 		color: var(--color-maroon);
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.process_card:hover :global(.process_icon) {
+		transform: scale(1.12);
 	}
 
 	.process_card_title {
@@ -1069,16 +1119,24 @@
 		}
 	}
 
+	.photo_strip_item {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+	}
+
 	.strip_photo {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
 		filter: brightness(0.92);
-		transition: filter 0.3s ease;
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 	}
 
-	.strip_photo:hover {
+	.photo_strip_item:hover .strip_photo {
+		transform: scale(1.06);
 		filter: brightness(1);
 	}
 
@@ -1125,6 +1183,13 @@
 		border: 1.5px dashed rgba(180, 150, 80, 0.35);
 		background: #fff;
 		box-sizing: border-box;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+	}
+
+	.ranking_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+		border-color: rgba(180, 150, 80, 0.7);
 	}
 
 	/* QS Stars card */
@@ -1369,6 +1434,13 @@
 		box-sizing: border-box;
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+
+	.impact_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 30px rgba(73, 21, 22, 0.3);
+		border: none;
 	}
 
 	.impact_label {
@@ -1443,6 +1515,18 @@
 		justify-content: space-between;
 		z-index: 100;
 		pointer-events: none;
+		animation: tooltipSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	@keyframes tooltipSlide {
+		from {
+			opacity: 0;
+			transform: translate(-50%, 8px);
+		}
+		to {
+			opacity: 1;
+			transform: translate(-50%, 0);
+		}
 	}
 
 	/* Arrow pointing up */
@@ -1504,6 +1588,13 @@
 		box-sizing: border-box;
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+
+	.aunqa_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.35);
+		border: none;
 	}
 
 	.aunqa_header {
