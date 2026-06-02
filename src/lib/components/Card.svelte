@@ -2,9 +2,6 @@
 	let {
 		variant = 'default',
 		size = 'md',
-		title = undefined,
-		subtitle = undefined,
-		description = undefined,
 		children = undefined,
 		class: classProp = '',
 		...restProps
@@ -12,18 +9,6 @@
 </script>
 
 <div class="card card-{size} card-{variant} {classProp}" {...restProps}>
-	{#if title}
-		<h3 class="card-title">{title}</h3>
-	{/if}
-
-	{#if subtitle}
-		<p class="card-subtitle">{subtitle}</p>
-	{/if}
-
-	{#if description}
-		<p class="card-description">{description}</p>
-	{/if}
-
 	{@render children?.()}
 </div>
 
@@ -32,56 +17,42 @@
 
 	.card {
 		@apply transition-all duration-300;
-		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+		box-shadow:
+			0 10px 15px -3px rgba(0, 0, 0, 0.1),
+			0 4px 6px -4px rgba(0, 0, 0, 0.1);
 	}
 	.card:hover {
-		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+		box-shadow:
+			0 20px 25px -5px rgba(0, 0, 0, 0.1),
+			0 8px 10px -6px rgba(0, 0, 0, 0.1);
 	}
 
 	.card-sm {
-		@apply p-4 rounded-xl;
+		@apply rounded-xl;
 	}
 
 	.card-md {
-		@apply p-6 rounded-2xl;
+		@apply rounded-3xl; /* Figma uses 35px border-radius, which maps well to 3xl */
 	}
 
-	.card-lg {
-		@apply p-8 rounded-3xl;
-	}
-
-	.card-default {
-		@apply bg-white;
-	}
-
+	/* --- NEW FIGMA GRADIENTS --- */
 	.card-maroon {
-		@apply bg-[#801B1E] text-white;
+		background: linear-gradient(116deg, rgba(146, 21, 24, 1) 0%, rgba(109, 23, 25, 1) 100%);
+		@apply text-white;
 	}
 
 	.card-dark {
-		@apply bg-gradient-to-br from-[#1A1A1A] to-[#2D2D2D] text-white;
+		background: linear-gradient(
+			133deg,
+			rgba(69, 21, 22, 1) 0%,
+			rgba(26, 22, 20, 1) 64%,
+			rgba(57, 46, 31, 1) 100%
+		);
+		@apply text-white;
 	}
 
 	.card-gold {
-		@apply bg-[#D4A843] text-[#1A1A1A];
-	}
-
-	.card-outline {
-		@apply border-2 border-[#801B1E] bg-transparent;
-	}
-	.card-outline:hover {
-		@apply bg-[#801B1E]/5;
-	}
-
-	.card-title {
-		@apply text-2xl font-bold mb-2;
-	}
-
-	.card-subtitle {
-		@apply text-sm font-medium italic opacity-80 mb-4;
-	}
-
-	.card-description {
-		@apply text-sm leading-relaxed opacity-90;
+		background: linear-gradient(99deg, rgba(250, 197, 73, 1) 0%, rgba(202, 129, 6, 1) 100%);
+		color: #000000;
 	}
 </style>

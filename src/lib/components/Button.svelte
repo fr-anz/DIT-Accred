@@ -1,6 +1,4 @@
 <script>
-	import { ChevronRight } from 'lucide-svelte';
-
 	let {
 		variant = 'primary',
 		size = 'md',
