@@ -1,8 +1,7 @@
 <script>
 	import Card from '$lib/components/Card.svelte';
-	import { GraduationCap, Info, Users, Building2, Network } from 'lucide-svelte';
+	import { Handshake, GraduationCap, CirclePile, Info, Users, Building2, Network } from 'lucide-svelte';
 	import { sections } from '$lib/data/homeData';
-	import Footer from '$lib/components/footer.svelte';
 
 	let videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
 	let visualizerEl = $state();
@@ -34,11 +33,38 @@
 			<h1 class="bsit-title">BSIT</h1>
 			<h2 class="bsit-subtitle">Bachelor of Science in Information Technology</h2>
 			<p class="bsit-desc">
-				The <strong>Bachelor of Science in Information Technology (BSIT)</strong> program is a four-year
-				degree program which focuses on the study of computer utilization and computer software to plan,
-				install, customize, operate, manage, administer and maintain information technology infrastructure
+				The Bachelor of Science in Information Technology (BSIT) program is a four-year degree
+				program which focuses on the study of computer utilization and computer software to plan,
+				install, customize, operate, manage, administer and maintain information technology
+				infrastructure
 			</p>
-			<img class="bsit-bg-img" src="/img/PYLON.jpg" alt="PUP Monument" />
+		</Card>
+
+		<Card class="innovation-card" variant="dark" size="md">
+			<h2 class="innovation-heading">Innovation. Excellence. Future Ready</h2>
+			<div class="highlights">
+				<div class="highlight-item">
+					<div class="highlight-text">
+						<Handshake></Handshake>
+						<span class="stat">100+</span>
+						<span class="desc">Industry partnerships worldwide</span>
+					</div>
+				</div>
+				<div class="highlight-item">
+					<div class="highlight-text">
+						<GraduationCap></GraduationCap>
+						<span class="stat">95.31%</span>
+						<span class="desc">Graduate employability rate within 12 months</span>
+					</div>
+				</div>
+				<div class="highlight-item">
+					<div class="highlight-text">
+						<CirclePile></CirclePile>
+						<span class="stat">10 Orgs</span>
+						<span class="desc">Student Built Organizations<br />(academic and tech)</span>
+					</div>
+				</div>
+			</div>
 		</Card>
 
 		<Card class="years-card" variant="dark" size="md">
@@ -160,9 +186,9 @@
 				<div class="mv-card">
 					<h3>MISSION</h3>
 					<p>
-						The <strong>Department of Information Technology</strong> is committed to providing exceptional
-						ICT education, conducting groundbreaking research, and driving innovation within the University,
-						establishing ourselves as a recognized leader in the field.
+						The <strong>Department of Information Technology</strong> is committed to providing
+						exceptional ICT education, conducting groundbreaking research, and driving innovation within
+						the University, establishing ourselves as a recognized leader in the field.
 					</p>
 				</div>
 				<div class="mv-card">
@@ -267,9 +293,9 @@
 					</div>
 					<p class="goal-text">Nurture Strong Relationships</p>
 				</div>
-			</div>
 		</div>
 	</div>
+</div>
 </section>
 
 <section class="quick-links">
@@ -291,183 +317,140 @@
 	{/each}
 </section>
 
-<div class="section5-wrapper">
-	<section class="section-5">
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/100x116"
-			style="--w:100px; --h:116px; --x:0px; --y:57px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/200x200"
-			style="--w:200px; --h:200px; --x:0px; --y:835px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/350x317"
-			style="--w:350px; --h:317px; --x:0px; --y:235px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/165x162"
-			style="--w:165px; --h:162px; --x:401px; --y:467px; --op:0.80; --shadow:10px; --blur:5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/131x134"
-			style="--w:131px; --h:134px; --x:270px; --y:668px; --op:0.90; --shadow:10px; --blur:5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:1451px; --y:380px; --op:0.90; --shadow:15px; --blur:7.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/170x170"
-			style="--w:170px; --h:170px; --x:1751px; --y:534px; --op:0.99; --shadow:5px; --blur:2.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:1621px; --y:208px; --shadow:5px; --blur:2.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:1801px; --y:35px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/126x126"
-			style="--w:126px; --h:126px; --x:432px; --y:1081px; --op:0.85; --shadow:15px; --blur:7.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:1276px; --y:771px; --op:0.90; --shadow:20px; --blur:10px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/103x100"
-			style="--w:103px; --h:100px; --x:1482px; --y:1107px; --op:0.90; --shadow:10px; --blur:5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:1657px; --y:1278px; --op:0.95; --shadow:4px; --blur:2px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:1832px; --y:1450px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/263x243"
-			style="--w:263px; --h:243px; --x:175px; --y:1207px; --op:0.90; --shadow:5px; --blur:2.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/117x129"
-			style="--w:117px; --h:129px; --x:646px; --y:830px; --op:0.75; --shadow:20px; --blur:10px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/87x92"
-			style="--w:87px;  --h:92px;  --x:1305px; --y:115px; --shadow:4px; --blur:2px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/217x217"
-			style="--w:217px; --h:217px; --x:708px; --y:163px; --op:0.70; --shadow:15px; --blur:7.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:0px; --y:1450px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/175x172"
-			style="--w:175px; --h:172px; --x:558px; --y:1293px; --op:0.75; --shadow:15px; --blur:7.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/242x255"
-			style="--w:242px; --h:255px; --x:1679px; --y:815px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/121x116"
-			style="--w:121px; --h:116px; --x:1562px; --y:705px; --op:0.90; --shadow:5px; --blur:2.5px;"
-		/>
-		<img
-			class="bg-rect"
-			alt=""
-			src="https://placehold.co/241x230"
-			style="--w:241px; --h:230px; --x:1035px; --y:935px; --op:0.75; --shadow:20px; --blur:10px;"
-		/>
+<section class="section-5">
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/100x116"
+		style="--w:100px; --h:116px; --x:0px; --y:57px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/200x200"
+		style="--w:200px; --h:200px; --x:0px; --y:835px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/350x317"
+		style="--w:350px; --h:317px; --x:0px; --y:235px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/165x162"
+		style="--w:165px; --h:162px; --x:401px; --y:467px; --op:0.80; --shadow:10px; --blur:5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/131x134"
+		style="--w:131px; --h:134px; --x:270px; --y:668px; --op:0.90; --shadow:10px; --blur:5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:1451px; --y:380px; --op:0.90; --shadow:15px; --blur:7.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/170x170"
+		style="--w:170px; --h:170px; --x:1751px; --y:534px; --op:0.99; --shadow:5px; --blur:2.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:1621px; --y:208px; --shadow:5px; --blur:2.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:1801px; --y:35px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/126x126"
+		style="--w:126px; --h:126px; --x:432px; --y:1081px; --op:0.85; --shadow:15px; --blur:7.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:1276px; --y:771px; --op:0.90; --shadow:20px; --blur:10px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/103x100"
+		style="--w:103px; --h:100px; --x:1482px; --y:1107px; --op:0.90; --shadow:10px; --blur:5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:1657px; --y:1278px; --op:0.95; --shadow:4px; --blur:2px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:1832px; --y:1450px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/263x243"
+		style="--w:263px; --h:243px; --x:175px; --y:1207px; --op:0.90; --shadow:5px; --blur:2.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/117x129"
+		style="--w:117px; --h:129px; --x:646px; --y:830px; --op:0.75; --shadow:20px; --blur:10px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/87x92"
+		style="--w:87px;  --h:92px;  --x:1305px; --y:115px; --shadow:4px; --blur:2px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/217x217"
+		style="--w:217px; --h:217px; --x:708px; --y:163px; --op:0.70; --shadow:15px; --blur:7.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:0px; --y:1450px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/175x172"
+		style="--w:175px; --h:172px; --x:558px; --y:1293px; --op:0.75; --shadow:15px; --blur:7.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/242x255"
+		style="--w:242px; --h:255px; --x:1679px; --y:815px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/121x116"
+		style="--w:121px; --h:116px; --x:1562px; --y:705px; --op:0.90; --shadow:5px; --blur:2.5px;"
+	/>
+	<img
+		class="bg-rect" alt=""
+		src="https://placehold.co/241x230"
+		style="--w:241px; --h:230px; --x:1035px; --y:935px; --op:0.75; --shadow:20px; --blur:10px;"
+	/>
 
-		<h3 class="subtitle-top">we build systems that</h3>
+	<h3 class="subtitle-top">we build systems that</h3>
 
-		<h1 class="main-title">that solve real problems —</h1>
+	<h1 class="main-title">that solve real problems —</h1>
 
-		<h3 class="subtitle-bottom">from classrooms to communities,<br />to the country.</h3>
+	<h3 class="subtitle-bottom">from classrooms to communities,<br />to the country.</h3>
 
-		<p class="description">
-			The Department of Information Technology was founded in 1979 as part of PUP’s commitment to
-			accessible technical education. Forty-six years later, that mission still holds.
-		</p>
+	<p class="description">
+		The Department of Information Technology was founded in 1979 as part of PUP’s commitment to
+		accessible technical education. Forty-six years later, that mission still holds.
+	</p>
 
-		<a href="https://www.pup.edu.ph" class="btn-pup" target="_blank" rel="noopener noreferrer">
-			Check-out PUP Website
-		</a>
-	</section>
-</div>
-
-<Footer></Footer>
+	<a href="https://www.pup.edu.ph" class="btn-pup" target="_blank" rel="noopener noreferrer">
+		Check-out PUP Website
+	</a>
+</section>
 
 <style>
-	:root {
-		--container-max: 1400px;
-		--space-xs: clamp(0.5rem, 1vw, 0.75rem);
-		--space-sm: clamp(0.75rem, 1.5vw, 1rem);
-		--space-md: clamp(1rem, 2vw, 2rem);
-		--space-lg: clamp(2rem, 4vw, 4rem);
-		--text-sm: clamp(0.875rem, 1vw, 1rem);
-		--text-md: clamp(1rem, 1.5vw, 1.25rem);
-		--text-lg: clamp(1.5rem, 3vw, 2.5rem);
-		--text-xl: clamp(2rem, 5vw, 4rem);
-	}
-
-	.section5-wrapper {
-		overflow-x: hidden;
-	}
-
 	.video-container {
 		position: relative;
 		width: 100%;
@@ -506,6 +489,7 @@
 
 	/* Cards styling */
 	:global(.bsit-card),
+	:global(.innovation-card),
 	:global(.years-card),
 	:global(.objectives-card) {
 		padding: 32px;
@@ -517,10 +501,10 @@
 
 	/*Grid placements */
 	:global(.bsit-card) {
-		grid-column: span 12;
-		position: relative;
-		overflow: hidden;
-		min-height: 400px;
+		grid-column: span 7;
+	}
+	:global(.innovation-card) {
+		grid-column: span 5;
 	}
 	:global(.years-card) {
 		grid-column: span 4;
@@ -531,7 +515,7 @@
 
 	/* --- Box 1: BSIT --- */
 	.bsit-title {
-		font-size: clamp(2rem, 5vw, 4.5rem);
+		font-size: 72px;
 		font-weight: 700;
 		letter-spacing: 4px;
 		margin: 0;
@@ -546,25 +530,45 @@
 	}
 	.bsit-desc {
 		font-size: 16px;
-		text-align: left;
+		text-align: justify;
 		line-height: 1.6;
-		margin: 48px 0 0 0;
+		margin: 0;
 	}
-	.bsit-bg-img {
-		position: absolute;
-		right: 0;
-		top: 0;
-		height: 100%;
-		width: 50%;
-		object-fit: cover;
-		z-index: 0;
-		pointer-events: none;
+
+	/* --- Box 2: Innovation --- */
+	.innovation-heading {
+		font-size: 32px;
+		font-weight: 700;
+		margin: 0 0 1.5rem 0;
+		line-height: 1.2;
 	}
-	.bsit-title,
-	.bsit-subtitle,
-	.bsit-desc {
-		position: relative;
-		z-index: 1;
+	.highlights {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.highlight-item {
+		background-color: #5d5d5d;
+		border-radius: 12px;
+		padding: 1rem 1.25rem;
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.highlight-text {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+	.highlight-text .stat {
+		font-size: 24px;
+		font-weight: 700;
+		min-width: 90px;
+	}
+	.highlight-text .desc {
+		font-size: 15px;
+		line-height: 1.3;
 	}
 
 	/* --- Box 3: 47 Years --- */
@@ -576,7 +580,7 @@
 		margin-bottom: 0.75rem;
 	}
 	.years-header .number {
-		font-size: clamp(2.5rem, 5vw, 5rem);
+		font-size: 80px;
 		font-weight: 700;
 		line-height: 1;
 	}
@@ -770,7 +774,11 @@
 		z-index: 0;
 	}
 
+
+
+
 	/* --- LEFT SIDE: Radial Diagram --- */
+
 
 	.quick-links {
 		display: flex;
@@ -896,16 +904,14 @@
 	/* Intro Section CSS Grid Layout */
 	.intro-container {
 		display: grid;
-		grid-template-columns: minmax(280px, 40%) 1fr;
+		grid-template-columns: 634px 1fr;
 		gap: 60px;
 		align-items: start;
 		margin-bottom: 80px;
 	}
 	.intro-image {
-		width: 100%;
-		max-width: 634px;
-		aspect-ratio: 634 / 854;
-		height: auto;
+		width: 634px;
+		height: 854px;
 		object-fit: cover;
 		border-radius: 15px;
 		background: linear-gradient(134deg, #6d1012 0%, #965e00 100__);
@@ -927,8 +933,8 @@
 
 	/* Mission & Vision Styling Layout */
 	.mv-container {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		display: flex;
+		justify-content: flex-end;
 		gap: 40px;
 		margin-top: 60px;
 	}
@@ -943,6 +949,12 @@
 		padding: 40px;
 		box-sizing: border-box;
 	}
+	.mv-container .mv-card:nth-child(1) {
+		width: 566px;
+	} /* Mission width */
+	.mv-container .mv-card:nth-child(2) {
+		width: 357px;
+	} /* Vision width */
 
 	.mv-card h3 {
 		font-family: 'Overpass', sans-serif;
@@ -970,7 +982,6 @@
 		background: linear-gradient(137deg, #fac549 0%, #ca8106 100%);
 		border-radius: 35px;
 		display: flex;
-		flex-wrap: wrap;
 		justify-content: space-around;
 		align-items: center;
 		padding: 60px 40px;
@@ -981,13 +992,12 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		width: 100%;
-		max-width: 280px;
+		width: 280px;
 	}
 	.stat-number {
 		font-family: 'Overpass', sans-serif;
 		color: #941518;
-		font-size: clamp(2.5rem, 5vw, 4.5rem);
+		font-size: 72px;
 		font-weight: 700;
 		margin: 15px 0;
 	}
@@ -1010,11 +1020,11 @@
 	/* Concentric Circle Orbit Graphics Engine System */
 	.qc-visualizer {
 		position: relative;
-		width: min(100%, 874px);
-		aspect-ratio: 874 / 750;
-		height: auto;
+		width: 874px;
+		height: 750px;
 		background: linear-gradient(148deg, #451516 0%, #1a1614 64%, #392e1f 100%);
 		border-radius: 30px;
+		flex-shrink: 0;
 	}
 	.ellipse-outer,
 	.ellipse-mid,
@@ -1054,16 +1064,16 @@
 		}
 	}
 	.ellipse-outer {
-		width: 55%;
-		aspect-ratio: 481 / 468;
+		width: 481px;
+		height: 468px;
 	}
 	.ellipse-mid {
-		width: 37%;
-		aspect-ratio: 325 / 316;
+		width: 325px;
+		height: 316px;
 	}
 	.ellipse-inner {
-		width: 18.5%;
-		aspect-ratio: 163 / 159;
+		width: 163px;
+		height: 159px;
 	}
 
 	.qc-core-badge {
@@ -1071,13 +1081,13 @@
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		width: 27%;
-		padding: 0.5em 0;
+		width: 239px;
+		height: 51px;
 		background: linear-gradient(90deg, #cfa83a 0%, #ce870c 100%);
 		border-radius: 30px;
 		color: #b30e12;
 		font-family: 'Overpass', sans-serif;
-		font-size: clamp(14px, 2vw, 26px);
+		font-size: 26px;
 		font-weight: 700;
 		display: flex;
 		align-items: center;
@@ -1115,20 +1125,20 @@
 		opacity: 0;
 	}
 	.instruction-btn {
-		left: 50%;
-		top: 14.7%;
+		left: 437px;
+		top: 110px;
 	}
 	.research-btn {
-		left: 86.3%;
-		top: 50%;
+		left: 754px;
+		top: 375px;
 	}
 	.extension-btn {
-		left: 13.7%;
-		top: 50%;
+		left: 120px;
+		top: 375px;
 	}
 	.compliance-btn {
-		left: 50%;
-		top: 85.3%;
+		left: 437px;
+		top: 640px;
 	}
 	.qc-visualizer.animate .node-btn {
 		animation: nodePop 0.25s ease-out forwards;
@@ -1160,10 +1170,10 @@
 	/* Connector line segments — grow from center outward */
 	.line-top {
 		position: absolute;
-		left: 50%;
-		top: 18.8%;
+		left: 437px;
+		top: 141px;
 		width: 2px;
-		height: 31.2%;
+		height: 234px;
 		background: #fac549;
 		transform-origin: bottom center;
 		transform: translate(-50%, 0) scaleY(0);
@@ -1171,9 +1181,9 @@
 	}
 	.line-right {
 		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: 27.5%;
+		left: 437px;
+		top: 375px;
+		width: 240.5px;
 		height: 2px;
 		background: #fac549;
 		transform-origin: left center;
@@ -1182,9 +1192,9 @@
 	}
 	.line-left {
 		position: absolute;
-		left: 22.5%;
-		top: 50%;
-		width: 27.5%;
+		left: 196.5px;
+		top: 375px;
+		width: 240.5px;
 		height: 2px;
 		background: #fac549;
 		transform-origin: right center;
@@ -1193,10 +1203,10 @@
 	}
 	.line-bottom {
 		position: absolute;
-		left: 50%;
-		top: 50%;
+		left: 437px;
+		top: 375px;
 		width: 2px;
-		height: 31.2%;
+		height: 234px;
 		background: #fac549;
 		transform-origin: top center;
 		transform: translate(-50%, 0) scaleY(0);
@@ -1233,8 +1243,8 @@
 	/* Gold dots at outer ellipse intersections */
 	.gold-dot {
 		position: absolute;
-		width: 0.9%;
-		aspect-ratio: 1;
+		width: 8px;
+		height: 8px;
 		background: #fac549;
 		border-radius: 50%;
 		transform: translate(-50%, -50%);
@@ -1242,20 +1252,20 @@
 		opacity: 0;
 	}
 	.dot-top {
-		left: 50%;
-		top: 18.8%;
+		left: 437px;
+		top: 141px;
 	}
 	.dot-right {
-		left: 77.5%;
-		top: 50%;
+		left: 677.5px;
+		top: 375px;
 	}
 	.dot-left {
-		left: 22.5%;
-		top: 50%;
+		left: 196.5px;
+		top: 375px;
 	}
 	.dot-bottom {
-		left: 50%;
-		top: 81.2%;
+		left: 437px;
+		top: 609px;
 	}
 	.qc-visualizer.animate .gold-dot {
 		animation: dotPop 0.2s linear forwards;
@@ -1295,7 +1305,7 @@
 	.goals-title {
 		font-family: 'Overpass', sans-serif;
 		color: #fac549;
-		font-size: clamp(3rem, 8vw, 7.5rem);
+		font-size: 120px;
 		font-weight: 700;
 		margin: 0 0 40px 0;
 		text-align: left; /* Shifted left to match the design file layout */
@@ -1304,14 +1314,14 @@
 	/* Card layout grid engine */
 	.goals-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 30px;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 30px; /* Space between rows and columns */
 		width: 100%;
 	}
 
 	/* Individual Card Styling */
 	.goal-card {
-		width: 100%;
+		width: 338.79px;
 		height: 171px;
 		background: linear-gradient(137deg, #921518 0%, #6d1719 100%);
 		border-radius: 15px;
@@ -1354,11 +1364,11 @@
 	/* Shared Inline Vector Icons Standard Controls */
 
 	.section-5 {
-		width: min(100%, 1920px);
-		aspect-ratio: 1920 / 1596;
-		margin: 0 auto;
+		width: 1920px;
+		height: 1596px;
 		position: relative;
 		overflow: hidden;
+		margin: 0 auto;
 	}
 
 	/* Consolidated Base Styling for Background Rectangles */
@@ -1384,7 +1394,7 @@
 		text-align: center;
 		color: #000000;
 		font:
-			italic 400 clamp(1.25rem, 4vw, 4rem)/1.2 'Inter',
+			italic 400 64px/1.2 'Inter',
 			sans-serif;
 	}
 
@@ -1397,7 +1407,7 @@
 		text-align: center;
 		color: #f5be42;
 		font:
-			700 clamp(3rem, 8vw, 10rem)/1.1 'Overpass',
+			700 160px/160px 'Overpass',
 			sans-serif;
 		word-wrap: break-word;
 	}
@@ -1411,7 +1421,7 @@
 		text-align: center;
 		color: #000000;
 		font:
-			italic 400 clamp(1.25rem, 4vw, 4rem)/1.2 'Inter',
+			italic 400 64px/1.2 'Inter',
 			sans-serif;
 	}
 
@@ -1424,7 +1434,7 @@
 		text-align: center;
 		color: #000000;
 		font:
-			400 clamp(1rem, 2vw, 3rem)/1.4 'Inter',
+			400 52px/1.4 'Inter',
 			sans-serif;
 		text-shadow: 0px 4px 4px rgba(255, 251, 251, 0.25);
 	}
@@ -1457,264 +1467,37 @@
 		color: #ffffff;
 	}
 
-	/* ---- Responsive Breakpoints ---- */
-
-	/* ≤1400px — shrink large elements, stack MV cards */
-	@media (max-width: 1400px) {
-		.about-section {
-			padding: 40px 60px;
-		}
-		.intro-text {
-			align-items: center;
-		}
-		.intro-text p {
-			font-size: 22px;
-			line-height: 32px;
-			text-align: center;
-			max-width: 100%;
-			margin: 0;
-		}
-		.mv-card h3 {
-			font-size: 48px;
-		}
-		.mv-card p {
-			font-size: 18px;
-		}
-		.goals-section {
-			flex-direction: column;
-			align-items: center;
-		}
-		.goals-title {
-			text-align: center;
-		}
-		.goal-card {
-			height: 150px;
-		}
-	}
-
-	/* ≤1200px — tablets / small desktops */
+	/* media query */
 	@media (max-width: 1200px) {
-		:global(.bsit-card),
-		:global(.years-card),
-		:global(.objectives-card) {
-			grid-column: span 12;
-		}
-		.obj-grid {
-			grid-template-columns: 1fr;
-		}
-		.about-section {
-			padding: 30px 40px;
-		}
-		.stats-banner {
-			gap: 30px;
-			padding: 40px 30px;
-		}
-		.goal-card {
-			height: 140px;
+	
+
+	@media (max-width: 768px) {
+		.welcome-container {
+			gap: 1rem;
 		}
 	}
 
-	/* ≤1024px — tablets */
 	@media (max-width: 1024px) {
-		.intro-container {
-			grid-template-columns: 1fr;
-		}
-		.intro-image {
-			max-width: 400px;
-			margin: 0 auto;
-		}
 		.leadership-container {
 			grid-template-columns: 1fr;
 		}
+
 		.leader-pane {
 			min-height: 800px;
 			padding: 3rem 2rem;
 		}
+
 		.quote {
 			max-width: 100%;
 		}
+
 		.dustin-img,
 		.melvin-img {
 			left: 50%;
 			transform: translateX(-50%);
 			max-height: 60%;
 		}
-		.about-section {
-			padding: 24px 24px;
-		}
-		.intro-text p {
-			font-size: 20px;
-			line-height: 28px;
-		}
-		.mv-card h3 {
-			font-size: 36px;
-		}
-		.mv-card p {
-			font-size: 16px;
-		}
-		.mv-card {
-			padding: 24px;
-		}
-		.stats-banner {
-			gap: 20px;
-			padding: 30px 20px;
-		}
-		.stat-label {
-			font-size: 18px;
-		}
-		.goal-card {
-			height: 130px;
-		}
-		.goal-text {
-			font-size: 16px;
-		}
-		.bsit-bg-img {
-			opacity: 0.25;
-			width: 100%;
-		}
 	}
-
-	/* ≤768px — large phones */
-	@media (max-width: 768px) {
-		.welcome-container {
-			gap: 1rem;
-			padding: 2rem 1rem;
-		}
-		.about-section {
-			padding: 16px 16px;
-		}
-		.about-title {
-			font-size: 20px;
-			letter-spacing: 4px;
-		}
-		.intro-image {
-			max-width: 280px;
-		}
-		.intro-text p {
-			font-size: 16px;
-			line-height: 24px;
-		}
-		.mv-card {
-			padding: 16px;
-		}
-		.mv-card h3 {
-			font-size: 28px;
-		}
-		.about-header {
-			gap: 10px;
-		}
-		.stats-banner {
-			flex-direction: column;
-			align-items: center;
-			gap: 24px;
-			padding: 24px 16px;
-		}
-		.leadership-container {
-			min-height: auto;
-		}
-		.leader-pane {
-			padding: 2rem 1.5rem;
-			min-height: 600px;
-		}
-		.profile-img {
-			max-height: 70%;
-		}
-		.profile-info h3 {
-			font-size: clamp(1.2rem, 5vw, 1.8rem);
-		}
-		.profile-info p {
-			font-size: clamp(0.9rem, 3vw, 1.2rem);
-		}
-		.goals-title {
-			margin-bottom: 20px;
-		}
-		.goals-grid {
-			gap: 16px;
-		}
-		.goal-card {
-			height: 120px;
-			padding: 14px;
-		}
-		.goal-num {
-			font-size: 22px;
-		}
-		.goal-text {
-			font-size: 14px;
-		}
-		.quick-links {
-			height: auto;
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-		}
-		.quick-links .panel {
-			min-height: 200px;
-		}
-		.bento-section {
-			padding: 2rem 1rem;
-		}
-		.bsit-subtitle {
-			font-size: 16px;
-		}
-		.years-header .text {
-			font-size: 28px;
-		}
-		.years-desc {
-			font-size: 14px;
-		}
-		:global(.bsit-card),
-		:global(.years-card),
-		:global(.objectives-card) {
-			padding: 20px;
-		}
-		.bsit-bg-img {
-			display: none;
-		}
-	}
-
-	/* ≤480px — small phones */
-	@media (max-width: 480px) {
-		.about-section {
-			padding: 12px 12px;
-		}
-		.intro-image {
-			max-width: 200px;
-		}
-		.intro-text p {
-			font-size: 14px;
-			line-height: 20px;
-		}
-		.mv-card {
-			padding: 12px;
-		}
-		.mv-card h3 {
-			font-size: 22px;
-		}
-		.about-title {
-			font-size: 16px;
-			letter-spacing: 2px;
-		}
-		.goal-card {
-			height: 100px;
-			padding: 10px;
-		}
-		.goal-num {
-			font-size: 18px;
-		}
-		.goal-text {
-			font-size: 12px;
-		}
-		.quick-links {
-			grid-template-columns: 1fr;
-		}
-		.quick-links .panel {
-			min-height: 140px;
-		}
-		.leader-pane {
-			padding: 1.5rem 1rem;
-			min-height: 500px;
-		}
-		.profile-img {
-			max-height: 65%;
-		}
 	}
 </style>
+
