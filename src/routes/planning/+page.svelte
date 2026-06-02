@@ -1034,12 +1034,14 @@
 	}
 
 	.process_card_title {
-		font-family: var(--font-heading);
-		font-size: 1.15rem; /* Slightly larger matching figma */
-		font-weight: 700;
-		color: var(--color-maroon);
+		font-family: var(--font-heading); /* Overpass */
+		font-size: 2rem; /* 32px matching Figma specification */
+		font-weight: 600; /* SemiBold matching Figma specification */
+		color: #941518; /* Maroon color matching Figma specification */
 		margin: 0;
-		line-height: 1.3;
+		line-height: 1; /* 100% line-height matching Figma specification */
+		letter-spacing: 0.04em; /* 4% letter-spacing matching Figma specification */
+		text-align: center;
 	}
 
 	.process_card_desc {
