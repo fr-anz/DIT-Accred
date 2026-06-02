@@ -2,11 +2,11 @@
 	import Card from '$lib/components/Card.svelte';
 	import { GraduationCap, Info, Users, Building2, Network } from 'lucide-svelte';
 	import { sections } from '$lib/data/homeData';
+	import Footer from '$lib/components/footer.svelte';
 
 	let videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
 	let visualizerEl = $state();
 	let isVisible = $state(false);
-	let scaleRootEl = $state();
 
 	$effect(() => {
 		if (!visualizerEl || typeof IntersectionObserver === 'undefined') return;
@@ -22,23 +22,7 @@
 		observer.observe(visualizerEl);
 		return () => observer.disconnect();
 	});
-
-	$effect(() => {
-		if (!scaleRootEl || typeof ResizeObserver === 'undefined') return;
-		const updateScale = () => {
-			const scale = Math.max(0.25, window.innerWidth / 1920);
-			scaleRootEl.style.transform = `scale(${scale})`;
-			scaleRootEl.style.transformOrigin = 'top left';
-			scaleRootEl.style.width = `${100 / scale}%`;
-		};
-		updateScale();
-		const observer = new ResizeObserver(updateScale);
-		observer.observe(scaleRootEl);
-		return () => observer.disconnect();
-	});
 </script>
-
-<div class="scale-root" bind:this={scaleRootEl}>
 
 <header class="video-container">
 	<video src={videoUrl} autoplay loop muted playsinline class="video-home"></video>
@@ -54,11 +38,7 @@
 				degree program which focuses on the study of computer utilization and computer software to plan,
 				install, customize, operate, manage, administer and maintain information technology infrastructure
 			</p>
-			<img
-				class="bsit-bg-img"
-				src="https://upload.wikimedia.org/wikipedia/commons/f/f4/PUP_Mabini_Campus_pylon_%28Anonas_Street%2C_Santa_Mesa%2C_Manila%3B_06-18-2023%29.jpg"
-				alt="PUP Monument"
-			/>
+			<img class="bsit-bg-img" src="/img/PYLON.jpg" alt="PUP Monument" />
 		</Card>
 
 		<Card class="years-card" variant="dark" size="md">
@@ -311,171 +291,181 @@
 	{/each}
 </section>
 
-<section class="section-5">
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/100x116"
-		style="--w:100px; --h:116px; --x:0px; --y:57px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/200x200"
-		style="--w:200px; --h:200px; --x:0px; --y:835px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/350x317"
-		style="--w:350px; --h:317px; --x:0px; --y:235px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/165x162"
-		style="--w:165px; --h:162px; --x:401px; --y:467px; --op:0.80; --shadow:10px; --blur:5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/131x134"
-		style="--w:131px; --h:134px; --x:270px; --y:668px; --op:0.90; --shadow:10px; --blur:5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:1451px; --y:380px; --op:0.90; --shadow:15px; --blur:7.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/170x170"
-		style="--w:170px; --h:170px; --x:1751px; --y:534px; --op:0.99; --shadow:5px; --blur:2.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:1621px; --y:208px; --shadow:5px; --blur:2.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:1801px; --y:35px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/126x126"
-		style="--w:126px; --h:126px; --x:432px; --y:1081px; --op:0.85; --shadow:15px; --blur:7.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:1276px; --y:771px; --op:0.90; --shadow:20px; --blur:10px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/103x100"
-		style="--w:103px; --h:100px; --x:1482px; --y:1107px; --op:0.90; --shadow:10px; --blur:5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:1657px; --y:1278px; --op:0.95; --shadow:4px; --blur:2px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:1832px; --y:1450px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/263x243"
-		style="--w:263px; --h:243px; --x:175px; --y:1207px; --op:0.90; --shadow:5px; --blur:2.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/117x129"
-		style="--w:117px; --h:129px; --x:646px; --y:830px; --op:0.75; --shadow:20px; --blur:10px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/87x92"
-		style="--w:87px;  --h:92px;  --x:1305px; --y:115px; --shadow:4px; --blur:2px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/217x217"
-		style="--w:217px; --h:217px; --x:708px; --y:163px; --op:0.70; --shadow:15px; --blur:7.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:0px; --y:1450px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/175x172"
-		style="--w:175px; --h:172px; --x:558px; --y:1293px; --op:0.75; --shadow:15px; --blur:7.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/242x255"
-		style="--w:242px; --h:255px; --x:1679px; --y:815px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/121x116"
-		style="--w:121px; --h:116px; --x:1562px; --y:705px; --op:0.90; --shadow:5px; --blur:2.5px;"
-	/>
-	<img
-		class="bg-rect"
-		alt=""
-		src="https://placehold.co/241x230"
-		style="--w:241px; --h:230px; --x:1035px; --y:935px; --op:0.75; --shadow:20px; --blur:10px;"
-	/>
+<div class="section5-wrapper">
+	<section class="section-5">
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/100x116"
+			style="--w:100px; --h:116px; --x:0px; --y:57px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/200x200"
+			style="--w:200px; --h:200px; --x:0px; --y:835px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/350x317"
+			style="--w:350px; --h:317px; --x:0px; --y:235px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/165x162"
+			style="--w:165px; --h:162px; --x:401px; --y:467px; --op:0.80; --shadow:10px; --blur:5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/131x134"
+			style="--w:131px; --h:134px; --x:270px; --y:668px; --op:0.90; --shadow:10px; --blur:5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:1451px; --y:380px; --op:0.90; --shadow:15px; --blur:7.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/170x170"
+			style="--w:170px; --h:170px; --x:1751px; --y:534px; --op:0.99; --shadow:5px; --blur:2.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:1621px; --y:208px; --shadow:5px; --blur:2.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:1801px; --y:35px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/126x126"
+			style="--w:126px; --h:126px; --x:432px; --y:1081px; --op:0.85; --shadow:15px; --blur:7.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:1276px; --y:771px; --op:0.90; --shadow:20px; --blur:10px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/103x100"
+			style="--w:103px; --h:100px; --x:1482px; --y:1107px; --op:0.90; --shadow:10px; --blur:5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:1657px; --y:1278px; --op:0.95; --shadow:4px; --blur:2px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:1832px; --y:1450px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/263x243"
+			style="--w:263px; --h:243px; --x:175px; --y:1207px; --op:0.90; --shadow:5px; --blur:2.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/117x129"
+			style="--w:117px; --h:129px; --x:646px; --y:830px; --op:0.75; --shadow:20px; --blur:10px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/87x92"
+			style="--w:87px;  --h:92px;  --x:1305px; --y:115px; --shadow:4px; --blur:2px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/217x217"
+			style="--w:217px; --h:217px; --x:708px; --y:163px; --op:0.70; --shadow:15px; --blur:7.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:0px; --y:1450px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/175x172"
+			style="--w:175px; --h:172px; --x:558px; --y:1293px; --op:0.75; --shadow:15px; --blur:7.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/242x255"
+			style="--w:242px; --h:255px; --x:1679px; --y:815px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/121x116"
+			style="--w:121px; --h:116px; --x:1562px; --y:705px; --op:0.90; --shadow:5px; --blur:2.5px;"
+		/>
+		<img
+			class="bg-rect"
+			alt=""
+			src="https://placehold.co/241x230"
+			style="--w:241px; --h:230px; --x:1035px; --y:935px; --op:0.75; --shadow:20px; --blur:10px;"
+		/>
 
-	<h3 class="subtitle-top">we build systems that</h3>
+		<h3 class="subtitle-top">we build systems that</h3>
 
-	<h1 class="main-title">that solve real problems —</h1>
+		<h1 class="main-title">that solve real problems —</h1>
 
-	<h3 class="subtitle-bottom">from classrooms to communities,<br />to the country.</h3>
+		<h3 class="subtitle-bottom">from classrooms to communities,<br />to the country.</h3>
 
-	<p class="description">
-		The Department of Information Technology was founded in 1979 as part of PUP’s commitment to
-		accessible technical education. Forty-six years later, that mission still holds.
-	</p>
+		<p class="description">
+			The Department of Information Technology was founded in 1979 as part of PUP’s commitment to
+			accessible technical education. Forty-six years later, that mission still holds.
+		</p>
 
-	<a href="https://www.pup.edu.ph" class="btn-pup" target="_blank" rel="noopener noreferrer">
-		Check-out PUP Website
-	</a>
-</section>
-
+		<a href="https://www.pup.edu.ph" class="btn-pup" target="_blank" rel="noopener noreferrer">
+			Check-out PUP Website
+		</a>
+	</section>
 </div>
 
+<Footer></Footer>
+
 <style>
-	:global(body) {
-		overflow-x: hidden;
+	:root {
+		--container-max: 1400px;
+		--space-xs: clamp(0.5rem, 1vw, 0.75rem);
+		--space-sm: clamp(0.75rem, 1.5vw, 1rem);
+		--space-md: clamp(1rem, 2vw, 2rem);
+		--space-lg: clamp(2rem, 4vw, 4rem);
+		--text-sm: clamp(0.875rem, 1vw, 1rem);
+		--text-md: clamp(1rem, 1.5vw, 1.25rem);
+		--text-lg: clamp(1.5rem, 3vw, 2.5rem);
+		--text-xl: clamp(2rem, 5vw, 4rem);
 	}
 
-	.scale-root {
-		will-change: transform;
+	.section5-wrapper {
+		overflow-x: hidden;
 	}
 
 	.video-container {
@@ -530,6 +520,7 @@
 		grid-column: span 12;
 		position: relative;
 		overflow: hidden;
+		min-height: 400px;
 	}
 	:global(.years-card) {
 		grid-column: span 4;
@@ -540,7 +531,7 @@
 
 	/* --- Box 1: BSIT --- */
 	.bsit-title {
-		font-size: 72px;
+		font-size: clamp(2rem, 5vw, 4.5rem);
 		font-weight: 700;
 		letter-spacing: 4px;
 		margin: 0;
@@ -557,7 +548,7 @@
 		font-size: 16px;
 		text-align: left;
 		line-height: 1.6;
-		margin: 0;
+		margin: 48px 0 0 0;
 	}
 	.bsit-bg-img {
 		position: absolute;
@@ -585,7 +576,7 @@
 		margin-bottom: 0.75rem;
 	}
 	.years-header .number {
-		font-size: 80px;
+		font-size: clamp(2.5rem, 5vw, 5rem);
 		font-weight: 700;
 		line-height: 1;
 	}
@@ -905,14 +896,16 @@
 	/* Intro Section CSS Grid Layout */
 	.intro-container {
 		display: grid;
-		grid-template-columns: 634px 1fr;
+		grid-template-columns: minmax(280px, 40%) 1fr;
 		gap: 60px;
 		align-items: start;
 		margin-bottom: 80px;
 	}
 	.intro-image {
-		width: 634px;
-		height: 854px;
+		width: 100%;
+		max-width: 634px;
+		aspect-ratio: 634 / 854;
+		height: auto;
 		object-fit: cover;
 		border-radius: 15px;
 		background: linear-gradient(134deg, #6d1012 0%, #965e00 100__);
@@ -934,8 +927,8 @@
 
 	/* Mission & Vision Styling Layout */
 	.mv-container {
-		display: flex;
-		justify-content: flex-end;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 40px;
 		margin-top: 60px;
 	}
@@ -949,12 +942,6 @@
 			-4px 4px 4px rgba(109, 23, 25, 0.5);
 		padding: 40px;
 		box-sizing: border-box;
-	}
-	.mv-container .mv-card:nth-child(1) {
-		width: 566px;
-	}
-	.mv-container .mv-card:nth-child(2) {
-		width: 357px;
 	}
 
 	.mv-card h3 {
@@ -983,6 +970,7 @@
 		background: linear-gradient(137deg, #fac549 0%, #ca8106 100%);
 		border-radius: 35px;
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-around;
 		align-items: center;
 		padding: 60px 40px;
@@ -993,12 +981,13 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		width: 280px;
+		width: 100%;
+		max-width: 280px;
 	}
 	.stat-number {
 		font-family: 'Overpass', sans-serif;
 		color: #941518;
-		font-size: 72px;
+		font-size: clamp(2.5rem, 5vw, 4.5rem);
 		font-weight: 700;
 		margin: 15px 0;
 	}
@@ -1021,11 +1010,11 @@
 	/* Concentric Circle Orbit Graphics Engine System */
 	.qc-visualizer {
 		position: relative;
-		width: 874px;
-		height: 750px;
+		width: min(100%, 874px);
+		aspect-ratio: 874 / 750;
+		height: auto;
 		background: linear-gradient(148deg, #451516 0%, #1a1614 64%, #392e1f 100%);
 		border-radius: 30px;
-		flex-shrink: 0;
 	}
 	.ellipse-outer,
 	.ellipse-mid,
@@ -1065,16 +1054,16 @@
 		}
 	}
 	.ellipse-outer {
-		width: 481px;
-		height: 468px;
+		width: 55%;
+		aspect-ratio: 481 / 468;
 	}
 	.ellipse-mid {
-		width: 325px;
-		height: 316px;
+		width: 37%;
+		aspect-ratio: 325 / 316;
 	}
 	.ellipse-inner {
-		width: 163px;
-		height: 159px;
+		width: 18.5%;
+		aspect-ratio: 163 / 159;
 	}
 
 	.qc-core-badge {
@@ -1082,13 +1071,13 @@
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		width: 239px;
-		height: 51px;
+		width: 27%;
+		padding: 0.5em 0;
 		background: linear-gradient(90deg, #cfa83a 0%, #ce870c 100%);
 		border-radius: 30px;
 		color: #b30e12;
 		font-family: 'Overpass', sans-serif;
-		font-size: 26px;
+		font-size: clamp(14px, 2vw, 26px);
 		font-weight: 700;
 		display: flex;
 		align-items: center;
@@ -1126,20 +1115,20 @@
 		opacity: 0;
 	}
 	.instruction-btn {
-		left: 437px;
-		top: 110px;
+		left: 50%;
+		top: 14.7%;
 	}
 	.research-btn {
-		left: 754px;
-		top: 375px;
+		left: 86.3%;
+		top: 50%;
 	}
 	.extension-btn {
-		left: 120px;
-		top: 375px;
+		left: 13.7%;
+		top: 50%;
 	}
 	.compliance-btn {
-		left: 437px;
-		top: 640px;
+		left: 50%;
+		top: 85.3%;
 	}
 	.qc-visualizer.animate .node-btn {
 		animation: nodePop 0.25s ease-out forwards;
@@ -1171,10 +1160,10 @@
 	/* Connector line segments — grow from center outward */
 	.line-top {
 		position: absolute;
-		left: 437px;
-		top: 141px;
+		left: 50%;
+		top: 18.8%;
 		width: 2px;
-		height: 234px;
+		height: 31.2%;
 		background: #fac549;
 		transform-origin: bottom center;
 		transform: translate(-50%, 0) scaleY(0);
@@ -1182,9 +1171,9 @@
 	}
 	.line-right {
 		position: absolute;
-		left: 437px;
-		top: 375px;
-		width: 240.5px;
+		left: 50%;
+		top: 50%;
+		width: 27.5%;
 		height: 2px;
 		background: #fac549;
 		transform-origin: left center;
@@ -1193,9 +1182,9 @@
 	}
 	.line-left {
 		position: absolute;
-		left: 196.5px;
-		top: 375px;
-		width: 240.5px;
+		left: 22.5%;
+		top: 50%;
+		width: 27.5%;
 		height: 2px;
 		background: #fac549;
 		transform-origin: right center;
@@ -1204,10 +1193,10 @@
 	}
 	.line-bottom {
 		position: absolute;
-		left: 437px;
-		top: 375px;
+		left: 50%;
+		top: 50%;
 		width: 2px;
-		height: 234px;
+		height: 31.2%;
 		background: #fac549;
 		transform-origin: top center;
 		transform: translate(-50%, 0) scaleY(0);
@@ -1244,8 +1233,8 @@
 	/* Gold dots at outer ellipse intersections */
 	.gold-dot {
 		position: absolute;
-		width: 8px;
-		height: 8px;
+		width: 0.9%;
+		aspect-ratio: 1;
 		background: #fac549;
 		border-radius: 50%;
 		transform: translate(-50%, -50%);
@@ -1253,20 +1242,20 @@
 		opacity: 0;
 	}
 	.dot-top {
-		left: 437px;
-		top: 141px;
+		left: 50%;
+		top: 18.8%;
 	}
 	.dot-right {
-		left: 677.5px;
-		top: 375px;
+		left: 77.5%;
+		top: 50%;
 	}
 	.dot-left {
-		left: 196.5px;
-		top: 375px;
+		left: 22.5%;
+		top: 50%;
 	}
 	.dot-bottom {
-		left: 437px;
-		top: 609px;
+		left: 50%;
+		top: 81.2%;
 	}
 	.qc-visualizer.animate .gold-dot {
 		animation: dotPop 0.2s linear forwards;
@@ -1306,7 +1295,7 @@
 	.goals-title {
 		font-family: 'Overpass', sans-serif;
 		color: #fac549;
-		font-size: 120px;
+		font-size: clamp(3rem, 8vw, 7.5rem);
 		font-weight: 700;
 		margin: 0 0 40px 0;
 		text-align: left; /* Shifted left to match the design file layout */
@@ -1315,14 +1304,14 @@
 	/* Card layout grid engine */
 	.goals-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 30px; /* Space between rows and columns */
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 30px;
 		width: 100%;
 	}
 
 	/* Individual Card Styling */
 	.goal-card {
-		width: 338.79px;
+		width: 100%;
 		height: 171px;
 		background: linear-gradient(137deg, #921518 0%, #6d1719 100%);
 		border-radius: 15px;
@@ -1365,11 +1354,11 @@
 	/* Shared Inline Vector Icons Standard Controls */
 
 	.section-5 {
-		width: 1920px;
-		height: 1596px;
+		width: min(100%, 1920px);
+		aspect-ratio: 1920 / 1596;
+		margin: 0 auto;
 		position: relative;
 		overflow: hidden;
-		margin: 0 auto;
 	}
 
 	/* Consolidated Base Styling for Background Rectangles */
@@ -1395,7 +1384,7 @@
 		text-align: center;
 		color: #000000;
 		font:
-			italic 400 64px/1.2 'Inter',
+			italic 400 clamp(1.25rem, 4vw, 4rem)/1.2 'Inter',
 			sans-serif;
 	}
 
@@ -1408,7 +1397,7 @@
 		text-align: center;
 		color: #f5be42;
 		font:
-			700 160px/160px 'Overpass',
+			700 clamp(3rem, 8vw, 10rem)/1.1 'Overpass',
 			sans-serif;
 		word-wrap: break-word;
 	}
@@ -1422,7 +1411,7 @@
 		text-align: center;
 		color: #000000;
 		font:
-			italic 400 64px/1.2 'Inter',
+			italic 400 clamp(1.25rem, 4vw, 4rem)/1.2 'Inter',
 			sans-serif;
 	}
 
@@ -1435,7 +1424,7 @@
 		text-align: center;
 		color: #000000;
 		font:
-			400 52px/1.4 'Inter',
+			400 clamp(1rem, 2vw, 3rem)/1.4 'Inter',
 			sans-serif;
 		text-shadow: 0px 4px 4px rgba(255, 251, 251, 0.25);
 	}
@@ -1475,17 +1464,6 @@
 		.about-section {
 			padding: 40px 60px;
 		}
-		.intro-container {
-			grid-template-columns: 1fr;
-			gap: 30px;
-		}
-		.intro-image {
-			width: 100%;
-			max-width: 400px;
-			height: auto;
-			aspect-ratio: 634/854;
-			margin: 0 auto;
-		}
 		.intro-text {
 			align-items: center;
 		}
@@ -1496,45 +1474,21 @@
 			max-width: 100%;
 			margin: 0;
 		}
-		.mv-container {
-			justify-content: center;
-			flex-direction: column;
-			align-items: center;
-			gap: 24px;
-		}
-		.mv-container .mv-card:nth-child(1),
-		.mv-container .mv-card:nth-child(2) {
-			width: 100%;
-			max-width: 600px;
-		}
 		.mv-card h3 {
 			font-size: 48px;
 		}
 		.mv-card p {
 			font-size: 18px;
 		}
-		.stat-number {
-			font-size: 56px;
-		}
-		.stat-card {
-			width: 220px;
-		}
 		.goals-section {
 			flex-direction: column;
 			align-items: center;
 		}
 		.goals-title {
-			font-size: 80px;
 			text-align: center;
 		}
 		.goal-card {
-			width: 100%;
 			height: 150px;
-		}
-		.qc-visualizer {
-			width: 640px;
-			height: 580px;
-			flex-shrink: 0;
 		}
 	}
 
@@ -1552,22 +1506,8 @@
 			padding: 30px 40px;
 		}
 		.stats-banner {
-			flex-wrap: wrap;
 			gap: 30px;
 			padding: 40px 30px;
-		}
-		.stat-card {
-			width: 200px;
-		}
-		.stat-number {
-			font-size: 48px;
-		}
-		.qc-visualizer {
-			width: 520px;
-			height: 450px;
-		}
-		.goals-title {
-			font-size: 64px;
 		}
 		.goal-card {
 			height: 140px;
@@ -1576,6 +1516,13 @@
 
 	/* ≤1024px — tablets */
 	@media (max-width: 1024px) {
+		.intro-container {
+			grid-template-columns: 1fr;
+		}
+		.intro-image {
+			max-width: 400px;
+			margin: 0 auto;
+		}
 		.leadership-container {
 			grid-template-columns: 1fr;
 		}
@@ -1612,21 +1559,8 @@
 			gap: 20px;
 			padding: 30px 20px;
 		}
-		.stat-card {
-			width: 160px;
-		}
-		.stat-number {
-			font-size: 40px;
-		}
 		.stat-label {
 			font-size: 18px;
-		}
-		.qc-visualizer {
-			width: 480px;
-			height: 420px;
-		}
-		.goals-title {
-			font-size: 52px;
 		}
 		.goal-card {
 			height: 130px;
@@ -1634,14 +1568,9 @@
 		.goal-text {
 			font-size: 16px;
 		}
-		.bsit-title {
-			font-size: 48px;
-		}
-		.years-header .number {
-			font-size: 60px;
-		}
-		.years-header .text {
-			font-size: 36px;
+		.bsit-bg-img {
+			opacity: 0.25;
+			width: 100%;
 		}
 	}
 
@@ -1659,7 +1588,7 @@
 			letter-spacing: 4px;
 		}
 		.intro-image {
-			max-width: 240px;
+			max-width: 280px;
 		}
 		.intro-text p {
 			font-size: 16px;
@@ -1680,16 +1609,6 @@
 			gap: 24px;
 			padding: 24px 16px;
 		}
-		.stat-card {
-			width: 100%;
-			max-width: 240px;
-		}
-		.stat-number {
-			font-size: 36px;
-		}
-		.stat-label {
-			font-size: 16px;
-		}
 		.leadership-container {
 			min-height: auto;
 		}
@@ -1706,20 +1625,13 @@
 		.profile-info p {
 			font-size: clamp(0.9rem, 3vw, 1.2rem);
 		}
-		.qc-visualizer {
-			width: 100%;
-			max-width: 400px;
-			height: 350px;
-		}
 		.goals-title {
-			font-size: 36px;
 			margin-bottom: 20px;
 		}
 		.goals-grid {
 			gap: 16px;
 		}
 		.goal-card {
-			width: 100%;
 			height: 120px;
 			padding: 14px;
 		}
@@ -1730,20 +1642,18 @@
 			font-size: 14px;
 		}
 		.quick-links {
-			height: 300px;
+			height: auto;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.quick-links .panel {
+			min-height: 200px;
 		}
 		.bento-section {
 			padding: 2rem 1rem;
 		}
-		.bsit-title {
-			font-size: 36px;
-			margin-top: 0;
-		}
 		.bsit-subtitle {
 			font-size: 16px;
-		}
-		.years-header .number {
-			font-size: 48px;
 		}
 		.years-header .text {
 			font-size: 28px;
@@ -1756,6 +1666,9 @@
 		:global(.objectives-card) {
 			padding: 20px;
 		}
+		.bsit-bg-img {
+			display: none;
+		}
 	}
 
 	/* ≤480px — small phones */
@@ -1764,7 +1677,7 @@
 			padding: 12px 12px;
 		}
 		.intro-image {
-			max-width: 180px;
+			max-width: 200px;
 		}
 		.intro-text p {
 			font-size: 14px;
@@ -1780,15 +1693,6 @@
 			font-size: 16px;
 			letter-spacing: 2px;
 		}
-		.stat-number {
-			font-size: 28px;
-		}
-		.stat-label {
-			font-size: 14px;
-		}
-		.goals-title {
-			font-size: 28px;
-		}
 		.goal-card {
 			height: 100px;
 			padding: 10px;
@@ -1799,20 +1703,10 @@
 		.goal-text {
 			font-size: 12px;
 		}
-		.qc-visualizer {
-			width: 100%;
-			max-width: 320px;
-			height: 280px;
-		}
-		.bsit-title {
-			font-size: 28px;
-		}
 		.quick-links {
-			height: auto;
-			flex-wrap: wrap;
+			grid-template-columns: 1fr;
 		}
 		.quick-links .panel {
-			min-width: 50%;
 			min-height: 140px;
 		}
 		.leader-pane {
