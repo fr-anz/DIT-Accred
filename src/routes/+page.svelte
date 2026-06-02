@@ -1,6 +1,6 @@
 <script>
 	import Card from '$lib/components/Card.svelte';
-	import { Handshake, GraduationCap, CirclePile, Info, Users, Building2, Network } from 'lucide-svelte';
+	import { GraduationCap, Info, Users, Building2, Network } from 'lucide-svelte';
 	import { sections } from '$lib/data/homeData';
 
 	let videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
@@ -33,38 +33,15 @@
 			<h1 class="bsit-title">BSIT</h1>
 			<h2 class="bsit-subtitle">Bachelor of Science in Information Technology</h2>
 			<p class="bsit-desc">
-				The Bachelor of Science in Information Technology (BSIT) program is a four-year degree
-				program which focuses on the study of computer utilization and computer software to plan,
-				install, customize, operate, manage, administer and maintain information technology
-				infrastructure
+				The <strong>Bachelor of Science in Information Technology (BSIT)</strong> program is a four-year
+				degree program which focuses on the study of computer utilization and computer software to plan,
+				install, customize, operate, manage, administer and maintain information technology infrastructure
 			</p>
-		</Card>
-
-		<Card class="innovation-card" variant="dark" size="md">
-			<h2 class="innovation-heading">Innovation. Excellence. Future Ready</h2>
-			<div class="highlights">
-				<div class="highlight-item">
-					<div class="highlight-text">
-						<Handshake></Handshake>
-						<span class="stat">100+</span>
-						<span class="desc">Industry partnerships worldwide</span>
-					</div>
-				</div>
-				<div class="highlight-item">
-					<div class="highlight-text">
-						<GraduationCap></GraduationCap>
-						<span class="stat">95.31%</span>
-						<span class="desc">Graduate employability rate within 12 months</span>
-					</div>
-				</div>
-				<div class="highlight-item">
-					<div class="highlight-text">
-						<CirclePile></CirclePile>
-						<span class="stat">10 Orgs</span>
-						<span class="desc">Student Built Organizations<br />(academic and tech)</span>
-					</div>
-				</div>
-			</div>
+			<img
+				class="bsit-bg-img"
+				src="https://upload.wikimedia.org/wikipedia/commons/f/f4/PUP_Mabini_Campus_pylon_%28Anonas_Street%2C_Santa_Mesa%2C_Manila%3B_06-18-2023%29.jpg"
+				alt="PUP Monument"
+			/>
 		</Card>
 
 		<Card class="years-card" variant="dark" size="md">
@@ -186,9 +163,9 @@
 				<div class="mv-card">
 					<h3>MISSION</h3>
 					<p>
-						The <strong>Department of Information Technology</strong> is committed to providing
-						exceptional ICT education, conducting groundbreaking research, and driving innovation within
-						the University, establishing ourselves as a recognized leader in the field.
+						The <strong>Department of Information Technology</strong> is committed to providing exceptional
+						ICT education, conducting groundbreaking research, and driving innovation within the University,
+						establishing ourselves as a recognized leader in the field.
 					</p>
 				</div>
 				<div class="mv-card">
@@ -293,9 +270,9 @@
 					</div>
 					<p class="goal-text">Nurture Strong Relationships</p>
 				</div>
+			</div>
 		</div>
 	</div>
-</div>
 </section>
 
 <section class="quick-links">
@@ -319,117 +296,140 @@
 
 <section class="section-5">
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/100x116"
 		style="--w:100px; --h:116px; --x:0px; --y:57px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/200x200"
 		style="--w:200px; --h:200px; --x:0px; --y:835px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/350x317"
 		style="--w:350px; --h:317px; --x:0px; --y:235px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/165x162"
 		style="--w:165px; --h:162px; --x:401px; --y:467px; --op:0.80; --shadow:10px; --blur:5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/131x134"
 		style="--w:131px; --h:134px; --x:270px; --y:668px; --op:0.90; --shadow:10px; --blur:5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:1451px; --y:380px; --op:0.90; --shadow:15px; --blur:7.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/170x170"
 		style="--w:170px; --h:170px; --x:1751px; --y:534px; --op:0.99; --shadow:5px; --blur:2.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:1621px; --y:208px; --shadow:5px; --blur:2.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:1801px; --y:35px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/126x126"
 		style="--w:126px; --h:126px; --x:432px; --y:1081px; --op:0.85; --shadow:15px; --blur:7.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:1276px; --y:771px; --op:0.90; --shadow:20px; --blur:10px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/103x100"
 		style="--w:103px; --h:100px; --x:1482px; --y:1107px; --op:0.90; --shadow:10px; --blur:5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:1657px; --y:1278px; --op:0.95; --shadow:4px; --blur:2px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:1832px; --y:1450px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/263x243"
 		style="--w:263px; --h:243px; --x:175px; --y:1207px; --op:0.90; --shadow:5px; --blur:2.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/117x129"
 		style="--w:117px; --h:129px; --x:646px; --y:830px; --op:0.75; --shadow:20px; --blur:10px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/87x92"
 		style="--w:87px;  --h:92px;  --x:1305px; --y:115px; --shadow:4px; --blur:2px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/217x217"
 		style="--w:217px; --h:217px; --x:708px; --y:163px; --op:0.70; --shadow:15px; --blur:7.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:0px; --y:1450px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/175x172"
 		style="--w:175px; --h:172px; --x:558px; --y:1293px; --op:0.75; --shadow:15px; --blur:7.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/242x255"
 		style="--w:242px; --h:255px; --x:1679px; --y:815px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/121x116"
 		style="--w:121px; --h:116px; --x:1562px; --y:705px; --op:0.90; --shadow:5px; --blur:2.5px;"
 	/>
 	<img
-		class="bg-rect" alt=""
+		class="bg-rect"
+		alt=""
 		src="https://placehold.co/241x230"
 		style="--w:241px; --h:230px; --x:1035px; --y:935px; --op:0.75; --shadow:20px; --blur:10px;"
 	/>
@@ -489,7 +489,6 @@
 
 	/* Cards styling */
 	:global(.bsit-card),
-	:global(.innovation-card),
 	:global(.years-card),
 	:global(.objectives-card) {
 		padding: 32px;
@@ -501,10 +500,9 @@
 
 	/*Grid placements */
 	:global(.bsit-card) {
-		grid-column: span 7;
-	}
-	:global(.innovation-card) {
-		grid-column: span 5;
+		grid-column: span 12;
+		position: relative;
+		overflow: hidden;
 	}
 	:global(.years-card) {
 		grid-column: span 4;
@@ -530,45 +528,25 @@
 	}
 	.bsit-desc {
 		font-size: 16px;
-		text-align: justify;
+		text-align: left;
 		line-height: 1.6;
 		margin: 0;
 	}
-
-	/* --- Box 2: Innovation --- */
-	.innovation-heading {
-		font-size: 32px;
-		font-weight: 700;
-		margin: 0 0 1.5rem 0;
-		line-height: 1.2;
+	.bsit-bg-img {
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
+		width: 50%;
+		object-fit: cover;
+		z-index: 0;
+		pointer-events: none;
 	}
-	.highlights {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-	.highlight-item {
-		background-color: #5d5d5d;
-		border-radius: 12px;
-		padding: 1rem 1.25rem;
-		display: flex;
-		align-items: center;
-		gap: 1.25rem;
-	}
-
-	.highlight-text {
-		display: flex;
-		align-items: center;
-		gap: 1.25rem;
-	}
-	.highlight-text .stat {
-		font-size: 24px;
-		font-weight: 700;
-		min-width: 90px;
-	}
-	.highlight-text .desc {
-		font-size: 15px;
-		line-height: 1.3;
+	.bsit-title,
+	.bsit-subtitle,
+	.bsit-desc {
+		position: relative;
+		z-index: 1;
 	}
 
 	/* --- Box 3: 47 Years --- */
@@ -774,11 +752,7 @@
 		z-index: 0;
 	}
 
-
-
-
 	/* --- LEFT SIDE: Radial Diagram --- */
-
 
 	.quick-links {
 		display: flex;
@@ -1540,7 +1514,6 @@
 	/* ≤1200px — tablets / small desktops */
 	@media (max-width: 1200px) {
 		:global(.bsit-card),
-		:global(.innovation-card),
 		:global(.years-card),
 		:global(.objectives-card) {
 			grid-column: span 12;
@@ -1636,9 +1609,6 @@
 		}
 		.bsit-title {
 			font-size: 48px;
-		}
-		.innovation-heading {
-			font-size: 24px;
 		}
 		.years-header .number {
 			font-size: 60px;
@@ -1745,9 +1715,6 @@
 		.bsit-subtitle {
 			font-size: 16px;
 		}
-		.innovation-heading {
-			font-size: 20px;
-		}
 		.years-header .number {
 			font-size: 48px;
 		}
@@ -1758,7 +1725,6 @@
 			font-size: 14px;
 		}
 		:global(.bsit-card),
-		:global(.innovation-card),
 		:global(.years-card),
 		:global(.objectives-card) {
 			padding: 20px;
@@ -1831,4 +1797,3 @@
 		}
 	}
 </style>
-
