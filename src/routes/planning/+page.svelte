@@ -453,12 +453,23 @@
 		--section-max-width: 1280px; /* Zoom 125% equivalent sizing (less white space) */
 	}
 
-	/* Base scaling for 125% zoom feel */
 	.content_section {
-		max-width: var(--section-max-width);
-		margin: 0 auto;
-		padding: 2.5rem 2rem 4rem 2rem;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 2.5rem 10% 4rem 10%; /* Fluid 10% side padding matching the community page scale at 100% zoom */
 		font-size: 1.05rem;
+	}
+
+	@media (max-width: 1024px) {
+		.content_section {
+			padding: 2.5rem 6% 4rem 6%;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.content_section {
+			padding: 2rem 1.5rem 3.5rem 1.5rem;
+		}
 	}
 
 	#strategic-benchmarking {
