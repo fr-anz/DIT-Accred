@@ -6,6 +6,7 @@
 	let videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
 	let visualizerEl = $state();
 	let isVisible = $state(false);
+	let scaleRootEl = $state();
 
 	$effect(() => {
 		if (!visualizerEl || typeof IntersectionObserver === 'undefined') return;
@@ -21,7 +22,23 @@
 		observer.observe(visualizerEl);
 		return () => observer.disconnect();
 	});
+
+	$effect(() => {
+		if (!scaleRootEl || typeof ResizeObserver === 'undefined') return;
+		const updateScale = () => {
+			const scale = Math.max(0.25, window.innerWidth / 1920);
+			scaleRootEl.style.transform = `scale(${scale})`;
+			scaleRootEl.style.transformOrigin = 'top left';
+			scaleRootEl.style.width = `${100 / scale}%`;
+		};
+		updateScale();
+		const observer = new ResizeObserver(updateScale);
+		observer.observe(scaleRootEl);
+		return () => observer.disconnect();
+	});
 </script>
+
+<div class="scale-root" bind:this={scaleRootEl}>
 
 <header class="video-container">
 	<video src={videoUrl} autoplay loop muted playsinline class="video-home"></video>
@@ -450,7 +467,17 @@
 	</a>
 </section>
 
+</div>
+
 <style>
+	:global(body) {
+		overflow-x: hidden;
+	}
+
+	.scale-root {
+		will-change: transform;
+	}
+
 	.video-container {
 		position: relative;
 		width: 100%;
