@@ -994,7 +994,7 @@
 	}
 
 	.process_card {
-		border: 1.5px solid rgba(140, 15, 19, 0.28); /* Red/maroon thin borders matching figma */
+		border: 2px solid rgba(148, 21, 24, 0.45); /* Thicker red/maroon borders matching figma */
 		border-radius: 10px; /* Tighter matching figma */
 		padding: 2.25rem 1.5rem;
 		text-align: center;
