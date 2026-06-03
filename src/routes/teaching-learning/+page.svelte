@@ -542,7 +542,7 @@
 
 	<div class="student_orgs_grid">
 		<!-- Org 1: IBITS -->
-		<div class="org_card" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600')">
+		<div class="org_card" style="background-image: url('/teaching-learning/org-ibits.jpg')">
 			<div class="org_overlay"></div>
 			<div class="org_content">
 				<h3 class="org_title">IBITS</h3>
@@ -551,7 +551,7 @@
 		</div>
 
 		<!-- Org 2: ARK -->
-		<div class="org_card" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600')">
+		<div class="org_card" style="background-image: url('/teaching-learning/org-ark.jpg')">
 			<div class="org_overlay"></div>
 			<div class="org_content">
 				<h3 class="org_title">ARK</h3>
@@ -560,7 +560,7 @@
 		</div>
 
 		<!-- Org 3: AWSCC PUP -->
-		<div class="org_card" style="background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600')">
+		<div class="org_card" style="background-image: url('/teaching-learning/org-awscc.jpg')">
 			<div class="org_overlay"></div>
 			<div class="org_content">
 				<h3 class="org_title">AWSCC PUP</h3>
@@ -569,7 +569,7 @@
 		</div>
 
 		<!-- Org 4: CNCP -->
-		<div class="org_card" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=600')">
+		<div class="org_card" style="background-image: url('/teaching-learning/org-cncp.jpg')">
 			<div class="org_overlay"></div>
 			<div class="org_content">
 				<h3 class="org_title">CNCP</h3>
@@ -1182,12 +1182,12 @@
 		border-color: #fff;
 	}
 
-	.node_icon {
+	:global(.node_icon) {
 		color: #fff;
 		transition: color 0.3s ease;
 	}
 
-	.timeline_node:hover .node_icon {
+	.timeline_node:hover :global(.node_icon) {
 		color: var(--color-maroon);
 	}
 
@@ -1448,7 +1448,7 @@
 		margin-bottom: 0.6rem;
 	}
 
-	.card_icon {
+	:global(.card_icon) {
 		color: var(--color-maroon);
 	}
 
