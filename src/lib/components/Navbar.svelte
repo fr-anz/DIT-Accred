@@ -4,7 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
-	import { Menu, X } from 'lucide-svelte';
+	import { Menu, X, ArrowRight } from 'lucide-svelte';
 
 	import researchImg from '$lib/assets/nav-images/research.jpeg';
 	import teachingImg from '$lib/assets/nav-images/teaching-learning.jpg';
@@ -17,8 +17,6 @@
 	let showNavbar = $state(false);
 
 	let navItemEls = [];
-
-	let activeImage = $derived(navItems[activeIndex]?.image ?? null);
 
 	let dividerHighlight = $derived.by(() => {
 		if (activeIndex === null || !navItemEls[activeIndex]) return null;
@@ -41,6 +39,11 @@
 				`;
 			}
 		};
+	}
+
+	function closeNavbar() {
+		activeIndex = null;
+		showNavbar = false;
 	}
 
 	const navItems = [
@@ -146,6 +149,8 @@
 		}
 	];
 
+	let activeImage = $derived(activeIndex !== null ? navItems[activeIndex]?.image ?? null : null);
+
 	onMount(() => {
 		navItems
 			.map(item => item.image)
@@ -226,17 +231,43 @@
 							class="nav-btn"
 							class:active={activeIndex === i}
 							onclick={(e) => {
-								if (item.subItems?.length) {
+								if (item.subItems?.length || item.description) {
 									e.preventDefault();
 									activeIndex = activeIndex === i ? null : i;
 								} else {
-									showNavbar = false;
-									activeIndex = null;
+									closeNavbar();
 								}
 							}}
 						>
 							{item.label}
 						</a>
+						<!-- Mobile inline sub-items -->
+						{#if item.subItems?.length}
+							<ul class="mobile-sub-items">
+								<li>
+									<a
+										href={resolve(item.href)}
+										class="mobile-sub-item mobile-parent-link"
+										onclick={closeNavbar}
+									>
+										<span>{item.label}</span>
+										<ArrowRight size={16} strokeWidth={1.5} />
+									</a>
+								</li>
+								{#each item.subItems as sub (sub.href)}
+									<li>
+										<a
+											href={resolve(sub.href)}
+											class="mobile-sub-item"
+											class:active={$page.url.pathname + $page.url.hash === sub.href}
+											onclick={closeNavbar}
+										>
+											{sub.label}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						{/if}
 					</li>
 				{/each}
 			</ul>
@@ -245,29 +276,40 @@
 					<div class="divider-index" style="top: {dividerHighlight}px;"></div>
 				{/if}
 			</div>
-			<!-- Right panel -->
+			<!-- Right panel (desktop only, revealed on click) -->
 			{#if activeIndex !== null}
 				<div class="nav-right">
 					{#if navItems[activeIndex].subItems?.length}
-						<ul class="sub-items">
-							{#each navItems[activeIndex].subItems as sub (sub.href)}
-								<li>
-									<a
-										href={resolve(sub.href)}
-										class="sub-item"
-										class:active={$page.url.pathname + $page.url.hash === sub.href}
-										onclick={() => {
-											showNavbar = false;
-											activeIndex = null;
-										}}
-									>
-										{sub.label}
-									</a>
-								</li>
-							{/each}
-						</ul>
+						<div class="right-panel-content">
+							<a
+								href={resolve(navItems[activeIndex].href)}
+								class="parent-page-link"
+								onclick={closeNavbar}
+							>
+								<span>{navItems[activeIndex].label}</span>
+								<ArrowRight size={20} strokeWidth={1.5} />
+							</a>
+							<ul class="sub-items">
+								{#each navItems[activeIndex].subItems as sub (sub.href)}
+									<li>
+										<a
+											href={resolve(sub.href)}
+											class="sub-item"
+											class:active={$page.url.pathname + $page.url.hash === sub.href}
+											onclick={closeNavbar}
+										>
+											{sub.label}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</div>
 					{:else if navItems[activeIndex].description}
 						<div class="nav-description">
+							<div class="description-btn">
+								<span>{navItems[activeIndex].label}</span>
+								<ArrowRight size={18} strokeWidth={1.5} />
+							</div>
 							<p>{navItems[activeIndex].description}</p>
 						</div>
 					{/if}
@@ -333,6 +375,7 @@
 		flex-direction: column;
 		padding: 2.5rem 3rem;
 		background: rgba(0, 0, 0, 0.7);
+		overflow-y: auto;
 	}
 
 	.bg-images {
@@ -340,6 +383,7 @@
 		inset: 0;
 		z-index: 0;
 		pointer-events: none;
+		overflow: hidden;
 	}
 
 	.bg-image {
@@ -466,7 +510,7 @@
 	.nav-body {
 		display: grid;
 		grid-template-columns: 1fr 1px 1fr;
-		height: 100vh;
+		flex: 1;
 		column-gap: 4rem;
 		overflow: hidden;
 	}
@@ -537,6 +581,11 @@
 		}
 	}
 
+	/* Mobile inline sub-items (hidden on desktop) */
+	.mobile-sub-items {
+		display: none;
+	}
+
 	/* Right panel */
 	.nav-right {
 		display: flex;
@@ -546,20 +595,45 @@
 		max-height: 63vh;
 	}
 
+	.right-panel-content {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		width: min(650px, 100%);
+		max-height: 63vh;
+		overflow-y: auto;
+	}
+
+	.parent-page-link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.25rem;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		background-color: rgba(255, 255, 255, 0.15);
+		border-radius: 8px;
+		text-decoration: none;
+		color: #fff;
+		font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+		font-weight: 600;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.parent-page-link:hover {
+		background: rgba(255, 255, 255, 0.25);
+		border-color: rgba(255, 255, 255, 0.5);
+	}
+
 	.sub-items {
 		list-style: none;
 		padding: 0;
 		margin: 0;
-
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-		justify-content: center;
-
-		width: min(650px, 100%);
-		height: 100%;
-		max-height: 63vh;
-		overflow-y: auto;
 	}
 
 	.sub-item {
@@ -602,6 +676,21 @@
 		font-style: italic;
 	}
 
+	.description-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.25rem;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		background-color: rgba(255, 255, 255, 0.15);
+		border-radius: 8px;
+		color: #fff;
+		font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+		font-weight: 600;
+		margin-bottom: 1.5rem;
+		cursor: default;
+	}
+
 	.panel-divider {
 		position: relative;
 		width: 5px;
@@ -623,5 +712,112 @@
 		background: linear-gradient(to top, #ffe59f 30%, #fffefc 100%);
 		border-radius: 9999px;
 		transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* ── Responsive ── */
+
+	@media (max-width: 1024px) {
+		.fullscreen-nav {
+			padding: 2rem 2rem;
+		}
+
+		.nav-body {
+			column-gap: 2rem;
+		}
+
+		.nav-items {
+			padding-left: 24px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.fullscreen-nav {
+			padding: 1.5rem 1.25rem;
+		}
+
+		.nav-header {
+			margin-bottom: 4vh;
+		}
+
+		.brand .logo {
+			width: 36px;
+			height: 36px;
+		}
+
+		.title {
+			font-size: 0.8rem;
+		}
+
+		.sub-title {
+			font-size: 0.65rem;
+		}
+
+		.nav-body {
+			display: flex;
+			flex-direction: column;
+			column-gap: 0;
+			overflow: visible;
+		}
+
+		.nav-items {
+			padding-left: 0;
+			gap: 0.5rem;
+			min-width: 0;
+		}
+
+		.nav-btn {
+			font-size: clamp(1.4rem, 6vw, 1.8rem);
+			padding: 0.35rem 0;
+		}
+
+		/* Show inline sub-items on mobile */
+		.mobile-sub-items {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+			padding: 0.25rem 0 0.5rem 1.25rem;
+			border-left: 2px solid rgba(255, 255, 255, 0.15);
+			margin-left: 0.25rem;
+		}
+
+		.mobile-sub-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.5rem;
+			color: rgba(217, 217, 217, 0.85);
+			text-decoration: none;
+			font-size: clamp(0.85rem, 3.5vw, 1rem);
+			font-weight: 500;
+			padding: 0.3rem 0.75rem;
+			border-radius: 6px;
+			transition:
+				color 0.2s ease,
+				background 0.2s ease;
+			word-break: break-word;
+		}
+
+		.mobile-parent-link {
+			font-weight: 700;
+			color: #fff;
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+		}
+
+		.mobile-sub-item:hover {
+			color: #fff;
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		.mobile-sub-item.active {
+			color: #cfa83a;
+			font-weight: 600;
+		}
+
+		/* Hide desktop-only right panel elements on mobile */
+		.panel-divider,
+		.nav-right {
+			display: none;
+		}
 	}
 </style>
