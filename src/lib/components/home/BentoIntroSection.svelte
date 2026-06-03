@@ -76,7 +76,44 @@
 		grid-column: span 12;
 		position: relative;
 		overflow: hidden;
-		min-height: 400px;
+		min-height: 410px;
+		isolation: isolate;
+	}
+
+	:global(.bsit-card)::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background:
+			linear-gradient(
+				90deg,
+				rgba(148, 21, 24, 0.98) 0%,
+				rgba(148, 21, 24, 0.95) 30%,
+				rgba(148, 21, 24, 0.62) 58%,
+				rgba(148, 21, 24, 0.22) 100%
+			),
+			radial-gradient(circle at 36% 38%, rgba(250, 197, 73, 0.08), transparent 34%),
+			radial-gradient(circle at 86% 12%, rgba(42, 0, 44, 0.28), transparent 48%);
+		pointer-events: none;
+	}
+
+	:global(.bsit-card)::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		background:
+			linear-gradient(
+				90deg,
+				rgba(93, 3, 7, 0.98) 0%,
+				rgba(93, 3, 7, 0.86) 32%,
+				rgba(93, 3, 7, 0.38) 66%,
+				transparent 100%
+			),
+			linear-gradient(180deg, rgba(255, 0, 0, 0.02), rgba(20, 0, 0, 0.12));
+		mix-blend-mode: multiply;
+		pointer-events: none;
 	}
 
 	:global(.years-card) {
@@ -88,44 +125,54 @@
 	}
 
 	.bsit-title {
-		font-size: clamp(2rem, 5vw, 4.5rem);
+		font-size: clamp(3.75rem, 9vw, 6.75rem);
 		font-weight: 700;
-		letter-spacing: 4px;
+		letter-spacing: 0.12em;
 		margin: 0;
+		color: #ffffff;
+		line-height: 0.9;
 	}
 
 	.bsit-subtitle {
-		margin: -5px 0 20px 0;
-		font-size: clamp(1rem, 1.6vw, 1.25rem);
+		margin: 0.75rem 0 0 0;
+		font-size: clamp(1.2rem, 2vw, 1.6rem);
 		font-style: italic;
-		color: #cfa83a;
+		color: #d6c330;
 		font-weight: 600;
+		letter-spacing: 0.04em;
 	}
 
 	.bsit-desc {
-		font-size: clamp(0.95rem, 1.2vw, 1rem);
+		font-size: clamp(1rem, 1.35vw, 1.1rem);
 		text-align: left;
-		line-height: 1.6;
-		margin: clamp(1.5rem, 4vw, 3rem) 0 0 0;
-		max-width: 62ch;
+		line-height: 1.24;
+		margin: clamp(3.5rem, 7vw, 4.25rem) 0 0 0;
+		max-width: 60ch;
+		color: #ffffff;
 	}
 
 	.bsit-bg-img {
 		position: absolute;
-		right: 0;
+		right: -10%;
 		top: 0;
 		height: 100%;
-		width: 50%;
+		width: 82%;
 		object-fit: cover;
+		object-position: center center;
 		z-index: 0;
 		pointer-events: none;
+		opacity: 1;
+		filter: saturate(1.75) contrast(1.28) brightness(0.98);
+		mix-blend-mode: luminosity;
+		-webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, #000 44%);
+		mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, #000 44%);
 	}
 
 	.bsit-title,
 	.bsit-subtitle,
 	.bsit-desc {
 		position: relative;
-		z-index: 1;
+		z-index: 3;
 	}
 
 	.years-header {
@@ -210,8 +257,20 @@
 
 	@media (max-width: 1024px) {
 		.bsit-bg-img {
-			opacity: 0.25;
-			width: 100%;
+			opacity: 0.42;
+			width: 110%;
+			right: -8%;
+		}
+
+		:global(.bsit-card)::before {
+			background:
+				linear-gradient(
+					90deg,
+					rgba(148, 21, 24, 0.98) 0%,
+					rgba(148, 21, 24, 0.82) 48%,
+					rgba(148, 21, 24, 0.34) 100%
+				),
+				radial-gradient(circle at 72% 24%, rgba(40, 0, 50, 0.32), transparent 42%);
 		}
 	}
 
@@ -239,7 +298,16 @@
 		}
 
 		.bsit-bg-img {
-			display: none;
+			display: block;
+			opacity: 0.28;
+		}
+
+		.bsit-title {
+			font-size: clamp(3rem, 18vw, 5rem);
+		}
+
+		.bsit-desc {
+			margin-top: 2.5rem;
 		}
 	}
 </style>
