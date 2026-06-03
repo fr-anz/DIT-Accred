@@ -163,7 +163,7 @@
 
 			<div class="compliance_grid">
 				<div class="compliance_subcard copc_card">
-					<div class="card_bg_image" style="background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=300')" aria-hidden="true"></div>
+					<div class="card_bg_image" style="background-image: url('/teaching-learning/copc-status.jpg')" aria-hidden="true"></div>
 					<div class="card_bg_overlay"></div>
 					<div class="subcard_content">
 						<span class="subcard_label">COPC STATUS</span>
@@ -173,7 +173,7 @@
 				</div>
 
 				<div class="compliance_subcard obe_card">
-					<div class="card_bg_image" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=300')" aria-hidden="true"></div>
+					<div class="card_bg_image" style="background-image: url('/teaching-learning/obe-framework.jpg')" aria-hidden="true"></div>
 					<div class="card_bg_overlay"></div>
 					<div class="subcard_content">
 						<span class="subcard_label">FRAMEWORK</span>
@@ -183,7 +183,7 @@
 				</div>
 
 				<div class="compliance_subcard cmo_card">
-					<div class="card_bg_image" style="background-image: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=300')" aria-hidden="true"></div>
+					<div class="card_bg_image" style="background-image: url('/teaching-learning/cmo-standard.jpg')" aria-hidden="true"></div>
 					<div class="card_bg_overlay"></div>
 					<div class="subcard_content">
 						<span class="subcard_label">STANDARD</span>
@@ -196,7 +196,7 @@
 
 		<!-- Curriculum Revision Lifecycle Card -->
 		<div class="lifecycle_card">
-			<div class="lifecycle_bg_image" style="background-image: url('https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&q=80&w=800')" aria-hidden="true"></div>
+			<div class="lifecycle_bg_image" style="background-image: url('/teaching-learning/curriculum-lifecycle.jpg')" aria-hidden="true"></div>
 			<div class="lifecycle_bg_overlay"></div>
 			<div class="dot_grid_overlay" aria-hidden="true"></div>
 
