@@ -21,11 +21,20 @@
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 
+	/**
+	 * @typedef {1 | 2 | 3 | 4} CourseYear
+	 * @typedef {{ code: string; name: string; units: number }} Course
+	 */
+
 	// Svelte 5 Runes for page interactivity
 	let activeTab = $state('circular'); // Tab for curriculum enhancements
+	/** @type {CourseYear} */
 	let activeYear = $state(1); // Year selector for interactive explorer
+	/** @type {number | null} */
 	let selectedAlumIndex = $state(null); // Index of alum for detailed modal
 	let carouselIndex = $state(1); // Carousel index for Notable Alumni (default to Dahyun)
+	/** @type {CourseYear[]} */
+	const courseYears = [1, 2, 3, 4];
 
 	// Alumni profiles - reordered Sehun (0), Dahyun (1), Winter (2) to match visual layout in Figma
 	const alumniList = [
@@ -98,6 +107,7 @@
 	];
 
 	// Interactive explorer course data
+	/** @type {Record<CourseYear, Course[]>} */
 	const coursesByYear = {
 		1: [
 			{ code: 'COMP 001', name: 'Introduction to Computing', units: 3 },
@@ -483,7 +493,7 @@
 				<h3 class="explorer_title">INTERACTIVE CURRICULUM EXPLORER</h3>
 				
 				<div class="explorer_tabs">
-					{#each [1, 2, 3, 4] as year}
+					{#each courseYears as year}
 						<button
 							class="explorer_tab_btn"
 							class:active={activeYear === year}

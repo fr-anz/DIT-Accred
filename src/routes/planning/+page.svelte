@@ -18,7 +18,13 @@
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 
+	/**
+	 * @typedef {1 | 2 | 4 | 17} SdgId
+	 * @typedef {{ label: string; color: string; range: string }} SdgInfo
+	 */
+
 	// SDG data for hover cards
+	/** @type {Record<SdgId, SdgInfo>} */
 	const sdgData = {
 		1: {
 			label: 'No Poverty',
@@ -42,6 +48,7 @@
 		}
 	};
 
+	/** @type {SdgId | null} */
 	let hoveredSdg = $state(null);
 
 	const wuriRankings = [
@@ -57,6 +64,7 @@
 		{ stars: 4, label: 'Facilities' }
 	];
 
+	/** @type {SdgId[]} */
 	const sdgIds = [1, 2, 4, 17];
 </script>
 
