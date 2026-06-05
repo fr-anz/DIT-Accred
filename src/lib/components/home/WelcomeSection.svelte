@@ -1,7 +1,6 @@
 <script>
 	const logos = [
-		{ src: '/img/CHED.png', alt: 'Commission on Higher Education logo' },
-		{ src: '/img/AACCUP.jpg', alt: 'AACCUP logo' },
+		{ src: '/img/DIT-logo.jpg', alt: 'Department of Information Technology logo' },
 		{ src: '/img/PUP.png', alt: 'Polytechnic University of the Philippines logo' },
 		{ src: '/img/CCIS.png', alt: 'College of Computer and Information Sciences logo' }
 	];
@@ -47,8 +46,8 @@
 	}
 
 	.logo-row img {
-		width: clamp(3.35rem, 6vw, 4.65rem);
-		height: clamp(3.35rem, 6vw, 4.65rem);
+		width: clamp(3.5rem, 7vw, 6rem);
+		aspect-ratio: 1 / 1;
 		object-fit: contain;
 		display: block;
 	}

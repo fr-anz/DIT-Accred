@@ -41,9 +41,9 @@
 	<div class="stats-banner">
 		{#each departmentStats as stat}
 			<div class="stat-card">
-				{#if stat.icon === 'users'}
+				{#if stat.icon === 'graduation'}
 					<Users size={48} color="#941518" />
-				{:else if stat.icon === 'graduation'}
+				{:else if stat.icon === 'users'}
 					<GraduationCap size={48} color="#941518" />
 				{:else if stat.icon === 'building'}
 					<Building2 size={48} color="#941518" />
@@ -54,25 +54,6 @@
 				<span class="stat-label">{stat.label}</span>
 			</div>
 		{/each}
-	</div>
-
-	<div class="goals-section">
-		<QualityControlDiagram />
-
-		<div class="goals-content">
-			<h2 class="goals-title">DIT GOALS</h2>
-
-			<div class="goals-grid">
-				{#each ditGoals as goal, index}
-					<div class="goal-card">
-						<div class="goal-header">
-							<span class="goal-num">{String(index + 1).padStart(2, '0')}</span>
-						</div>
-						<p class="goal-text">{goal}</p>
-					</div>
-				{/each}
-			</div>
-		</div>
 	</div>
 </section>
 
@@ -175,7 +156,7 @@
 		min-height: clamp(190px, 22vw, 286px);
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: flex-start;
 	}
 
 	.mv-card h3 {
@@ -241,73 +222,6 @@
 		font-size: clamp(0.72rem, 1.35vw, 1.15rem);
 		line-height: 1.3;
 		text-wrap: balance;
-	}
-
-	.goals-section {
-		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-		align-items: start;
-		gap: clamp(2rem, 4vw, 3.5rem);
-		background: #ffffff;
-		padding-top: clamp(1.5rem, 4vw, 3rem);
-	}
-
-	.goals-content {
-		width: 100%;
-	}
-
-	.goals-title {
-		font-family: 'Overpass', sans-serif;
-		color: #fac549;
-		font-size: clamp(3rem, 7vw, 5.2rem);
-		font-weight: 700;
-		margin: 0 0 clamp(1.5rem, 3vw, 2.5rem) 0;
-		text-align: left;
-		line-height: 1;
-	}
-
-	.goals-grid {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: clamp(1rem, 2vw, 1.875rem);
-		width: 100%;
-	}
-
-	.goal-card {
-		width: 100%;
-		min-height: clamp(7.5rem, 13vw, 10.7rem);
-		background: linear-gradient(137deg, #921518 0%, #6d1719 100%);
-		border-radius: 15px;
-		padding: clamp(0.875rem, 2vw, 1.25rem);
-		box-sizing: border-box;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
-
-	.goal-header {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-	}
-
-	.goal-num {
-		font-family: 'Overpass', sans-serif;
-		color: #fac549;
-		font-size: 30px;
-		font-weight: 500;
-		line-height: 1;
-	}
-
-	.goal-text {
-		color: #ffffff;
-		font-family: 'Inter', sans-serif;
-		font-size: clamp(0.9rem, 1.5vw, 1.25rem);
-		font-weight: 500;
-		line-height: 1.3;
-		text-align: right;
-		margin: 0;
-		overflow-wrap: anywhere;
 	}
 
 	@media (max-width: 1400px) {
@@ -394,34 +308,6 @@
 		.stat-label {
 			font-size: clamp(0.72rem, 2vw, 0.85rem);
 		}
-
-		.goals-title {
-			margin-bottom: 20px;
-			text-align: center;
-		}
-
-		.goals-section {
-			grid-template-columns: 1fr;
-			gap: 1.5rem;
-		}
-
-		:global(.qc-visualizer) {
-			max-width: 420px;
-			margin: 0 auto;
-		}
-
-		.goals-content {
-			max-width: 460px;
-			margin: 0 auto;
-		}
-
-		.goals-grid {
-			gap: 16px;
-		}
-
-		.goal-num {
-			font-size: 22px;
-		}
 	}
 
 	@media (max-width: 480px) {
@@ -441,44 +327,6 @@
 		.stats-banner {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 			border-radius: 12px;
-		}
-
-		.goals-title {
-			font-size: clamp(2rem, 10vw, 3rem);
-			text-align: center;
-		}
-
-		.goals-grid {
-			gap: 0.75rem;
-		}
-
-		.goal-num {
-			font-size: 18px;
-		}
-
-		.goal-card {
-			min-height: 96px;
-			padding: 0.75rem;
-		}
-
-		.goal-text {
-			font-size: 0.78rem;
-			line-height: 1.2;
-		}
-	}
-
-	@media (max-width: 380px) {
-		.goals-section {
-			grid-template-columns: 1fr;
-		}
-
-		.goals-title {
-			text-align: center;
-		}
-
-		:global(.qc-visualizer) {
-			max-width: 280px;
-			margin: 0 auto;
 		}
 	}
 </style>

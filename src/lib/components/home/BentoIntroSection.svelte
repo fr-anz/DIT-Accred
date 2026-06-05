@@ -14,6 +14,7 @@
 				install, customize, operate, manage, administer and maintain information technology infrastructure
 			</p>
 			<img class="bsit-bg-img" src="/img/PYLON.jpg" alt="PUP Monument" />
+			<img class="bsit-pop-img" src="/img/Pylon-nobg.svg" alt="" aria-hidden="true" />
 		</Card>
 
 		<Card class="years-card" variant="dark" size="md">
@@ -156,7 +157,7 @@
 		right: -10%;
 		top: 0;
 		height: 100%;
-		width: 82%;
+		width: 60%;
 		object-fit: cover;
 		object-position: center center;
 		z-index: 0;
@@ -166,6 +167,29 @@
 		mix-blend-mode: luminosity;
 		-webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, #000 44%);
 		mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, #000 44%);
+	}
+
+	.bsit-pop-img {
+		position: absolute;
+		right: -10%;
+		top: 0;
+		z-index: 2;
+		width: 60%;
+		height: 110%;
+		object-fit: fill;
+		pointer-events: none;
+		opacity: 0;
+		transform: translate3d(0, 18px, 0);
+		transform-origin: 58% 100%;
+		transition:
+			opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: transform, opacity;
+	}
+
+	:global(.bsit-card:hover) .bsit-pop-img {
+		opacity: 1;
+		transform: translate3d(0, -8px, 0);
 	}
 
 	.bsit-title,
@@ -262,6 +286,12 @@
 			right: -8%;
 		}
 
+		.bsit-pop-img {
+			right: 9%;
+			bottom: 0;
+			width: min(34%, 310px);
+		}
+
 		:global(.bsit-card)::before {
 			background:
 				linear-gradient(
@@ -300,6 +330,18 @@
 		.bsit-bg-img {
 			display: block;
 			opacity: 0.28;
+		}
+
+		.bsit-pop-img {
+			right: -4%;
+			bottom: 0;
+			width: 62%;
+			transform: translate3d(0, 0, 0);
+		}
+
+		:global(.bsit-card:hover) .bsit-pop-img {
+			opacity: 1;
+			transform: translate3d(0, -8px, 0);
 		}
 
 		.bsit-title {
