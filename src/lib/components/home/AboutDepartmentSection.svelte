@@ -156,7 +156,7 @@
 		min-height: clamp(190px, 22vw, 286px);
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: flex-start;
 	}
 
 	.mv-card h3 {
