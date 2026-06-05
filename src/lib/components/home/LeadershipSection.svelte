@@ -1,15 +1,6 @@
 <script>
 	const leaders = [
 		{
-			id: 'dustin',
-			name: 'John Dustin Santos, MIT',
-			role: 'Chairperson of Department of Information Technology',
-			img: '/img/sir-dustin.jpg',
-			position: 'center center',
-			align: 'left',
-			roleMaxWidth: '260px'
-		},
-		{
 			id: 'melvin',
 			name: 'Melvin C. Roxas, MSGITS',
 			role: 'Dean of College of Computer Information and Sciences',
@@ -17,6 +8,16 @@
 			position: 'center center',
 			align: 'right',
 			roleMaxWidth: '290px'
+		},
+
+		{
+			id: 'dustin',
+			name: 'John Dustin Santos, MIT',
+			role: 'Chairperson of Department of Information Technology',
+			img: '/img/sir-dustin.jpg',
+			position: 'center center',
+			align: 'left',
+			roleMaxWidth: '260px'
 		}
 	];
 
@@ -74,11 +75,7 @@
 	const binaryLayerB = binaryLayerA.slice().reverse();
 	const panelCloseDuration = 220;
 
-	function handlePanelLeave() {
-		if (window.matchMedia('(pointer: fine)').matches) {
-			closeDetail();
-		}
-	}
+	
 
 	/**
 	 * @param {string} id
@@ -154,7 +151,7 @@
 			role="dialog"
 			tabindex="-1"
 			aria-label="{displayedLeaderData.name} detail"
-			onmouseleave={handlePanelLeave}
+		
 		>
 			<button
 				class="expanded-close"
@@ -206,8 +203,7 @@
 					class="leader-card"
 					class:align-right={leader.align === 'right'}
 					style="--card-position: {leader.position}; --role-max-width: {leader.roleMaxWidth}"
-					onmouseenter={() => openLeader(leader.id, 'hover')}
-					onclick={(event) => openLeader(leader.id, event.detail === 0 ? 'keyboard' : 'hover')}
+					onclick={() => openLeader(leader.id, 'keyboard')}
 					aria-label="{leader.name}, {leader.role}"
 				>
 					<div class="card-bg" style="background-image: url({leader.img})"></div>
@@ -453,7 +449,9 @@
 		border: 3px solid #941518;
 		border-radius: 12px;
 		overflow: hidden;
-		box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25), 0 20px 40px rgba(0, 0, 0, 0.24);
+		box-shadow:
+			0 4px 4px rgba(0, 0, 0, 0.25),
+			0 20px 40px rgba(0, 0, 0, 0.24);
 		animation: panel-in 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
 		transform-origin: center;
 	}
@@ -505,8 +503,8 @@
 		cursor: pointer;
 		transition: background 0.2s;
 		-webkit-tap-highlight-color: transparent;
-		opacity: 0;
-		pointer-events: none;
+		opacity: 1;
+		pointer-events: auto;
 	}
 
 	.expanded-close:focus-visible {
@@ -559,12 +557,7 @@
 	}
 
 	.expanded-copy {
-		background: linear-gradient(
-			136deg,
-			#ffddde 0%,
-			#ffffff 50%,
-			#eed4a7 100%
-		);
+		background: linear-gradient(136deg, #ffddde 0%, #ffffff 50%, #eed4a7 100%);
 		padding: clamp(2.25rem, 5vw, 4.5rem) clamp(2rem, 5vw, 4rem);
 		display: flex;
 		flex-direction: column;

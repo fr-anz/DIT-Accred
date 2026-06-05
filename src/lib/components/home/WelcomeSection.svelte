@@ -1,7 +1,6 @@
 <script>
 	const logos = [
-		{ src: '/img/CHED.png', alt: 'Commission on Higher Education logo' },
-		{ src: '/img/AACCUP.jpg', alt: 'AACCUP logo' },
+		{ src: '/img/DIT-logo.jpg', alt: 'Department of Information Technology logo' },
 		{ src: '/img/PUP.png', alt: 'Polytechnic University of the Philippines logo' },
 		{ src: '/img/CCIS.png', alt: 'College of Computer and Information Sciences logo' }
 	];

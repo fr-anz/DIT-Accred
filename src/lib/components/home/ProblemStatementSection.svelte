@@ -28,7 +28,7 @@
 		</p>
 
 		<a href="https://www.pup.edu.ph" class="btn-pup" target="_blank" rel="noopener noreferrer">
-			Check-out PUP Website
+			Learn More About DIT
 		</a>
 	</section>
 </div>
