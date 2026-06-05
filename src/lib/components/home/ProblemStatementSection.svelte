@@ -1,6 +1,18 @@
 <script>
 	import { scatteredImages } from '$lib/data/homeData';
 
+	/**
+	 * @param {{
+	 *   src: string;
+	 *   w: number;
+	 *   h: number;
+	 *   x: number;
+	 *   y: number;
+	 *   blur?: number;
+	 *   shadow?: number;
+	 *   opacity?: number;
+	 * }} image
+	 */
 	function imageStyle(image) {
 		const blur = image.blur ?? 0;
 		const shadow = image.shadow ?? 0;

@@ -13,9 +13,24 @@
 	import planningImg from '$lib/assets/nav-images/planning.jpeg';
 	import complianceImg from '$lib/assets/nav-images/compliance.jpeg';
 
+	/**
+	 * @typedef {Object} NavSubItem
+	 * @property {string} label
+	 * @property {string} href
+	 *
+	 * @typedef {Object} NavItem
+	 * @property {string} href
+	 * @property {string} label
+	 * @property {string | null} image
+	 * @property {NavSubItem[]=} subItems
+	 * @property {string=} description
+	 */
+
+	/** @type {number | null} */
 	let activeIndex = $state(null);
 	let showNavbar = $state(false);
 
+	/** @type {HTMLElement[]} */
 	let navItemEls = [];
 
 	let dividerHighlight = $derived.by(() => {
@@ -28,9 +43,11 @@
 		return elRect.top - parentRect.top + elRect.height / 2;
 	});
 
-	function slideDownAndUp(node, { duration = 600 }) {
+	/** @param {HTMLElement} node @param {{ duration?: number }} options */
+	function slideDownAndUp(node, { duration = 600 } = {}) {
 		return {
 			duration,
+			/** @param {number} t */
 			css: (t) => {
 				const y = (1 - t) * -100;
 				return `
@@ -46,6 +63,7 @@
 		showNavbar = false;
 	}
 
+	/** @type {NavItem[]} */
 	const navItems = [
 		{ href: '/', label: 'Home', image: null },
 		{
@@ -149,12 +167,17 @@
 		}
 	];
 
+	/** @param {string} href */
+	function resolveHref(href) {
+		return resolve(/** @type {any} */ (href));
+	}
+
 	let activeImage = $derived(activeIndex !== null ? navItems[activeIndex]?.image ?? null : null);
 
 	onMount(() => {
 		navItems
 			.map(item => item.image)
-			.filter(Boolean)
+			.filter(src => src !== null)
 			.forEach(src => {
 				const img = new Image();
 				img.src = src;
@@ -227,7 +250,7 @@
 				{#each navItems as item, i (item.href)}
 					<li style="--i: {i};" bind:this={navItemEls[i]}>
 						<a
-							href={resolve(item.href)}
+							href={resolveHref(item.href)}
 							class="nav-btn"
 							class:active={activeIndex === i}
 							onclick={(e) => {
@@ -246,7 +269,7 @@
 							<ul class="mobile-sub-items">
 								<li>
 									<a
-										href={resolve(item.href)}
+										href={resolveHref(item.href)}
 										class="mobile-sub-item mobile-parent-link"
 										onclick={closeNavbar}
 									>
@@ -257,7 +280,7 @@
 								{#each item.subItems as sub (sub.href)}
 									<li>
 										<a
-											href={resolve(sub.href)}
+											href={resolveHref(sub.href)}
 											class="mobile-sub-item"
 											class:active={$page.url.pathname + $page.url.hash === sub.href}
 											onclick={closeNavbar}
@@ -282,7 +305,7 @@
 					{#if navItems[activeIndex].subItems?.length}
 						<div class="right-panel-content">
 							<a
-								href={resolve(navItems[activeIndex].href)}
+								href={resolveHref(navItems[activeIndex].href)}
 								class="parent-page-link"
 								onclick={closeNavbar}
 							>
@@ -293,7 +316,7 @@
 								{#each navItems[activeIndex].subItems as sub (sub.href)}
 									<li>
 										<a
-											href={resolve(sub.href)}
+											href={resolveHref(sub.href)}
 											class="sub-item"
 											class:active={$page.url.pathname + $page.url.hash === sub.href}
 											onclick={closeNavbar}
