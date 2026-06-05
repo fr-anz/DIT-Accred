@@ -46,8 +46,8 @@
 	}
 
 	.logo-row img {
-		width: clamp(3.35rem, 6vw, 4.65rem);
-		height: clamp(3.35rem, 6vw, 4.65rem);
+		width: clamp(3.5rem, 7vw, 6rem);
+		aspect-ratio: 1 / 1;
 		object-fit: contain;
 		display: block;
 	}

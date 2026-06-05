@@ -41,9 +41,9 @@
 	<div class="stats-banner">
 		{#each departmentStats as stat}
 			<div class="stat-card">
-				{#if stat.icon === 'users'}
+				{#if stat.icon === 'graduation'}
 					<Users size={48} color="#941518" />
-				{:else if stat.icon === 'graduation'}
+				{:else if stat.icon === 'users'}
 					<GraduationCap size={48} color="#941518" />
 				{:else if stat.icon === 'building'}
 					<Building2 size={48} color="#941518" />
