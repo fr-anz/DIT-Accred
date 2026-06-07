@@ -2,9 +2,10 @@
 	import { page } from '$app/stores';
 	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import ditLogo from '$lib/assets/DIT Logo.jpg';
 	import { Menu, X, ArrowRight } from 'lucide-svelte';
+	import { navItems as baseNavItems } from '$lib/data/navigation';
 
 	import researchImg from '$lib/assets/nav-images/research.jpeg';
 	import teachingImg from '$lib/assets/nav-images/teaching-learning.jpg';
@@ -14,24 +15,21 @@
 	import complianceImg from '$lib/assets/nav-images/compliance.jpeg';
 
 	/**
-	 * @typedef {Object} NavSubItem
-	 * @property {string} label
-	 * @property {string} href
-	 *
-	 * @typedef {Object} NavItem
-	 * @property {string} href
-	 * @property {string} label
-	 * @property {string | null} image
-	 * @property {NavSubItem[]=} subItems
-	 * @property {string=} description
+	 * @typedef {import('$lib/data/navigation').NavItem & { image: string | null }} HomeNavItem
 	 */
 
 	/** @type {number | null} */
 	let activeIndex = $state(null);
 	let showNavbar = $state(false);
+	/** @type {string | null} */
+	let openMobileHref = $state(null);
 
 	/** @type {HTMLElement[]} */
 	let navItemEls = [];
+	/** @type {HTMLButtonElement | null} */
+	let menuButtonEl = $state(null);
+	/** @type {HTMLElement | null} */
+	let navEl = $state(null);
 
 	let dividerHighlight = $derived.by(() => {
 		if (activeIndex === null || !navItemEls[activeIndex]) return null;
@@ -58,127 +56,110 @@
 		};
 	}
 
-	function closeNavbar() {
+	function openNavbar() {
+		showNavbar = true;
 		activeIndex = null;
-		showNavbar = false;
+		openMobileHref = null;
+		void tick().then(() => navEl?.focus());
 	}
 
-	/** @type {NavItem[]} */
-	const navItems = [
-		{ href: '/', label: 'Home', image: null },
-		{
-			href: '/research',
-			label: 'Research',
-			image: researchImg,
-			subItems: [
-				{ label: 'Policy Framework & Governance Ecosystem', href: '/research#policy' },
-				{ label: 'Key Productivity Metrics & Faculty Engagement', href: '/research#productivity' },
-				{ label: 'Completed Research Repository', href: '/research#research-repository' },
-				{ label: 'Published & Indexed Research Directory', href: '/research#published-research' },
-				{
-					label: 'Competitive Research Distinctions & International Awards',
-					href: '/research#research-awards'
-				},
-				{ label: 'Strategic Future Research Development Blueprint', href: '/research#rd-blueprint' }
-			]
-		},
-		{
-			href: '/teaching-learning',
-			label: 'Teaching & Learning',
-			image: teachingImg,
-			subItems: [
-				{
-					label: 'Program Compliance & Governance Framework',
-					href: '/teaching-learning#program-compliance'
-				},
-				{
-					label: 'Curriculum Architecture & Instruction Delivery',
-					href: '/teaching-learning#curriculum-architecture'
-				},
-				{
-					label: 'Academic Staff & Faculty Profiles',
-					href: '/teaching-learning#staff-faculty-profile'
-				},
-				{ label: 'Student Outcomes', href: '/teaching-learning#student-outcomes' },
-				{
-					label: 'Learner & Graduates Quality Assessment',
-					href: '/teaching-learning#learner-graduate-qa'
-				},
-				{
-					label: 'External Program Quality Assurance Badges',
-					href: '/teaching-learning#external-program-qa'
-				}
-			]
-		},
-		{
-			href: '/community',
-			label: 'Community',
-			image: communityImg,
-			subItems: [
-				{
-					label: 'Community Extension Policy & Strategic Agenda',
-					href: '/community#community-extension-agenda'
-				},
-				{
-					label: 'Master Registry of Completed & Ongoing Extension Projects',
-					href: '/community#registry-of-projects'
-				},
-				{
-					label: 'Deep-Dive Profiles of Featured Extensions',
-					href: '/community#profiles-extensions'
-				},
-				{ label: 'The PUP iVote++ System', href: '/community#vote-system' }
-			]
-		},
-		{
-			href: '/internationalization',
-			label: 'Internationalization',
-			image: intlImg,
-			subItems: [
-				{
-					label: 'Internationalization of Research Engagement',
-					href: '/internationalization#research-engagement'
-				},
-				{
-					label: 'Internationalization of the Student Learning Experience',
-					href: '/internationalization#internationalization-experience'
-				}
-			]
-		},
-		{
-			href: '/planning',
-			label: 'Planning and Quality Assurance',
-			image: planningImg,
-			description:
-				"The Planning and Quality Assurance Page serves as a dedicated portal highlighting the institution's commitment to international excellence, curricular rigor, and strategic growth."
-		},
-		{
-			href: '/compliance',
-			label: 'Compliance',
-			image: complianceImg,
-			subItems: [
-				{
-					label: 'Quality Assurance & Institutional Accreditations',
-					href: '/compliance#qa-accreditations'
-				},
-				{ label: 'Core Operational Pillars', href: '/compliance#core-pillars' },
-				{ label: 'Quality Management Systems (ISO 9001:2015)', href: '/compliance#qms' }
-			]
+	/** @param {{ returnFocus?: boolean }} options */
+	function closeNavbar({ returnFocus = true } = {}) {
+		activeIndex = null;
+		openMobileHref = null;
+		showNavbar = false;
+		if (returnFocus) {
+			void tick().then(() => menuButtonEl?.focus());
 		}
-	];
+	}
+
+	/** @type {Record<string, string | null>} */
+	const navImages = {
+		'/': null,
+		'/research': researchImg,
+		'/teaching-learning': teachingImg,
+		'/community': communityImg,
+		'/internationalization': intlImg,
+		'/planning': planningImg,
+		'/compliance': complianceImg
+	};
+
+	/** @type {HomeNavItem[]} */
+	const navItems = baseNavItems.map((item) => ({
+		...item,
+		image: navImages[item.href] ?? null
+	}));
 
 	/** @param {string} href */
 	function resolveHref(href) {
 		return resolve(/** @type {any} */ (href));
 	}
 
+	let activePath = $derived($page.url.pathname);
+	let activeTarget = $derived(`${$page.url.pathname}${$page.url.hash}`);
 	let activeImage = $derived(activeIndex !== null ? navItems[activeIndex]?.image ?? null : null);
+
+	/** @param {HomeNavItem} item */
+	function hasPanel(item) {
+		return Boolean(item.subItems?.length || item.description);
+	}
+
+	/** @param {HomeNavItem} item */
+	function isActive(item) {
+		return activePath === item.href;
+	}
+
+	/** @param {HomeNavItem} item @param {number} index */
+	function isMenuItemActive(item, index) {
+		return activeIndex === null ? isActive(item) : activeIndex === index;
+	}
+
+	/** @param {number} index */
+	function togglePanel(index) {
+		activeIndex = activeIndex === index ? null : index;
+	}
+
+	/** @param {HomeNavItem} item */
+	function toggleMobile(item) {
+		openMobileHref = openMobileHref === item.href ? null : item.href;
+	}
+
+	/** @param {KeyboardEvent} event */
+	function handleWindowKeydown(event) {
+		if (!showNavbar) return;
+
+		if (event.key === 'Escape') {
+			closeNavbar();
+			return;
+		}
+
+		if (event.key !== 'Tab' || !navEl) return;
+
+		const focusable = Array.from(
+			navEl.querySelectorAll(
+				'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+			)
+		).filter((el) => el instanceof HTMLElement && el.offsetParent !== null);
+
+		if (!focusable.length) return;
+
+		const first = /** @type {HTMLElement} */ (focusable[0]);
+		const last = /** @type {HTMLElement} */ (focusable[focusable.length - 1]);
+
+		if (event.shiftKey && document.activeElement === first) {
+			event.preventDefault();
+			last.focus();
+		} else if (!event.shiftKey && document.activeElement === last) {
+			event.preventDefault();
+			first.focus();
+		}
+	}
 
 	onMount(() => {
 		navItems
-			.map(item => item.image)
-			.filter(src => src !== null)
-			.forEach(src => {
+			.map((item) => item.image)
+			.filter((src) => src !== null)
+			.forEach((src) => {
 				const img = new Image();
 				img.src = src;
 			});
@@ -189,10 +170,17 @@
 	<link rel="preload" as="image" href={researchImg} />
 </svelte:head>
 
-<svelte:window onkeydown={(e) => e.key === 'Escape' && (showNavbar = false)} />
+<svelte:window onkeydown={handleWindowKeydown} />
 
 {#if !showNavbar}
-	<button class="compact-pill" onclick={() => (showNavbar = true)} aria-label="Open menu">
+	<button
+		class="compact-pill"
+		bind:this={menuButtonEl}
+		onclick={openNavbar}
+		aria-label="Open menu"
+		aria-expanded={showNavbar}
+		aria-controls="home-navigation"
+	>
 		<img class="logo" src={ditLogo} alt="DIT Logo" />
 		<span class="pill-label">Department of Information Technology</span>
 		<Menu size={18} strokeWidth={1.5} />
@@ -202,15 +190,18 @@
 {#if showNavbar}
 	<button
 		class="overlay-backdrop"
-		onclick={() => (showNavbar = false)}
+		onclick={() => closeNavbar()}
 		transition:fade={{ duration: 200 }}
 		aria-label="Close menu"
 	></button>
 
 	<nav
+		id="home-navigation"
 		class="fullscreen-nav"
 		class:has-image={activeImage !== null}
 		aria-label="Main navigation"
+		bind:this={navEl}
+		tabindex="-1"
 		transition:slideDownAndUp={{ duration: 300 }}
 	>
 		<div class="bg-images">
@@ -238,7 +229,7 @@
 					<p class="sub-title">College of Computer and Information Sciences</p>
 				</div>
 			</div>
-			<button class="close-btn" onclick={() => (showNavbar = false)} aria-label="Close menu">
+			<button class="close-btn" onclick={() => closeNavbar()} aria-label="Close menu">
 				<span>Close</span>
 				<X size={22} strokeWidth={1.5} />
 			</button>
@@ -248,48 +239,71 @@
 			<!-- Left panel -->
 			<ul class="nav-items">
 				{#each navItems as item, i (item.href)}
-					<li style="--i: {i};" bind:this={navItemEls[i]}>
-						<a
-							href={resolveHref(item.href)}
-							class="nav-btn"
-							class:active={activeIndex === i}
-							onclick={(e) => {
-								if (item.subItems?.length || item.description) {
-									e.preventDefault();
-									activeIndex = activeIndex === i ? null : i;
-								} else {
-									closeNavbar();
-								}
-							}}
-						>
-							{item.label}
-						</a>
-						<!-- Mobile inline sub-items -->
-						{#if item.subItems?.length}
-							<ul class="mobile-sub-items">
-								<li>
+					<li class:has-panel={hasPanel(item)} style="--i: {i};" bind:this={navItemEls[i]}>
+						<div class="nav-row" class:active={activeIndex === i}>
+							<a
+								href={resolveHref(item.href)}
+								class="nav-btn"
+								class:active={isMenuItemActive(item, i)}
+								aria-current={isActive(item) ? 'page' : undefined}
+								aria-expanded={hasPanel(item) ? activeIndex === i : undefined}
+								aria-controls={hasPanel(item)
+									? `nav-panel-${item.href.slice(1) || 'home'}`
+									: undefined}
+								onclick={(event) => {
+									if (hasPanel(item)) {
+										event.preventDefault();
+										togglePanel(i);
+									} else {
+										closeNavbar({ returnFocus: false });
+									}
+								}}
+							>
+								{item.label}
+							</a>
+						</div>
+
+						{#if hasPanel(item)}
+							<button
+								class="mobile-accordion"
+								class:active={isActive(item)}
+								class:open={openMobileHref === item.href}
+								type="button"
+								aria-expanded={openMobileHref === item.href}
+								aria-controls={`mobile-menu-${item.href.slice(1) || 'home'}`}
+								onclick={() => toggleMobile(item)}
+							>
+								<span>{item.label}</span>
+							</button>
+
+							{#if openMobileHref === item.href}
+								<div class="mobile-sub-items" id={`mobile-menu-${item.href.slice(1) || 'home'}`}>
 									<a
 										href={resolveHref(item.href)}
 										class="mobile-sub-item mobile-parent-link"
-										onclick={closeNavbar}
+										aria-current={isActive(item) ? 'page' : undefined}
+										onclick={() => closeNavbar({ returnFocus: false })}
 									>
-										<span>{item.label}</span>
+										<span>Overview</span>
 										<ArrowRight size={16} strokeWidth={1.5} />
 									</a>
-								</li>
-								{#each item.subItems as sub (sub.href)}
-									<li>
-										<a
-											href={resolveHref(sub.href)}
-											class="mobile-sub-item"
-											class:active={$page.url.pathname + $page.url.hash === sub.href}
-											onclick={closeNavbar}
-										>
-											{sub.label}
-										</a>
-									</li>
-								{/each}
-							</ul>
+									{#if item.subItems?.length}
+										{#each item.subItems as sub (sub.href)}
+											<a
+												href={resolveHref(sub.href)}
+												class="mobile-sub-item"
+												class:active={activeTarget === sub.href}
+												aria-current={activeTarget === sub.href ? 'location' : undefined}
+												onclick={() => closeNavbar({ returnFocus: false })}
+											>
+												{sub.label}
+											</a>
+										{/each}
+									{:else if item.description}
+										<p>{item.description}</p>
+									{/if}
+								</div>
+							{/if}
 						{/if}
 					</li>
 				{/each}
@@ -301,13 +315,14 @@
 			</div>
 			<!-- Right panel (desktop only, revealed on click) -->
 			{#if activeIndex !== null}
-				<div class="nav-right">
+				<div class="nav-right" id={`nav-panel-${navItems[activeIndex].href.slice(1) || 'home'}`}>
 					{#if navItems[activeIndex].subItems?.length}
 						<div class="right-panel-content">
 							<a
 								href={resolveHref(navItems[activeIndex].href)}
 								class="parent-page-link"
-								onclick={closeNavbar}
+								aria-current={isActive(navItems[activeIndex]) ? 'page' : undefined}
+								onclick={() => closeNavbar({ returnFocus: false })}
 							>
 								<span>{navItems[activeIndex].label}</span>
 								<ArrowRight size={20} strokeWidth={1.5} />
@@ -318,8 +333,9 @@
 										<a
 											href={resolveHref(sub.href)}
 											class="sub-item"
-											class:active={$page.url.pathname + $page.url.hash === sub.href}
-											onclick={closeNavbar}
+											class:active={activeTarget === sub.href}
+											aria-current={activeTarget === sub.href ? 'location' : undefined}
+											onclick={() => closeNavbar({ returnFocus: false })}
 										>
 											{sub.label}
 										</a>
@@ -329,10 +345,15 @@
 						</div>
 					{:else if navItems[activeIndex].description}
 						<div class="nav-description">
-							<div class="description-btn">
+							<a
+								href={resolveHref(navItems[activeIndex].href)}
+								class="description-btn"
+								aria-current={isActive(navItems[activeIndex]) ? 'page' : undefined}
+								onclick={() => closeNavbar({ returnFocus: false })}
+							>
 								<span>{navItems[activeIndex].label}</span>
 								<ArrowRight size={18} strokeWidth={1.5} />
-							</div>
+							</a>
 							<p>{navItems[activeIndex].description}</p>
 						</div>
 					{/if}
@@ -365,6 +386,18 @@
 	.compact-pill:hover {
 		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
 		transform: translateY(-1px);
+	}
+
+	.compact-pill:focus-visible,
+	.close-btn:focus-visible,
+	.nav-btn:focus-visible,
+	.parent-page-link:focus-visible,
+	.sub-item:focus-visible,
+	.description-btn:focus-visible,
+	.mobile-accordion:focus-visible,
+	.mobile-sub-item:focus-visible {
+		outline: 2px solid rgba(207, 168, 58, 0.9);
+		outline-offset: 4px;
 	}
 
 	.compact-pill .logo {
@@ -554,6 +587,12 @@
 		animation-delay: calc(0.2s + (var(--i) * 0.07s));
 	}
 
+	.nav-row {
+		display: flex;
+		align-items: center;
+		width: fit-content;
+	}
+
 	.nav-btn {
 		background: none;
 		border: none;
@@ -574,7 +613,8 @@
 		letter-spacing: -0.02em;
 	}
 
-	.nav-btn:hover {
+	.nav-btn:hover,
+	.nav-row.active .nav-btn {
 		color: transparent;
 		background-image: linear-gradient(to right, #cfa83a 10%, #d9d9d9 80%);
 		transform: translateX(12px);
@@ -605,6 +645,7 @@
 	}
 
 	/* Mobile inline sub-items (hidden on desktop) */
+	.mobile-accordion,
 	.mobile-sub-items {
 		display: none;
 	}
@@ -612,42 +653,45 @@
 	/* Right panel */
 	.nav-right {
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		align-items: flex-start;
+		justify-content: flex-start;
 		height: 100%;
 		max-height: 63vh;
+		padding-top: clamp(0.25rem, 2vh, 1.5rem);
 	}
 
 	.right-panel-content {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
-		width: min(650px, 100%);
+		gap: 1.6rem;
+		width: min(620px, 100%);
 		max-height: 63vh;
 		overflow-y: auto;
+		padding-right: 1rem;
 	}
 
 	.parent-page-link {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 0.75rem 1.25rem;
-		border: 1px solid rgba(255, 255, 255, 0.3);
-		background-color: rgba(255, 255, 255, 0.15);
-		border-radius: 8px;
+		gap: 0.65rem;
+		width: fit-content;
+		padding: 0 0 0.35rem;
+		border-bottom: 1px solid rgba(207, 168, 58, 0.72);
 		text-decoration: none;
 		color: #fff;
-		font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-		font-weight: 600;
+		font-size: clamp(1.35rem, 1.8vw, 1.8rem);
+		font-weight: 700;
+		line-height: 1.15;
 		transition:
-			background 0.2s ease,
+			color 0.2s ease,
 			border-color 0.2s ease,
-			color 0.2s ease;
+			transform 0.2s ease;
 	}
 
 	.parent-page-link:hover {
-		background: rgba(255, 255, 255, 0.25);
-		border-color: rgba(255, 255, 255, 0.5);
+		border-color: rgba(255, 255, 255, 0.78);
+		color: #cfa83a;
+		transform: translateX(4px);
 	}
 
 	.sub-items {
@@ -656,68 +700,77 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 1.25rem;
 	}
 
 	.sub-item {
-		display: block;
-		padding: 0.6rem 1.25rem;
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		background-color: rgba(255, 255, 255, 0.1);
-		border-radius: 8px;
+		display: inline-block;
+		width: fit-content;
+		padding: 0;
+		border: 0;
+		background: transparent;
 		text-decoration: none;
-		color: rgba(217, 217, 217, 1);
-		font-size: clamp(1rem, 1.2vw, 1.2em);
+		color: rgba(255, 255, 255, 0.8);
+		font-size: clamp(1rem, 1.2vw, 1.18rem);
 		font-weight: 700;
+		line-height: 1.42;
 		transition:
-			background 0.2s ease,
-			border-color 0.2s ease,
-			color 0.2s ease;
+			color 0.2s ease,
+			transform 0.2s ease;
 	}
 
 	.sub-item:hover {
-		background: rgba(255, 255, 255, 0.08);
-		border-color: rgba(255, 255, 255, 0.4);
 		color: #fff;
+		transform: translateX(4px);
 	}
 
 	.sub-item.active {
-		background: rgba(255, 255, 255, 0.8);
-		color: #875f23;
-		font-weight: 600;
+		color: #cfa83a;
+		font-weight: 800;
 	}
 
 	.nav-description {
-		padding: 1rem 0;
+		padding: 0;
+		max-width: 560px;
 	}
 
 	.nav-description p {
-		color: rgba(255, 255, 255, 0.6);
-		font-size: clamp(1rem, 2vw, 2rem);
-		line-height: 1.7;
-		max-width: 512px;
+		color: rgba(255, 255, 255, 0.68);
+		font-size: clamp(1.15rem, 1.8vw, 1.75rem);
+		line-height: 1.55;
+		max-width: 480px;
 		font-style: italic;
+		margin: 1.75rem 0 0;
 	}
 
 	.description-btn {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 0.75rem 1.25rem;
-		border: 1px solid rgba(255, 255, 255, 0.3);
-		background-color: rgba(255, 255, 255, 0.15);
-		border-radius: 8px;
+		gap: 0.65rem;
+		width: fit-content;
+		padding: 0 0 0.35rem;
+		border-bottom: 1px solid rgba(207, 168, 58, 0.72);
 		color: #fff;
-		font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-		font-weight: 600;
-		margin-bottom: 1.5rem;
-		cursor: default;
+		font-size: clamp(1.35rem, 1.8vw, 1.8rem);
+		font-weight: 700;
+		line-height: 1.15;
+		text-decoration: none;
+		transition:
+			color 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.description-btn:hover {
+		border-color: rgba(255, 255, 255, 0.78);
+		color: #cfa83a;
+		transform: translateX(4px);
 	}
 
 	.panel-divider {
 		position: relative;
-		width: 5px;
-		background: rgba(255, 255, 255, 0.15);
+		width: 1px;
+		background: rgba(255, 255, 255, 0.18);
 		align-self: stretch;
 		max-height: 63vh;
 	}
@@ -730,9 +783,9 @@
 		position: absolute;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 5px;
-		height: 80px;
-		background: linear-gradient(to top, #ffe59f 30%, #fffefc 100%);
+		width: 1px;
+		height: 88px;
+		background: rgba(207, 168, 58, 0.95);
 		border-radius: 9999px;
 		transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
@@ -793,7 +846,47 @@
 			padding: 0.35rem 0;
 		}
 
-		/* Show inline sub-items on mobile */
+		.nav-items li.has-panel > .nav-row {
+			display: none;
+		}
+
+		.nav-row {
+			width: 100%;
+		}
+
+		.nav-row .nav-btn {
+			width: 100%;
+		}
+
+		.mobile-accordion {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.06);
+			color: #fff;
+			cursor: pointer;
+			font-family: 'Georgia', 'Times New Roman', serif;
+			font-size: clamp(1.4rem, 6vw, 1.8rem);
+			font-weight: 300;
+			line-height: 1.15;
+			padding: 0.5rem 0.75rem;
+			text-align: left;
+			transition:
+				background 0.2s ease,
+				border-color 0.2s ease,
+				color 0.2s ease;
+		}
+
+		.mobile-accordion:hover,
+		.mobile-accordion.open,
+		.mobile-accordion.active {
+			border-color: rgba(255, 255, 255, 0.28);
+			background: rgba(255, 255, 255, 0.1);
+			color: #cfa83a;
+		}
+
 		.mobile-sub-items {
 			display: flex;
 			flex-direction: column;
@@ -801,6 +894,14 @@
 			padding: 0.25rem 0 0.5rem 1.25rem;
 			border-left: 2px solid rgba(255, 255, 255, 0.15);
 			margin-left: 0.25rem;
+		}
+
+		.mobile-sub-items p {
+			color: rgba(217, 217, 217, 0.82);
+			font-size: 0.9rem;
+			line-height: 1.55;
+			margin: 0.25rem 0 0;
+			padding: 0.25rem 0.75rem;
 		}
 
 		.mobile-sub-item {
@@ -841,6 +942,36 @@
 		.panel-divider,
 		.nav-right {
 			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.compact-pill,
+		.bg-image,
+		.nav-items li,
+		.nav-btn,
+		.parent-page-link,
+		.sub-item,
+		.description-btn,
+		.divider-index,
+		.mobile-accordion,
+		.mobile-sub-item {
+			animation: none;
+			transition: none;
+		}
+
+		.nav-items li {
+			opacity: 1;
+		}
+
+		.bg-image.visible,
+		.nav-btn:hover,
+		.nav-row.active .nav-btn,
+		.parent-page-link:hover,
+		.sub-item:hover,
+		.description-btn:hover,
+		.mobile-accordion.open {
+			transform: none;
 		}
 	}
 </style>
