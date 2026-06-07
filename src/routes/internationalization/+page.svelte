@@ -235,24 +235,27 @@
   }
 
 .partner-card-name {
-    color: #941518;
-    font-family: var(--font-heading);
-    font-size: 1.8rem; 
-    font-weight: 700;
-    margin: auto 0 0 0; 
-    line-height: 1.35;
-  }
+  color: #941518;
+  font-family: var(--font-heading);
+  font-size: 1.8rem; 
+  font-weight: 700;
+  
+  margin: -10px 0 10px 0; 
+  
+  line-height: 1.35;
+}
 
 .partner-card-location {
-    color: #1a1a1a;
-    font-family: var(--font-body);
-    font-size: 1.05rem;
-    font-weight: 400;
-    
-    margin: 20px 0 0; 
-    
-    font-style: italic;
-  }
+  color: #1a1a1a;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  
+  margin-top: auto; 
+  margin-bottom: 0;
+  
+  font-style: italic;
+}
 
   /* RESPONSIVE BREAKPOINTS */
   @media (max-width: 1024px) {
