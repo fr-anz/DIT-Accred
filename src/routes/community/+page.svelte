@@ -54,6 +54,7 @@
     'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80'
   ];
+
 </script>
 
 <main>
@@ -63,12 +64,14 @@
   </section>
 
   <section id="community-extension-agenda" class="strategic-agenda">
+
     <header class="agenda-header">
       <div class="accent-square"></div>
       <h2>COMMUNITY EXTENSION POLICY AND STRATEGIC AGENDA</h2>
     </header>
 
     <div class="agenda-content-grid">
+
       <div class="agenda-panel panel-red">
         <h3>SOCIAL STANCE & SERVICE ORIENTATION</h3>
         <hr class="accent-line" />
@@ -84,6 +87,7 @@
           Extension projects consistently exhibit strong faculty leadership and active student involvement, seamlessly linking community service with instructional objectives. Faculty members serve as project leaders, trainers, system developers, and evaluators, while IT undergraduate students participate as facilitators, moderators, and technical assistants—reinforcing experiential learning and civic social responsibility.
         </p>
       </div>
+
     </div>
 
     <div class="maturity-framework">
@@ -96,6 +100,7 @@
       </div>
 
       <div class="framework-cards-grid">
+
         <div class="pillar-card card-bg-1">
           <span class="card-number">0 1</span>
           <div class="card-content">
@@ -119,6 +124,7 @@
             <p>Translating faculty research and student configurations into practical, deployable systems that automate manual organizational workflows.</p>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -132,6 +138,7 @@
         <span>VERIFICATION: INTEGRATION LOGS</span>
       </div>
     </div>
+
   </section>
 
   <section class="technical-profiles">
@@ -324,6 +331,7 @@
     background-color: #f0f0f0; 
     overflow: hidden;
   }
+
   .hero-bg {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -332,12 +340,13 @@
     opacity: 0.3; 
     z-index: 0;
   }
+
   .hero-title {
     position: relative;
     z-index: 1;
     font-family: 'Helvetica', Arial, sans-serif; 
     font-size: clamp(4rem, 8vw, 8rem); 
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: 0.05em;
     margin: 0;
     background: linear-gradient(to right, #000000 0%, #941518 80%);
@@ -347,7 +356,6 @@
     color: transparent;
   }
 
-  /* --- STRATEGIC AGENDA SECTION --- */
   .strategic-agenda {
     display: flex;
     flex-direction: column;
@@ -355,6 +363,7 @@
     min-height: 100vh; 
     justify-content: space-between; 
   }
+
   .agenda-header {
     background: linear-gradient(to right, #420607 0%, #000000 80%);
     padding: 24px 5%;
@@ -362,11 +371,13 @@
     align-items: center;
     gap: 16px;
   }
+
   .accent-square {
     width: 20px;
     height: 20px;
     background-color: #555555; 
   }
+
   .agenda-header h2 {
     font-family: 'Overpass', sans-serif; 
     color: #ef9b08; 
@@ -375,17 +386,20 @@
     letter-spacing: 0.15em;
     margin: 0;
   }
+
   .agenda-content-grid {
     display: grid;
     grid-template-columns: 1fr 1fr; 
     width: 100%;
   }
+
   .agenda-panel {
     padding: 60px 10%;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
+
   .agenda-panel h3 {
     font-family: 'Overpass', sans-serif; 
     font-size: 1.15rem;
@@ -393,6 +407,7 @@
     letter-spacing: 0.05em;
     margin: 0;
   }
+
   .accent-line {
     border: none;
     height: 1px;
@@ -400,21 +415,36 @@
     background-color: rgba(255, 255, 255, 0.4);
     margin: 0;
   }
+
   .agenda-panel p {
     font-family: 'Inter', sans-serif; 
     font-size: 1rem;
     line-height: 1.6;
     margin: 0;
   }
+
+
+  .panel-red {
+    background-color: #941518;
+    color: #FFFFFF;
+  }
+
+  .panel-gold {
+    background-color: #f8b209; 
+    color: #FFFFFF;
+  }
+
   .panel-red { background-color: #941518; color: #FFFFFF; }
   .panel-gold { background-color: #f8b209; color: #FFFFFF; }
 
   /* --- MATURITY FRAMEWORK --- */
+
   .maturity-framework {
     background: linear-gradient(135deg, #fcedeb 0%, #f4e8cf 100%);
     padding: 60px 10%;
     color: #1A1515;
   }
+
   .framework-header h2 {
     font-family: 'Overpass', sans-serif;
     font-size: 1.5rem;
@@ -422,12 +452,14 @@
     margin: 0 0 16px 0;
     letter-spacing: 0.02em;
   }
+
   .framework-divider {
     border: none;
     height: 1px;
     background-color: rgba(0, 0, 0, 0.3);
     margin: 0 0 24px 0;
   }
+
   .framework-description {
     font-family: 'Inter', sans-serif;
     font-size: 1.05rem;
@@ -435,11 +467,13 @@
     max-width: 900px;
     margin-bottom: 40px;
   }
+
   .framework-cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
+
   .pillar-card {
     position: relative;
     border-radius: 16px;
@@ -454,6 +488,7 @@
     background-position: center;
     overflow: hidden;
   }
+
   .pillar-card::before {
     content: '';
     position: absolute;
@@ -461,6 +496,7 @@
     background: linear-gradient(to bottom, rgba(106, 19, 22, 0.4) 0%, rgba(106, 19, 22, 0.95) 100%);
     z-index: 1;
   }
+
   .card-number {
     font-family: 'Overpass', sans-serif;
     font-size: 1.1rem;
@@ -470,10 +506,12 @@
     position: relative;
     z-index: 2; 
   }
+
   .card-content {
     position: relative;
     z-index: 2; 
   }
+
   .card-content h4 {
     font-family: 'Overpass', sans-serif;
     color: #ef9b08; 
@@ -482,6 +520,7 @@
     margin: 0 0 16px 0;
     line-height: 1.4;
   }
+
   .card-content p {
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
@@ -489,6 +528,7 @@
     margin: 0;
     color: #f0f0f0;
   }
+
   .card-bg-1 { background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80'); }
   .card-bg-2 { background-image: url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80'); }
   .card-bg-3 { background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80'); }
@@ -500,6 +540,7 @@
     align-items: center;
     gap: 60px; 
   }
+
   .verification-item {
     display: flex;
     align-items: center;
@@ -510,6 +551,28 @@
     font-size: 0.95rem;
     letter-spacing: 0.05em;
   }
+
+
+  .badge-icon {
+    width: 24px;
+    height: 24px;
+    color: #FFFFFF;
+  }
+
+  @media (max-width: 1024px) {
+    .agenda-content-grid {
+      grid-template-columns: 1fr; 
+    }
+    .framework-cards-grid {
+      grid-template-columns: 1fr; 
+    }
+    .verification-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+  }
+
   .badge-icon { width: 24px; height: 24px; color: #FFFFFF; }
 
   /* --- TECHNICAL PROFILES SECTION --- */
