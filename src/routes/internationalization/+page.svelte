@@ -1,20 +1,23 @@
 <script>
   import Footer from '$lib/components/footer.svelte';
 
-  // Data for the university partners
+  import binusLogo from '$lib/assets/internationalization/binus.png';
+  import unpamLogo from '$lib/assets/internationalization/unpam.png';
+  import umpsaLogo from '$lib/assets/internationalization/umpsa.png';
+
   const partners = [
     {
-      logo: 'src/lib/assets/internationalization/binus.png',
+      logo: binusLogo,
       name: 'Bina Nusantara University',
       location: 'West Jakarta, Indonesia'
     },
     {
-      logo: 'src/lib/assets/internationalization/unpam.png',
+      logo: unpamLogo,
       name: 'Pamulang University',
       location: 'South Tangerang, Indonesia'
     },
     {
-      logo: 'src/lib/assets/internationalization/umpsa.png',
+      logo: umpsaLogo,
       name: 'Universiti Malaysia Pahang Al-Sultan Abdullah',
       location: 'Pekan Pahang, Malaysia'
     }
@@ -235,27 +238,29 @@
   }
 
 .partner-card-name {
-  color: #941518;
-  font-family: var(--font-heading);
-  font-size: 1.8rem; 
-  font-weight: 700;
-  
-  margin: -10px 0 10px 0; 
-  
-  line-height: 1.35;
-}
+    color: #941518;
+    font-family: var(--font-heading);
+    font-size: 1.8rem; 
+    font-weight: 700;
+    
+    margin: 0 0 25px 0;
 
-.partner-card-location {
-  color: #1a1a1a;
-  font-family: var(--font-body);
-  font-size: 1.05rem;
-  font-weight: 400;
-  
-  margin-top: auto; 
-  margin-bottom: 0;
-  
-  font-style: italic;
-}
+    padding-top: 10px;
+    
+    line-height: 1.35;
+
+  }
+
+  .partner-card-location {
+    color: #1a1a1a;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 400;
+    font-style: italic;
+    
+    margin: 0;
+    
+  }
 
   /* RESPONSIVE BREAKPOINTS */
   @media (max-width: 1024px) {
