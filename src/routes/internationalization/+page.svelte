@@ -249,7 +249,7 @@
     font-size: 1.05rem;
     font-weight: 400;
     
-    margin: auto 0 0 0; 
+    margin: 20px 0 0; 
     
     font-style: italic;
   }
