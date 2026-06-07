@@ -18,7 +18,13 @@
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 
+	/**
+	 * @typedef {1 | 2 | 4 | 17} SdgId
+	 * @typedef {{ label: string; color: string; range: string }} SdgInfo
+	 */
+
 	// SDG data for hover cards
+	/** @type {Record<SdgId, SdgInfo>} */
 	const sdgData = {
 		1: {
 			label: 'No Poverty',
@@ -42,6 +48,7 @@
 		}
 	};
 
+	/** @type {SdgId | null} */
 	let hoveredSdg = $state(null);
 
 	const wuriRankings = [
@@ -57,6 +64,7 @@
 		{ stars: 4, label: 'Facilities' }
 	];
 
+	/** @type {SdgId[]} */
 	const sdgIds = [1, 2, 4, 17];
 </script>
 
@@ -83,7 +91,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="strategic-benchmarking">
 	<div class="section_label">
-		<Globe size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<Globe size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
 	</div>
 	<hr class="section_divider" />
@@ -112,7 +120,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="university-support">
 	<div class="section_label">
-		<Flag size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
 	</div>
 	<hr class="section_divider" />
@@ -214,7 +222,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="dept-process">
 	<div class="section_label">
-		<Flag size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>DEPARTMENT-LEVEL PROCESS</span>
 	</div>
 	<hr class="section_divider" />
@@ -222,32 +230,36 @@
 	<div class="process_cards_grid">
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<PenLine size={28} strokeWidth={1.5} class="process_icon" />
+				<PenLine size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">Curriculum<br />Revision</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">Based on CHED Memorandum Order No. 32 series of 2017.</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<FileText size={28} strokeWidth={1.5} class="process_icon" />
+				<FileText size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">Syllabi<br />Prep</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">
 				Regular updates for industry and government sensitivity.
 			</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<Briefcase size={28} strokeWidth={1.5} class="process_icon" />
+				<Briefcase size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">Internship</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">Established MOA with strategic industry partners.</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
-				<Plane size={28} strokeWidth={1.5} class="process_icon" />
+				<Plane size={36} strokeWidth={1.5} class="process_icon" />
 			</div>
 			<h4 class="process_card_title">International<br />Affairs</h4>
+			<hr class="process_divider" />
 			<p class="process_card_desc">Institutionalization of global partnerships and mobility.</p>
 		</div>
 	</div>
@@ -257,26 +269,34 @@
   PHOTO STRIP
 ───────────────────────────────────────────── -->
 <div class="photo_strip" aria-label="Department photo gallery">
-	<img
-		src="/planning/photo-strip-1.jpg"
-		alt="Students and faculty in an IT laboratory setting"
-		class="strip_photo"
-	/>
-	<img
-		src="/planning/photo-strip-2.jpg"
-		alt="Students listening to a presentation on Converge ICT Solutions"
-		class="strip_photo"
-	/>
-	<img
-		src="/planning/photo-strip-3.jpg"
-		alt="Faculty and staff group with Banua Palawan tribe members"
-		class="strip_photo"
-	/>
-	<img
-		src="/planning/photo-strip-4.jpg"
-		alt="Department faculty meeting and planning session"
-		class="strip_photo"
-	/>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-1.jpg"
+			alt="Students and faculty in an IT laboratory setting"
+			class="strip_photo img_pos_1"
+		/>
+	</div>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-2.jpg"
+			alt="Students listening to a presentation on Converge ICT Solutions"
+			class="strip_photo img_pos_2"
+		/>
+	</div>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-3.jpg"
+			alt="Faculty and staff group with Banua Palawan tribe members"
+			class="strip_photo img_pos_3"
+		/>
+	</div>
+	<div class="photo_strip_item">
+		<img
+			src="/planning/photo-strip-4.jpg"
+			alt="Department faculty meeting and planning session"
+			class="strip_photo img_pos_4"
+		/>
+	</div>
 </div>
 
 <!-- ─────────────────────────────────────────────
@@ -284,7 +304,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="rankings">
 	<div class="section_label">
-		<BadgeCheck size={22} strokeWidth={1.5} class="section_icon maroon" />
+		<BadgeCheck size={20} strokeWidth={1.5} class="section_icon maroon" />
 		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
@@ -449,12 +469,32 @@
 		--section-max-width: 1280px; /* Zoom 125% equivalent sizing (less white space) */
 	}
 
-	/* Base scaling for 125% zoom feel */
 	.content_section {
-		max-width: var(--section-max-width);
-		margin: 0 auto;
-		padding: 5rem 2rem;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 2.5rem 10% 4rem 10%; /* Fluid 10% side padding matching the community page scale at 100% zoom */
 		font-size: 1.05rem;
+	}
+
+	@media (max-width: 1024px) {
+		.content_section {
+			padding: 2.5rem 6% 4rem 6%;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.content_section {
+			padding: 2rem 1.5rem 3.5rem 1.5rem;
+		}
+	}
+
+	#strategic-benchmarking {
+		padding-top: 4.5rem; /* Separator from hero fold */
+	}
+
+	#university-support,
+	#dept-process {
+		padding-top: 1rem; /* Reduced top padding to tighten the spacing between consecutive sections */
 	}
 
 	/* ── HERO ── */
@@ -483,6 +523,7 @@
 			0 20px,
 			20px -20px,
 			-20px 0px;
+		animation: checkerboardFade 1.2s ease-out forwards;
 	}
 
 	.hero_content {
@@ -490,6 +531,7 @@
 		z-index: 1;
 		text-align: center;
 		padding: 4rem 2rem;
+		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
 	.hero_title {
@@ -503,18 +545,47 @@
 		text-transform: uppercase;
 	}
 
+	@keyframes checkerboardFade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 0.85;
+		}
+	}
+
+	@keyframes heroFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	/* ── SHARED SECTION WRAPPER ── */
 	.section_label {
 		display: flex;
 		align-items: center;
 		gap: 0.85rem;
-		color: var(--color-gold-dark);
 		font-family: var(--font-body);
-		font-size: 1.05rem;
-		font-weight: 800;
-		letter-spacing: 0.15em;
+		font-size: 1.15rem; /* Proportional scale to match figma reference */
+		font-weight: 700;
+		letter-spacing: 0.2em; /* 20% letter-spacing for the adjusted font scale */
 		text-transform: uppercase;
 		margin-bottom: 0.85rem;
+		line-height: 1.3;
+	}
+
+	.section_label span {
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		text-fill-color: transparent;
+		display: inline-block;
 	}
 
 	:global(.section_icon) {
@@ -570,6 +641,12 @@
 		justify-content: center;
 		gap: 0.4rem;
 		box-sizing: border-box;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+
+	.aaccup_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.28);
 	}
 
 	@media (max-width: 900px) {
@@ -778,12 +855,13 @@
 	.support_grid {
 		display: grid;
 		grid-template-columns: 1.05fr 1fr;
-		gap: 2rem;
+		gap: 3rem; /* Expanded for better breathing room on desktop */
 	}
 
 	@media (max-width: 760px) {
 		.support_grid {
 			grid-template-columns: 1fr;
+			gap: 2rem;
 		}
 	}
 
@@ -798,7 +876,7 @@
 		background: #fff;
 		border: 1px solid rgba(207, 168, 58, 0.3);
 		border-radius: 12px;
-		padding: 1.75rem;
+		padding: 2rem; /* Expanded from 1.75rem for premium feel */
 		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 	}
 
@@ -823,8 +901,17 @@
 		display: flex;
 		align-items: center;
 		gap: 1.25rem;
-		padding: 0.85rem 0;
+		padding: 0.85rem 1rem;
+		margin: 0 -1rem;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+		border-radius: 8px;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-bottom-color 0.3s ease;
+	}
+
+	.priority_item:hover {
+		transform: translateX(8px);
+		background-color: rgba(207, 168, 58, 0.08);
+		border-bottom-color: transparent;
 	}
 
 	.priority_item.last {
@@ -850,7 +937,7 @@
 	.core_functions_card {
 		background: var(--color-gold);
 		border-radius: 12px;
-		padding: 1.5rem 1.75rem;
+		padding: 2rem; /* Expanded padding */
 		box-shadow: 0 4px 20px rgba(207, 168, 58, 0.2);
 	}
 
@@ -885,7 +972,7 @@
 	.support_feed {
 		background: var(--color-maroon);
 		border-radius: 12px;
-		padding: 1.75rem;
+		padding: 2rem; /* Expanded padding */
 		color: #fff;
 		display: flex;
 		flex-direction: column;
@@ -943,12 +1030,13 @@
 	.process_cards_grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 1.25rem;
+		gap: 1.5rem; /* Expanded from 1.25rem for alignment with rankings grid */
 	}
 
 	@media (max-width: 760px) {
 		.process_cards_grid {
 			grid-template-columns: repeat(2, 1fr);
+			gap: 1.25rem;
 		}
 	}
 
@@ -959,15 +1047,17 @@
 	}
 
 	.process_card {
-		border: 1.5px solid rgba(92, 15, 22, 0.15);
-		border-radius: 12px;
-		padding: 1.75rem 1.25rem;
+		border: 4px solid rgba(160, 22, 24, 0.45); /* Thicker red/maroon borders matching figma */
+		border-radius: 30px; /* Tighter matching figma */
+		padding: 2.25rem 1.5rem;
 		text-align: center;
 		background: #fff;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.65rem;
+		gap: 0.85rem;
+		min-height: 330px; /* Tall portrait rectangular shape */
+		box-sizing: border-box;
 		transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 		cursor: default;
 	}
@@ -978,36 +1068,46 @@
 		box-shadow: 0 8px 24px rgba(207, 168, 58, 0.15);
 	}
 
+	.process_divider {
+		border: none;
+		border-top: 1.5px solid rgba(140, 15, 19, 0.18);
+		width: 45px;
+		margin: 0.4rem auto;
+	}
+
 	.process_icon_wrapper {
-		width: 52px;
-		height: 52px;
-		border-radius: 50%;
-		background: rgba(92, 15, 22, 0.06);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.5rem; /* Clean white card backgrounds, no background circle behind icons */
 	}
 
 	:global(.process_icon) {
 		color: var(--color-maroon);
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.process_card:hover :global(.process_icon) {
+		transform: scale(1.12);
 	}
 
 	.process_card_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 700;
-		color: var(--color-maroon);
+		font-family: var(--font-heading); /* Overpass */
+		font-size: 2rem; /* 32px matching Figma specification */
+		font-weight: 600; /* SemiBold matching Figma specification */
+		color: #941518; /* Maroon color matching Figma specification */
 		margin: 0;
-		line-height: 1.3;
+		line-height: 1; /* 100% line-height matching Figma specification */
+		letter-spacing: 0.04em; /* 4% letter-spacing matching Figma specification */
+		text-align: center;
 	}
 
 	.process_card_desc {
 		font-family: var(--font-body);
-		font-size: 0.78rem;
-		color: #555;
-		line-height: 1.55;
-		margin: 0;
+		font-size: 0.85rem; /* Matching figma */
+		color: #444;
+		line-height: 1.6;
+		margin: 0.5rem 0 0 0;
 	}
 
 	/* ── PHOTO STRIP ── */
@@ -1017,7 +1117,7 @@
 		grid-template-columns: repeat(4, 1fr);
 		height: 260px;
 		overflow: hidden;
-		margin: 1rem 0 0 0;
+		margin: 0; /* Let it sit perfectly flush between process and rankings sections */
 	}
 
 	@media (max-width: 768px) {
@@ -1027,24 +1127,49 @@
 		}
 	}
 
+	.photo_strip_item {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+	}
+
 	.strip_photo {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
 		filter: brightness(0.92);
-		transition: filter 0.3s ease;
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 	}
 
-	.strip_photo:hover {
+	.photo_strip_item:hover .strip_photo {
+		transform: scale(1.06);
 		filter: brightness(1);
+	}
+
+	/* Target center/crop focus to show the humans clearly */
+	.img_pos_1 {
+		object-position: center 20%;
+	}
+
+	.img_pos_2 {
+		object-position: center 30%;
+	}
+
+	.img_pos_3 {
+		object-position: center 40%;
+	}
+
+	.img_pos_4 {
+		object-position: center 25%;
 	}
 
 	/* ── RANKINGS SECTION ── */
 	.rankings_grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1.25rem;
+		gap: 1.5rem; /* Expanded from 1.25rem */
 		align-items: stretch;
 	}
 
@@ -1066,6 +1191,13 @@
 		border: 1.5px dashed rgba(180, 150, 80, 0.35);
 		background: #fff;
 		box-sizing: border-box;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+	}
+
+	.ranking_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+		border-color: rgba(180, 150, 80, 0.7);
 	}
 
 	/* QS Stars card */
@@ -1310,6 +1442,13 @@
 		box-sizing: border-box;
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+
+	.impact_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 30px rgba(73, 21, 22, 0.3);
+		border: none;
 	}
 
 	.impact_label {
@@ -1384,6 +1523,18 @@
 		justify-content: space-between;
 		z-index: 100;
 		pointer-events: none;
+		animation: tooltipSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	@keyframes tooltipSlide {
+		from {
+			opacity: 0;
+			transform: translate(-50%, 8px);
+		}
+		to {
+			opacity: 1;
+			transform: translate(-50%, 0);
+		}
 	}
 
 	/* Arrow pointing up */
@@ -1445,6 +1596,13 @@
 		box-sizing: border-box;
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+
+	.aunqa_card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.35);
+		border: none;
 	}
 
 	.aunqa_header {
