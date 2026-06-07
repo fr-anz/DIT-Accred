@@ -23,6 +23,10 @@
 		return item.href === '/planning' ? 'Planning & Quality Assurance' : item.label;
 	}
 
+	function desktopLabel(item: NavItem) {
+		return item.href === '/planning' ? 'Planning & QA' : item.label;
+	}
+
 	function hasSections(item: NavItem) {
 		return Boolean(item.subItems?.length || item.description);
 	}
@@ -44,9 +48,20 @@
 		drawerOpen = false;
 		openMobileHref = null;
 	}
+
+	function handleWindowPointerDown(event: PointerEvent) {
+		if (!(event.target instanceof Element) || event.target.closest('.page-navbar')) {
+			return;
+		}
+
+		closeMenus();
+	}
 </script>
 
-<svelte:window onkeydown={(event) => event.key === 'Escape' && closeMenus()} />
+<svelte:window
+	onkeydown={(event) => event.key === 'Escape' && closeMenus()}
+	onpointerdown={handleWindowPointerDown}
+/>
 
 <nav class="page-navbar" aria-label="Main navigation">
 	<div class="nav-shell">
@@ -64,6 +79,7 @@
 				class="tab-link"
 				class:active={activePath === homeItem.href}
 				href={resolveHref(homeItem.href)}
+				aria-current={activePath === homeItem.href ? 'page' : undefined}
 				onclick={closeMenus}
 			>
 				{homeItem.label}
@@ -71,20 +87,32 @@
 
 			{#each sectionItems as item (item.href)}
 				<div class="tab-group">
-					<button
-						class="tab-button"
-						class:active={isActive(item)}
-						class:open={openDesktopHref === item.href}
-						type="button"
-						aria-expanded={openDesktopHref === item.href}
-						aria-controls={`menu-${item.href.slice(1)}`}
-						onclick={() => toggleDesktop(item)}
-					>
-						<span>{displayLabel(item)}</span>
-						<span class="chevron">
-							<ChevronDown size={14} strokeWidth={1.75} />
-						</span>
-					</button>
+					<div class="tab-combo" class:active={isActive(item)} class:open={openDesktopHref === item.href}>
+						<a
+							class="tab-link section-tab"
+							href={resolveHref(item.href)}
+							aria-current={isActive(item) ? 'page' : undefined}
+							onclick={closeMenus}
+						>
+							{desktopLabel(item)}
+						</a>
+
+						{#if hasSections(item)}
+							<button
+								class="tab-menu-button"
+								type="button"
+								aria-label={`Open ${desktopLabel(item)} menu`}
+								aria-expanded={openDesktopHref === item.href}
+								aria-controls={`menu-${item.href.slice(1)}`}
+								aria-haspopup="true"
+								onclick={() => toggleDesktop(item)}
+							>
+								<span class="chevron">
+									<ChevronDown size={14} strokeWidth={1.75} />
+								</span>
+							</button>
+						{/if}
+					</div>
 
 					{#if openDesktopHref === item.href}
 						<div class="dropdown" id={`menu-${item.href.slice(1)}`}>
@@ -121,6 +149,7 @@
 			type="button"
 			aria-label={drawerOpen ? 'Close menu' : 'Open menu'}
 			aria-expanded={drawerOpen}
+			aria-controls="mobile-navigation"
 			onclick={() => {
 				drawerOpen = !drawerOpen;
 				openDesktopHref = null;
@@ -135,11 +164,12 @@
 	</div>
 
 	{#if drawerOpen}
-		<div class="mobile-drawer">
+		<div class="mobile-drawer" id="mobile-navigation">
 			<a
 				class="mobile-link"
 				class:active={activePath === homeItem.href}
 				href={resolveHref(homeItem.href)}
+				aria-current={activePath === homeItem.href ? 'page' : undefined}
 				onclick={closeMenus}
 			>
 				{homeItem.label}
@@ -153,6 +183,7 @@
 						class:open={openMobileHref === item.href}
 						type="button"
 						aria-expanded={openMobileHref === item.href}
+						aria-controls={`mobile-menu-${item.href.slice(1)}`}
 						onclick={() => toggleMobile(item)}
 					>
 						<span>{displayLabel(item)}</span>
@@ -164,14 +195,21 @@
 					</button>
 
 					{#if openMobileHref === item.href}
-						<div class="mobile-panel">
-							<a href={resolveHref(item.href)} onclick={closeMenus}>Overview</a>
+						<div class="mobile-panel" id={`mobile-menu-${item.href.slice(1)}`}>
+							<a
+								href={resolveHref(item.href)}
+								aria-current={isActive(item) ? 'page' : undefined}
+								onclick={closeMenus}
+							>
+								Overview
+							</a>
 
 							{#if item.subItems?.length}
 								{#each item.subItems as subItem (subItem.href)}
 									<a
 										class:active={activeTarget === subItem.href}
 										href={resolveHref(subItem.href)}
+										aria-current={activeTarget === subItem.href ? 'location' : undefined}
 										onclick={closeMenus}
 									>
 										{subItem.label}
@@ -271,15 +309,27 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		gap: 20px;
+		column-gap: 24px;
 	}
 
 	.tab-group {
 		position: relative;
 	}
 
+	.tab-combo {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 0;
+	}
+
+	.tab-combo.open .section-tab {
+		color: #6f5b24;
+	}
+
 	.tab-link,
-	.tab-button {
+	.tab-menu-button {
+		position: relative;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -289,7 +339,7 @@
 		color: #000000;
 		cursor: pointer;
 		font-family: 'Overpass', sans-serif;
-		font-size: 16px;
+		font-size: 15px;
 		font-weight: 400;
 		line-height: 22.4px;
 		padding: 0;
@@ -298,24 +348,66 @@
 		white-space: nowrap;
 	}
 
+	.tab-link::after {
+		position: absolute;
+		right: 0;
+		bottom: -7px;
+		left: 0;
+		height: 1px;
+		background: rgba(207, 168, 58, 0.72);
+		content: '';
+		opacity: 0;
+		transform: scaleX(0.72);
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.section-tab::after {
+		bottom: -6px;
+	}
+
+	.tab-menu-button {
+		width: 16px;
+		height: 22px;
+	}
+
 	.chevron {
 		flex: 0 0 auto;
 		transition: transform 0.2s ease;
 	}
 
-	.tab-button.open .chevron,
+	.tab-combo.open .chevron,
 	.mobile-accordion.open .chevron {
 		transform: rotate(180deg);
 	}
 
 	.tab-link:hover,
-	.tab-button:hover {
+	.tab-menu-button:hover {
 		color: #cfa83a;
 	}
 
-	.tab-link.active,
-	.tab-button.active {
-		color: #000000;
+	.tab-link.active {
+		color: #6f5b24;
+		font-weight: 600;
+	}
+
+	.tab-link.active::after,
+	.tab-combo.active .section-tab::after {
+		opacity: 1;
+		transform: scaleX(1);
+	}
+
+	.brand-link:focus-visible,
+	.tab-link:focus-visible,
+	.tab-menu-button:focus-visible,
+	.drawer-toggle:focus-visible,
+	.mobile-link:focus-visible,
+	.mobile-accordion:focus-visible,
+	.dropdown a:focus-visible,
+	.mobile-panel a:focus-visible {
+		outline: 2px solid rgba(207, 168, 58, 0.78);
+		outline-offset: 4px;
 	}
 
 	.dropdown {
@@ -405,22 +497,73 @@
 		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 		color: #000000;
 		cursor: pointer;
+		transition:
+			background 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.drawer-toggle:hover {
+		background: rgba(255, 255, 255, 0.62);
+	}
+
+	.drawer-toggle:active,
+	.tab-menu-button:active,
+	.mobile-link:active,
+	.mobile-accordion:active,
+	.dropdown a:active,
+	.mobile-panel a:active {
+		transform: translateY(1px);
 	}
 
 	.mobile-drawer {
 		display: none;
 	}
 
-	@media (min-width: 1600px) {
+	@media (min-width: 1480px) {
 		.desktop-tabs {
 			position: absolute;
 			top: 35px;
-			left: 637px;
+			right: 45px;
 			justify-content: center;
 		}
 	}
 
-	@media (max-width: 1320px) {
+	@media (max-width: 1479px) and (min-width: 1181px) {
+		.nav-shell {
+			padding: 0 28px;
+			gap: 12px;
+		}
+
+		.brand-link {
+			gap: 12px;
+		}
+
+		.brand-kicker,
+		.brand-subtitle {
+			display: none;
+		}
+
+		.brand-title {
+			font-size: 13px;
+			line-height: 16px;
+		}
+
+		.desktop-tabs {
+			column-gap: 18px;
+		}
+
+		.tab-combo {
+			gap: 4px;
+			padding: 5px 0;
+		}
+
+		.tab-link,
+		.tab-menu-button {
+			font-size: 14px;
+		}
+	}
+
+	@media (max-width: 1180px) {
 		.nav-shell {
 			padding: 0 28px;
 		}
@@ -436,7 +579,10 @@
 		.mobile-drawer {
 			display: grid;
 			gap: 6px;
+			max-height: calc(100dvh - 96px);
+			overflow-y: auto;
 			padding: 0 28px 22px;
+			overscroll-behavior: contain;
 		}
 
 		.mobile-link,
@@ -456,12 +602,17 @@
 			padding: 13px 14px;
 			text-align: left;
 			text-decoration: none;
+			transition:
+				background 0.2s ease,
+				color 0.2s ease,
+				transform 0.2s ease;
 		}
 
 		.mobile-link.active,
 		.mobile-accordion.active {
-			color: #cfa83a;
-			background: rgba(255, 255, 255, 0.52);
+			color: #6f5b24;
+			background: rgba(255, 255, 255, 0.28);
+			box-shadow: inset 3px 0 0 rgba(207, 168, 58, 0.6);
 		}
 
 		.mobile-panel {
@@ -516,6 +667,7 @@
 		}
 
 		.mobile-drawer {
+			max-height: calc(100dvh - 78px);
 			padding: 0 16px 16px;
 		}
 	}
