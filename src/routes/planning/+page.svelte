@@ -314,19 +314,8 @@
 		<!-- QS Stars card -->
 		<div class="ranking_card qs_card">
 			<div class="qs_header">
-				<div class="qs_logo_row">
-					<Award size={18} strokeWidth={1.5} class="qs_logo_icon" />
-					<span class="qs_org">QS Stars</span>
-				</div>
-				<div class="qs_stars_row" aria-label="3 out of 5 stars">
-					{#each [1, 2, 3, 4, 5] as s}
-						<Star
-							size={14}
-							strokeWidth={0}
-							fill={s <= 3 ? '#FAC549' : '#FCEFCA'}
-						/>
-					{/each}
-				</div>
+				<img src="/planning/qs-logo.png" alt="QS Stars" class="qs_logo_img" />
+				<img src="/planning/qs-stars-box.png" alt="3 Stars" class="qs_stars_box_img" />
 			</div>
 
 			<h3 class="qs_rating_title">3-Star Overall Rating</h3>
@@ -352,9 +341,7 @@
 		<!-- WURI Rankings card -->
 		<div class="ranking_card wuri_card">
 			<div class="wuri_header">
-				<div>
-					<h3 class="wuri_title">WURI Rankings<br />2024</h3>
-				</div>
+				<img src="/planning/wuri-logo.png" alt="WURI" class="wuri_logo_img" />
 				<div class="wuri_world_rank">
 					<span class="wuri_rank_label">World Rank:</span>
 					<span class="wuri_rank_num">271st</span>
@@ -1188,7 +1175,7 @@
 	.ranking_card {
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
-		border: 1.5px dashed rgba(180, 150, 80, 0.35);
+		border: 1.5px solid var(--color-gold);
 		background: #fff;
 		box-sizing: border-box;
 		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
@@ -1214,34 +1201,21 @@
 		margin-bottom: 0.5rem;
 	}
 
-	.qs_logo_row {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+	.qs_logo_img {
+		height: 38px;
+		object-fit: contain;
 	}
 
-	:global(.qs_logo_icon) {
-		color: #8c0f13;
-		flex-shrink: 0;
-	}
-
-	.qs_org {
-		font-family: var(--font-body);
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: #1a1a1a;
-	}
-
-	.qs_stars_row {
-		display: flex;
-		gap: 3px;
+	.qs_stars_box_img {
+		height: 28px;
+		object-fit: contain;
 	}
 
 	.qs_rating_title {
 		font-family: var(--font-heading);
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: #8c0f13;
+		color: #CFA83A;
 		margin: 0;
 	}
 
@@ -1261,7 +1235,7 @@
 	}
 
 	.qs_cat_tile {
-		background: #8c0f13;
+		background: linear-gradient(180deg, #8E1518 0%, #1E1E1E 100%);
 		border-radius: 10px;
 		padding: 0.85rem 1rem;
 		display: flex;
@@ -1280,7 +1254,7 @@
 	.qs_cat_label {
 		font-family: var(--font-body);
 		font-size: 0.72rem;
-		color: #fac549;
+		color: #CFA83A;
 		font-style: italic;
 		font-weight: 600;
 	}
@@ -1292,14 +1266,14 @@
 		font-family: var(--font-body);
 		font-size: 0.82rem;
 		font-weight: 700;
-		color: #8c0f13;
+		color: #941518;
 		padding-top: 1rem;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+		border-top: 1.5px solid #5E5E5E;
 		margin-top: auto;
 	}
 
 	:global(.validated_icon_circle) {
-		fill: #8c0f13;
+		fill: #941518;
 		color: #ffffff;
 		flex-shrink: 0;
 	}
@@ -1313,19 +1287,15 @@
 
 	.wuri_header {
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
 		margin-bottom: 0.25rem;
 	}
 
-	.wuri_title {
-		font-family: var(--font-heading);
-		font-size: 1.2rem;
-		font-weight: 900;
-		color: #1a1a1a;
-		margin: 0;
-		line-height: 1.25;
+	.wuri_logo_img {
+		height: 38px;
+		object-fit: contain;
 	}
 
 	.wuri_world_rank {
@@ -1344,7 +1314,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
 		font-weight: 900;
-		color: #8c0f13;
+		color: #CFA83A;
 	}
 
 	.wuri_desc {
@@ -1357,7 +1327,7 @@
 
 	.wuri_divider {
 		border: none;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+		border-top: 1.5px solid #5E5E5E;
 		margin: 0.25rem 0;
 	}
 
@@ -1378,14 +1348,14 @@
 	}
 
 	.wuri_rank_badge {
-		background: #8c0f13;
+		background: #941518;
 		color: #fff;
 		font-family: var(--font-heading);
 		font-size: 1.2rem;
 		font-weight: 900;
 		border-radius: 6px;
-		width: 48px;
-		height: 42px;
+		width: 44px;
+		height: 44px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -1432,7 +1402,7 @@
 	}
 
 	.impact_card {
-		background: linear-gradient(180deg, #451516 0%, #1A1614 65%, #392E1F 100%);
+		background: linear-gradient(180deg, #8E1518 0%, #1E1E1E 100%);
 		border: none;
 		color: #fff;
 		flex: 1;
@@ -1454,7 +1424,7 @@
 	.impact_label {
 		font-family: var(--font-body);
 		font-size: 0.75rem;
-		color: rgba(255, 255, 255, 0.6);
+		color: rgba(255, 255, 255, 0.7);
 		margin: 0 0 0.35rem 0;
 		letter-spacing: 0.05em;
 	}
@@ -1463,7 +1433,7 @@
 		font-family: var(--font-heading);
 		font-size: 3.5rem;
 		font-weight: 900;
-		color: #fff;
+		color: #CFA83A;
 		margin: 0 0 0.5rem 0;
 		line-height: 1;
 	}
@@ -1471,7 +1441,7 @@
 	.impact_desc {
 		font-family: var(--font-body);
 		font-size: 0.82rem;
-		color: rgba(255, 255, 255, 0.75);
+		color: #ffffff;
 		line-height: 1.65;
 		margin: 0 0 1.25rem 0;
 	}
@@ -1591,7 +1561,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
-		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
+		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.25);
 		justify-content: center;
 		box-sizing: border-box;
 		border-radius: 20px;
@@ -1612,21 +1582,21 @@
 	}
 
 	:global(.aunqa_icon) {
-		color: #3d0a0e;
+		color: #941518;
 	}
 
 	.aunqa_title {
 		font-family: var(--font-heading);
 		font-size: 1rem;
 		font-weight: 800;
-		color: #3d0a0e;
+		color: #000000;
 		margin: 0;
 	}
 
 	.aunqa_desc {
 		font-family: var(--font-body);
 		font-size: 0.82rem;
-		color: rgba(61, 10, 14, 0.8);
+		color: #000000;
 		line-height: 1.6;
 		margin: 0;
 	}
