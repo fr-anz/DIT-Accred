@@ -668,67 +668,60 @@
 	</div>
 	<hr class="section_divider" />
 
-	<!-- Notable Alumni Card - 3-per-page Slideshow -->
+	<!-- Notable Alumni Section -->
 	<div class="alumni_section_container">
-		<div class="notable_alumni_card">
-			<div class="alumni_left">
-				<h2 class="notable_alumni_title">NOTABLE<br />ALUMNI</h2>
-				<p class="alumni_intro_desc">
-					Our graduates are the blueprint of our success. From visionary software engineers and tech entrepreneurs to global IT leaders, the <span class="bold_text">Department of Information Technology</span> proudly celebrates the alumni who are redefining industries, driving digital transformation, and shaping the future of technology across the globe.
-				</p>
-			</div>
+		<h2 class="notable_alumni_title">NOTABLE ALUMNI</h2>
 
-			<div class="alumni_right">
-				<!-- Slideshow wrapper -->
-				<div class="alumni_slideshow">
-					<!-- Prev button -->
-					<button class="slide_nav_btn slide_prev" onclick={prevSlide} aria-label="Previous alumni">
-						<ChevronLeft size={20} strokeWidth={2.5} />
-					</button>
+		<!-- Slideshow wrapper -->
+		<div class="alumni_slideshow_wrapper">
+			<div class="alumni_slideshow">
+				<!-- Prev button -->
+				<button class="slide_nav_btn slide_prev" onclick={prevSlide} aria-label="Previous alumni">
+					<ChevronLeft size={24} strokeWidth={2.5} />
+				</button>
 
-					<!-- 3 alumni cards -->
-					<div class="alumni_cards_container">
-						{#each visibleAlumni() as alum, i}
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<div
-								class="alumni_portrait_card"
-								onclick={() => openAlumModal(i)}
-								role="listitem"
-							>
-								<div class="portrait_image_wrapper">
-									<img src={alum.img} alt={alum.name} class="portrait_img" />
-									<div class="portrait_play_overlay">
-										<div class="play_icon_circle">
-											<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-										</div>
+				<!-- 3 alumni cards -->
+				<div class="alumni_cards_container">
+					{#each visibleAlumni() as alum, i}
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+						<div
+							class="alumni_portrait_card"
+							onclick={() => openAlumModal(i)}
+							role="listitem"
+						>
+							<div class="portrait_image_wrapper">
+								<img src={alum.img} alt={alum.name} class="portrait_img" />
+								<div class="portrait_play_overlay">
+									<div class="play_icon_circle">
+										<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
 									</div>
 								</div>
-								<div class="portrait_info">
-									<h4 class="alum_name">{alum.name}</h4>
-									<span class="alum_role_tag">{alum.role}</span>
-								</div>
 							</div>
-						{/each}
-					</div>
-
-					<!-- Next button -->
-					<button class="slide_nav_btn slide_next" onclick={nextSlide} aria-label="Next alumni">
-						<ChevronRight size={20} strokeWidth={2.5} />
-					</button>
-				</div>
-
-				<!-- Page dot indicators -->
-				<div class="carousel_indicators">
-					{#each Array(totalSlidePages) as _, p}
-						<button
-							class="dot_indicator"
-							class:active={slidePage === p}
-							onclick={() => (slidePage = p)}
-							aria-label="Go to slide {p + 1}"
-						></button>
+							<div class="portrait_info">
+								<h4 class="alum_name">{alum.name}</h4>
+								<span class="alum_role_tag">{alum.role}</span>
+							</div>
+						</div>
 					{/each}
 				</div>
+
+				<!-- Next button -->
+				<button class="slide_nav_btn slide_next" onclick={nextSlide} aria-label="Next alumni">
+					<ChevronRight size={24} strokeWidth={2.5} />
+				</button>
+			</div>
+
+			<!-- Page dot indicators -->
+			<div class="carousel_indicators">
+				{#each Array(totalSlidePages) as _, p}
+					<button
+						class="dot_indicator"
+						class:active={slidePage === p}
+						onclick={() => (slidePage = p)}
+						aria-label="Go to slide {p + 1}"
+					></button>
+				{/each}
 			</div>
 		</div>
 	</div>
@@ -1859,142 +1852,150 @@
 	.alumni_section_container {
 		width: 100%;
 		box-sizing: border-box;
-		margin-bottom: 2.5rem;
-	}
-
-	.notable_alumni_card {
-		background: linear-gradient(135deg, #5c0f16 0%, #220205 100%);
-		border-radius: 24px;
-		padding: 3.5rem;
-		display: grid;
-		grid-template-columns: 1fr 1.1fr;
-		gap: 4.5rem;
-		color: #fff;
-		box-shadow: 0 12px 40px rgba(92, 15, 22, 0.15);
-		align-items: center;
-	}
-
-	@media (max-width: 960px) {
-		.notable_alumni_card {
-			grid-template-columns: 1fr;
-			gap: 3rem;
-			padding: 2.5rem;
-		}
+		margin-bottom: 3rem;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	.notable_alumni_title {
 		font-family: var(--font-heading);
-		font-size: clamp(2.2rem, 4vw, 3.2rem);
+		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 900;
-		color: #fff;
-		margin: 0 0 1.5rem 0;
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		text-fill-color: transparent;
+		margin: 0 0 2.5rem 0;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
 		line-height: 1.1;
-		letter-spacing: -0.01em;
+		display: inline-block;
 	}
 
-	.alumni_intro_desc {
-		font-family: var(--font-body);
-		font-size: 1.05rem;
-		line-height: 1.8;
-		color: rgba(255, 255, 255, 0.85);
-		margin: 0;
-	}
-
-	.bold_text {
-		font-weight: 700;
-		color: var(--color-gold-light);
-	}
-
-	.alumni_right {
+	.alumni_slideshow_wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 2.25rem;
 		align-items: center;
-	}
-
-	/* ── Slideshow wrapper ── */
-	.alumni_slideshow {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
 		width: 100%;
 	}
 
+	.alumni_slideshow {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		width: 100%;
+		justify-content: space-between;
+	}
+
 	.slide_nav_btn {
-		width: 36px;
-		height: 36px;
+		width: 44px;
+		height: 44px;
 		border-radius: 50%;
-		border: 1.5px solid rgba(255,255,255,0.35);
-		background: rgba(255,255,255,0.08);
-		color: #fff;
+		border: 1.5px solid rgba(92, 15, 22, 0.12);
+		background: #fff;
+		color: var(--color-maroon);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
 		flex-shrink: 0;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 		transition: all 0.25s ease;
 	}
 
 	.slide_nav_btn:hover {
-		background: rgba(207,168,58,0.25);
-		border-color: var(--color-gold);
+		background: var(--color-maroon);
+		color: #fff;
+		border-color: var(--color-maroon);
 		transform: scale(1.08);
 	}
 
 	.alumni_cards_container {
 		display: flex;
-		gap: 1.25rem;
+		gap: 2rem;
 		justify-content: center;
-		align-items: flex-end;
+		align-items: stretch;
 		flex: 1;
-		min-height: 260px;
 	}
 
-	@media (max-width: 600px) {
+	@media (max-width: 1024px) {
+		.alumni_cards_container {
+			gap: 1.25rem;
+		}
+	}
+
+	@media (max-width: 900px) {
 		.alumni_cards_container {
 			flex-direction: column;
 			align-items: center;
-			gap: 2rem;
+			gap: 1.75rem;
 		}
 		.alumni_slideshow {
-			flex-wrap: wrap;
-			justify-content: center;
+			flex-direction: column;
+			gap: 2rem;
+		}
+		.slide_prev {
+			order: 2;
+		}
+		.slide_next {
+			order: 3;
+		}
+		.alumni_cards_container {
+			order: 1;
+			width: 100%;
 		}
 	}
 
 	.alumni_portrait_card {
-		background: rgba(255,255,255,0.06);
-		border: 1px solid rgba(255,255,255,0.12);
-		border-radius: 18px;
+		background: linear-gradient(180deg, #801b1e 0%, #160507 100%);
+		border-radius: 24px;
 		overflow: hidden;
-		width: 150px;
+		width: 280px;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		text-align: center;
+		align-items: stretch;
 		cursor: pointer;
 		transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 		position: relative;
-		padding-bottom: 1rem;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+	}
+
+	@media (max-width: 1200px) and (min-width: 901px) {
+		.alumni_portrait_card {
+			width: 230px;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.alumni_portrait_card {
+			width: 100%;
+			max-width: 320px;
+		}
 	}
 
 	.alumni_portrait_card:hover {
 		transform: translateY(-6px);
-		border-color: rgba(207,168,58,0.5);
-		box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+		box-shadow: 0 16px 35px rgba(92, 15, 22, 0.25);
 	}
 
 	.portrait_image_wrapper {
 		width: 100%;
-		height: 165px;
+		height: 295px;
 		position: relative;
 		overflow: hidden;
-		border-radius: 14px 14px 0 0;
-		margin-bottom: 0.85rem;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
-		background: linear-gradient(180deg, #6b1a22 0%, #3a0a0e 100%);
+		background: transparent;
+	}
+
+	@media (max-width: 1200px) and (min-width: 901px) {
+		.portrait_image_wrapper {
+			height: 240px;
+		}
 	}
 
 	.portrait_img {
@@ -2014,13 +2015,12 @@
 	.portrait_play_overlay {
 		position: absolute;
 		inset: 0;
-		background: rgba(92, 15, 22, 0.55);
+		background: rgba(92, 15, 22, 0.45);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		opacity: 0;
 		transition: opacity 0.3s ease;
-		border-radius: 14px 14px 0 0;
 	}
 
 	.alumni_portrait_card:hover .portrait_play_overlay {
@@ -2028,10 +2028,10 @@
 	}
 
 	.play_icon_circle {
-		width: 44px;
-		height: 44px;
+		width: 50px;
+		height: 50px;
 		border-radius: 50%;
-		background: rgba(207,168,58,0.9);
+		background: rgba(207, 168, 58, 0.95);
 		color: #1a1a1a;
 		display: flex;
 		align-items: center;
@@ -2042,29 +2042,29 @@
 	.portrait_info {
 		display: flex;
 		flex-direction: column;
-		gap: 0.3rem;
-		padding: 0 0.75rem;
-		align-items: center;
+		gap: 0.25rem;
+		padding: 1.25rem 1.5rem;
+		align-items: flex-start;
+		text-align: left;
+		background: transparent;
 	}
 
 	.alum_name {
 		font-family: var(--font-heading);
-		font-size: 0.78rem;
+		font-size: 1.15rem;
 		font-weight: 800;
 		color: #fff;
 		margin: 0;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		line-height: 1.2;
+		line-height: 1.25;
 	}
 
 	.alum_role_tag {
 		font-family: var(--font-body);
-		font-size: 0.65rem;
+		font-size: 0.8rem;
 		color: var(--color-gold);
 		font-weight: 600;
 		font-style: italic;
-		line-height: 1.3;
+		line-height: 1.35;
 	}
 
 	.carousel_indicators {
@@ -2077,7 +2077,7 @@
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.4);
+		background: rgba(92, 15, 22, 0.15);
 		border: none;
 		padding: 0;
 		cursor: pointer;
