@@ -737,7 +737,7 @@
 	<div class="tracer_grid">
 		<!-- Employment Horizon Table -->
 		<div class="employment_horizon_card">
-			<h3 class="horizon_title">EMPLOYMENT HORIZON<br /><span class="sub_text">(GRADUATE TRACER)</span></h3>
+			<h3 class="horizon_title">EMPLOYMENT HORIZON<br />(GRADUATE TRACER)</h3>
 			
 			<div class="table_container">
 				<table class="tracer_table">
@@ -2143,7 +2143,7 @@
 
 	.employment_horizon_card {
 		background: #fff;
-		border: 1px solid rgba(0, 0, 0, 0.08);
+		border: 1.5px solid var(--color-gold);
 		border-radius: 20px;
 		padding: 2.5rem 2.25rem;
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
@@ -2151,18 +2151,12 @@
 
 	.horizon_title {
 		font-family: var(--font-heading);
-		font-size: 1.2rem;
-		font-weight: 800;
+		font-size: 1.25rem;
+		font-weight: 900;
 		color: var(--color-maroon);
 		margin: 0 0 1.75rem 0;
-		line-height: 1.3;
-	}
-
-	.horizon_title .sub_text {
-		font-size: 0.72rem;
-		color: #666;
-		font-weight: 800;
-		letter-spacing: 0.05em;
+		line-height: 1.35;
+		letter-spacing: 0.02em;
 	}
 
 	.table_container {
@@ -2180,29 +2174,37 @@
 		font-size: 0.72rem;
 		font-weight: 800;
 		letter-spacing: 0.05em;
-		color: var(--color-maroon);
-		border-bottom: 1.5px solid rgba(92, 15, 22, 0.15);
+		border-bottom: 1.5px solid rgba(0, 0, 0, 0.12);
 	}
 
 	.tracer_table td {
 		padding: 1rem 0;
 		font-size: 0.88rem;
-		color: #333;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 	}
 
-	.th_left, .td_left {
+	.th_left {
 		text-align: left;
-		font-weight: 700;
+		font-weight: 800;
+		color: #1a1a1a;
 	}
 
-	.th_right, .td_right {
+	.th_right {
 		text-align: right;
 		font-weight: 800;
+		color: var(--color-gold-dark);
+	}
+
+	.td_left {
+		text-align: left;
+		font-weight: 700;
+		color: #1a1a1a;
 	}
 
 	.td_right {
-		color: var(--color-maroon);
+		text-align: right;
+		font-weight: 800;
+		color: var(--color-gold-dark);
 	}
 
 	/* PEO Score Card */
