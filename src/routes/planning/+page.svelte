@@ -125,10 +125,16 @@
 	</div>
 	<hr class="section_divider" />
 
-	<!-- Video illustration placeholder -->
+	<!-- Video embed -->
 	<div class="video_wrapper">
 		<div class="video_screen">
-			<img src="/planning/video-placeholder.png" alt="University Support Functions" class="video_placeholder_img" />
+			<iframe
+				src="https://www.youtube.com/embed/Lp_x4dWvLs4"
+				title="University Support Functions Video"
+				class="video_iframe"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+			></iframe>
 		</div>
 	</div>
 
@@ -684,11 +690,11 @@
 		background: transparent;
 	}
 
-	.video_placeholder_img {
+	.video_iframe {
 		width: 100%;
-		height: auto;
+		aspect-ratio: 16 / 9;
+		border: none;
 		display: block;
-		object-fit: cover;
 	}
 
 	/* ── SUPPORT GRID ── */
