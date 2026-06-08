@@ -32,79 +32,102 @@
 	let activeYear = $state(1); // Year selector for interactive explorer
 	/** @type {number | null} */
 	let selectedAlumIndex = $state(null); // Index of alum for detailed modal
-	let carouselIndex = $state(1); // Carousel index for Notable Alumni (default to Dahyun)
+	/** Slideshow: which page of 3 we're on (0 = first 3, 1 = second 3) */
+	let slidePage = $state(0);
 	/** @type {CourseYear[]} */
 	const courseYears = [1, 2, 3, 4];
 
-	// Alumni profiles - reordered Sehun (0), Dahyun (1), Winter (2) to match visual layout in Figma
+	// Alumni profiles - 6 total, shown 3 per slide
 	const alumniList = [
 		{
 			name: 'Sehun Domingo',
 			shortName: 'Sehun',
-			role: 'Lead DevOps Engineer',
-			batch: '20xx - 20xx',
+			role: 'Data Analyst at Google',
+			batch: 'Batch 2018 - 2022',
 			honors: 'Cum Laude',
 			degree: 'Bachelor of Science in Information Technology',
 			img: '/teaching-learning/alum-sehun.png',
 			badgeColor: '#2563EB',
-			badgeLetter: 'A'
+			badgeLetter: 'A',
+			testimonialVideoUrl: ''
 		},
 		{
 			name: 'Dahyun Dela Cruz',
 			shortName: 'Dahyun',
 			role: 'IT Global Entrepreneur',
-			batch: '20xx - 20xx',
+			batch: 'Batch 2018 - 2022',
 			honors: 'Magna Cumlaude',
 			degree: 'Bachelor of Science in Information Technology',
 			img: '/teaching-learning/alum-dahyun.png',
 			badgeColor: '#7C3AED',
-			badgeLetter: 'F'
-		},
-		{
-			name: 'Winter Mendoza',
-			shortName: 'Winter',
-			role: 'Senior Cloud Architect',
-			batch: '20xx - 20xx',
-			honors: 'Summa Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/alum-winter.png',
-			badgeColor: '#EF4444',
-			badgeLetter: 'N'
-		},
-		{
-			name: 'Hoshi Batumbakal',
-			shortName: 'Hoshi',
-			role: 'Cyber Security Manager',
-			batch: 'Batch 2017 - 2021',
-			honors: 'Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
-			badgeColor: '#10B981',
-			badgeLetter: 'C'
-		},
-		{
-			name: 'Jaemin Suarez',
-			shortName: 'Jaemin',
-			role: 'AI Research Lead',
-			batch: 'Batch 2016 - 2020',
-			honors: 'Magna Cumlaude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400',
-			badgeColor: '#F59E0B',
-			badgeLetter: 'M'
+			badgeLetter: 'F',
+			testimonialVideoUrl: ''
 		},
 		{
 			name: 'Irene Joy Reyes',
 			shortName: 'Irene',
-			role: 'Principal Solution Architect',
-			batch: 'Batch 2015 - 2019',
+			role: 'Data Scientist at Microsoft',
+			batch: 'Batch 2018 - 2022',
 			honors: 'Summa Cum Laude',
 			degree: 'Bachelor of Science in Information Technology',
-			img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=400',
+			img: '/teaching-learning/alum-irene.png',
 			badgeColor: '#EC4899',
-			badgeLetter: 'S'
+			badgeLetter: 'S',
+			testimonialVideoUrl: ''
+		},
+		{
+			name: 'Hoshi Batumbakal',
+			shortName: 'Hoshi',
+			role: 'CTO at Start-up Inc.',
+			batch: 'Batch 2017 - 2021',
+			honors: 'Cum Laude',
+			degree: 'Bachelor of Science in Information Technology',
+			img: '/teaching-learning/alum-hoshi.png',
+			badgeColor: '#10B981',
+			badgeLetter: 'C',
+			testimonialVideoUrl: ''
+		},
+		{
+			name: 'Jaemin Suarez',
+			shortName: 'Jaemin',
+			role: 'Project Manager at Azure',
+			batch: 'Batch 2016 - 2020',
+			honors: 'Magna Cumlaude',
+			degree: 'Bachelor of Science in Information Technology',
+			img: '/teaching-learning/alum-jaemin.png',
+			badgeColor: '#F59E0B',
+			badgeLetter: 'M',
+			testimonialVideoUrl: ''
+		},
+		{
+			name: 'Winter Mendoza',
+			shortName: 'Winter',
+			role: 'Professor at UPD',
+			batch: 'Batch 2018 - 2022',
+			honors: 'Magna Cumlaude',
+			degree: 'Bachelor of Science in Information Technology',
+			img: '/teaching-learning/alum-winter.png',
+			badgeColor: '#EF4444',
+			badgeLetter: 'N',
+			testimonialVideoUrl: ''
 		}
 	];
+
+	// Total slide pages: one page per 3 alumni
+	const totalSlidePages = Math.ceil(alumniList.length / 3);
+
+	/** Returns the 3 alumni visible on the current slide page */
+	function visibleAlumni() {
+		return alumniList.slice(slidePage * 3, slidePage * 3 + 3);
+	}
+
+	function prevSlide() {
+		slidePage = (slidePage - 1 + totalSlidePages) % totalSlidePages;
+	}
+
+	function nextSlide() {
+		slidePage = (slidePage + 1) % totalSlidePages;
+	}
 
 	// Interactive explorer course data
 	/** @type {Record<CourseYear, Course[]>} */
@@ -134,6 +157,14 @@
 	// Close alumni details modal
 	function closeModal() {
 		selectedAlumIndex = null;
+	}
+
+	/** 
+	 * Open modal with the correct global index from the visible slice 
+	 * @param {number} localIndex
+	 */
+	function openAlumModal(localIndex) {
+		selectedAlumIndex = slidePage * 3 + localIndex;
 	}
 
 	// Organizations list with high-quality themed images
@@ -637,7 +668,7 @@
 	</div>
 	<hr class="section_divider" />
 
-	<!-- Notable Alumni Card -->
+	<!-- Notable Alumni Card - 3-per-page Slideshow -->
 	<div class="alumni_section_container">
 		<div class="notable_alumni_card">
 			<div class="alumni_left">
@@ -648,39 +679,53 @@
 			</div>
 
 			<div class="alumni_right">
-				<div class="alumni_cards_container">
-					{#each alumniList.slice(0, 3) as alum, i}
-						<!-- svelte-ignore a11y_click_events_have_key_events -->
-						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-						<div
-							class="alumni_portrait_card"
-							class:highlighted={carouselIndex === i}
-							onclick={() => {
-								carouselIndex = i;
-								selectedAlumIndex = i;
-							}}
-							onmouseenter={() => (carouselIndex = i)}
-							role="listitem"
-						>
-							<div class="portrait_image_wrapper">
-								<img src={alum.img} alt={alum.name} class="portrait_img" />
+				<!-- Slideshow wrapper -->
+				<div class="alumni_slideshow">
+					<!-- Prev button -->
+					<button class="slide_nav_btn slide_prev" onclick={prevSlide} aria-label="Previous alumni">
+						<ChevronLeft size={20} strokeWidth={2.5} />
+					</button>
+
+					<!-- 3 alumni cards -->
+					<div class="alumni_cards_container">
+						{#each visibleAlumni() as alum, i}
+							<!-- svelte-ignore a11y_click_events_have_key_events -->
+							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+							<div
+								class="alumni_portrait_card"
+								onclick={() => openAlumModal(i)}
+								role="listitem"
+							>
+								<div class="portrait_image_wrapper">
+									<img src={alum.img} alt={alum.name} class="portrait_img" />
+									<div class="portrait_play_overlay">
+										<div class="play_icon_circle">
+											<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+										</div>
+									</div>
+								</div>
+								<div class="portrait_info">
+									<h4 class="alum_name">{alum.name}</h4>
+									<span class="alum_role_tag">{alum.role}</span>
+								</div>
 							</div>
-							<div class="portrait_info">
-								<h4 class="alum_name">{alum.name}</h4>
-								<span class="alum_batch">{alum.batch}</span>
-							</div>
-						</div>
-					{/each}
+						{/each}
+					</div>
+
+					<!-- Next button -->
+					<button class="slide_nav_btn slide_next" onclick={nextSlide} aria-label="Next alumni">
+						<ChevronRight size={20} strokeWidth={2.5} />
+					</button>
 				</div>
 
-				<!-- Carousel Dot Indicators -->
+				<!-- Page dot indicators -->
 				<div class="carousel_indicators">
-					{#each [0, 1, 2] as ind}
+					{#each Array(totalSlidePages) as _, p}
 						<button
 							class="dot_indicator"
-							class:active={carouselIndex === ind}
-							onclick={() => (carouselIndex = ind)}
-							aria-label="Set featured alumni {ind + 1}"
+							class:active={slidePage === p}
+							onclick={() => (slidePage = p)}
+							aria-label="Go to slide {p + 1}"
 						></button>
 					{/each}
 				</div>
@@ -820,56 +865,70 @@
 			</button>
 
 			<div class="modal_grid">
-				<!-- Left Panel: Profile Detail -->
+				<!-- Left Panel: Profile Detail (Figma-aligned) -->
 				<div class="modal_profile_panel">
 					<div class="modal_profile_card">
+						<!-- Circular photo with ring border -->
 						<div class="detail_image_wrapper">
 							<img src={alumniList[selectedAlumIndex].img} alt={alumniList[selectedAlumIndex].name} class="detail_img" />
-							<div
-								class="detail_badge_circle"
-								style="background-color: {alumniList[selectedAlumIndex].badgeColor};"
-							>
-								{alumniList[selectedAlumIndex].badgeLetter}
-							</div>
 						</div>
 
 						<div class="detail_info_block">
 							<h3 class="detail_alum_name">{alumniList[selectedAlumIndex].name}</h3>
 							<p class="detail_alum_role">{alumniList[selectedAlumIndex].role}</p>
-							
+
+							<!-- Decorative social icon row -->
+							<div class="detail_social_row" aria-label="Social links">
+								<span class="social_icon_btn" aria-label="Facebook">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+								</span>
+								<span class="social_icon_btn" aria-label="Instagram">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+								</span>
+								<span class="social_icon_btn" aria-label="LinkedIn">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+								</span>
+								<span class="social_icon_btn" aria-label="GitHub">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+								</span>
+							</div>
+
 							<div class="detail_meta_row">
 								<span class="detail_batch_tag">{alumniList[selectedAlumIndex].batch}</span>
 								<span class="detail_honors_tag">{alumniList[selectedAlumIndex].honors}</span>
 							</div>
 
-							<p class="detail_degree_title">{alumniList[selectedAlumIndex].degree}</p>
+							<p class="detail_degree_title"><em>{alumniList[selectedAlumIndex].degree}</em></p>
 						</div>
 					</div>
 				</div>
 
-				<!-- Right Panel: Placeholders/Other Alumni List -->
-				<div class="modal_alumni_list_panel">
-					<h4 class="other_alumni_title">Other Alumni (Placeholders)</h4>
-					<div class="other_alumni_grid">
-						{#each alumniList as alum, idx}
-							{#if idx !== selectedAlumIndex}
-								<!-- svelte-ignore a11y_click_events_have_key_events -->
-								<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-								<div
-									class="other_alum_item"
-									onclick={() => (selectedAlumIndex = idx)}
-									role="listitem"
-								>
-									<div class="other_portrait_circle">
-										<img src={alum.img} alt={alum.name} class="other_portrait_img" />
+				<!-- Right Panel: Testimonial Video (Figma-aligned) -->
+				<div class="modal_video_panel">
+					<p class="video_panel_title">TESTIMONIAL VIDEO</p>
+					<div class="testimonial_video_wrapper">
+						{#if alumniList[selectedAlumIndex].testimonialVideoUrl}
+							<!-- svelte-ignore a11y_media_has_caption -->
+							<video
+								src={alumniList[selectedAlumIndex].testimonialVideoUrl}
+								controls
+								class="testimonial_video"
+								poster={alumniList[selectedAlumIndex].img}
+							>
+								<track kind="captions" />
+								Your browser does not support the video tag.
+							</video>
+						{:else}
+							<!-- Placeholder: dark maroon gradient area with glowing play button -->
+							<div class="video_placeholder">
+								<div class="video_placeholder_inner">
+									<div class="video_play_btn">
+										<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
 									</div>
-									<div class="other_portrait_info">
-										<span class="other_name">{alum.name}</span>
-										<span class="other_batch">{alum.batch.replace('Batch ', '')}</span>
-									</div>
+									<p class="video_placeholder_text">Testimonial video coming soon</p>
 								</div>
-							{/if}
-						{/each}
+							</div>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -1885,118 +1944,169 @@
 	.alumni_right {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 1.5rem;
 		align-items: center;
+	}
+
+	/* ── Slideshow wrapper ── */
+	.alumni_slideshow {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		width: 100%;
+	}
+
+	.slide_nav_btn {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		border: 1.5px solid rgba(255,255,255,0.35);
+		background: rgba(255,255,255,0.08);
+		color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		flex-shrink: 0;
+		transition: all 0.25s ease;
+	}
+
+	.slide_nav_btn:hover {
+		background: rgba(207,168,58,0.25);
+		border-color: var(--color-gold);
+		transform: scale(1.08);
 	}
 
 	.alumni_cards_container {
 		display: flex;
-		gap: 2rem;
+		gap: 1.25rem;
 		justify-content: center;
 		align-items: flex-end;
-		width: 100%;
-		min-height: 290px;
+		flex: 1;
+		min-height: 260px;
 	}
 
 	@media (max-width: 600px) {
 		.alumni_cards_container {
 			flex-direction: column;
 			align-items: center;
-			gap: 3rem;
+			gap: 2rem;
+		}
+		.alumni_slideshow {
+			flex-wrap: wrap;
+			justify-content: center;
 		}
 	}
 
 	.alumni_portrait_card {
-		background: transparent;
-		border: none;
-		box-shadow: none;
-		width: 170px;
+		background: rgba(255,255,255,0.06);
+		border: 1px solid rgba(255,255,255,0.12);
+		border-radius: 18px;
+		overflow: hidden;
+		width: 150px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
 		cursor: pointer;
-		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 		position: relative;
+		padding-bottom: 1rem;
 	}
 
 	.alumni_portrait_card:hover {
-		transform: translateY(-8px);
-	}
-
-	.alumni_portrait_card.highlighted {
-		transform: scale(1.18);
-		z-index: 10;
+		transform: translateY(-6px);
+		border-color: rgba(207,168,58,0.5);
+		box-shadow: 0 12px 30px rgba(0,0,0,0.3);
 	}
 
 	.portrait_image_wrapper {
-		width: 150px;
-		height: 170px;
+		width: 100%;
+		height: 165px;
 		position: relative;
-		margin-bottom: 1rem;
+		overflow: hidden;
+		border-radius: 14px 14px 0 0;
+		margin-bottom: 0.85rem;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
+		background: linear-gradient(180deg, #6b1a22 0%, #3a0a0e 100%);
 	}
 
 	.portrait_img {
 		width: 100%;
 		height: 100%;
-		object-fit: contain;
+		object-fit: cover;
+		object-position: center top;
 		display: block;
+		transition: transform 0.4s ease;
 	}
 
-	/* Golden glowing arc platform under active graduate */
-	.alumni_portrait_card.highlighted .portrait_image_wrapper::after {
-		content: '';
+	.alumni_portrait_card:hover .portrait_img {
+		transform: scale(1.05);
+	}
+
+	/* Play icon overlay on hover */
+	.portrait_play_overlay {
 		position: absolute;
-		bottom: -2px;
-		left: 10%;
-		right: 10%;
-		height: 4px;
-		background: linear-gradient(90deg, transparent, var(--color-gold) 50%, transparent);
-		box-shadow: 0 0 14px 4px rgba(207, 168, 58, 0.85);
+		inset: 0;
+		background: rgba(92, 15, 22, 0.55);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		border-radius: 14px 14px 0 0;
+	}
+
+	.alumni_portrait_card:hover .portrait_play_overlay {
+		opacity: 1;
+	}
+
+	.play_icon_circle {
+		width: 44px;
+		height: 44px;
 		border-radius: 50%;
-		z-index: 1;
+		background: rgba(207,168,58,0.9);
+		color: #1a1a1a;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.35);
 	}
 
 	.portrait_info {
 		display: flex;
 		flex-direction: column;
-		gap: 0.2rem;
+		gap: 0.3rem;
+		padding: 0 0.75rem;
+		align-items: center;
 	}
 
 	.alum_name {
 		font-family: var(--font-heading);
-		font-size: 0.85rem;
+		font-size: 0.78rem;
 		font-weight: 800;
 		color: #fff;
 		margin: 0;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		transition: font-size 0.3s ease;
+		letter-spacing: 0.04em;
+		line-height: 1.2;
 	}
 
-	.alumni_portrait_card.highlighted .alum_name {
-		font-size: 0.95rem;
-	}
-
-	.alum_batch {
+	.alum_role_tag {
 		font-family: var(--font-body);
-		font-size: 0.72rem;
+		font-size: 0.65rem;
 		color: var(--color-gold);
-		font-weight: 700;
+		font-weight: 600;
 		font-style: italic;
-		transition: font-size 0.3s ease;
-	}
-
-	.alumni_portrait_card.highlighted .alum_batch {
-		font-size: 0.78rem;
+		line-height: 1.3;
 	}
 
 	.carousel_indicators {
 		display: flex;
 		gap: 0.5rem;
+		justify-content: center;
 	}
 
 	.dot_indicator {
@@ -2012,7 +2122,9 @@
 
 	.dot_indicator.active {
 		background: var(--color-gold);
-		transform: scale(1.35);
+		transform: scale(1.4);
+		width: 20px;
+		border-radius: 4px;
 	}
 
 	/* Tracer stats columns */
@@ -2278,8 +2390,8 @@
 	.modal_overlay {
 		position: fixed;
 		inset: 0;
-		background: rgba(22, 5, 7, 0.65);
-		backdrop-filter: blur(8px);
+		background: rgba(22, 5, 7, 0.7);
+		backdrop-filter: blur(10px);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -2292,11 +2404,11 @@
 		background: #fff;
 		border-radius: 28px;
 		width: 100%;
-		max-width: 850px;
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+		max-width: 860px;
+		box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
 		position: relative;
 		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(255, 255, 255, 0.08);
 		animation: modalZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
@@ -2307,7 +2419,7 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
-		background: #f3f3f0;
+		background: rgba(0,0,0,0.07);
 		border: none;
 		color: #333;
 		display: flex;
@@ -2319,13 +2431,13 @@
 	}
 
 	.close_modal_btn:hover {
-		background: #e2e2dd;
+		background: rgba(0,0,0,0.14);
 		transform: scale(1.08);
 	}
 
 	.modal_grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 280px 1fr;
 		min-height: 460px;
 	}
 
@@ -2335,19 +2447,20 @@
 		}
 	}
 
+	/* ── Left Profile Panel ── */
 	.modal_profile_panel {
-		background: linear-gradient(135deg, #fdfbf7 0%, #f4f0e6 100%);
-		padding: 3rem 2.5rem;
+		background: linear-gradient(160deg, #fdfbf7 0%, #f4ede0 100%);
+		padding: 2.5rem 2rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-right: 1px solid rgba(0, 0, 0, 0.05);
+		border-right: 1px solid rgba(0, 0, 0, 0.06);
 	}
 
 	@media (max-width: 760px) {
 		.modal_profile_panel {
 			border-right: none;
-			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 		}
 	}
 
@@ -2361,13 +2474,14 @@
 
 	.detail_image_wrapper {
 		position: relative;
-		width: 180px;
-		height: 180px;
+		width: 140px;
+		height: 140px;
 		border-radius: 50%;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 8px 24px rgba(92,15,22,0.15);
 		border: 4px solid #fff;
-		margin-bottom: 1.5rem;
-		background: #fff;
+		margin-bottom: 1.25rem;
+		background: #f8f0e8;
+		overflow: hidden;
 	}
 
 	.detail_img {
@@ -2377,59 +2491,68 @@
 		border-radius: 50%;
 	}
 
-	.detail_badge_circle {
-		position: absolute;
-		bottom: 5px;
-		right: 5px;
-		width: 38px;
-		height: 38px;
-		border-radius: 50%;
-		border: 3px solid #fff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #fff;
-		font-family: var(--font-heading);
-		font-size: 0.95rem;
-		font-weight: 900;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-	}
-
 	.detail_info_block {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		gap: 0.1rem;
 	}
 
 	.detail_alum_name {
 		font-family: var(--font-heading);
-		font-size: 1.5rem;
+		font-size: 1.3rem;
 		font-weight: 900;
 		color: var(--color-maroon);
-		margin: 0 0 0.25rem 0;
+		margin: 0 0 0.2rem 0;
+		line-height: 1.15;
 	}
 
 	.detail_alum_role {
 		font-family: var(--font-body);
-		font-size: 0.9rem;
+		font-size: 0.85rem;
 		color: var(--color-gold-dark);
 		font-weight: 700;
-		margin: 0 0 1.25rem 0;
+		font-style: italic;
+		margin: 0 0 0.9rem 0;
+	}
+
+	/* Decorative social icon buttons */
+	.detail_social_row {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.social_icon_btn {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: rgba(0,0,0,0.07);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.7rem;
+		font-weight: 900;
+		color: #444;
+		cursor: default;
+		transition: background 0.2s;
 	}
 
 	.detail_meta_row {
 		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
+		gap: 0.4rem;
+		margin-bottom: 0.75rem;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	.detail_batch_tag {
 		background: var(--color-maroon);
 		color: #fff;
 		font-family: var(--font-body);
-		font-size: 0.72rem;
+		font-size: 0.68rem;
 		font-weight: 700;
-		padding: 0.35rem 0.85rem;
+		padding: 0.3rem 0.75rem;
 		border-radius: 20px;
 	}
 
@@ -2437,109 +2560,100 @@
 		background: rgba(207, 168, 58, 0.15);
 		color: var(--color-gold-dark);
 		font-family: var(--font-body);
-		font-size: 0.72rem;
+		font-size: 0.68rem;
 		font-weight: 700;
-		padding: 0.35rem 0.85rem;
+		padding: 0.3rem 0.75rem;
 		border-radius: 20px;
 		border: 1px solid rgba(207, 168, 58, 0.25);
 	}
 
 	.detail_degree_title {
 		font-family: var(--font-body);
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		color: #666;
 		margin: 0;
-		line-height: 1.4;
-		max-width: 260px;
+		line-height: 1.5;
+		max-width: 220px;
+		text-align: center;
 	}
 
-	/* Placeholders panel */
-	.modal_alumni_list_panel {
-		padding: 3rem 2.5rem;
+	/* ── Right Video Panel ── */
+	.modal_video_panel {
+		padding: 2.5rem 2rem;
 		display: flex;
 		flex-direction: column;
-		background: #fff;
-	}
-
-	.other_alumni_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 800;
-		color: #1a1a1a;
-		letter-spacing: 0.05em;
-		margin: 0 0 1.5rem 0;
-		text-transform: uppercase;
-		border-bottom: 2px solid #f3f3f0;
-		padding-bottom: 0.75rem;
-	}
-
-	.other_alumni_grid {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-		overflow-y: auto;
-		max-height: 300px;
-	}
-
-	.other_alum_item {
-		display: flex;
-		align-items: center;
 		gap: 1rem;
-		padding: 0.65rem 0.85rem;
-		border-radius: 12px;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		background: #fdfdfd;
-		border: 1px solid rgba(0, 0, 0, 0.04);
+		background: #fff;
+		justify-content: center;
 	}
 
-	.other_alum_item:hover {
-		background: #fbf9f4;
-		border-color: rgba(207, 168, 58, 0.25);
-		transform: translateX(4px);
+	.video_panel_title {
+		font-family: var(--font-heading);
+		font-size: 0.8rem;
+		font-weight: 900;
+		color: #1a1a1a;
+		letter-spacing: 0.1em;
+		margin: 0;
+		text-transform: uppercase;
 	}
 
-	.other_portrait_circle {
-		width: 44px;
-		height: 44px;
-		border-radius: 50%;
+	.testimonial_video_wrapper {
+		width: 100%;
+		border-radius: 16px;
 		overflow: hidden;
-		border: 2.5px solid #f3f3f0;
+		background: #0e0e0e;
+		aspect-ratio: 16 / 9;
+		box-shadow: 0 8px 28px rgba(0,0,0,0.18);
 	}
 
-	.other_portrait_img {
+	.testimonial_video {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		display: block;
 	}
 
-	.other_portrait_info {
+	/* Placeholder state (no video URL yet) */
+	.video_placeholder {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #3a0a0e 0%, #6b1a22 50%, #3a0800 100%);
+	}
+
+	.video_placeholder_inner {
 		display: flex;
 		flex-direction: column;
-		line-height: 1.2;
+		align-items: center;
+		gap: 1rem;
 	}
 
-	.other_name {
-		font-family: var(--font-heading);
-		font-size: 0.88rem;
-		font-weight: 800;
-		color: #1a1a1a;
+	.video_play_btn {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: rgba(207, 168, 58, 0.15);
+		border: 2px solid rgba(207, 168, 58, 0.45);
+		color: var(--color-gold);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 0 28px rgba(207, 168, 58, 0.2);
 	}
 
-	.other_batch {
+	.video_placeholder_text {
 		font-family: var(--font-body);
-		font-size: 0.72rem;
-		color: #666;
-		margin-top: 1px;
+		font-size: 0.78rem;
+		color: rgba(255,255,255,0.5);
+		margin: 0;
+		font-style: italic;
 	}
 
 	@keyframes overlayFadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
+		from { opacity: 0; }
+		to   { opacity: 1; }
 	}
 
 	@keyframes modalZoomIn {
