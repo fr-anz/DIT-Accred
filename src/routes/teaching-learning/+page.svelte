@@ -812,42 +812,7 @@
 	</div>
 </section>
 
-<!-- ─────────────────────────────────────────────
-  SECTION 6: EXTERNAL PROGRAM QUALITY ASSURANCE
-───────────────────────────────────────────── -->
-<section class="content_section" id="external-program-qa">
-	<div class="section_label">
-		<Award size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>EXTERNAL PROGRAM QUALITY ASSURANCE BADGES</span>
-	</div>
-	<hr class="section_divider" />
 
-	<div class="external_badges_grid">
-		<div class="external_badge_card">
-			<div class="badge_logo_wrapper">
-				<ClipboardCheck size={40} strokeWidth={1.5} class="badge_logo_icon" />
-			</div>
-			<h4 class="badge_title">AACCUP ACCREDITED</h4>
-			<p class="badge_desc">Ensuring academic rigor through Level III &amp; IV evaluations.</p>
-		</div>
-
-		<div class="external_badge_card">
-			<div class="badge_logo_wrapper">
-				<CheckCircle2 size={40} strokeWidth={1.5} class="badge_logo_icon" />
-			</div>
-			<h4 class="badge_title">CHED COMPLIANT</h4>
-			<p class="badge_desc">Full Certificate of Program Compliance (COPC No. 008).</p>
-		</div>
-
-		<div class="external_badge_card">
-			<div class="badge_logo_wrapper">
-				<Layers size={40} strokeWidth={1.5} class="badge_logo_icon" />
-			</div>
-			<h4 class="badge_title">ISO 9001:2015 ALIGNED</h4>
-			<p class="badge_desc">Global quality systems auditing for teaching operations.</p>
-		</div>
-	</div>
-</section>
 
 <!-- ─────────────────────────────────────────────
   ALUMNI DETAILS OVERLAY MODAL
@@ -978,8 +943,7 @@
 	#curriculum-architecture,
 	#staff-faculty-profile,
 	#student-outcomes,
-	#learner-graduate-qa,
-	#external-program-qa {
+	#learner-graduate-qa {
 		padding-top: 1rem;
 	}
 
@@ -2323,70 +2287,7 @@
 		line-height: 1.4;
 	}
 
-	/* ── SECTION 6: EXTERNAL BADGES ── */
-	.external_badges_grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 2rem;
-	}
 
-	@media (max-width: 900px) {
-		.external_badges_grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	.external_badge_card {
-		background: #fff;
-		border: 1px solid rgba(0, 0, 0, 0.08);
-		border-radius: 20px;
-		padding: 2.25rem 2rem;
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
-		transition: all 0.3s ease;
-	}
-
-	.external_badge_card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
-	}
-
-	.badge_logo_wrapper {
-		width: 80px;
-		height: 80px;
-		border-radius: 50%;
-		background: rgba(92, 15, 22, 0.05);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 1.5rem;
-		border: 1.5px solid rgba(92, 15, 22, 0.1);
-	}
-
-	:global(.badge_logo_icon) {
-		color: var(--color-maroon);
-	}
-
-	.badge_title {
-		font-family: var(--font-heading);
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: #1a1a1a;
-		letter-spacing: 0.05em;
-		margin: 0 0 0.5rem 0;
-	}
-
-	.badge_desc {
-		font-family: var(--font-body);
-		font-size: 0.8rem;
-		color: #555;
-		line-height: 1.5;
-		margin: 0;
-		max-width: 240px;
-	}
 
 	/* ── DETAILS MODAL ── */
 	.modal_overlay {
