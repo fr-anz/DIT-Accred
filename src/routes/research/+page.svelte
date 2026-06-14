@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import {
 		BookOpen,
 		Building2,
@@ -53,6 +54,47 @@
 		{ year: '2023', count: 16 },
 		{ year: '2024', count: 10 }
 	];
+
+	/** @type {HTMLDivElement | undefined} */
+	let metricsSculpture;
+
+	const metricCardCount = 3;
+
+	onMount(() => {
+		const element = metricsSculpture;
+		if (!element) return;
+
+		const scrollPerCard = 240;
+		let animationFrame = 0;
+
+		const updateSnap = () => {
+			animationFrame = 0;
+
+			const rect = element.getBoundingClientRect();
+			const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+			const documentTop = rect.top + window.scrollY;
+			const start = documentTop - viewportHeight * 0.55;
+			const rawIndex = (window.scrollY - start) / scrollPerCard;
+			const index = Math.min(metricCardCount - 1, Math.max(0, Math.round(rawIndex)));
+
+			element.style.setProperty('--metrics-orbit', `${index * 120}deg`);
+		};
+
+		const requestSnap = () => {
+			if (animationFrame) return;
+			animationFrame = requestAnimationFrame(updateSnap);
+		};
+
+		requestSnap();
+		window.addEventListener('scroll', requestSnap, { passive: true });
+		window.addEventListener('resize', requestSnap);
+
+		return () => {
+			if (animationFrame) cancelAnimationFrame(animationFrame);
+			window.removeEventListener('scroll', requestSnap);
+			window.removeEventListener('resize', requestSnap);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -98,11 +140,6 @@
 			{/each}
 		</div>
 
-		<p class="policy_note">
-			PUP Research &amp; Development Manual governs planning, funding, IP, dissemination, and
-			utilization of all department research.
-		</p>
-
 		<a
 			class="manual_link"
 			href="/research"
@@ -120,13 +157,7 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="metrics_sculpture">
-			<!-- <div class="completed_card">
-				<h3>Completed<br />Research</h3>
-				<strong>70</strong>
-				<p>Spanning 2018 to<br />2024 academic cycles</p>
-			</div> -->
-
+		<div class="metrics_sculpture" bind:this={metricsSculpture}>
 			<div class="origami_mark" aria-hidden="true">
 				<svg class="origami_svg" viewBox="0 0 325 430" role="presentation">
 					<defs>
@@ -136,20 +167,7 @@
 							<stop offset="1" stop-color="#c07f06" />
 						</linearGradient>
 					</defs>
-					<circle cx="4" cy="70" r="4" fill="red" />
-					<circle cx="137" cy="347" r="4" fill="red" />
 
-					<circle cx="321" cy="70" r="4" fill="blue" />
-					<circle cx="188" cy="347" r="4" fill="blue" />
-					<line
-						x1="162.5"
-						y1="0"
-						x2="162.5"
-						y2="450"
-						stroke="red"
-						stroke-width="1"
-						stroke-dasharray="6 6"
-					/>
 					<g fill="#fff" stroke="url(#goldStroke)" stroke-width="3" stroke-linejoin="round">
 						<path d="M60 20 L265 20 L305 90 L185 300 L140 300 L20 90 Z" />
 						/>
@@ -168,17 +186,31 @@
 				</svg>
 			</div>
 
-			<!-- <div class="tilt_card disseminated_card">
-				<span>Disseminated<br />Publications</span>
-				<strong>46</strong>
-				<p>Papers published in refereed and indexed platforms.</p>
-			</div>
+			<div class="cards_ring">
+				<div class="metric_spoke" style="--spoke-angle: 0deg;">
+					<article class="metric_card">
+						<h3>Completed Research</h3>
+						<strong>70</strong>
+						<p>Spanning 2018 to 2024 academic cycles</p>
+					</article>
+				</div>
 
-			<div class="tilt_card impact_card">
-				<p>All published articles are indexed in premier global databases.</p>
-				<strong>89.13%</strong>
-				<span>High-Impact<br />Indexation Rate</span>
-			</div> -->
+				<div class="metric_spoke" style="--spoke-angle: 120deg;">
+					<article class="metric_card">
+						<h3>High-Impact Indexation Rate</h3>
+						<strong>89.13%</strong>
+						<p>All published articles are indexed in premier global databases.</p>
+					</article>
+				</div>
+
+				<div class="metric_spoke" style="--spoke-angle: 240deg;">
+					<article class="metric_card">
+						<h3>Disseminated Publications</h3>
+						<strong>46</strong>
+						<p>Papers published in refereed and indexed platforms.</p>
+					</article>
+				</div>
+			</div>
 		</div>
 
 		<div class="distribution_panel" id="research-repository">
@@ -431,16 +463,6 @@
 		text-transform: uppercase;
 	}
 
-	.policy_note {
-		font-family: var(--font-body);
-		font-size: clamp(1.55rem, 2.2vw, 2.75rem);
-		line-height: 1.05;
-		text-align: center;
-		max-width: 1250px;
-		margin: 0 auto 4.5rem;
-		color: #101010;
-	}
-
 	.manual_link {
 		width: min(100%, 855px);
 		min-height: 82px;
@@ -472,58 +494,25 @@
 	}
 
 	.metrics_sculpture {
+		--metric-card-width: 234px;
+		--metric-card-height: 222px;
+		--wheel-radius: 206px;
+		--seal-offset: 72px;
+
 		position: relative;
 		width: min(100%, 760px);
-		min-height: 658px;
-		margin: 0 auto;
-	}
-
-	.completed_card {
-		position: relative;
-		z-index: 4;
-		width: 205px;
-		min-height: 228px;
-		margin: 0 auto;
-		border: 3px solid transparent;
-		border-radius: 12px;
-		background:
-			linear-gradient(#fff, #fff) padding-box,
-			linear-gradient(155deg, #eec25c, #d99b1d 45%, #c07f06) border-box;
-		text-align: center;
-		box-sizing: border-box;
-		padding: 1.45rem 1rem 1.6rem;
-	}
-
-	.completed_card h3 {
-		font-family: var(--font-body);
-		font-size: 1.2rem;
-		font-weight: 800;
-		line-height: 1.08;
-		margin: 0 0 1rem;
-	}
-
-	.completed_card strong {
-		display: block;
-		font-size: 4.25rem;
-		font-weight: 300;
-		line-height: 0.9;
-		margin-bottom: 1.25rem;
-	}
-
-	.completed_card p {
-		font-size: 0.92rem;
-		line-height: 1.15;
-		margin: 0;
+		min-height: 720px;
+		margin: 0 auto 3.5rem;
 	}
 
 	.origami_mark {
 		position: absolute;
 		left: 50%;
-		top: 228px;
+		top: calc(50% + var(--seal-offset));
 		width: 325px;
 		height: 430px;
-		transform: translateX(-50%);
-		z-index: 2;
+		transform: translate(-50%, -50%) scale(0.96);
+		z-index: 1;
 	}
 
 	.origami_svg {
@@ -532,69 +521,65 @@
 		height: 100%;
 	}
 
-	.tilt_card {
+	.cards_ring {
 		position: absolute;
+		inset: 0;
+		transform-origin: 50% 50%;
+		transform: rotate(var(--metrics-orbit, 0deg));
+		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+		will-change: transform;
 		z-index: 3;
-		width: 255px;
-		min-height: 195px;
+	}
+
+	.metric_spoke {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: var(--metric-card-width);
+		height: var(--metric-card-height);
+		margin-left: calc(var(--metric-card-width) / -2);
+		margin-top: calc(var(--metric-card-height) / -2);
+		transform: rotate(var(--spoke-angle)) translateY(calc(-1 * var(--wheel-radius)));
+	}
+
+	.metric_card {
+		width: 100%;
+		height: 100%;
 		border: 3px solid transparent;
 		border-radius: 12px;
 		background:
 			linear-gradient(#fff, #fff) padding-box,
 			linear-gradient(155deg, #eec25c, #d99b1d 45%, #c07f06) border-box;
 		box-sizing: border-box;
-		padding: 1.1rem 1rem;
+		padding: 1.4rem 1.25rem 1.6rem;
+		text-align: center;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.9rem;
+		gap: 0.55rem;
 	}
 
-	.tilt_card strong {
-		font-size: 3.9rem;
-		font-weight: 400;
-		line-height: 0.9;
-	}
-
-	.tilt_card span {
+	.metric_card h3 {
 		font-family: var(--font-body);
-		font-size: 1.05rem;
+		font-size: 1.18rem;
 		font-weight: 800;
 		line-height: 1.1;
+		margin: 0;
 	}
 
-	.tilt_card p {
-		font-size: 0.84rem;
+	.metric_card strong {
+		display: block;
+		font-size: 3.9rem;
+		font-weight: 300;
+		line-height: 0.9;
+		margin: 0.2rem 0;
+	}
+
+	.metric_card p {
+		font-size: 0.9rem;
 		line-height: 1.2;
 		margin: 0;
-		max-height: 150px;
-	}
-
-	.disseminated_card {
-		left: 46px;
-		top: 380px;
-		transform: rotate(-31deg);
-		transform-origin: center;
-	}
-
-	.disseminated_card strong,
-	.disseminated_card span,
-	.disseminated_card p {
-		writing-mode: vertical-rl;
-		transform: rotate(180deg);
-	}
-
-	.impact_card {
-		right: 46px;
-		top: 380px;
-		transform: rotate(31deg);
-		transform-origin: center;
-	}
-
-	.impact_card strong,
-	.impact_card span,
-	.impact_card p {
-		writing-mode: vertical-rl;
 	}
 
 	.distribution_panel {
@@ -920,10 +905,6 @@
 			line-height: 1.35;
 		}
 
-		.policy_note {
-			font-size: 1.35rem;
-		}
-
 		.manual_link {
 			gap: 1rem;
 			font-size: 0.95rem;
@@ -940,45 +921,33 @@
 			min-height: auto;
 			margin: 0 0 2.5rem;
 			transform: none;
+		}
+
+		.cards_ring {
+			position: static;
 			display: flex;
 			flex-direction: column;
 			gap: 1rem;
-		}
-
-		.completed_card,
-		.tilt_card {
-			position: relative;
-			inset: auto;
-			width: 100%;
-			min-height: auto;
 			transform: none;
-			padding: 3rem 2.25rem;
 		}
 
-		.tilt_card {
-			display: grid;
-			gap: 0.7rem;
-		}
-
-		.completed_card strong,
-		.tilt_card strong {
-			font-size: 4.5rem;
-		}
-
-		.tilt_card strong,
-		.tilt_card span,
-		.tilt_card p {
+		.metric_spoke {
 			position: static;
-			max-width: none;
-			max-height: none;
-			text-align: left;
-			writing-mode: horizontal-tb;
+			width: 100%;
+			height: auto;
+			margin: 0;
 			transform: none;
 		}
 
-		.tilt_card strong,
-		.tilt_card span {
-			display: block;
+		.metric_card {
+			width: 100%;
+			height: auto;
+			min-height: auto;
+			padding: 2.75rem 2rem;
+		}
+
+		.metric_card strong {
+			font-size: 4.5rem;
 		}
 
 		.origami_mark {
