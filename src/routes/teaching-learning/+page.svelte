@@ -32,79 +32,102 @@
 	let activeYear = $state(1); // Year selector for interactive explorer
 	/** @type {number | null} */
 	let selectedAlumIndex = $state(null); // Index of alum for detailed modal
-	let carouselIndex = $state(1); // Carousel index for Notable Alumni (default to Dahyun)
+	/** Slideshow: which page of 3 we're on (0 = first 3, 1 = second 3) */
+	let slidePage = $state(0);
 	/** @type {CourseYear[]} */
 	const courseYears = [1, 2, 3, 4];
 
-	// Alumni profiles - reordered Sehun (0), Dahyun (1), Winter (2) to match visual layout in Figma
+	// Alumni profiles - 6 total, shown 3 per slide
 	const alumniList = [
 		{
 			name: 'Sehun Domingo',
 			shortName: 'Sehun',
-			role: 'Lead DevOps Engineer',
-			batch: '20xx - 20xx',
+			role: 'Data Analyst at Google',
+			batch: 'Batch 2018 - 2022',
 			honors: 'Cum Laude',
 			degree: 'Bachelor of Science in Information Technology',
 			img: '/teaching-learning/alum-sehun.png',
 			badgeColor: '#2563EB',
-			badgeLetter: 'A'
+			badgeLetter: 'A',
+			testimonialVideoUrl: ''
 		},
 		{
 			name: 'Dahyun Dela Cruz',
 			shortName: 'Dahyun',
 			role: 'IT Global Entrepreneur',
-			batch: '20xx - 20xx',
+			batch: 'Batch 2018 - 2022',
 			honors: 'Magna Cumlaude',
 			degree: 'Bachelor of Science in Information Technology',
 			img: '/teaching-learning/alum-dahyun.png',
 			badgeColor: '#7C3AED',
-			badgeLetter: 'F'
-		},
-		{
-			name: 'Winter Mendoza',
-			shortName: 'Winter',
-			role: 'Senior Cloud Architect',
-			batch: '20xx - 20xx',
-			honors: 'Summa Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/alum-winter.png',
-			badgeColor: '#EF4444',
-			badgeLetter: 'N'
-		},
-		{
-			name: 'Hoshi Batumbakal',
-			shortName: 'Hoshi',
-			role: 'Cyber Security Manager',
-			batch: 'Batch 2017 - 2021',
-			honors: 'Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
-			badgeColor: '#10B981',
-			badgeLetter: 'C'
-		},
-		{
-			name: 'Jaemin Suarez',
-			shortName: 'Jaemin',
-			role: 'AI Research Lead',
-			batch: 'Batch 2016 - 2020',
-			honors: 'Magna Cumlaude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400',
-			badgeColor: '#F59E0B',
-			badgeLetter: 'M'
+			badgeLetter: 'F',
+			testimonialVideoUrl: ''
 		},
 		{
 			name: 'Irene Joy Reyes',
 			shortName: 'Irene',
-			role: 'Principal Solution Architect',
-			batch: 'Batch 2015 - 2019',
+			role: 'Data Scientist at Microsoft',
+			batch: 'Batch 2018 - 2022',
 			honors: 'Summa Cum Laude',
 			degree: 'Bachelor of Science in Information Technology',
-			img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=400',
+			img: '/teaching-learning/alum-irene.png',
 			badgeColor: '#EC4899',
-			badgeLetter: 'S'
+			badgeLetter: 'S',
+			testimonialVideoUrl: ''
+		},
+		{
+			name: 'Hoshi Batumbakal',
+			shortName: 'Hoshi',
+			role: 'CTO at Start-up Inc.',
+			batch: 'Batch 2017 - 2021',
+			honors: 'Cum Laude',
+			degree: 'Bachelor of Science in Information Technology',
+			img: '/teaching-learning/alum-hoshi.png',
+			badgeColor: '#10B981',
+			badgeLetter: 'C',
+			testimonialVideoUrl: ''
+		},
+		{
+			name: 'Jaemin Suarez',
+			shortName: 'Jaemin',
+			role: 'Project Manager at Azure',
+			batch: 'Batch 2016 - 2020',
+			honors: 'Magna Cumlaude',
+			degree: 'Bachelor of Science in Information Technology',
+			img: '/teaching-learning/alum-jaemin.png',
+			badgeColor: '#F59E0B',
+			badgeLetter: 'M',
+			testimonialVideoUrl: ''
+		},
+		{
+			name: 'Winter Mendoza',
+			shortName: 'Winter',
+			role: 'Professor at UPD',
+			batch: 'Batch 2018 - 2022',
+			honors: 'Magna Cumlaude',
+			degree: 'Bachelor of Science in Information Technology',
+			img: '/teaching-learning/alum-winter.png',
+			badgeColor: '#EF4444',
+			badgeLetter: 'N',
+			testimonialVideoUrl: ''
 		}
 	];
+
+	// Total slide pages: one page per 3 alumni
+	const totalSlidePages = Math.ceil(alumniList.length / 3);
+
+	/** Returns the 3 alumni visible on the current slide page */
+	function visibleAlumni() {
+		return alumniList.slice(slidePage * 3, slidePage * 3 + 3);
+	}
+
+	function prevSlide() {
+		slidePage = (slidePage - 1 + totalSlidePages) % totalSlidePages;
+	}
+
+	function nextSlide() {
+		slidePage = (slidePage + 1) % totalSlidePages;
+	}
 
 	// Interactive explorer course data
 	/** @type {Record<CourseYear, Course[]>} */
@@ -134,6 +157,14 @@
 	// Close alumni details modal
 	function closeModal() {
 		selectedAlumIndex = null;
+	}
+
+	/** 
+	 * Open modal with the correct global index from the visible slice 
+	 * @param {number} localIndex
+	 */
+	function openAlumModal(localIndex) {
+		selectedAlumIndex = slidePage * 3 + localIndex;
 	}
 
 	// Organizations list with high-quality themed images
@@ -637,53 +668,60 @@
 	</div>
 	<hr class="section_divider" />
 
-	<!-- Notable Alumni Card -->
+	<!-- Notable Alumni Section -->
 	<div class="alumni_section_container">
-		<div class="notable_alumni_card">
-			<div class="alumni_left">
-				<h2 class="notable_alumni_title">NOTABLE<br />ALUMNI</h2>
-				<p class="alumni_intro_desc">
-					Our graduates are the blueprint of our success. From visionary software engineers and tech entrepreneurs to global IT leaders, the <span class="bold_text">Department of Information Technology</span> proudly celebrates the alumni who are redefining industries, driving digital transformation, and shaping the future of technology across the globe.
-				</p>
-			</div>
+		<h2 class="notable_alumni_title">NOTABLE ALUMNI</h2>
 
-			<div class="alumni_right">
+		<!-- Slideshow wrapper -->
+		<div class="alumni_slideshow_wrapper">
+			<div class="alumni_slideshow">
+				<!-- Prev button -->
+				<button class="slide_nav_btn slide_prev" onclick={prevSlide} aria-label="Previous alumni">
+					<ChevronLeft size={24} strokeWidth={2.5} />
+				</button>
+
+				<!-- 3 alumni cards -->
 				<div class="alumni_cards_container">
-					{#each alumniList.slice(0, 3) as alum, i}
+					{#each visibleAlumni() as alum, i}
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 						<div
 							class="alumni_portrait_card"
-							class:highlighted={carouselIndex === i}
-							onclick={() => {
-								carouselIndex = i;
-								selectedAlumIndex = i;
-							}}
-							onmouseenter={() => (carouselIndex = i)}
+							onclick={() => openAlumModal(i)}
 							role="listitem"
 						>
 							<div class="portrait_image_wrapper">
 								<img src={alum.img} alt={alum.name} class="portrait_img" />
+								<div class="portrait_play_overlay">
+									<div class="play_icon_circle">
+										<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+									</div>
+								</div>
 							</div>
 							<div class="portrait_info">
 								<h4 class="alum_name">{alum.name}</h4>
-								<span class="alum_batch">{alum.batch}</span>
+								<span class="alum_role_tag">{alum.role}</span>
 							</div>
 						</div>
 					{/each}
 				</div>
 
-				<!-- Carousel Dot Indicators -->
-				<div class="carousel_indicators">
-					{#each [0, 1, 2] as ind}
-						<button
-							class="dot_indicator"
-							class:active={carouselIndex === ind}
-							onclick={() => (carouselIndex = ind)}
-							aria-label="Set featured alumni {ind + 1}"
-						></button>
-					{/each}
-				</div>
+				<!-- Next button -->
+				<button class="slide_nav_btn slide_next" onclick={nextSlide} aria-label="Next alumni">
+					<ChevronRight size={24} strokeWidth={2.5} />
+				</button>
+			</div>
+
+			<!-- Page dot indicators -->
+			<div class="carousel_indicators">
+				{#each Array(totalSlidePages) as _, p}
+					<button
+						class="dot_indicator"
+						class:active={slidePage === p}
+						onclick={() => (slidePage = p)}
+						aria-label="Go to slide {p + 1}"
+					></button>
+				{/each}
 			</div>
 		</div>
 	</div>
@@ -692,7 +730,7 @@
 	<div class="tracer_grid">
 		<!-- Employment Horizon Table -->
 		<div class="employment_horizon_card">
-			<h3 class="horizon_title">EMPLOYMENT HORIZON<br /><span class="sub_text">(GRADUATE TRACER)</span></h3>
+			<h3 class="horizon_title">EMPLOYMENT HORIZON<br />(GRADUATE TRACER)</h3>
 			
 			<div class="table_container">
 				<table class="tracer_table">
@@ -767,42 +805,7 @@
 	</div>
 </section>
 
-<!-- ─────────────────────────────────────────────
-  SECTION 6: EXTERNAL PROGRAM QUALITY ASSURANCE
-───────────────────────────────────────────── -->
-<section class="content_section" id="external-program-qa">
-	<div class="section_label">
-		<Award size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>EXTERNAL PROGRAM QUALITY ASSURANCE BADGES</span>
-	</div>
-	<hr class="section_divider" />
 
-	<div class="external_badges_grid">
-		<div class="external_badge_card">
-			<div class="badge_logo_wrapper">
-				<ClipboardCheck size={40} strokeWidth={1.5} class="badge_logo_icon" />
-			</div>
-			<h4 class="badge_title">AACCUP ACCREDITED</h4>
-			<p class="badge_desc">Ensuring academic rigor through Level III &amp; IV evaluations.</p>
-		</div>
-
-		<div class="external_badge_card">
-			<div class="badge_logo_wrapper">
-				<CheckCircle2 size={40} strokeWidth={1.5} class="badge_logo_icon" />
-			</div>
-			<h4 class="badge_title">CHED COMPLIANT</h4>
-			<p class="badge_desc">Full Certificate of Program Compliance (COPC No. 008).</p>
-		</div>
-
-		<div class="external_badge_card">
-			<div class="badge_logo_wrapper">
-				<Layers size={40} strokeWidth={1.5} class="badge_logo_icon" />
-			</div>
-			<h4 class="badge_title">ISO 9001:2015 ALIGNED</h4>
-			<p class="badge_desc">Global quality systems auditing for teaching operations.</p>
-		</div>
-	</div>
-</section>
 
 <!-- ─────────────────────────────────────────────
   ALUMNI DETAILS OVERLAY MODAL
@@ -820,56 +823,70 @@
 			</button>
 
 			<div class="modal_grid">
-				<!-- Left Panel: Profile Detail -->
+				<!-- Left Panel: Profile Detail (Figma-aligned) -->
 				<div class="modal_profile_panel">
 					<div class="modal_profile_card">
+						<!-- Circular photo with ring border -->
 						<div class="detail_image_wrapper">
 							<img src={alumniList[selectedAlumIndex].img} alt={alumniList[selectedAlumIndex].name} class="detail_img" />
-							<div
-								class="detail_badge_circle"
-								style="background-color: {alumniList[selectedAlumIndex].badgeColor};"
-							>
-								{alumniList[selectedAlumIndex].badgeLetter}
-							</div>
 						</div>
 
 						<div class="detail_info_block">
 							<h3 class="detail_alum_name">{alumniList[selectedAlumIndex].name}</h3>
 							<p class="detail_alum_role">{alumniList[selectedAlumIndex].role}</p>
-							
+
+							<!-- Decorative social icon row -->
+							<div class="detail_social_row" aria-label="Social links">
+								<span class="social_icon_btn" aria-label="Facebook">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+								</span>
+								<span class="social_icon_btn" aria-label="Instagram">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+								</span>
+								<span class="social_icon_btn" aria-label="LinkedIn">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+								</span>
+								<span class="social_icon_btn" aria-label="GitHub">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+								</span>
+							</div>
+
 							<div class="detail_meta_row">
 								<span class="detail_batch_tag">{alumniList[selectedAlumIndex].batch}</span>
 								<span class="detail_honors_tag">{alumniList[selectedAlumIndex].honors}</span>
 							</div>
 
-							<p class="detail_degree_title">{alumniList[selectedAlumIndex].degree}</p>
+							<p class="detail_degree_title"><em>{alumniList[selectedAlumIndex].degree}</em></p>
 						</div>
 					</div>
 				</div>
 
-				<!-- Right Panel: Placeholders/Other Alumni List -->
-				<div class="modal_alumni_list_panel">
-					<h4 class="other_alumni_title">Other Alumni (Placeholders)</h4>
-					<div class="other_alumni_grid">
-						{#each alumniList as alum, idx}
-							{#if idx !== selectedAlumIndex}
-								<!-- svelte-ignore a11y_click_events_have_key_events -->
-								<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-								<div
-									class="other_alum_item"
-									onclick={() => (selectedAlumIndex = idx)}
-									role="listitem"
-								>
-									<div class="other_portrait_circle">
-										<img src={alum.img} alt={alum.name} class="other_portrait_img" />
+				<!-- Right Panel: Testimonial Video (Figma-aligned) -->
+				<div class="modal_video_panel">
+					<p class="video_panel_title">TESTIMONIAL VIDEO</p>
+					<div class="testimonial_video_wrapper">
+						{#if alumniList[selectedAlumIndex].testimonialVideoUrl}
+							<!-- svelte-ignore a11y_media_has_caption -->
+							<video
+								src={alumniList[selectedAlumIndex].testimonialVideoUrl}
+								controls
+								class="testimonial_video"
+								poster={alumniList[selectedAlumIndex].img}
+							>
+								<track kind="captions" />
+								Your browser does not support the video tag.
+							</video>
+						{:else}
+							<!-- Placeholder: dark maroon gradient area with glowing play button -->
+							<div class="video_placeholder">
+								<div class="video_placeholder_inner">
+									<div class="video_play_btn">
+										<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
 									</div>
-									<div class="other_portrait_info">
-										<span class="other_name">{alum.name}</span>
-										<span class="other_batch">{alum.batch.replace('Batch ', '')}</span>
-									</div>
+									<p class="video_placeholder_text">Testimonial video coming soon</p>
 								</div>
-							{/if}
-						{/each}
+							</div>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -919,8 +936,7 @@
 	#curriculum-architecture,
 	#staff-faculty-profile,
 	#student-outcomes,
-	#learner-graduate-qa,
-	#external-program-qa {
+	#learner-graduate-qa {
 		padding-top: 1rem;
 	}
 
@@ -1836,174 +1852,232 @@
 	.alumni_section_container {
 		width: 100%;
 		box-sizing: border-box;
-		margin-bottom: 2.5rem;
-	}
-
-	.notable_alumni_card {
-		background: linear-gradient(135deg, #5c0f16 0%, #220205 100%);
-		border-radius: 24px;
-		padding: 3.5rem;
-		display: grid;
-		grid-template-columns: 1fr 1.1fr;
-		gap: 4.5rem;
-		color: #fff;
-		box-shadow: 0 12px 40px rgba(92, 15, 22, 0.15);
-		align-items: center;
-	}
-
-	@media (max-width: 960px) {
-		.notable_alumni_card {
-			grid-template-columns: 1fr;
-			gap: 3rem;
-			padding: 2.5rem;
-		}
+		margin-bottom: 3rem;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	.notable_alumni_title {
 		font-family: var(--font-heading);
-		font-size: clamp(2.2rem, 4vw, 3.2rem);
+		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 900;
-		color: #fff;
-		margin: 0 0 1.5rem 0;
+		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		text-fill-color: transparent;
+		margin: 0 0 2.5rem 0;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
 		line-height: 1.1;
-		letter-spacing: -0.01em;
+		display: inline-block;
 	}
 
-	.alumni_intro_desc {
-		font-family: var(--font-body);
-		font-size: 1.05rem;
-		line-height: 1.8;
-		color: rgba(255, 255, 255, 0.85);
-		margin: 0;
-	}
-
-	.bold_text {
-		font-weight: 700;
-		color: var(--color-gold-light);
-	}
-
-	.alumni_right {
+	.alumni_slideshow_wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 2.25rem;
 		align-items: center;
+		width: 100%;
+	}
+
+	.alumni_slideshow {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	.slide_nav_btn {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		border: 1.5px solid rgba(92, 15, 22, 0.12);
+		background: #fff;
+		color: var(--color-maroon);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		flex-shrink: 0;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+		transition: all 0.25s ease;
+	}
+
+	.slide_nav_btn:hover {
+		background: var(--color-maroon);
+		color: #fff;
+		border-color: var(--color-maroon);
+		transform: scale(1.08);
 	}
 
 	.alumni_cards_container {
 		display: flex;
 		gap: 2rem;
 		justify-content: center;
-		align-items: flex-end;
-		width: 100%;
-		min-height: 290px;
+		align-items: stretch;
+		flex: 1;
 	}
 
-	@media (max-width: 600px) {
+	@media (max-width: 1024px) {
+		.alumni_cards_container {
+			gap: 1.25rem;
+		}
+	}
+
+	@media (max-width: 900px) {
 		.alumni_cards_container {
 			flex-direction: column;
 			align-items: center;
-			gap: 3rem;
+			gap: 1.75rem;
+		}
+		.alumni_slideshow {
+			flex-direction: column;
+			gap: 2rem;
+		}
+		.slide_prev {
+			order: 2;
+		}
+		.slide_next {
+			order: 3;
+		}
+		.alumni_cards_container {
+			order: 1;
+			width: 100%;
 		}
 	}
 
 	.alumni_portrait_card {
-		background: transparent;
-		border: none;
-		box-shadow: none;
-		width: 170px;
+		background: linear-gradient(180deg, #801b1e 0%, #160507 100%);
+		border-radius: 24px;
+		overflow: hidden;
+		width: 280px;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		text-align: center;
+		align-items: stretch;
 		cursor: pointer;
-		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 		position: relative;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+	}
+
+	@media (max-width: 1200px) and (min-width: 901px) {
+		.alumni_portrait_card {
+			width: 230px;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.alumni_portrait_card {
+			width: 100%;
+			max-width: 320px;
+		}
 	}
 
 	.alumni_portrait_card:hover {
-		transform: translateY(-8px);
-	}
-
-	.alumni_portrait_card.highlighted {
-		transform: scale(1.18);
-		z-index: 10;
+		transform: translateY(-6px);
+		box-shadow: 0 16px 35px rgba(92, 15, 22, 0.25);
 	}
 
 	.portrait_image_wrapper {
-		width: 150px;
-		height: 170px;
+		width: 100%;
+		height: 295px;
 		position: relative;
-		margin-bottom: 1rem;
+		overflow: hidden;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
+		background: transparent;
+	}
+
+	@media (max-width: 1200px) and (min-width: 901px) {
+		.portrait_image_wrapper {
+			height: 240px;
+		}
 	}
 
 	.portrait_img {
 		width: 100%;
 		height: 100%;
-		object-fit: contain;
+		object-fit: cover;
+		object-position: center top;
 		display: block;
+		transition: transform 0.4s ease;
 	}
 
-	/* Golden glowing arc platform under active graduate */
-	.alumni_portrait_card.highlighted .portrait_image_wrapper::after {
-		content: '';
+	.alumni_portrait_card:hover .portrait_img {
+		transform: scale(1.05);
+	}
+
+	/* Play icon overlay on hover */
+	.portrait_play_overlay {
 		position: absolute;
-		bottom: -2px;
-		left: 10%;
-		right: 10%;
-		height: 4px;
-		background: linear-gradient(90deg, transparent, var(--color-gold) 50%, transparent);
-		box-shadow: 0 0 14px 4px rgba(207, 168, 58, 0.85);
+		inset: 0;
+		background: rgba(92, 15, 22, 0.45);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.alumni_portrait_card:hover .portrait_play_overlay {
+		opacity: 1;
+	}
+
+	.play_icon_circle {
+		width: 50px;
+		height: 50px;
 		border-radius: 50%;
-		z-index: 1;
+		background: rgba(207, 168, 58, 0.95);
+		color: #1a1a1a;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.35);
 	}
 
 	.portrait_info {
 		display: flex;
 		flex-direction: column;
-		gap: 0.2rem;
+		gap: 0.25rem;
+		padding: 1.25rem 1.5rem;
+		align-items: flex-start;
+		text-align: left;
+		background: transparent;
 	}
 
 	.alum_name {
 		font-family: var(--font-heading);
-		font-size: 0.85rem;
+		font-size: 1.15rem;
 		font-weight: 800;
 		color: #fff;
 		margin: 0;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		transition: font-size 0.3s ease;
+		line-height: 1.25;
 	}
 
-	.alumni_portrait_card.highlighted .alum_name {
-		font-size: 0.95rem;
-	}
-
-	.alum_batch {
+	.alum_role_tag {
 		font-family: var(--font-body);
-		font-size: 0.72rem;
+		font-size: 0.8rem;
 		color: var(--color-gold);
-		font-weight: 700;
+		font-weight: 600;
 		font-style: italic;
-		transition: font-size 0.3s ease;
-	}
-
-	.alumni_portrait_card.highlighted .alum_batch {
-		font-size: 0.78rem;
+		line-height: 1.35;
 	}
 
 	.carousel_indicators {
 		display: flex;
 		gap: 0.5rem;
+		justify-content: center;
 	}
 
 	.dot_indicator {
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.4);
+		background: rgba(92, 15, 22, 0.15);
 		border: none;
 		padding: 0;
 		cursor: pointer;
@@ -2012,7 +2086,9 @@
 
 	.dot_indicator.active {
 		background: var(--color-gold);
-		transform: scale(1.35);
+		transform: scale(1.4);
+		width: 20px;
+		border-radius: 4px;
 	}
 
 	/* Tracer stats columns */
@@ -2031,7 +2107,7 @@
 
 	.employment_horizon_card {
 		background: #fff;
-		border: 1px solid rgba(0, 0, 0, 0.08);
+		border: 1.5px solid var(--color-gold);
 		border-radius: 20px;
 		padding: 2.5rem 2.25rem;
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
@@ -2039,18 +2115,12 @@
 
 	.horizon_title {
 		font-family: var(--font-heading);
-		font-size: 1.2rem;
-		font-weight: 800;
+		font-size: 1.25rem;
+		font-weight: 900;
 		color: var(--color-maroon);
 		margin: 0 0 1.75rem 0;
-		line-height: 1.3;
-	}
-
-	.horizon_title .sub_text {
-		font-size: 0.72rem;
-		color: #666;
-		font-weight: 800;
-		letter-spacing: 0.05em;
+		line-height: 1.35;
+		letter-spacing: 0.02em;
 	}
 
 	.table_container {
@@ -2068,29 +2138,37 @@
 		font-size: 0.72rem;
 		font-weight: 800;
 		letter-spacing: 0.05em;
-		color: var(--color-maroon);
-		border-bottom: 1.5px solid rgba(92, 15, 22, 0.15);
+		border-bottom: 1.5px solid rgba(0, 0, 0, 0.12);
 	}
 
 	.tracer_table td {
 		padding: 1rem 0;
 		font-size: 0.88rem;
-		color: #333;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 	}
 
-	.th_left, .td_left {
+	.th_left {
 		text-align: left;
-		font-weight: 700;
+		font-weight: 800;
+		color: #1a1a1a;
 	}
 
-	.th_right, .td_right {
+	.th_right {
 		text-align: right;
 		font-weight: 800;
+		color: var(--color-gold-dark);
+	}
+
+	.td_left {
+		text-align: left;
+		font-weight: 700;
+		color: #1a1a1a;
 	}
 
 	.td_right {
-		color: var(--color-maroon);
+		text-align: right;
+		font-weight: 800;
+		color: var(--color-gold-dark);
 	}
 
 	/* PEO Score Card */
@@ -2209,77 +2287,14 @@
 		line-height: 1.4;
 	}
 
-	/* ── SECTION 6: EXTERNAL BADGES ── */
-	.external_badges_grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 2rem;
-	}
 
-	@media (max-width: 900px) {
-		.external_badges_grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	.external_badge_card {
-		background: #fff;
-		border: 1px solid rgba(0, 0, 0, 0.08);
-		border-radius: 20px;
-		padding: 2.25rem 2rem;
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
-		transition: all 0.3s ease;
-	}
-
-	.external_badge_card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
-	}
-
-	.badge_logo_wrapper {
-		width: 80px;
-		height: 80px;
-		border-radius: 50%;
-		background: rgba(92, 15, 22, 0.05);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 1.5rem;
-		border: 1.5px solid rgba(92, 15, 22, 0.1);
-	}
-
-	:global(.badge_logo_icon) {
-		color: var(--color-maroon);
-	}
-
-	.badge_title {
-		font-family: var(--font-heading);
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: #1a1a1a;
-		letter-spacing: 0.05em;
-		margin: 0 0 0.5rem 0;
-	}
-
-	.badge_desc {
-		font-family: var(--font-body);
-		font-size: 0.8rem;
-		color: #555;
-		line-height: 1.5;
-		margin: 0;
-		max-width: 240px;
-	}
 
 	/* ── DETAILS MODAL ── */
 	.modal_overlay {
 		position: fixed;
 		inset: 0;
-		background: rgba(22, 5, 7, 0.65);
-		backdrop-filter: blur(8px);
+		background: rgba(22, 5, 7, 0.7);
+		backdrop-filter: blur(10px);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -2292,11 +2307,11 @@
 		background: #fff;
 		border-radius: 28px;
 		width: 100%;
-		max-width: 850px;
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+		max-width: 860px;
+		box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
 		position: relative;
 		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(255, 255, 255, 0.08);
 		animation: modalZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
@@ -2307,7 +2322,7 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
-		background: #f3f3f0;
+		background: rgba(0,0,0,0.07);
 		border: none;
 		color: #333;
 		display: flex;
@@ -2319,13 +2334,13 @@
 	}
 
 	.close_modal_btn:hover {
-		background: #e2e2dd;
+		background: rgba(0,0,0,0.14);
 		transform: scale(1.08);
 	}
 
 	.modal_grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 280px 1fr;
 		min-height: 460px;
 	}
 
@@ -2335,19 +2350,20 @@
 		}
 	}
 
+	/* ── Left Profile Panel ── */
 	.modal_profile_panel {
-		background: linear-gradient(135deg, #fdfbf7 0%, #f4f0e6 100%);
-		padding: 3rem 2.5rem;
+		background: linear-gradient(160deg, #fdfbf7 0%, #f4ede0 100%);
+		padding: 2.5rem 2rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-right: 1px solid rgba(0, 0, 0, 0.05);
+		border-right: 1px solid rgba(0, 0, 0, 0.06);
 	}
 
 	@media (max-width: 760px) {
 		.modal_profile_panel {
 			border-right: none;
-			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 		}
 	}
 
@@ -2361,13 +2377,14 @@
 
 	.detail_image_wrapper {
 		position: relative;
-		width: 180px;
-		height: 180px;
+		width: 140px;
+		height: 140px;
 		border-radius: 50%;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 8px 24px rgba(92,15,22,0.15);
 		border: 4px solid #fff;
-		margin-bottom: 1.5rem;
-		background: #fff;
+		margin-bottom: 1.25rem;
+		background: #f8f0e8;
+		overflow: hidden;
 	}
 
 	.detail_img {
@@ -2377,59 +2394,68 @@
 		border-radius: 50%;
 	}
 
-	.detail_badge_circle {
-		position: absolute;
-		bottom: 5px;
-		right: 5px;
-		width: 38px;
-		height: 38px;
-		border-radius: 50%;
-		border: 3px solid #fff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #fff;
-		font-family: var(--font-heading);
-		font-size: 0.95rem;
-		font-weight: 900;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-	}
-
 	.detail_info_block {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		gap: 0.1rem;
 	}
 
 	.detail_alum_name {
 		font-family: var(--font-heading);
-		font-size: 1.5rem;
+		font-size: 1.3rem;
 		font-weight: 900;
 		color: var(--color-maroon);
-		margin: 0 0 0.25rem 0;
+		margin: 0 0 0.2rem 0;
+		line-height: 1.15;
 	}
 
 	.detail_alum_role {
 		font-family: var(--font-body);
-		font-size: 0.9rem;
+		font-size: 0.85rem;
 		color: var(--color-gold-dark);
 		font-weight: 700;
-		margin: 0 0 1.25rem 0;
+		font-style: italic;
+		margin: 0 0 0.9rem 0;
+	}
+
+	/* Decorative social icon buttons */
+	.detail_social_row {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.social_icon_btn {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: rgba(0,0,0,0.07);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.7rem;
+		font-weight: 900;
+		color: #444;
+		cursor: default;
+		transition: background 0.2s;
 	}
 
 	.detail_meta_row {
 		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
+		gap: 0.4rem;
+		margin-bottom: 0.75rem;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	.detail_batch_tag {
 		background: var(--color-maroon);
 		color: #fff;
 		font-family: var(--font-body);
-		font-size: 0.72rem;
+		font-size: 0.68rem;
 		font-weight: 700;
-		padding: 0.35rem 0.85rem;
+		padding: 0.3rem 0.75rem;
 		border-radius: 20px;
 	}
 
@@ -2437,109 +2463,100 @@
 		background: rgba(207, 168, 58, 0.15);
 		color: var(--color-gold-dark);
 		font-family: var(--font-body);
-		font-size: 0.72rem;
+		font-size: 0.68rem;
 		font-weight: 700;
-		padding: 0.35rem 0.85rem;
+		padding: 0.3rem 0.75rem;
 		border-radius: 20px;
 		border: 1px solid rgba(207, 168, 58, 0.25);
 	}
 
 	.detail_degree_title {
 		font-family: var(--font-body);
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		color: #666;
 		margin: 0;
-		line-height: 1.4;
-		max-width: 260px;
+		line-height: 1.5;
+		max-width: 220px;
+		text-align: center;
 	}
 
-	/* Placeholders panel */
-	.modal_alumni_list_panel {
-		padding: 3rem 2.5rem;
+	/* ── Right Video Panel ── */
+	.modal_video_panel {
+		padding: 2.5rem 2rem;
 		display: flex;
 		flex-direction: column;
-		background: #fff;
-	}
-
-	.other_alumni_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 800;
-		color: #1a1a1a;
-		letter-spacing: 0.05em;
-		margin: 0 0 1.5rem 0;
-		text-transform: uppercase;
-		border-bottom: 2px solid #f3f3f0;
-		padding-bottom: 0.75rem;
-	}
-
-	.other_alumni_grid {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-		overflow-y: auto;
-		max-height: 300px;
-	}
-
-	.other_alum_item {
-		display: flex;
-		align-items: center;
 		gap: 1rem;
-		padding: 0.65rem 0.85rem;
-		border-radius: 12px;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		background: #fdfdfd;
-		border: 1px solid rgba(0, 0, 0, 0.04);
+		background: #fff;
+		justify-content: center;
 	}
 
-	.other_alum_item:hover {
-		background: #fbf9f4;
-		border-color: rgba(207, 168, 58, 0.25);
-		transform: translateX(4px);
+	.video_panel_title {
+		font-family: var(--font-heading);
+		font-size: 0.8rem;
+		font-weight: 900;
+		color: #1a1a1a;
+		letter-spacing: 0.1em;
+		margin: 0;
+		text-transform: uppercase;
 	}
 
-	.other_portrait_circle {
-		width: 44px;
-		height: 44px;
-		border-radius: 50%;
+	.testimonial_video_wrapper {
+		width: 100%;
+		border-radius: 16px;
 		overflow: hidden;
-		border: 2.5px solid #f3f3f0;
+		background: #0e0e0e;
+		aspect-ratio: 16 / 9;
+		box-shadow: 0 8px 28px rgba(0,0,0,0.18);
 	}
 
-	.other_portrait_img {
+	.testimonial_video {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		display: block;
 	}
 
-	.other_portrait_info {
+	/* Placeholder state (no video URL yet) */
+	.video_placeholder {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #3a0a0e 0%, #6b1a22 50%, #3a0800 100%);
+	}
+
+	.video_placeholder_inner {
 		display: flex;
 		flex-direction: column;
-		line-height: 1.2;
+		align-items: center;
+		gap: 1rem;
 	}
 
-	.other_name {
-		font-family: var(--font-heading);
-		font-size: 0.88rem;
-		font-weight: 800;
-		color: #1a1a1a;
+	.video_play_btn {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: rgba(207, 168, 58, 0.15);
+		border: 2px solid rgba(207, 168, 58, 0.45);
+		color: var(--color-gold);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 0 28px rgba(207, 168, 58, 0.2);
 	}
 
-	.other_batch {
+	.video_placeholder_text {
 		font-family: var(--font-body);
-		font-size: 0.72rem;
-		color: #666;
-		margin-top: 1px;
+		font-size: 0.78rem;
+		color: rgba(255,255,255,0.5);
+		margin: 0;
+		font-style: italic;
 	}
 
 	@keyframes overlayFadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
+		from { opacity: 0; }
+		to   { opacity: 1; }
 	}
 
 	@keyframes modalZoomIn {
