@@ -47,7 +47,7 @@
 					<a href="/teaching-learning#curriculum-architecture" class="footer_link">Curriculum</a>
 				</li>
 				<li>
-					<a href="/teaching-learning#staff-faculty-profile" class="footer_link">Faculty Directory</a>
+					<a href="/teaching-learning/faculty" class="footer_link">Faculty Directory</a>
 				</li>
 			</ul>
 		</div>
