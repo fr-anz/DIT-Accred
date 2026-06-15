@@ -8,12 +8,16 @@
 	let { children } = $props();
 
 	let isHome = $derived($page.url.pathname === '/');
+	// Immersive routes (e.g. the secret /gallery playground) render full-screen with no chrome.
+	let isImmersive = $derived($page.url.pathname.startsWith('/gallery'));
 </script>
 
-{#if isHome}
-	<Navbar></Navbar>
-{:else}
-	<PageNavbar></PageNavbar>
+{#if !isImmersive}
+	{#if isHome}
+		<Navbar></Navbar>
+	{:else}
+		<PageNavbar></PageNavbar>
+	{/if}
 {/if}
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
