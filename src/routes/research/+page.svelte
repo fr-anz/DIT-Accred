@@ -10,7 +10,6 @@
 		Network
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
-	import ditSeal from '$lib/assets/DIT Logo.svg';
 
 	const frameworkCards = [
 		{
@@ -34,10 +33,30 @@
 	];
 
 	const incentiveTracks = [
-		'High-Impact Research Incentivization',
-		'Undergraduate Competition Deployment',
-		'Capstone Commercialization & Standardization',
-		'Joint Global Research Linkages'
+		{
+			title: 'High-Impact Research Incentivization',
+			width: '79%',
+			placeholder:
+				'Placeholder details for publication incentives, faculty mentoring, and indexed research targets.'
+		},
+		{
+			title: 'Undergraduate Competition Deployment',
+			width: '88%',
+			placeholder:
+				'Placeholder details for student research competitions, prototype reviews, and coach assignments.'
+		},
+		{
+			title: 'Capstone Commercialization & Standardization',
+			width: '96%',
+			placeholder:
+				'Placeholder details for capstone packaging, deployment readiness, and documentation standards.'
+		},
+		{
+			title: 'Joint Global Research Linkages',
+			width: '100%',
+			placeholder:
+				'Placeholder details for partner institutions, collaborative research tracks, and exchange outputs.'
+		}
 	];
 
 	const facultyResearchers = Array.from({ length: 8 }, () => ({
@@ -59,12 +78,19 @@
 	let metricsSculpture;
 
 	const metricCardCount = 3;
+	/** @type {number | null} */
+	let activeIncentiveIndex = $state(null);
+
+	/** @param {number} index */
+	const toggleIncentiveTrack = (index) => {
+		activeIncentiveIndex = activeIncentiveIndex === index ? null : index;
+	};
 
 	onMount(() => {
 		const element = metricsSculpture;
 		if (!element) return;
 
-		const scrollPerCard = 240;
+		const scrollPerCard = 320;
 		let animationFrame = 0;
 
 		const updateSnap = () => {
@@ -76,8 +102,15 @@
 			const start = documentTop - viewportHeight * 0.55;
 			const rawIndex = (window.scrollY - start) / scrollPerCard;
 			const index = Math.min(metricCardCount - 1, Math.max(0, Math.round(rawIndex)));
+			const topCardIndex = [0, 2, 1][index];
 
 			element.style.setProperty('--metrics-orbit', `${index * 120}deg`);
+			for (let cardIndex = 0; cardIndex < metricCardCount; cardIndex += 1) {
+				element.style.setProperty(
+					`--metric-radius-${cardIndex}`,
+					cardIndex === topCardIndex ? '246px' : '266px'
+				);
+			}
 		};
 
 		const requestSnap = () => {
@@ -132,10 +165,28 @@
 		</div>
 
 		<div class="incentive_stack" aria-label="Research development priority tracks">
-			{#each incentiveTracks as track}
-				<div class="incentive_row">
-					<span>{track}</span>
-					<ChevronDown size={26} strokeWidth={2.3} />
+			{#each incentiveTracks as track, index}
+				<div class="incentive_item" style="--track-width: {track.width};">
+					<button
+						class="incentive_row"
+						type="button"
+						aria-expanded={activeIncentiveIndex === index}
+						aria-controls="incentive-panel-{index}"
+						onclick={() => toggleIncentiveTrack(index)}
+					>
+						<span>{track.title}</span>
+						<ChevronDown
+							size={26}
+							strokeWidth={2.3}
+							class={activeIncentiveIndex === index ? 'chevron_open' : ''}
+						/>
+					</button>
+
+					{#if activeIncentiveIndex === index}
+						<div class="incentive_panel" id="incentive-panel-{index}">
+							<p>{track.placeholder}</p>
+						</div>
+					{/if}
 				</div>
 			{/each}
 		</div>
@@ -158,36 +209,12 @@
 		<hr class="section_divider" />
 
 		<div class="metrics_sculpture" bind:this={metricsSculpture}>
-			<div class="origami_mark" aria-hidden="true">
-				<svg class="origami_svg" viewBox="0 0 325 430" role="presentation">
-					<defs>
-						<linearGradient id="goldStroke" x1="0" y1="0" x2="0.4" y2="1">
-							<stop offset="0" stop-color="#eec25c" />
-							<stop offset="0.5" stop-color="#d99b1d" />
-							<stop offset="1" stop-color="#c07f06" />
-						</linearGradient>
-					</defs>
-
-					<g fill="#fff" stroke="url(#goldStroke)" stroke-width="3" stroke-linejoin="round">
-						<path d="M60 20 L265 20 L305 90 L185 300 L140 300 L20 90 Z" />
-						/>
-					</g>
-
-					<g stroke="url(#goldStroke)" stroke-width="2.5" stroke-linecap="round">
-						<path d="M60 20 L162.5 155" />
-						<path d="M265 20 L162.5 155" />
-						<path d="M20 90 L162.5 155" />
-						<path d="M305 90 L162.5 155" />
-						<path d="M162.5 155 L140 300" />
-						<path d="M162.5 155 L185 300" />
-					</g>
-					<circle cx="162.5" cy="140" r="64" fill="#fff" />
-					<image href={ditSeal} x="100" y="78" width="125" height="125" />
-				</svg>
+			<div class="center_building_mark" aria-hidden="true">
+				<img src="/research/Center_Building.svg" alt="" />
 			</div>
 
 			<div class="cards_ring">
-				<div class="metric_spoke" style="--spoke-angle: 0deg;">
+				<div class="metric_spoke" style="--spoke-angle: 0deg; --spoke-radius: var(--metric-radius-0);">
 					<article class="metric_card">
 						<h3>Completed Research</h3>
 						<strong>70</strong>
@@ -195,7 +222,7 @@
 					</article>
 				</div>
 
-				<div class="metric_spoke" style="--spoke-angle: 120deg;">
+				<div class="metric_spoke" style="--spoke-angle: 120deg; --spoke-radius: var(--metric-radius-1);">
 					<article class="metric_card">
 						<h3>High-Impact Indexation Rate</h3>
 						<strong>89.13%</strong>
@@ -203,7 +230,7 @@
 					</article>
 				</div>
 
-				<div class="metric_spoke" style="--spoke-angle: 240deg;">
+				<div class="metric_spoke" style="--spoke-angle: 240deg; --spoke-radius: var(--metric-radius-2);">
 					<article class="metric_card">
 						<h3>Disseminated Publications</h3>
 						<strong>46</strong>
@@ -375,46 +402,51 @@
 	.framework_grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1.8rem;
-		width: min(100%, 1190px);
+		gap: 1.6rem;
+		width: min(100%, 1160px);
 		margin: 0 auto;
 	}
 
 	.framework_card {
-		min-height: 795px;
-		border: 4px solid #d2a32a;
-		border-radius: 22px;
-		padding: 8.5rem 3.5rem 5rem;
+		min-height: 610px;
+		border: 2px solid #d2a32a;
+		border-radius: 18px;
+		padding: 5.75rem 2.5rem 3.75rem;
 		text-align: center;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+		display: grid;
+		grid-template-rows: 4.5rem 8.25rem auto;
+		justify-items: center;
+		align-content: start;
+		row-gap: 1.6rem;
 		background: #fff;
 	}
 
 	:global(.framework_icon) {
 		color: #050505;
-		margin-bottom: 3rem;
+		align-self: end;
 	}
 
 	.framework_card h3 {
 		font-family: var(--font-heading);
-		font-size: clamp(1.5rem, 2.1vw, 2.25rem);
+		font-size: clamp(1.2rem, 1.45vw, 1.62rem);
 		font-weight: 800;
-		letter-spacing: 0.22em;
+		letter-spacing: 0.14em;
 		line-height: 1.15;
 		text-transform: uppercase;
 		color: var(--color-maroon);
 		margin: 0;
+		max-width: 100%;
+		text-wrap: balance;
 	}
 
 	.framework_card p {
 		font-family: var(--font-body);
-		font-size: clamp(1.05rem, 1.55vw, 1.75rem);
-		line-height: 1.06;
-		margin: auto 0 0;
-		max-width: 330px;
+		font-size: clamp(1rem, 1.25vw, 1.28rem);
+		line-height: 1.12;
+		margin: 0;
+		max-width: 300px;
 		color: #0d0d0d;
+		text-wrap: pretty;
 	}
 
 	.incentive_stack {
@@ -424,12 +456,17 @@
 		justify-items: center;
 	}
 
+	.incentive_item {
+		width: var(--track-width);
+		margin-top: -3px;
+	}
+
 	.incentive_row {
-		height: 75px;
-		border: 4px solid #d2a32a;
+		width: 100%;
+		height: 70px;
+		border: 2px solid #d2a32a;
 		border-radius: 18px;
 		background: #fff;
-		margin-top: -5px;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
@@ -437,22 +474,11 @@
 		gap: 3rem;
 		padding: 0 3rem;
 		color: var(--color-maroon);
-	}
-
-	.incentive_row:nth-child(1) {
-		width: 79%;
-	}
-
-	.incentive_row:nth-child(2) {
-		width: 88%;
-	}
-
-	.incentive_row:nth-child(3) {
-		width: 96%;
-	}
-
-	.incentive_row:nth-child(4) {
-		width: 100%;
+		cursor: pointer;
+		transition:
+			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 0.22s ease,
+			background 0.22s ease;
 	}
 
 	.incentive_row span {
@@ -461,6 +487,64 @@
 		font-weight: 800;
 		letter-spacing: 0.26em;
 		text-transform: uppercase;
+	}
+
+	.incentive_row:hover {
+		background: #fffaf0;
+		border-color: #bd850d;
+		transform: translateY(-1px);
+	}
+
+	.incentive_row:active {
+		transform: translateY(1px);
+	}
+
+	.incentive_row:focus-visible {
+		outline: 3px solid rgba(140, 15, 19, 0.28);
+		outline-offset: 3px;
+	}
+
+	:global(.chevron_open) {
+		transform: rotate(180deg);
+	}
+
+	.incentive_row :global(svg) {
+		flex: 0 0 auto;
+		transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.incentive_panel {
+		border: 2px solid #d2a32a;
+		border-top: 0;
+		border-radius: 0 0 18px 18px;
+		background: #fffaf0;
+		margin: -14px auto 0;
+		padding: 1.75rem 2.25rem 1.5rem;
+		box-sizing: border-box;
+		color: #4c1415;
+		animation: dropdown-reveal 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.incentive_panel p {
+		font-family: var(--font-body);
+		font-size: clamp(0.95rem, 1.05vw, 1.12rem);
+		font-weight: 600;
+		line-height: 1.35;
+		margin: 0 auto;
+		max-width: 72ch;
+		text-align: center;
+	}
+
+	@keyframes dropdown-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(-0.6rem);
+		}
+
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	.manual_link {
@@ -494,31 +578,36 @@
 	}
 
 	.metrics_sculpture {
-		--metric-card-width: 234px;
-		--metric-card-height: 222px;
-		--wheel-radius: 206px;
-		--seal-offset: 72px;
+		--metric-card-width: 253px;
+		--metric-card-height: 237px;
+		--wheel-radius: 246px;
+		--building-mark-width: 426px;
+		--metric-radius-0: var(--wheel-radius);
+		--metric-radius-1: 266px;
+		--metric-radius-2: 266px;
+		--seal-offset: 57px;
 
 		position: relative;
-		width: min(100%, 760px);
-		min-height: 720px;
+		width: min(100%, 824px);
+		min-height: 758px;
 		margin: 0 auto 3.5rem;
 	}
 
-	.origami_mark {
+	.center_building_mark {
 		position: absolute;
 		left: 50%;
 		top: calc(50% + var(--seal-offset));
-		width: 325px;
-		height: 430px;
-		transform: translate(-50%, -50%) scale(0.96);
+		width: min(82vw, var(--building-mark-width));
+		aspect-ratio: 619 / 536;
+		transform: translate(-50%, -50%);
 		z-index: 1;
 	}
 
-	.origami_svg {
+	.center_building_mark img {
 		display: block;
 		width: 100%;
 		height: 100%;
+		object-fit: contain;
 	}
 
 	.cards_ring {
@@ -539,7 +628,8 @@
 		height: var(--metric-card-height);
 		margin-left: calc(var(--metric-card-width) / -2);
 		margin-top: calc(var(--metric-card-height) / -2);
-		transform: rotate(var(--spoke-angle)) translateY(calc(-1 * var(--wheel-radius)));
+		transform: rotate(var(--spoke-angle))
+			translateY(calc(-1 * var(--spoke-radius, var(--wheel-radius))));
 	}
 
 	.metric_card {
@@ -551,18 +641,18 @@
 			linear-gradient(#fff, #fff) padding-box,
 			linear-gradient(155deg, #eec25c, #d99b1d 45%, #c07f06) border-box;
 		box-sizing: border-box;
-		padding: 1.4rem 1.25rem 1.6rem;
+		padding: 1.46rem 1.33rem 1.66rem;
 		text-align: center;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.55rem;
+		gap: 0.73rem;
 	}
 
 	.metric_card h3 {
 		font-family: var(--font-body);
-		font-size: 1.18rem;
+		font-size: 1.33rem;
 		font-weight: 800;
 		line-height: 1.1;
 		margin: 0;
@@ -570,52 +660,52 @@
 
 	.metric_card strong {
 		display: block;
-		font-size: 3.9rem;
+		font-size: 4rem;
 		font-weight: 300;
 		line-height: 0.9;
 		margin: 0.2rem 0;
 	}
 
 	.metric_card p {
-		font-size: 0.9rem;
+		font-size: 1.04rem;
 		line-height: 1.2;
 		margin: 0;
 	}
 
 	.distribution_panel {
-		width: min(100%, 1300px);
+		width: min(100%, 1120px);
 		margin: 0 auto;
-		border: 4px solid #d88c00;
-		border-radius: 24px;
-		padding: 5rem 7rem 5.5rem;
+		border: 3px solid #d88c00;
+		border-radius: 20px;
+		padding: 3.75rem 5.25rem 4.25rem;
 		box-sizing: border-box;
 	}
 
 	.distribution_panel h3 {
 		font-family: var(--font-heading);
-		font-size: clamp(1.45rem, 2vw, 2.3rem);
+		font-size: clamp(1.25rem, 1.65vw, 1.95rem);
 		font-weight: 800;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		text-align: center;
-		margin: 0 0 4rem;
+		margin: 0 0 3rem;
 	}
 
 	.distribution_panel p {
 		font-family: var(--font-body);
-		font-size: clamp(1.2rem, 1.8vw, 2.05rem);
+		font-size: clamp(1.05rem, 1.45vw, 1.65rem);
 		line-height: 1.25;
-		margin: 0 auto 3rem;
+		margin: 0 auto 2.5rem;
 		text-align: justify;
-		max-width: 950px;
+		max-width: 820px;
 	}
 
 	.chart_frame {
 		position: relative;
-		width: min(100%, 820px);
+		width: min(100%, 720px);
 		margin: 0 auto;
 		border: 2px solid rgba(0, 0, 0, 0.55);
-		padding: 5rem 5.5rem 3.5rem;
+		padding: 4.25rem 4.5rem 3rem;
 		box-sizing: border-box;
 	}
 
@@ -625,14 +715,14 @@
 		right: 8rem;
 		display: flex;
 		align-items: center;
-		gap: 1.25rem;
-		font-size: 0.85rem;
+		gap: 1rem;
+		font-size: 0.8rem;
 		color: #6a6a6a;
 	}
 
 	.legend_dot {
-		width: 28px;
-		height: 28px;
+		width: 22px;
+		height: 22px;
 		border-radius: 999px;
 		background: #7f1518;
 	}
@@ -640,9 +730,9 @@
 	.chart_body {
 		position: relative;
 		display: grid;
-		grid-template-columns: 70px 1fr;
+		grid-template-columns: 58px 1fr;
 		align-items: end;
-		min-height: 360px;
+		min-height: 315px;
 	}
 
 	.axis_label {
@@ -650,27 +740,27 @@
 		justify-self: center;
 		writing-mode: vertical-rl;
 		transform: rotate(180deg);
-		font-size: 1.35rem;
+		font-size: 1.1rem;
 		text-transform: uppercase;
 		color: #3d3d3d;
 		letter-spacing: 0.04em;
 	}
 
 	.chart_grid {
-		height: 320px;
+		height: 280px;
 		border-left: 1px solid rgba(0, 0, 0, 0.18);
 		border-bottom: 1px solid rgba(0, 0, 0, 0.45);
 		background-image:
 			linear-gradient(to top, rgba(0, 0, 0, 0.12) 1px, transparent 1px),
 			linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
 		background-size:
-			100% 53px,
+			100% 46px,
 			20% 100%;
 		display: grid;
 		grid-template-columns: repeat(5, 1fr);
 		align-items: end;
-		padding: 0 1.4rem;
-		gap: 1.8rem;
+		padding: 0 1.1rem;
+		gap: 1.45rem;
 	}
 
 	.bar_group {
@@ -679,20 +769,20 @@
 		align-items: center;
 		justify-content: flex-end;
 		height: 100%;
-		gap: 1rem;
+		gap: 0.85rem;
 	}
 
 	.bar {
-		width: 78px;
-		height: calc(var(--value) * 14px);
-		min-height: 120px;
+		width: 66px;
+		height: calc(var(--value) * 12px);
+		min-height: 100px;
 		border-radius: 999px 999px 26px 26px;
 		background: #7f1518;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: #fff;
-		font-size: 0.9rem;
+		font-size: 0.82rem;
 	}
 
 	.bar_year {
@@ -703,10 +793,10 @@
 	.year_axis {
 		display: block;
 		text-align: center;
-		font-size: 1.4rem;
+		font-size: 1.15rem;
 		text-transform: uppercase;
 		color: #646464;
-		margin-top: 2rem;
+		margin-top: 1.6rem;
 	}
 
 	.faculty_section {
@@ -820,18 +910,30 @@
 		}
 
 		.framework_card {
-			min-height: 620px;
+			min-height: 560px;
 			padding: 5.5rem 2rem 3rem;
-		}
-
-		.metrics_sculpture {
-			transform: scale(0.86);
-			transform-origin: top center;
-			margin-bottom: -4rem;
 		}
 
 		.faculty_repository {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 900px) {
+		.framework_grid {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+
+		.framework_card {
+			min-height: auto;
+			padding: 3rem 1.5rem;
+			grid-template-rows: auto;
+			row-gap: 1.4rem;
+		}
+
+		.framework_card p {
+			margin-top: 0.8rem;
 		}
 	}
 
@@ -879,19 +981,23 @@
 		.framework_card {
 			min-height: auto;
 			padding: 3rem 1.5rem;
+			grid-template-rows: auto;
+			row-gap: 1.4rem;
 		}
 
 		.framework_card p {
-			margin-top: 2.5rem;
+			margin-top: 0.8rem;
 		}
 
 		.incentive_stack {
 			margin-top: 1.5rem;
 		}
 
-		.incentive_row,
-		.incentive_row:nth-child(n) {
+		.incentive_item {
 			width: 100%;
+		}
+
+		.incentive_row {
 			height: auto;
 			min-height: 64px;
 			justify-content: space-between;
@@ -903,6 +1009,15 @@
 			font-size: 0.78rem;
 			letter-spacing: 0.14em;
 			line-height: 1.35;
+		}
+
+		.incentive_panel {
+			margin-top: -10px;
+			padding: 1.35rem 1rem 1.15rem;
+		}
+
+		.incentive_panel p {
+			text-align: left;
 		}
 
 		.manual_link {
@@ -950,7 +1065,7 @@
 			font-size: 4.5rem;
 		}
 
-		.origami_mark {
+		.center_building_mark {
 			display: none;
 		}
 
