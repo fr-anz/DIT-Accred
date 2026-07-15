@@ -63,7 +63,8 @@
 		name: 'Aguila, Fermin',
 		role: 'Full Time Faculty',
 		count: 1,
-		image: '/img/sir-melvin.png'
+		image: '/img/sir-melvin.png',
+		publications: ['Placeholder research publication for faculty repository.']
 	}));
 
 	const chartBars = [
@@ -80,10 +81,21 @@
 	const metricCardCount = 3;
 	/** @type {number | null} */
 	let activeIncentiveIndex = $state(null);
+	let flippedFacultyIndices = $state(new Set());
 
 	/** @param {number} index */
 	const toggleIncentiveTrack = (index) => {
 		activeIncentiveIndex = activeIncentiveIndex === index ? null : index;
+	};
+
+	/** @param {number} index */
+	const toggleFacultyCard = (index) => {
+		if (flippedFacultyIndices.has(index)) {
+			flippedFacultyIndices.delete(index);
+		} else {
+			flippedFacultyIndices.add(index);
+		}
+		flippedFacultyIndices = new Set(flippedFacultyIndices);
 	};
 
 	onMount(() => {
@@ -108,7 +120,9 @@
 			for (let cardIndex = 0; cardIndex < metricCardCount; cardIndex += 1) {
 				element.style.setProperty(
 					`--metric-radius-${cardIndex}`,
-					cardIndex === topCardIndex ? '246px' : '266px'
+					cardIndex === topCardIndex
+						? 'calc(246px * var(--metrics-size))'
+						: 'calc(266px * var(--metrics-size))'
 				);
 			}
 		};
@@ -279,18 +293,37 @@
 		<hr class="section_divider" />
 
 		<div class="faculty_repository">
-			{#each facultyResearchers as researcher}
-				<article class="faculty_card">
-					<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
-					<div class="published_badge">
-						<span>Published<br />Studies</span>
-						<strong>{researcher.count}</strong>
-					</div>
-					<div class="faculty_overlay">
-						<h3>{researcher.name}</h3>
-						<p>{researcher.role}</p>
-					</div>
-				</article>
+			{#each facultyResearchers as researcher, index}
+				<button
+					class="faculty_card"
+					class:is_flipped={flippedFacultyIndices.has(index)}
+					type="button"
+					aria-pressed={flippedFacultyIndices.has(index)}
+					onclick={() => toggleFacultyCard(index)}
+				>
+					<span class="faculty_card_inner">
+						<span class="faculty_card_face faculty_front">
+							<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
+							<span class="published_badge">
+								<span>Published<br />Studies</span>
+								<strong>{researcher.count}</strong>
+							</span>
+							<span class="faculty_overlay">
+								<strong>{researcher.name}</strong>
+								<span>{researcher.role}</span>
+							</span>
+						</span>
+						<span class="faculty_card_face faculty_back">
+							<span class="faculty_back_label">Published Research</span>
+							<strong>{researcher.name}</strong>
+							<span class="faculty_publications">
+								{#each researcher.publications as publication}
+									<span>{publication}</span>
+								{/each}
+							</span>
+						</span>
+					</span>
+				</button>
 			{/each}
 		</div>
 	</section>
@@ -578,18 +611,19 @@
 	}
 
 	.metrics_sculpture {
-		--metric-card-width: 253px;
-		--metric-card-height: 237px;
-		--wheel-radius: 246px;
-		--building-mark-width: 426px;
+		--metrics-size: 1.35;
+		--metric-card-width: calc(280px * var(--metrics-size));
+		--metric-card-height: calc(237px * var(--metrics-size));
+		--wheel-radius: calc(246px * var(--metrics-size));
+		--building-mark-width: calc(426px * var(--metrics-size));
 		--metric-radius-0: var(--wheel-radius);
-		--metric-radius-1: 266px;
-		--metric-radius-2: 266px;
-		--seal-offset: 57px;
+		--metric-radius-1: calc(266px * var(--metrics-size));
+		--metric-radius-2: calc(266px * var(--metrics-size));
+		--seal-offset: calc(57px * var(--metrics-size));
 
 		position: relative;
-		width: min(100%, 824px);
-		min-height: 758px;
+		width: min(100%, calc(824px * var(--metrics-size)));
+		min-height: calc(758px * var(--metrics-size));
 		margin: 0 auto 3.5rem;
 	}
 
@@ -821,11 +855,37 @@
 		aspect-ratio: 1 / 1.22;
 		border-radius: 22px;
 		overflow: hidden;
+		padding: 0;
+		border: 0;
 		background: #730f12;
 		box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+		cursor: pointer;
+		perspective: 1200px;
+		text-align: left;
+		color: inherit;
 	}
 
-	.faculty_card::after {
+	.faculty_card_inner {
+		position: absolute;
+		inset: 0;
+		display: block;
+		transform-style: preserve-3d;
+		transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	.faculty_card.is_flipped .faculty_card_inner {
+		transform: rotateY(180deg);
+	}
+
+	.faculty_card_face {
+		position: absolute;
+		inset: 0;
+		display: block;
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
+
+	.faculty_front::after {
 		content: '';
 		position: absolute;
 		inset: 42% 0 0;
@@ -838,7 +898,7 @@
 		pointer-events: none;
 	}
 
-	.faculty_card img {
+	.faculty_front img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -885,7 +945,7 @@
 		z-index: 2;
 	}
 
-	.faculty_overlay h3 {
+	.faculty_overlay strong {
 		font-family: var(--font-body);
 		font-size: clamp(1.3rem, 1.6vw, 2rem);
 		font-weight: 800;
@@ -894,13 +954,47 @@
 		line-height: 1;
 	}
 
-	.faculty_overlay p {
+	.faculty_overlay span {
 		font-family: var(--font-body);
 		font-size: clamp(1rem, 1.2vw, 1.45rem);
 		font-style: italic;
 		font-weight: 800;
 		color: #ffd138;
 		margin: 0;
+	}
+
+	.faculty_back {
+		background: #fff8e4;
+		color: var(--color-maroon);
+		padding: 2rem;
+		box-sizing: border-box;
+		transform: rotateY(180deg);
+	}
+
+	.faculty_back_label {
+		display: block;
+		font-size: 0.7rem;
+		font-weight: 800;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: #a96800;
+		margin-bottom: 1.25rem;
+	}
+
+	.faculty_back > strong {
+		display: block;
+		font-family: var(--font-heading);
+		font-size: clamp(1.4rem, 1.8vw, 2.2rem);
+		line-height: 1.05;
+		margin-bottom: 1.5rem;
+	}
+
+	.faculty_publications {
+		display: block;
+		font-size: clamp(1rem, 1.15vw, 1.35rem);
+		font-weight: 600;
+		line-height: 1.4;
+		color: #322626;
 	}
 
 	@media (max-width: 1180px) {
