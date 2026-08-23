@@ -2,8 +2,58 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-html, body {
+/* ─────────────────────────────────────────────
+   BRAND TOKENS
+   Canonical values sampled from the Figma "Bento Box" canvas. The Figma file has
+   no bound variables, so these are the single source of truth for the codebase.
+   Prefer these over raw hex literals — see .kiro/steering/figma-design-to-code.md
+───────────────────────────────────────────── */
+:root {
+	/* Maroon ramp */
+	--c-maroon: #941518;
+	--c-maroon-mid: #801b1e;
+	--c-maroon-deep: #5c0f16;
+
+	/* Gold ramp */
+	--c-gold: #cfa83a;
+	--c-gold-light: #fac549;
+	--c-gold-dark: #ca8106;
+
+	/* Neutrals */
+	--c-ink: #1a1a1a;
+	--c-shell: #e5e3de;
+	--c-surface: #ffffff;
+
+	/* Gradients */
+	--grad-gold: linear-gradient(102deg, #fac549 5.6%, #ca8106 93%);
+	--grad-title: linear-gradient(127deg, #000000 9%, #901518 89%);
+
+	/* Typography */
+	--font-display: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--font-heading: 'Overpass', sans-serif;
+	--font-body: 'Inter', sans-serif;
+
+	/* Layout */
+	--section-max-width: 1280px;
+}
+
+html,
+body {
 	overflow-x: hidden;
+}
+
+/* Gradient-filled text. Always set `color` first as the fallback. */
+.grad_text {
+	background-image: var(--grad-gold);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+	.grad_text {
+		-webkit-text-fill-color: currentColor;
+	}
 }
 
 /* Global body reset */
@@ -43,4 +93,3 @@ h6,
 h1 {
 	font-family: 'Overpass', sans-serif;
 }
-
