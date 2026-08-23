@@ -28,6 +28,6 @@
 	@reference "tailwindcss";
 
 	.badges-stack {
-		@apply space-y-3 max-w-xs;
+		@apply max-w-xs space-y-3;
 	}
 </style>

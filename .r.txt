@@ -1,0 +1,2 @@
+svelte-check found 1 error and 51 warnings in 9 files
+build exit=0
