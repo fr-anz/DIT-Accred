@@ -4,7 +4,7 @@
 			id: 'melvin',
 			name: 'Melvin C. Roxas, MSGITS',
 			role: 'Dean of College of Computer Information and Sciences',
-			img: '/img/sir-melvin.png',
+			img: '/img/sir-melvin.jpg',
 			position: 'center center',
 			align: 'right',
 			roleMaxWidth: '290px'
@@ -14,7 +14,7 @@
 			id: 'dustin',
 			name: 'John Dustin Santos, MIT',
 			role: 'Chairperson of Department of Information Technology',
-			img: '/img/sir-dustin.jpg',
+			img: '/img/sir-dustin.png',
 			position: 'center center',
 			align: 'left',
 			roleMaxWidth: '260px'
@@ -75,7 +75,7 @@
 	const binaryLayerB = binaryLayerA.slice().reverse();
 	const panelCloseDuration = 220;
 
-	
+
 
 	/**
 	 * @param {string} id
@@ -151,7 +151,7 @@
 			role="dialog"
 			tabindex="-1"
 			aria-label="{displayedLeaderData.name} detail"
-		
+
 		>
 			<button
 				class="expanded-close"

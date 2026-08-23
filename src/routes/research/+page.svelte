@@ -154,7 +154,6 @@
 
 <main class="research_page">
 	<section class="hero_section">
-		<div class="checkerboard_bg" aria-hidden="true"></div>
 		<div class="hero_content">
 			<h1 class="hero_title">RESEARCH</h1>
 		</div>
@@ -228,7 +227,10 @@
 			</div>
 
 			<div class="cards_ring">
-				<div class="metric_spoke" style="--spoke-angle: 0deg; --spoke-radius: var(--metric-radius-0);">
+				<div
+					class="metric_spoke"
+					style="--spoke-angle: 0deg; --spoke-radius: var(--metric-radius-0);"
+				>
 					<article class="metric_card">
 						<h3>Completed Research</h3>
 						<strong>70</strong>
@@ -236,7 +238,10 @@
 					</article>
 				</div>
 
-				<div class="metric_spoke" style="--spoke-angle: 120deg; --spoke-radius: var(--metric-radius-1);">
+				<div
+					class="metric_spoke"
+					style="--spoke-angle: 120deg; --spoke-radius: var(--metric-radius-1);"
+				>
 					<article class="metric_card">
 						<h3>High-Impact Indexation Rate</h3>
 						<strong>89.13%</strong>
@@ -244,7 +249,10 @@
 					</article>
 				</div>
 
-				<div class="metric_spoke" style="--spoke-angle: 240deg; --spoke-radius: var(--metric-radius-2);">
+				<div
+					class="metric_spoke"
+					style="--spoke-angle: 240deg; --spoke-radius: var(--metric-radius-2);"
+				>
 					<article class="metric_card">
 						<h3>Disseminated Publications</h3>
 						<strong>46</strong>
@@ -342,9 +350,17 @@
 	}
 
 	.research_page {
+		position: relative;
+		isolation: isolate;
 		background: #ffffff;
 		color: #120f0f;
 		min-height: 100vh;
+	}
+
+	.research_page > section,
+	.research_page > :global(footer) {
+		position: relative;
+		z-index: 1;
 	}
 
 	.hero_section {
@@ -354,24 +370,7 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
-		background: #f5f5f5;
-	}
-
-	.checkerboard_bg {
-		position: absolute;
-		inset: 0;
-		background-color: #f7f7f7;
-		background-image:
-			linear-gradient(45deg, #e2e2e2 25%, transparent 25%),
-			linear-gradient(-45deg, #e2e2e2 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #e2e2e2 75%),
-			linear-gradient(-45deg, transparent 75%, #e2e2e2 75%);
-		background-position:
-			0 0,
-			0 60px,
-			60px -60px,
-			-60px 0;
-		background-size: 120px 120px;
+		background: transparent;
 	}
 
 	.hero_content {
@@ -1038,15 +1037,6 @@
 
 		.hero_title {
 			font-size: clamp(2.75rem, 15vw, 3.7rem);
-		}
-
-		.checkerboard_bg {
-			background-size: 82px 82px;
-			background-position:
-				0 0,
-				0 41px,
-				41px -41px,
-				-41px 0;
 		}
 
 		.content_section {
