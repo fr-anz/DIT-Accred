@@ -4,10 +4,10 @@ node_modules
 AGENTS.md
 agents.md
 
-# Kiro local settings (MCP endpoints, per-machine config)
-.kiro/settings/
-.kiro/tmp-*
-.kiro/figma-*
+# Kiro: share steering rules, keep everything else local
+# (MCP endpoints are per-machine; Figma MCP dumps are throwaway scratch)
+.kiro/*
+!.kiro/steering/
 
 # Output
 .output
