@@ -159,8 +159,8 @@
 		selectedAlumIndex = null;
 	}
 
-	/** 
-	 * Open modal with the correct global index from the visible slice 
+	/**
+	 * Open modal with the correct global index from the visible slice
 	 * @param {number} localIndex
 	 */
 	function openAlumModal(localIndex) {
@@ -250,12 +250,20 @@
 		<div class="governance_summary_card">
 			<h3 class="card_section_title">GOVERNANCE SUMMARY</h3>
 			<p class="governance_desc">
-				The Bachelor of Science in Information Technology operates under a robust regulatory architecture, strictly adhering to <span class="highlight_text">COPC No. 008</span> for operations, <span class="highlight_text">OBE Principles</span> for instructional delivery, and <span class="highlight_text">CMO No. 25</span> for curriculum alignment. Our framework ensures global competitiveness through rigorous standard-setting.
+				The Bachelor of Science in Information Technology operates under a robust regulatory
+				architecture, strictly adhering to <span class="highlight_text">COPC No. 008</span> for
+				operations, <span class="highlight_text">OBE Principles</span> for instructional delivery,
+				and <span class="highlight_text">CMO No. 25</span> for curriculum alignment. Our framework ensures
+				global competitiveness through rigorous standard-setting.
 			</p>
 
 			<div class="compliance_grid">
 				<div class="compliance_subcard copc_card">
-					<div class="card_bg_image" style="background-image: url('/teaching-learning/copc-status.jpg')" aria-hidden="true"></div>
+					<div
+						class="card_bg_image"
+						style="background-image: url('/teaching-learning/copc-status.jpg')"
+						aria-hidden="true"
+					></div>
 					<div class="card_bg_overlay"></div>
 					<div class="subcard_content">
 						<span class="subcard_label">COPC STATUS</span>
@@ -265,7 +273,11 @@
 				</div>
 
 				<div class="compliance_subcard obe_card">
-					<div class="card_bg_image" style="background-image: url('/teaching-learning/obe-framework.jpg')" aria-hidden="true"></div>
+					<div
+						class="card_bg_image"
+						style="background-image: url('/teaching-learning/obe-framework.jpg')"
+						aria-hidden="true"
+					></div>
 					<div class="card_bg_overlay"></div>
 					<div class="subcard_content">
 						<span class="subcard_label">FRAMEWORK</span>
@@ -275,7 +287,11 @@
 				</div>
 
 				<div class="compliance_subcard cmo_card">
-					<div class="card_bg_image" style="background-image: url('/teaching-learning/cmo-standard.jpg')" aria-hidden="true"></div>
+					<div
+						class="card_bg_image"
+						style="background-image: url('/teaching-learning/cmo-standard.jpg')"
+						aria-hidden="true"
+					></div>
 					<div class="card_bg_overlay"></div>
 					<div class="subcard_content">
 						<span class="subcard_label">STANDARD</span>
@@ -288,12 +304,16 @@
 
 		<!-- Curriculum Revision Lifecycle Card -->
 		<div class="lifecycle_card">
-			<div class="lifecycle_bg_image" style="background-image: url('/teaching-learning/curriculum-lifecycle.jpg')" aria-hidden="true"></div>
+			<div
+				class="lifecycle_bg_image"
+				style="background-image: url('/teaching-learning/curriculum-lifecycle.jpg')"
+				aria-hidden="true"
+			></div>
 			<div class="lifecycle_bg_overlay"></div>
 			<div class="dot_grid_overlay" aria-hidden="true"></div>
 
 			<h3 class="lifecycle_title">EVIDENCE-BASED CURRICULUM REVISION LIFECYCLE</h3>
-			
+
 			<div class="lifecycle_timeline">
 				<!-- Step 1 -->
 				<div class="timeline_node">
@@ -522,7 +542,7 @@
 			<!-- Interactive Explorer Card -->
 			<div class="interactive_explorer_card">
 				<h3 class="explorer_title">INTERACTIVE CURRICULUM EXPLORER</h3>
-				
+
 				<div class="explorer_tabs">
 					{#each courseYears as year}
 						<button
@@ -562,8 +582,8 @@
 	<hr class="section_divider" />
 
 	<div class="faculty_grid">
-		<!-- Full-Time Card -->
-		<div class="faculty_profile_card">
+		<!-- Full-Time Card (links to the faculty directory subpage, full-time section) -->
+		<a class="faculty_profile_card" href="/teaching-learning/faculty#full-time">
 			<div class="card_decor_strip red_strip"></div>
 			<div class="faculty_header">
 				<div class="faculty_icon_box red_bg">
@@ -574,9 +594,11 @@
 					<span class="faculty_sub">RESEARCH LEADERS</span>
 				</div>
 			</div>
-			
+
 			<p class="faculty_desc">
-				Dedicated faculty members with some Ph.D., Masteral, and Bachelors credentials focusing on pedagogical innovation and institutional research trajectories. Expertise spans across Data Science, AI Ethics, and Network Engineering.
+				Dedicated faculty members with some Ph.D., Masteral, and Bachelors credentials focusing on
+				pedagogical innovation and institutional research trajectories. Expertise spans across Data
+				Science, AI Ethics, and Network Engineering.
 			</p>
 
 			<ul class="faculty_checklist">
@@ -589,10 +611,15 @@
 					<span>Published Research in IEEE/ACM</span>
 				</li>
 			</ul>
-		</div>
 
-		<!-- Part-Time Card -->
-		<div class="faculty_profile_card">
+			<span class="faculty_cta">
+				View Full-time Faculty
+				<ChevronRight size={18} strokeWidth={2.5} class="faculty_cta_icon" />
+			</span>
+		</a>
+
+		<!-- Part-Time Card (links to the faculty directory subpage, part-time section) -->
+		<a class="faculty_profile_card" href="/teaching-learning/faculty#part-time">
 			<div class="card_decor_strip gold_strip"></div>
 			<div class="faculty_header">
 				<div class="faculty_icon_box gold_bg">
@@ -605,7 +632,9 @@
 			</div>
 
 			<p class="faculty_desc">
-				Active industry professionals bringing real-world DevOps, Cloud Architecture, and Software Engineering methodologies directly into the classroom. Bridging the gap between theory and production.
+				Active industry professionals bringing real-world DevOps, Cloud Architecture, and Software
+				Engineering methodologies directly into the classroom. Bridging the gap between theory and
+				production.
 			</p>
 
 			<ul class="faculty_checklist">
@@ -618,7 +647,12 @@
 					<span>Direct Liaison for OJT Programs</span>
 				</li>
 			</ul>
-		</div>
+
+			<span class="faculty_cta">
+				View Part-time Faculty
+				<ChevronRight size={18} strokeWidth={2.5} class="faculty_cta_icon" />
+			</span>
+		</a>
 	</div>
 </section>
 
@@ -685,16 +719,14 @@
 					{#each visibleAlumni() as alum, i}
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-						<div
-							class="alumni_portrait_card"
-							onclick={() => openAlumModal(i)}
-							role="listitem"
-						>
+						<div class="alumni_portrait_card" onclick={() => openAlumModal(i)} role="listitem">
 							<div class="portrait_image_wrapper">
 								<img src={alum.img} alt={alum.name} class="portrait_img" />
 								<div class="portrait_play_overlay">
 									<div class="play_icon_circle">
-										<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+										<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"
+											><polygon points="5,3 19,12 5,21" /></svg
+										>
 									</div>
 								</div>
 							</div>
@@ -731,7 +763,7 @@
 		<!-- Employment Horizon Table -->
 		<div class="employment_horizon_card">
 			<h3 class="horizon_title">EMPLOYMENT HORIZON<br />(GRADUATE TRACER)</h3>
-			
+
 			<div class="table_container">
 				<table class="tracer_table">
 					<thead>
@@ -805,8 +837,6 @@
 	</div>
 </section>
 
-
-
 <!-- ─────────────────────────────────────────────
   ALUMNI DETAILS OVERLAY MODAL
 ───────────────────────────────────────────── -->
@@ -828,7 +858,11 @@
 					<div class="modal_profile_card">
 						<!-- Circular photo with ring border -->
 						<div class="detail_image_wrapper">
-							<img src={alumniList[selectedAlumIndex].img} alt={alumniList[selectedAlumIndex].name} class="detail_img" />
+							<img
+								src={alumniList[selectedAlumIndex].img}
+								alt={alumniList[selectedAlumIndex].name}
+								class="detail_img"
+							/>
 						</div>
 
 						<div class="detail_info_block">
@@ -838,16 +872,38 @@
 							<!-- Decorative social icon row -->
 							<div class="detail_social_row" aria-label="Social links">
 								<span class="social_icon_btn" aria-label="Facebook">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
+										><path
+											d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+										/></svg
+									>
 								</span>
 								<span class="social_icon_btn" aria-label="Instagram">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+									<svg
+										width="14"
+										height="14"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path
+											d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+										/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg
+									>
 								</span>
 								<span class="social_icon_btn" aria-label="LinkedIn">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
+										><path
+											d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+										/><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg
+									>
 								</span>
 								<span class="social_icon_btn" aria-label="GitHub">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
+										><path
+											d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+										/></svg
+									>
 								</span>
 							</div>
 
@@ -881,7 +937,9 @@
 							<div class="video_placeholder">
 								<div class="video_placeholder_inner">
 									<div class="video_play_btn">
-										<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+										<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"
+											><polygon points="5,3 19,12 5,21" /></svg
+										>
 									</div>
 									<p class="video_placeholder_text">Testimonial video coming soon</p>
 								</div>
@@ -956,7 +1014,8 @@
 		position: absolute;
 		inset: 0;
 		opacity: 0.85;
-		background-image: linear-gradient(45deg, #e5e3de 25%, transparent 25%),
+		background-image:
+			linear-gradient(45deg, #e5e3de 25%, transparent 25%),
 			linear-gradient(-45deg, #e5e3de 25%, transparent 25%),
 			linear-gradient(45deg, transparent 75%, #e5e3de 75%),
 			linear-gradient(-45deg, transparent 75%, #e5e3de 75%);
@@ -1023,7 +1082,7 @@
 	}
 
 	.section_label span {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
@@ -1101,7 +1160,9 @@
 		align-items: flex-end;
 		padding: 1.5rem;
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 0.3s ease;
 	}
 
 	.compliance_subcard:hover {
@@ -1641,6 +1702,14 @@
 	}
 
 	.faculty_profile_card {
+		width: 100%;
+		text-align: left;
+		font: inherit;
+		color: inherit;
+		text-decoration: none;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
 		background: #fff;
 		border: 1px solid rgba(0, 0, 0, 0.08);
 		border-radius: 20px;
@@ -1654,6 +1723,32 @@
 	.faculty_profile_card:hover {
 		transform: translateY(-4px);
 		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+	}
+
+	.faculty_profile_card:focus-visible {
+		outline: 3px solid var(--color-gold);
+		outline-offset: 3px;
+	}
+
+	.faculty_cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 1.5rem;
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-maroon);
+	}
+
+	:global(.faculty_cta_icon) {
+		transition: transform 0.25s ease;
+	}
+
+	.faculty_profile_card:hover .faculty_cta :global(.faculty_cta_icon) {
+		transform: translateX(4px);
 	}
 
 	.card_decor_strip {
@@ -1816,12 +1911,22 @@
 	.org_overlay {
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(0deg, rgba(92, 15, 22, 0.95) 0%, rgba(92, 15, 22, 0.45) 50%, rgba(22, 5, 7, 0.1) 100%);
+		background: linear-gradient(
+			0deg,
+			rgba(92, 15, 22, 0.95) 0%,
+			rgba(92, 15, 22, 0.45) 50%,
+			rgba(22, 5, 7, 0.1) 100%
+		);
 		transition: background 0.3s ease;
 	}
 
 	.org_card:hover .org_overlay {
-		background: linear-gradient(0deg, rgba(207, 168, 58, 0.95) 0%, rgba(92, 15, 22, 0.5) 60%, rgba(22, 5, 7, 0.1) 100%);
+		background: linear-gradient(
+			0deg,
+			rgba(207, 168, 58, 0.95) 0%,
+			rgba(92, 15, 22, 0.5) 60%,
+			rgba(22, 5, 7, 0.1) 100%
+		);
 	}
 
 	.org_content {
@@ -1862,7 +1967,7 @@
 		font-family: var(--font-heading);
 		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 900;
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
@@ -1902,7 +2007,7 @@
 		justify-content: center;
 		cursor: pointer;
 		flex-shrink: 0;
-		box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 		transition: all 0.25s ease;
 	}
 
@@ -2036,7 +2141,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 	}
 
 	.portrait_info {
@@ -2287,8 +2392,6 @@
 		line-height: 1.4;
 	}
 
-
-
 	/* ── DETAILS MODAL ── */
 	.modal_overlay {
 		position: fixed;
@@ -2322,7 +2425,7 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
-		background: rgba(0,0,0,0.07);
+		background: rgba(0, 0, 0, 0.07);
 		border: none;
 		color: #333;
 		display: flex;
@@ -2334,7 +2437,7 @@
 	}
 
 	.close_modal_btn:hover {
-		background: rgba(0,0,0,0.14);
+		background: rgba(0, 0, 0, 0.14);
 		transform: scale(1.08);
 	}
 
@@ -2380,7 +2483,7 @@
 		width: 140px;
 		height: 140px;
 		border-radius: 50%;
-		box-shadow: 0 8px 24px rgba(92,15,22,0.15);
+		box-shadow: 0 8px 24px rgba(92, 15, 22, 0.15);
 		border: 4px solid #fff;
 		margin-bottom: 1.25rem;
 		background: #f8f0e8;
@@ -2430,7 +2533,7 @@
 		width: 30px;
 		height: 30px;
 		border-radius: 50%;
-		background: rgba(0,0,0,0.07);
+		background: rgba(0, 0, 0, 0.07);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -2506,7 +2609,7 @@
 		overflow: hidden;
 		background: #0e0e0e;
 		aspect-ratio: 16 / 9;
-		box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+		box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
 	}
 
 	.testimonial_video {
@@ -2549,14 +2652,18 @@
 	.video_placeholder_text {
 		font-family: var(--font-body);
 		font-size: 0.78rem;
-		color: rgba(255,255,255,0.5);
+		color: rgba(255, 255, 255, 0.5);
 		margin: 0;
 		font-style: italic;
 	}
 
 	@keyframes overlayFadeIn {
-		from { opacity: 0; }
-		to   { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes modalZoomIn {
