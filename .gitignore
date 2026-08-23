@@ -4,6 +4,11 @@ node_modules
 AGENTS.md
 agents.md
 
+# Kiro local settings (MCP endpoints, per-machine config)
+.kiro/settings/
+.kiro/tmp-*
+.kiro/figma-*
+
 # Output
 .output
 .vercel

@@ -4,6 +4,7 @@
 		Flag,
 		BadgeCheck,
 		SquareCheck,
+		Workflow,
 		BookOpen,
 		Award,
 		Building2,
@@ -28,22 +29,22 @@
 	const sdgData = {
 		1: {
 			label: 'No Poverty',
-			color: '#F5C242',
+			color: 'var(--c-gold-light)',
 			range: '43.6 - 52.7'
 		},
 		2: {
 			label: 'Zero Hunger',
-			color: '#C57E00',
+			color: 'var(--c-gold-dark)',
 			range: '13.7 - 40.9'
 		},
 		4: {
 			label: 'Quality Education',
-			color: '#8C0F13',
+			color: 'var(--c-maroon)',
 			range: '25.7 - 44.1'
 		},
 		17: {
 			label: 'Partnerships for the Goals',
-			color: '#5F1013',
+			color: 'var(--c-maroon-deep)',
 			range: '36.9 - 52.8'
 		}
 	};
@@ -82,7 +83,7 @@
 <section class="hero_section">
 	<div class="checkerboard_bg" aria-hidden="true"></div>
 	<div class="hero_content">
-		<h1 class="hero_title">PLANNING &amp; QUALITY<br />ASSURANCE</h1>
+		<h1 class="hero_title">PLANNING &amp; QUALITY ASSURANCE</h1>
 	</div>
 </section>
 
@@ -91,7 +92,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="strategic-benchmarking">
 	<div class="section_label">
-		<Globe size={20} strokeWidth={1.5} class="section_icon maroon" />
+		<Globe size={26} strokeWidth={1.5} class="section_icon maroon" />
 		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
 	</div>
 	<hr class="section_divider" />
@@ -100,9 +101,9 @@
 		<div class="benchmarking_text">
 			<p>
 				The Bachelor of Science in Information Technology (BSIT) program benefits directly from
-				active engagement in internationally recognized higher education ranking systems and regional
-				quality networks. These external validations ensure the curriculum remains comparable with
-				global computing education standards.
+				active engagement in internationally recognized higher education ranking systems and
+				regional quality networks. These external validations ensure the curriculum remains
+				comparable with global computing education standards.
 			</p>
 		</div>
 		<div class="aaccup_card">
@@ -120,7 +121,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="university-support">
 	<div class="section_label">
-		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
+		<Flag size={26} strokeWidth={1.5} class="section_icon maroon" />
 		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
 	</div>
 	<hr class="section_divider" />
@@ -148,7 +149,9 @@
 				<ul class="priority_list">
 					<li class="priority_item">
 						<span class="priority_num">01</span>
-						<span class="priority_text">Academic Program Development &amp; Internationalization</span>
+						<span class="priority_text"
+							>Academic Program Development &amp; Internationalization</span
+						>
 					</li>
 					<li class="priority_item">
 						<span class="priority_num">02</span>
@@ -208,7 +211,7 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="dept-process">
 	<div class="section_label">
-		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
+		<Workflow size={26} strokeWidth={1.5} class="section_icon maroon" />
 		<span>DEPARTMENT-LEVEL PROCESS</span>
 	</div>
 	<hr class="section_divider" />
@@ -228,9 +231,7 @@
 			</div>
 			<h4 class="process_card_title">Syllabi<br />Prep</h4>
 			<hr class="process_divider" />
-			<p class="process_card_desc">
-				Regular updates for industry and government sensitivity.
-			</p>
+			<p class="process_card_desc">Regular updates for industry and government sensitivity.</p>
 		</div>
 		<div class="process_card">
 			<div class="process_icon_wrapper">
@@ -290,13 +291,12 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="rankings">
 	<div class="section_label">
-		<BadgeCheck size={20} strokeWidth={1.5} class="section_icon maroon" />
+		<BadgeCheck size={26} strokeWidth={1.5} class="section_icon maroon" />
 		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
 
 	<div class="rankings_grid">
-
 		<!-- QS Stars card -->
 		<div class="ranking_card qs_card">
 			<div class="qs_header">
@@ -429,17 +429,17 @@
 <Footer />
 
 <style>
-	/* ── DESIGN TOKENS ── */
+	/* ── DESIGN TOKENS ──
+	   Aliases onto the canonical brand tokens in src/routes/layout.css so this page
+	   stops carrying its own divergent palette. Values now match the Figma canvas. */
 	:root {
-		--color-maroon: #5c0f16;
-		--color-maroon-mid: #801b1e;
-		--color-gold: #cfa83a;
-		--color-gold-light: #d4a843;
-		--color-gold-dark: #b8912d;
-		--color-bg: #ffffff;
-		--font-body: 'Inter', sans-serif;
-		--font-heading: 'Overpass', sans-serif;
-		--section-max-width: 1280px; /* Zoom 125% equivalent sizing (less white space) */
+		--color-maroon: var(--c-maroon);
+		--color-maroon-mid: var(--c-maroon-mid);
+		--color-maroon-deep: var(--c-maroon-deep);
+		--color-gold: var(--c-gold);
+		--color-gold-light: var(--c-gold-light);
+		--color-gold-dark: var(--c-gold-dark);
+		--color-bg: var(--c-surface);
 	}
 
 	.content_section {
@@ -482,20 +482,23 @@
 		background-color: #f8f6f3;
 	}
 
+	/* 16px checkerboard tile, #fafafa / #ebebeb — matches the Figma hero fill exactly.
+	   Reproduced in CSS rather than shipped as a raster so it stays crisp at any DPI. */
 	.checkerboard_bg {
 		position: absolute;
 		inset: 0;
-		opacity: 0.85;
-		background-image: linear-gradient(45deg, #e5e3de 25%, transparent 25%),
-			linear-gradient(-45deg, #e5e3de 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #e5e3de 75%),
-			linear-gradient(-45deg, transparent 75%, #e5e3de 75%);
-		background-size: 40px 40px;
+		background-color: #fafafa;
+		background-image:
+			linear-gradient(45deg, #ebebeb 25%, transparent 25%),
+			linear-gradient(-45deg, #ebebeb 25%, transparent 25%),
+			linear-gradient(45deg, transparent 75%, #ebebeb 75%),
+			linear-gradient(-45deg, transparent 75%, #ebebeb 75%);
+		background-size: 32px 32px;
 		background-position:
 			0 0,
-			0 20px,
-			20px -20px,
-			-20px 0px;
+			0 16px,
+			16px -16px,
+			-16px 0px;
 		animation: checkerboardFade 1.2s ease-out forwards;
 	}
 
@@ -507,15 +510,29 @@
 		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
+	/* Montserrat Bold display title with the black→maroon gradient fill (Figma node 979:692).
+	   `color` is the fallback for engines without background-clip: text. */
 	.hero_title {
-		font-family: var(--font-heading);
-		font-size: clamp(2.5rem, 6vw, 5.5rem);
-		font-weight: 900;
-		color: var(--color-maroon);
-		line-height: 1.15;
+		font-family: var(--font-display);
+		font-size: clamp(2.5rem, 6.8vw, 130px);
+		font-weight: 700;
+		color: var(--c-maroon);
+		background-image: var(--grad-title);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		line-height: 1.12;
 		letter-spacing: -0.01em;
 		margin: 0;
+		max-width: 1811px;
 		text-transform: uppercase;
+		text-wrap: balance;
+	}
+
+	@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+		.hero_title {
+			-webkit-text-fill-color: currentColor;
+		}
 	}
 
 	@keyframes checkerboardFade {
@@ -523,7 +540,7 @@
 			opacity: 0;
 		}
 		to {
-			opacity: 0.85;
+			opacity: 1;
 		}
 	}
 
@@ -539,26 +556,34 @@
 	}
 
 	/* ── SHARED SECTION WRAPPER ── */
+	/* Figma: Inter SemiBold 32px, uppercase, 8.64px tracking (= 0.27em), horizontal
+	   gold gradient fill. Sizes fluidly since the design column is 1143/1920 wide. */
 	.section_label {
 		display: flex;
 		align-items: center;
 		gap: 0.85rem;
 		font-family: var(--font-body);
-		font-size: 1.15rem; /* Proportional scale to match figma reference */
-		font-weight: 700;
-		letter-spacing: 0.2em; /* 20% letter-spacing for the adjusted font scale */
+		font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+		font-weight: 600;
+		letter-spacing: 0.27em;
 		text-transform: uppercase;
 		margin-bottom: 0.85rem;
 		line-height: 1.3;
 	}
 
 	.section_label span {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		color: var(--c-gold-dark);
+		background-image: var(--grad-gold);
+		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		text-fill-color: transparent;
 		display: inline-block;
+	}
+
+	@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+		.section_label span {
+			-webkit-text-fill-color: currentColor;
+		}
 	}
 
 	:global(.section_icon) {
@@ -591,18 +616,19 @@
 		}
 	}
 
+	/* Figma: Inter Regular 28px / 40px line-height, black, 1143px column */
 	.benchmarking_text p {
 		font-family: var(--font-body);
-		font-size: 1.15rem;
-		color: #2c2c2c;
-		line-height: 1.85;
-		max-width: 720px;
+		font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+		color: var(--c-ink);
+		line-height: 1.43;
+		max-width: 820px;
 		margin: 0;
 	}
 
 	.aaccup_card {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
-		border-radius: 20px;
+		background: var(--grad-gold);
+		border-radius: 25px;
 		padding: 1.75rem 2rem;
 		text-align: center;
 		width: 380px;
@@ -614,7 +640,9 @@
 		justify-content: center;
 		gap: 0.4rem;
 		box-sizing: border-box;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.3s ease;
 	}
 
 	.aaccup_card:hover {
@@ -635,37 +663,42 @@
 		margin-bottom: 0.25rem;
 	}
 
+	/* Figma: "LEVEL IV" Inter Regular 24px, 6.48px tracking (= 0.27em), uppercase */
 	.aaccup_level {
-		font-family: var(--font-heading);
-		font-size: 1.6rem;
-		font-weight: 800;
-		color: #1a1a1a;
+		font-family: var(--font-body);
+		font-size: clamp(1rem, 1.15vw, 1.2rem);
+		font-weight: 400;
+		color: var(--c-ink);
 		margin: 0;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.27em;
+		text-transform: uppercase;
 	}
 
+	/* Figma: "AACCUP STATUS" Inter Bold 24px var(--c-maroon), 6.48px tracking */
 	.aaccup_status_label {
 		font-family: var(--font-body);
-		font-size: 0.8rem;
-		font-weight: 800;
-		letter-spacing: 0.12em;
-		color: #8c0f13;
+		font-size: clamp(1rem, 1.15vw, 1.2rem);
+		font-weight: 700;
+		letter-spacing: 0.27em;
+		color: var(--c-maroon);
 		margin: 0;
 		text-transform: uppercase;
 	}
 
 	.aaccup_divider {
 		border: none;
-		border-top: 1px solid rgba(140, 15, 19, 0.25);
-		width: 60px;
+		border-top: 1px solid rgba(148, 21, 24, 0.35);
+		width: 175px;
+		max-width: 100%;
 		margin: 0.4rem 0;
 	}
 
+	/* Figma: "On-going Application" Inter Italic 24px */
 	.aaccup_sub {
 		font-family: var(--font-body);
-		font-size: 0.9rem;
+		font-size: clamp(0.95rem, 1.05vw, 1.1rem);
 		font-style: italic;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		margin: 0;
 	}
 
@@ -748,7 +781,7 @@
 		align-items: center;
 		gap: 1.25rem;
 		padding: 1rem 0;
-		border-bottom: 1.5px solid #5E5E5E;
+		border-bottom: 1.5px solid #5e5e5e;
 		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
@@ -764,7 +797,7 @@
 	.priority_num {
 		font-size: 0.95rem;
 		font-weight: 800;
-		color: #CFA83A;
+		color: var(--c-gold);
 		font-family: var(--font-body);
 		min-width: 28px;
 	}
@@ -779,7 +812,7 @@
 
 	/* Core Functions card */
 	.core_functions_card {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		background: linear-gradient(180deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%);
 		border-radius: 16px;
 		padding: 2rem;
 		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
@@ -804,10 +837,10 @@
 		background: #ffffff;
 		border-radius: 4px;
 		padding: 0.85rem 1rem;
-		border-left: 4px solid #941518;
+		border-left: 4px solid var(--c-maroon);
 		font-size: 0.8rem;
 		font-weight: 700;
-		color: #941518;
+		color: var(--c-maroon);
 		font-family: var(--font-body);
 		line-height: 1.3;
 		display: flex;
@@ -816,7 +849,7 @@
 
 	/* Support Feed */
 	.support_feed {
-		background: linear-gradient(180deg, #8E1518 0%, #1E1E1E 100%);
+		background: linear-gradient(180deg, var(--c-maroon) 0%, #1e1e1e 100%);
 		border-radius: 16px;
 		padding: 2rem;
 		color: #fff;
@@ -830,21 +863,21 @@
 		display: flex;
 		align-items: center;
 		gap: 0.6rem;
-		border-bottom: 1.5px solid #5E5E5E;
+		border-bottom: 1.5px solid #5e5e5e;
 		padding-bottom: 0.85rem;
 	}
 
 	.feed_title {
 		font-size: 0.85rem;
 		font-weight: 800;
-		color: #CFA83A;
+		color: var(--c-gold);
 		letter-spacing: 0.1em;
 		font-family: var(--font-body);
 		margin: 0;
 	}
 
 	:global(.feed_header svg) {
-		color: #CFA83A;
+		color: var(--c-gold);
 	}
 
 	.feed_cards {
@@ -863,7 +896,7 @@
 	.feed_card_title {
 		font-size: 0.92rem;
 		font-weight: 800;
-		color: #CFA83A;
+		color: var(--c-gold);
 		margin: 0 0 0.4rem 0;
 		font-family: var(--font-body);
 	}
@@ -871,7 +904,7 @@
 	.feed_card_desc {
 		font-size: 0.8rem;
 		line-height: 1.6;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		margin: 0;
 		font-family: var(--font-body);
 	}
@@ -945,7 +978,7 @@
 		font-family: var(--font-heading); /* Overpass */
 		font-size: 2rem; /* 32px matching Figma specification */
 		font-weight: 600; /* SemiBold matching Figma specification */
-		color: #941518; /* Maroon color matching Figma specification */
+		color: var(--c-maroon); /* Maroon color matching Figma specification */
 		margin: 0;
 		line-height: 1; /* 100% line-height matching Figma specification */
 		letter-spacing: 0.04em; /* 4% letter-spacing matching Figma specification */
@@ -990,7 +1023,9 @@
 		object-fit: cover;
 		display: block;
 		filter: brightness(0.92);
-		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+		transition:
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.4s ease;
 	}
 
 	.photo_strip_item:hover .strip_photo {
@@ -1041,7 +1076,10 @@
 		border: 1.5px solid var(--color-gold);
 		background: #fff;
 		box-sizing: border-box;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.3s ease,
+			border-color 0.3s ease;
 	}
 
 	.ranking_card:hover {
@@ -1078,7 +1116,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: #CFA83A;
+		color: var(--c-gold);
 		margin: 0;
 	}
 
@@ -1098,7 +1136,7 @@
 	}
 
 	.qs_cat_tile {
-		background: linear-gradient(180deg, #8E1518 0%, #1E1E1E 100%);
+		background: linear-gradient(180deg, var(--c-maroon) 0%, #1e1e1e 100%);
 		border-radius: 10px;
 		padding: 0.85rem 1rem;
 		display: flex;
@@ -1117,7 +1155,7 @@
 	.qs_cat_label {
 		font-family: var(--font-body);
 		font-size: 0.72rem;
-		color: #CFA83A;
+		color: var(--c-gold);
 		font-style: italic;
 		font-weight: 600;
 	}
@@ -1129,14 +1167,14 @@
 		font-family: var(--font-body);
 		font-size: 0.82rem;
 		font-weight: 700;
-		color: #941518;
+		color: var(--c-maroon);
 		padding-top: 1rem;
-		border-top: 1.5px solid #5E5E5E;
+		border-top: 1.5px solid #5e5e5e;
 		margin-top: auto;
 	}
 
 	:global(.validated_icon_circle) {
-		fill: #941518;
+		fill: var(--c-maroon);
 		color: #ffffff;
 		flex-shrink: 0;
 	}
@@ -1177,7 +1215,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
 		font-weight: 900;
-		color: #CFA83A;
+		color: var(--c-gold);
 	}
 
 	.wuri_desc {
@@ -1190,7 +1228,7 @@
 
 	.wuri_divider {
 		border: none;
-		border-top: 1.5px solid #5E5E5E;
+		border-top: 1.5px solid #5e5e5e;
 		margin: 0.25rem 0;
 	}
 
@@ -1211,7 +1249,7 @@
 	}
 
 	.wuri_rank_badge {
-		background: #941518;
+		background: var(--c-maroon);
 		color: #fff;
 		font-family: var(--font-heading);
 		font-size: 1.2rem;
@@ -1236,7 +1274,7 @@
 	.wuri_rank_text {
 		font-family: var(--font-body);
 		font-size: 0.78rem;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		font-weight: 800;
 		text-transform: uppercase;
 		letter-spacing: 0.02em;
@@ -1246,14 +1284,14 @@
 	.wuri_progress_track {
 		width: 100%;
 		height: 3px;
-		background: #EAE5DB;
+		background: #eae5db;
 		border-radius: 2px;
 		overflow: hidden;
 	}
 
 	.wuri_progress_bar {
 		height: 100%;
-		background: linear-gradient(90deg, #ca8106 0%, #fac549 100%);
+		background: linear-gradient(90deg, var(--c-gold-dark) 0%, var(--c-gold-light) 100%);
 		border-radius: 2px;
 	}
 
@@ -1265,7 +1303,7 @@
 	}
 
 	.impact_card {
-		background: linear-gradient(180deg, #8E1518 0%, #1E1E1E 100%);
+		background: linear-gradient(180deg, var(--c-maroon) 0%, #1e1e1e 100%);
 		border: none;
 		color: #fff;
 		flex: 1;
@@ -1275,7 +1313,9 @@
 		box-sizing: border-box;
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.3s ease;
 	}
 
 	.impact_card:hover {
@@ -1296,7 +1336,7 @@
 		font-family: var(--font-heading);
 		font-size: 3.5rem;
 		font-weight: 900;
-		color: #CFA83A;
+		color: var(--c-gold);
 		margin: 0 0 0.5rem 0;
 		line-height: 1;
 	}
@@ -1413,13 +1453,13 @@
 		font-family: var(--font-body);
 		font-size: 1.1rem;
 		font-weight: 700;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		letter-spacing: -0.02em;
 		white-space: nowrap;
 	}
 
 	.aunqa_card {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
+		background: linear-gradient(180deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%);
 		border: none;
 		display: flex;
 		flex-direction: column;
@@ -1429,7 +1469,9 @@
 		box-sizing: border-box;
 		border-radius: 20px;
 		padding: 1.75rem 1.5rem;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.3s ease;
 	}
 
 	.aunqa_card:hover {
@@ -1445,7 +1487,7 @@
 	}
 
 	:global(.aunqa_icon) {
-		color: #941518;
+		color: var(--c-maroon);
 	}
 
 	.aunqa_title {
