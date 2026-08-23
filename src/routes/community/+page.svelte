@@ -1,9 +1,10 @@
 <script>
-
   import Footer from '$lib/components/footer.svelte';
+  import { onMount } from 'svelte';
 
   let activeTab = $state(0);
   let showGallery = $state(false);
+  let currentImageIndex = $state(0);
 
   const profiles = [
     {
@@ -44,6 +45,14 @@
     }
   ];
 
+  const archiveFadeImages = [
+    'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=1000',
+    'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1000',
+    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1000',
+    'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80&w=1000',
+    'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000'
+  ];
+
   const galleryImages = [
     'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80',
@@ -55,6 +64,12 @@
     'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80'
   ];
 
+  onMount(() => {
+    const interval = setInterval(() => {
+      currentImageIndex = (currentImageIndex + 1) % archiveFadeImages.length;
+    }, 4000);
+    return () => clearInterval(interval);
+  });
 </script>
 
 <main>
@@ -202,10 +217,11 @@
     </div>
   </section>
 
+  <!-- PUP IVOTE++ SHOWCASE SECTION -->
   <section class="ivote-showcase">
     <div class="ivote-left">
       <div class="ivote-header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef9b08" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ivote-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
         <h2>PUP IVOTE++</h2>
       </div>
       
@@ -251,28 +267,29 @@
     </div>
 
     <div class="ivote-right">
-      <h3 class="archive-heading">REAL-TIME ELECTION ARCHIVE</h3>
-      
-      <div class="archive-slider-wrapper">
-        <div class="archive-slider-track">
-          <img src="https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80" alt="Archive Slide" />
-          <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80" alt="Archive Slide" />
+      <div class="archive-fade-container">
+        {#each archiveFadeImages as img, idx}
+          <div 
+            class="fade-slide {currentImageIndex === idx ? 'active' : ''}" 
+            style="background-image: url('{img}');">
+          </div>
+        {/each}
+        <div class="fade-scrim"></div>
+        
+        <button class="gallery-link" on:click={() => showGallery = true}>VIEW FULL GALLERY</button>
+
+        <div class="fade-archive-text">
+          <h2 class="archive-title-large">PUP IVOTE++</h2>
+          <p class="archive-subtitle">REAL-TIME ELECTION ARCHIVE</p>
         </div>
       </div>
-
-      <button class="gallery-link" on:click={() => showGallery = true}>VIEW FULL GALLERY</button>
     </div>
   </section>
 
-  <section class="motto-text-section">
+  <!-- MULA SA'YO TEXT SECTION -->
+ <section class="motto-text-section">
     <div class="motto-content">
-      <h1 class="motto-title">
+      <h1 class="motto-title" data-text="Mula sa'yo,&#10;para sa bayan">
         <span class="keep-together">Mula sa'yo,</span><br/>
         <span class="keep-together">para sa bayan</span>
       </h1>
@@ -281,15 +298,6 @@
       </p>
     </div>
   </section>
-
-  <section class="motto-image-strip">
-    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80" alt="Activity 1" />
-    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80" alt="Activity 2" />
-    <img src="https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80" alt="Activity 3" />
-    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80" alt="Activity 4" />
-    <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80" alt="Activity 5" />
-  </section>
-
   {#if showGallery}
     <div class="gallery-modal-overlay" on:click={() => showGallery = false}>
       <div class="gallery-modal-content" on:click|stopPropagation>
@@ -318,7 +326,7 @@
 </main>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Overpass:wght@600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Overpass:wght@600;700;800;900&display=swap');
 
   /* --- HERO SECTION --- */
   .community-hero {
@@ -423,7 +431,6 @@
     margin: 0;
   }
 
-
   .panel-red {
     background-color: #941518;
     color: #FFFFFF;
@@ -434,11 +441,7 @@
     color: #FFFFFF;
   }
 
-  .panel-red { background-color: #941518; color: #FFFFFF; }
-  .panel-gold { background-color: #f8b209; color: #FFFFFF; }
-
   /* --- MATURITY FRAMEWORK --- */
-
   .maturity-framework {
     background: linear-gradient(135deg, #fcedeb 0%, #f4e8cf 100%);
     padding: 60px 10%;
@@ -552,7 +555,6 @@
     letter-spacing: 0.05em;
   }
 
-
   .badge-icon {
     width: 24px;
     height: 24px;
@@ -572,8 +574,6 @@
       gap: 20px;
     }
   }
-
-  .badge-icon { width: 24px; height: 24px; color: #FFFFFF; }
 
   /* --- TECHNICAL PROFILES SECTION --- */
   .technical-profiles {
@@ -787,7 +787,7 @@
     min-height: 80vh;
   }
   .ivote-left {
-    background-color: #271f1a;
+    background: linear-gradient(to right, #451516 0%, #1A1614 64%, #392E1F 100%);
     padding: 80px 10%;
     color: #FFFFFF;
   }
@@ -797,9 +797,15 @@
     gap: 16px;
     margin-bottom: 24px;
   }
+  .ivote-icon {
+    color: #FAC549;
+  }
   .ivote-header h2 {
     font-family: 'Overpass', sans-serif;
-    color: #ef9b08;
+    background: linear-gradient(to right, #FAC549 0%, #CA8106 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-size: 1.2rem;
     font-weight: 700;
     letter-spacing: 0.2em;
@@ -817,11 +823,12 @@
     font-size: 1.1rem;
     font-weight: 800;
     margin: 0 0 16px 0;
+    color: #FFFFFF;
   }
   .ivote-divider hr {
     border: none;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #5E5E5E;
     margin-bottom: 24px;
   }
   .ivote-desc {
@@ -837,10 +844,10 @@
     gap: 16px;
   }
 
-  /* --- YELLOW BOX OVERLAY FIX --- */
+  /* Yellow Card Spec with Image & White Overlay */
   .ivote-card {
     position: relative;
-    background-color: #e5b95a;
+    background: linear-gradient(to bottom, #FAC549 0%, #CA8106 100%);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -852,13 +859,14 @@
     top: 0; left: 0; right: 0; bottom: 0;
     background-size: cover;
     background-position: center;
+    opacity: 0.3;
     z-index: 0;
   }
   .iv-card-bg::after {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(to bottom, rgba(229, 185, 90, 0.65) 0%, rgba(229, 185, 90, 0.75) 100%);
+    background-color: rgba(255, 255, 255, 0.2);
   }
   .iv-card-content {
     position: relative;
@@ -889,57 +897,53 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     line-height: 1.5;
-    color: #1a1515;
+    color: #000000;
     margin: auto 0 0 0;
   }
 
+  /* Cross-fading Full Box with Subtle Red Base Tint */
   .ivote-right {
-    background-color: #941518;
-    background-image: radial-gradient(#ffffff22 2px, transparent 2px);
-    background-size: 24px 24px;
-    padding: 80px 10%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden; 
-  }
-  .archive-heading {
-    font-family: 'Overpass', sans-serif;
-    color: #FFFFFF;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    margin: 0 0 40px 0;
-  }
-
-  /* CONTINUOUS MARQUEE SLIDER */
-  .archive-slider-wrapper {
-    width: 100%;
-    overflow: hidden;
     position: relative;
-    margin-bottom: 40px;
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    width: 100%;
+    min-height: 500px;
+    overflow: hidden;
+    background-color: #3b0e10;
   }
-  .archive-slider-track {
-    display: flex;
-    gap: 16px;
-    width: max-content;
-    animation: slideMarquee 15s linear infinite;
+  .archive-fade-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
-  .archive-slider-track img {
-    width: 250px;
-    aspect-ratio: 4/5;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  .fade-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+    z-index: 1;
   }
-  @keyframes slideMarquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-50% - 8px)); } 
+  .fade-slide.active {
+    opacity: 1;
+    z-index: 2;
   }
-
+  .fade-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top, 
+      rgba(35, 8, 9, 0.92) 0%, 
+      rgba(148, 21, 24, 0.22) 50%, 
+      rgba(20, 10, 10, 0.55) 100%
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
   .gallery-link {
+    position: absolute;
+    top: 36px;
+    right: 40px;
+    z-index: 10;
     font-family: 'Overpass', sans-serif;
     color: #FFFFFF;
     background: none;
@@ -950,19 +954,41 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-decoration: underline;
-    align-self: flex-end;
     transition: color 0.2s ease;
   }
   .gallery-link:hover {
-    color: #ef9b08;
+    color: #FAC549;
+  }
+  .fade-archive-text {
+    position: absolute;
+    bottom: 50px;
+    left: 40px;
+    right: 40px;
+    z-index: 10;
+  }
+  .archive-title-large {
+    font-family: 'Overpass', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #FAC549;
+    letter-spacing: 0.08em;
+    margin: 0 0 6px 0;
+  }
+  .archive-subtitle {
+    font-family: 'Overpass', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.12em;
+    margin: 0;
   }
 
-  /* --- MULA SA'YO TEXT SECTION --- */
+  /* --- MULA SA'YO TEXT SECTION (YELLOW SHADED) --- */
   .motto-text-section {
     width: 100%;
     background-color: #FFFFFF;
     padding-top: 120px; 
-    padding-bottom: 80px; 
+    padding-bottom: 120px; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -978,23 +1004,47 @@
     align-items: center;
   }
   
-  .motto-title {
+.motto-title {
+    position: relative;
     font-family: 'Overpass', Arial, sans-serif;
-    font-size: clamp(3rem, 11vw, 9rem); 
+    font-size: clamp(3rem, 11vw, 9rem);
     font-weight: 800;
     line-height: 1.1;
     letter-spacing: -0.02em;
     margin: 0 0 24px 0;
+    display: inline-block;
+    
+    /* 1. Base Layer: Yellow Gradient + 20% White Cover */
+    background: 
+      linear-gradient(rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.20)),
+      linear-gradient(to bottom, #FAC549 0%, #CA8106 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.15));
+  }
+
+
+  /* 2. Image Layer: 30% Opacity Overlay */
+  .motto-title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    white-space: pre-line;
     background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80');
     background-size: cover;
     background-position: center;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.15));
+    opacity: 0.30;
+    pointer-events: none;
+    z-index: 1;
   }
-
   .keep-together {
     display: inline-block;
     white-space: nowrap;
@@ -1013,19 +1063,6 @@
   .text-yellow {
     color: #c98e16;
     font-weight: 600;
-  }
-
-  /* --- BOTTOM IMAGE STRIP --- */
-  .motto-image-strip {
-    display: flex;
-    width: 100%;
-    height: 250px;
-    margin-bottom: 120px;
-  }
-  .motto-image-strip img {
-    width: 20%;
-    height: 100%;
-    object-fit: cover;
   }
 
   /* --- MODAL GALLERY STYLES --- */
@@ -1128,11 +1165,11 @@
     .grid-5 .img-wrapper:last-child { grid-column: span 2; }
     
     .ivote-showcase { grid-template-columns: 1fr; }
+    .ivote-right { min-height: 400px; }
     .ivote-cards-container { grid-template-columns: 1fr; }
     .gallery-grid-container { grid-template-columns: repeat(2, 1fr); }
     
     .gallery-modal-overlay { padding: 16px; }
     .gallery-modal-content { padding: 24px; }
   }
-
 </style>
