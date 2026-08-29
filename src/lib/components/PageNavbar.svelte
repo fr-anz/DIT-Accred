@@ -87,7 +87,11 @@
 
 			{#each sectionItems as item (item.href)}
 				<div class="tab-group">
-					<div class="tab-combo" class:active={isActive(item)} class:open={openDesktopHref === item.href}>
+					<div
+						class="tab-combo"
+						class:active={isActive(item)}
+						class:open={openDesktopHref === item.href}
+					>
 						<a
 							class="tab-link section-tab"
 							href={resolveHref(item.href)}
