@@ -18,6 +18,12 @@ To recreate this project with the same configuration:
 bun x sv@0.15.3 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" mdsvex storybook --install bun DIT-Accred
 ```
 
+## Project docs
+
+- [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) — colour and typography tokens, and the text role classes.
+  Read this before styling anything.
+- [`GIT_GUIDELINES.md`](GIT_GUIDELINES.md) — branch naming, commit format, and the PR process.
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:

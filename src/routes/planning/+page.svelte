@@ -83,7 +83,7 @@
 <section class="hero_section">
 	<div class="checkerboard_bg" aria-hidden="true"></div>
 	<div class="hero_content">
-		<h1 class="hero_title">PLANNING &amp; QUALITY ASSURANCE</h1>
+		<h1 class="t_display hero_title">PLANNING &amp; QUALITY ASSURANCE</h1>
 	</div>
 </section>
 
@@ -93,7 +93,7 @@
 <section class="content_section" id="strategic-benchmarking">
 	<div class="section_label">
 		<Globe size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
+		<span class="t_eyebrow">STRATEGIC INTERNATIONAL BENCHMARKING</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -122,7 +122,7 @@
 <section class="content_section" id="university-support">
 	<div class="section_label">
 		<Flag size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
+		<span class="t_eyebrow">UNIVERSITY SUPPORT FUNCTIONS</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -212,7 +212,7 @@
 <section class="content_section" id="dept-process">
 	<div class="section_label">
 		<Workflow size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span>DEPARTMENT-LEVEL PROCESS</span>
+		<span class="t_eyebrow">DEPARTMENT-LEVEL PROCESS</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -292,7 +292,7 @@
 <section class="content_section" id="rankings">
 	<div class="section_label">
 		<BadgeCheck size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
+		<span class="t_eyebrow">VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -510,29 +510,14 @@
 		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
-	/* Montserrat Bold display title with the black→maroon gradient fill (Figma node 979:692).
-	   `color` is the fallback for engines without background-clip: text. */
+	/* Inherits Montserrat Bold + the black→maroon gradient from the global .t_display
+	   role. Only the page-specific bits live here: this hero caps at 130px rather
+	   than the 150px used on the faculty/research heroes (Figma node 979:692). */
 	.hero_title {
-		font-family: var(--font-display);
 		font-size: clamp(2.5rem, 6.8vw, 130px);
-		font-weight: 700;
-		color: var(--c-maroon);
-		background-image: var(--grad-title);
-		background-clip: text;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
 		line-height: 1.12;
-		letter-spacing: -0.01em;
-		margin: 0;
 		max-width: 1811px;
-		text-transform: uppercase;
 		text-wrap: balance;
-	}
-
-	@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-		.hero_title {
-			-webkit-text-fill-color: currentColor;
-		}
 	}
 
 	@keyframes checkerboardFade {
@@ -556,34 +541,17 @@
 	}
 
 	/* ── SHARED SECTION WRAPPER ── */
-	/* Figma: Inter SemiBold 32px, uppercase, 8.64px tracking (= 0.27em), horizontal
-	   gold gradient fill. Sizes fluidly since the design column is 1143/1920 wide. */
+	/* Row wrapper only. The text itself carries the global .t_eyebrow role, which
+	   supplies Inter SemiBold / 0.27em / gold gradient. */
 	.section_label {
 		display: flex;
 		align-items: center;
 		gap: 0.85rem;
-		font-family: var(--font-body);
-		font-size: clamp(1.05rem, 1.4vw, 1.35rem);
-		font-weight: 600;
-		letter-spacing: 0.27em;
-		text-transform: uppercase;
 		margin-bottom: 0.85rem;
-		line-height: 1.3;
 	}
 
-	.section_label span {
-		color: var(--c-gold-dark);
-		background-image: var(--grad-gold);
-		background-clip: text;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
+	.section_label :global(.t_eyebrow) {
 		display: inline-block;
-	}
-
-	@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-		.section_label span {
-			-webkit-text-fill-color: currentColor;
-		}
 	}
 
 	:global(.section_icon) {

@@ -39,7 +39,7 @@ out of the design context and map them to the tokens below. Do not introduce a n
 ## Design tokens
 
 Canonical values live in `src/routes/layout.css` as CSS custom properties. Use the variable, not
-the literal.
+the literal. Full usage guide with examples: `DESIGN_SYSTEM.md` at the repo root.
 
 | Token             | Value                                                | Use                                        |
 | ----------------- | ---------------------------------------------------- | ------------------------------------------ |
@@ -62,6 +62,10 @@ unrelated PR.
 ## Type scale
 
 Fonts load in `src/app.html`. Montserrat (display), Overpass (headings), Inter (body).
+
+Do not hand-roll type. Apply the global text roles from `layout.css` — `.t_display`, `.t_eyebrow`,
+`.t_stat`, `.t_stat_label`, `.t_card_name`, `.t_card_title`, `.t_body`, `.t_body_sm`, `.t_meta`,
+`.t_action` — and override only what genuinely differs. See `DESIGN_SYSTEM.md`.
 
 | Role               | Spec                                                                                    |
 | ------------------ | --------------------------------------------------------------------------------------- |
