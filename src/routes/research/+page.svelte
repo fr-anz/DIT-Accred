@@ -363,16 +363,18 @@
 	}
 
 	.hero_title {
-		font-family: Helvetica, Arial, sans-serif;
-		font-size: clamp(4.25rem, 12vw, 10rem);
-		font-weight: 800;
-		letter-spacing: -0.03em;
-		line-height: 0.9;
+		position: relative;
+		z-index: 1;
+		font-family: 'Helvetica', Arial, sans-serif;
+		font-size: clamp(4rem, 8vw, 8rem);
+		font-weight: 600;
+		letter-spacing: 0.05em;
 		margin: 0;
-		background: linear-gradient(90deg, #120000 0%, #941518 78%);
+		background: linear-gradient(to right, #000000 0%, #941518 80%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		color: transparent;
-		text-align: center;
 	}
 
 	.content_section {
@@ -1062,10 +1064,6 @@
 	@media (max-width: 760px) {
 		.hero_section {
 			min-height: 72dvh;
-		}
-
-		.hero_title {
-			font-size: clamp(2.75rem, 15vw, 3.7rem);
 		}
 
 		.content_section {
