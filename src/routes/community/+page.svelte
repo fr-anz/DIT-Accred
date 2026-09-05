@@ -75,7 +75,7 @@
 <main>
   <section class="community-hero">
     <div class="hero-bg"></div> 
-    <h1 class="hero-title">COMMUNITY</h1>
+    <h1 class="t_display hero-title">COMMUNITY</h1>
   </section>
 
   <section id="community-extension-agenda" class="strategic-agenda">
@@ -349,19 +349,12 @@
     z-index: 0;
   }
 
+  /* Font, weight, tracking and the black→maroon gradient come from the global
+     .t_display role. Only the stacking context stays here, so the title sits
+     above .hero-bg. */
   .hero-title {
     position: relative;
     z-index: 1;
-    font-family: 'Helvetica', Arial, sans-serif; 
-    font-size: clamp(4rem, 8vw, 8rem); 
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    margin: 0;
-    background: linear-gradient(to right, #000000 0%, #941518 80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
   }
 
   .strategic-agenda {
