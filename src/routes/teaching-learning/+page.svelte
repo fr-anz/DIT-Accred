@@ -231,7 +231,7 @@
 <section class="hero_section">
 	<div class="checkerboard_bg" aria-hidden="true"></div>
 	<div class="hero_content">
-		<h1 class="hero_title">TEACHING &amp;<br />LEARNING</h1>
+		<h1 class="t_display hero_title">TEACHING &amp;<br />LEARNING</h1>
 	</div>
 </section>
 
@@ -1036,15 +1036,11 @@
 		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
+	/* Font, weight, tracking and the black→maroon gradient come from the global
+	   .t_display role. This title wraps to two lines, so it loosens the role's
+	   line-height of 1 to keep the descenders clear. */
 	.hero_title {
-		font-family: var(--font-heading);
-		font-size: clamp(2.5rem, 6vw, 5.5rem);
-		font-weight: 900;
-		color: var(--color-maroon);
-		line-height: 1.15;
-		letter-spacing: -0.01em;
-		margin: 0;
-		text-transform: uppercase;
+		line-height: 1.1;
 	}
 
 	@keyframes checkerboardFade {

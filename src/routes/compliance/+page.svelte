@@ -84,7 +84,7 @@
 <main>
   <section class="hero-section">
     <div class="hero-bg"></div> 
-    <h1 class="hero-title">COMPLIANCE</h1>
+    <h1 class="t_display hero-title">COMPLIANCE</h1>
   </section>
 
   <section class="compliance-section">
@@ -216,19 +216,11 @@
     z-index: 0;
   }
 
+  /* Font, weight, tracking and the black→maroon gradient come from the global
+     .t_display role. Only the stacking context and page padding stay here. */
   .hero-title {
     position: relative;
     z-index: 1;
-    font-family: 'Helvetica', Arial, sans-serif; 
-    font-size: clamp(3rem, 8vw, 7rem); 
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    margin: 0;
-    background: linear-gradient(to right, #000000 0%, var(--color-maroon) 80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
     text-align: center;
     padding: 0 5%;
   }

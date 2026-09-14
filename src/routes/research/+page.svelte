@@ -155,7 +155,7 @@
 <main class="research_page">
 	<section class="hero_section">
 		<div class="hero_content">
-			<h1 class="hero_title">RESEARCH</h1>
+			<h1 class="t_display hero_title">RESEARCH</h1>
 		</div>
 	</section>
 
@@ -379,16 +379,9 @@
 		padding: 2rem;
 	}
 
+	/* Font, weight, tracking and the black→maroon gradient all come from the
+	   global .t_display role. Only the page-specific bit stays here. */
 	.hero_title {
-		font-family: Helvetica, Arial, sans-serif;
-		font-size: clamp(4.25rem, 12vw, 10rem);
-		font-weight: 800;
-		letter-spacing: -0.03em;
-		line-height: 0.9;
-		margin: 0;
-		background: linear-gradient(90deg, #120000 0%, #941518 78%);
-		background-clip: text;
-		color: transparent;
 		text-align: center;
 	}
 
@@ -1033,10 +1026,6 @@
 	@media (max-width: 760px) {
 		.hero_section {
 			min-height: 72dvh;
-		}
-
-		.hero_title {
-			font-size: clamp(2.75rem, 15vw, 3.7rem);
 		}
 
 		.content_section {

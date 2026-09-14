@@ -31,7 +31,7 @@
 <main>
   <section class="hero-section">
     <div class="hero-bg"></div> 
-    <h1 class="hero-title">INTERNATIONALIZATION</h1>
+    <h1 class="t_display hero-title">INTERNATIONALIZATION</h1>
   </section>
 
   <section class="partners-section">
@@ -103,19 +103,17 @@
     z-index: 0;
   }
 
+  /* Font, weight, tracking and the black→maroon gradient come from the global
+     .t_display role.
+
+     Size is overridden because this is the longest title on the site and one
+     unbreakable word. The role's 150px cap is too wide, and the old 4rem lower
+     bound overflowed badly on mobile: at 390px the title measured 872px. This
+     clamp keeps it inside the viewport from 390px up to 1920px. */
   .hero-title {
     position: relative;
     z-index: 1;
-    font-family: 'Helvetica', Arial, sans-serif; 
-    font-size: clamp(4rem, 8vw, 8rem); 
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    margin: 0;
-    background: linear-gradient(to right, #000000 0%, #941518 80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+    font-size: clamp(1.5rem, 6.6vw, 128px);
     text-align: center;
     padding: 0 5%;
   }
