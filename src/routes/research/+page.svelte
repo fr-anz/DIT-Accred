@@ -1,10 +1,9 @@
 <script>
+	import { onMount } from 'svelte';
 	import {
 		BookOpen,
 		Building2,
 		ChevronDown,
-		ChevronLeft,
-		ChevronRight,
 		Download,
 		KeyRound,
 		Maximize2,
@@ -76,12 +75,12 @@
 		{ year: '2024', count: 10 }
 	];
 
+	/** @type {HTMLDivElement | undefined} */
+	let metricsSculpture;
+
 	const metricCardCount = 3;
-	const topMetricCardIndices = [0, 2, 1];
 	/** @type {number | null} */
 	let activeIncentiveIndex = $state(null);
-	let activeMetricIndex = $state(0);
-	let topMetricCardIndex = $derived(topMetricCardIndices[activeMetricIndex]);
 	let flippedFacultyIndices = $state(new Set());
 
 	/** @param {number} index */
@@ -99,10 +98,50 @@
 		flippedFacultyIndices = new Set(flippedFacultyIndices);
 	};
 
-	/** @param {number} direction */
-	const rotateMetrics = (direction) => {
-		activeMetricIndex = (activeMetricIndex + direction + metricCardCount) % metricCardCount;
-	};
+	onMount(() => {
+		const element = metricsSculpture;
+		if (!element) return;
+
+		const scrollPerCard = 320;
+		let animationFrame = 0;
+
+		const updateSnap = () => {
+			animationFrame = 0;
+
+			const rect = element.getBoundingClientRect();
+			const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+			const documentTop = rect.top + window.scrollY;
+			const start = documentTop - viewportHeight * 0.55;
+			const rawIndex = (window.scrollY - start) / scrollPerCard;
+			const index = Math.min(metricCardCount - 1, Math.max(0, Math.round(rawIndex)));
+			const topCardIndex = [0, 2, 1][index];
+
+			element.style.setProperty('--metrics-orbit', `${index * 120}deg`);
+			for (let cardIndex = 0; cardIndex < metricCardCount; cardIndex += 1) {
+				element.style.setProperty(
+					`--metric-radius-${cardIndex}`,
+					cardIndex === topCardIndex
+						? 'calc(246px * var(--metrics-size))'
+						: 'calc(266px * var(--metrics-size))'
+				);
+			}
+		};
+
+		const requestSnap = () => {
+			if (animationFrame) return;
+			animationFrame = requestAnimationFrame(updateSnap);
+		};
+
+		requestSnap();
+		window.addEventListener('scroll', requestSnap, { passive: true });
+		window.addEventListener('resize', requestSnap);
+
+		return () => {
+			if (animationFrame) cancelAnimationFrame(animationFrame);
+			window.removeEventListener('scroll', requestSnap);
+			window.removeEventListener('resize', requestSnap);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -116,7 +155,7 @@
 <main class="research_page">
 	<section class="hero_section">
 		<div class="hero_content">
-			<h1 class="hero_title">RESEARCH</h1>
+			<h1 class="t_display hero_title">RESEARCH</h1>
 		</div>
 	</section>
 
@@ -182,16 +221,15 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="metrics_sculpture" style:--metrics-orbit={`${activeMetricIndex * 120}deg`}>
+		<div class="metrics_sculpture" bind:this={metricsSculpture}>
 			<div class="center_building_mark" aria-hidden="true">
 				<img src="/research/Center_Building.svg" alt="" />
 			</div>
 
-			<div class="cards_ring" id="metrics-ring">
+			<div class="cards_ring">
 				<div
 					class="metric_spoke"
-					class:is_active={topMetricCardIndex === 0}
-					style="--spoke-angle: 0deg;"
+					style="--spoke-angle: 0deg; --spoke-radius: var(--metric-radius-0);"
 				>
 					<article class="metric_card">
 						<h3>Completed Research</h3>
@@ -202,8 +240,7 @@
 
 				<div
 					class="metric_spoke"
-					class:is_active={topMetricCardIndex === 1}
-					style="--spoke-angle: 120deg;"
+					style="--spoke-angle: 120deg; --spoke-radius: var(--metric-radius-1);"
 				>
 					<article class="metric_card">
 						<h3>High-Impact Indexation Rate</h3>
@@ -214,8 +251,7 @@
 
 				<div
 					class="metric_spoke"
-					class:is_active={topMetricCardIndex === 2}
-					style="--spoke-angle: 240deg;"
+					style="--spoke-angle: 240deg; --spoke-radius: var(--metric-radius-2);"
 				>
 					<article class="metric_card">
 						<h3>Disseminated Publications</h3>
@@ -224,25 +260,6 @@
 					</article>
 				</div>
 			</div>
-
-			<button
-				class="metric_control metric_control_previous"
-				type="button"
-				aria-label="Show previous research metric"
-				aria-controls="metrics-ring"
-				onclick={() => rotateMetrics(-1)}
-			>
-				<ChevronLeft size={32} strokeWidth={2} />
-			</button>
-			<button
-				class="metric_control metric_control_next"
-				type="button"
-				aria-label="Show next research metric"
-				aria-controls="metrics-ring"
-				onclick={() => rotateMetrics(1)}
-			>
-				<ChevronRight size={32} strokeWidth={2} />
-			</button>
 		</div>
 
 		<div class="distribution_panel" id="research-repository">
@@ -362,19 +379,10 @@
 		padding: 2rem;
 	}
 
+	/* Font, weight, tracking and the black→maroon gradient all come from the
+	   global .t_display role. Only the page-specific bit stays here. */
 	.hero_title {
-		position: relative;
-		z-index: 1;
-		font-family: 'Helvetica', Arial, sans-serif;
-		font-size: clamp(4rem, 8vw, 8rem);
-		font-weight: 600;
-		letter-spacing: 0.05em;
-		margin: 0;
-		background: linear-gradient(to right, #000000 0%, #941518 80%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		color: transparent;
+		text-align: center;
 	}
 
 	.content_section {
@@ -600,6 +608,9 @@
 		--metric-card-height: calc(237px * var(--metrics-size));
 		--wheel-radius: calc(246px * var(--metrics-size));
 		--building-mark-width: calc(426px * var(--metrics-size));
+		--metric-radius-0: var(--wheel-radius);
+		--metric-radius-1: calc(266px * var(--metrics-size));
+		--metric-radius-2: calc(266px * var(--metrics-size));
 		--seal-offset: calc(57px * var(--metrics-size));
 
 		position: relative;
@@ -644,12 +655,7 @@
 		margin-left: calc(var(--metric-card-width) / -2);
 		margin-top: calc(var(--metric-card-height) / -2);
 		transform: rotate(var(--spoke-angle))
-			translateY(calc(-1 * var(--spoke-radius, calc(266px * var(--metrics-size)))));
-		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	.metric_spoke.is_active {
-		--spoke-radius: var(--wheel-radius);
+			translateY(calc(-1 * var(--spoke-radius, var(--wheel-radius))));
 	}
 
 	.metric_card {
@@ -690,50 +696,6 @@
 		font-size: 1.04rem;
 		line-height: 1.2;
 		margin: 0;
-	}
-
-	.metric_control {
-		position: absolute;
-		top: 50%;
-		z-index: 4;
-		display: grid;
-		width: 58px;
-		height: 58px;
-		padding: 0;
-		place-items: center;
-		border: 2px solid #d49b1d;
-		border-radius: 50%;
-		background: #fff;
-		color: var(--color-maroon);
-		cursor: pointer;
-		transform: translateY(-50%);
-		transition:
-			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-			background 0.22s ease,
-			color 0.22s ease;
-	}
-
-	.metric_control:hover {
-		background: var(--color-maroon);
-		color: #fff;
-		transform: translateY(-50%) scale(1.06);
-	}
-
-	.metric_control:active {
-		transform: translateY(-50%) scale(0.98);
-	}
-
-	.metric_control:focus-visible {
-		outline: 3px solid rgba(140, 15, 19, 0.28);
-		outline-offset: 4px;
-	}
-
-	.metric_control_previous {
-		left: 0;
-	}
-
-	.metric_control_next {
-		right: 0;
 	}
 
 	.distribution_panel {
@@ -1177,10 +1139,6 @@
 		}
 
 		.center_building_mark {
-			display: none;
-		}
-
-		.metric_control {
 			display: none;
 		}
 
