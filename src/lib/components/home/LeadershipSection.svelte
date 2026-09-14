@@ -75,8 +75,6 @@
 	const binaryLayerB = binaryLayerA.slice().reverse();
 	const panelCloseDuration = 220;
 
-
-
 	/**
 	 * @param {string} id
 	 * @param {'hover' | 'keyboard'} source
@@ -151,7 +149,6 @@
 			role="dialog"
 			tabindex="-1"
 			aria-label="{displayedLeaderData.name} detail"
-
 		>
 			<button
 				class="expanded-close"

@@ -13,7 +13,12 @@
 </Story>
 
 <Story name="Maroon">
-	<Card variant="maroon" title="BSIT" subtitle="Bachelor of Science in Information Technology" description="A four-year degree program focusing on computer utilization and software." />
+	<Card
+		variant="maroon"
+		title="BSIT"
+		subtitle="Bachelor of Science in Information Technology"
+		description="A four-year degree program focusing on computer utilization and software."
+	/>
 </Story>
 
 <Story name="Dark">
@@ -26,7 +31,11 @@
 </Story>
 
 <Story name="Gold">
-	<Card variant="gold" title="Program Educational Objectives" description="Within 3-5 years of graduation, graduates are expected to achieve professional growth." />
+	<Card
+		variant="gold"
+		title="Program Educational Objectives"
+		description="Within 3-5 years of graduation, graduates are expected to achieve professional growth."
+	/>
 </Story>
 
 <Story name="Outline">
@@ -36,7 +45,10 @@
 <Story name="Custom Content">
 	<Card variant="dark" class="text-center">
 		<p class="years-stat">47 <span class="years-label">years</span></p>
-		<p class="years-desc">of Department's existence.<br />Coding the <strong>PUP Spirit</strong> since <strong>1979</strong></p>
+		<p class="years-desc">
+			of Department's existence.<br />Coding the <strong>PUP Spirit</strong> since
+			<strong>1979</strong>
+		</p>
 	</Card>
 </Story>
 
@@ -44,7 +56,7 @@
 	@reference "tailwindcss";
 
 	.story-heading {
-		@apply text-xl font-bold mb-4;
+		@apply mb-4 text-xl font-bold;
 	}
 
 	.story-stack {
@@ -52,7 +64,7 @@
 	}
 
 	.years-stat {
-		@apply text-4xl font-bold text-[#D4A843] mb-2;
+		@apply mb-2 text-4xl font-bold text-[#D4A843];
 	}
 
 	.years-label {

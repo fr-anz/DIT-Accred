@@ -1078,11 +1078,14 @@
 	}
 
 	.section_label span {
+		/* `color` is the fallback for engines without background-clip: text.
+		   There is no unprefixed text-fill-color property, so only the -webkit- one
+		   is declared. */
+		color: #ca8106;
 		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
-		text-fill-color: transparent;
 		display: inline-block;
 	}
 
@@ -1963,11 +1966,13 @@
 		font-family: var(--font-heading);
 		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 900;
+		/* `color` is the fallback for engines without background-clip: text.
+		   There is no unprefixed text-fill-color property. */
+		color: #ca8106;
 		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
-		text-fill-color: transparent;
 		margin: 0 0 2.5rem 0;
 		text-transform: uppercase;
 		letter-spacing: 0.02em;

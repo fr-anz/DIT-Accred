@@ -9,9 +9,7 @@
 </script>
 
 {#snippet template(args: any)}
-	<Button {...args}>
-		Button
-	</Button>
+	<Button {...args}>Button</Button>
 {/snippet}
 
 <Story name="Primary" args={{}} {template} />

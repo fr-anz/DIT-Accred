@@ -97,7 +97,7 @@
 
 	let activePath = $derived($page.url.pathname);
 	let activeTarget = $derived(`${$page.url.pathname}${$page.url.hash}`);
-	let activeImage = $derived(activeIndex !== null ? navItems[activeIndex]?.image ?? null : null);
+	let activeImage = $derived(activeIndex !== null ? (navItems[activeIndex]?.image ?? null) : null);
 
 	/** @param {HomeNavItem} item */
 	function hasPanel(item) {
@@ -136,9 +136,7 @@
 		if (event.key !== 'Tab' || !navEl) return;
 
 		const focusable = Array.from(
-			navEl.querySelectorAll(
-				'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-			)
+			navEl.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
 		).filter((el) => el instanceof HTMLElement && el.offsetParent !== null);
 
 		if (!focusable.length) return;
