@@ -231,7 +231,7 @@
 <section class="hero_section">
 	<div class="checkerboard_bg" aria-hidden="true"></div>
 	<div class="hero_content">
-		<h1 class="hero_title">TEACHING &amp;<br />LEARNING</h1>
+		<h1 class="t_display hero_title">TEACHING &amp;<br />LEARNING</h1>
 	</div>
 </section>
 
@@ -582,8 +582,8 @@
 	<hr class="section_divider" />
 
 	<div class="faculty_grid">
-		<!-- Full-Time Card -->
-		<div class="faculty_profile_card">
+		<!-- Full-Time Card (links to the faculty directory subpage, full-time section) -->
+		<a class="faculty_profile_card" href="/teaching-learning/faculty#full-time">
 			<div class="card_decor_strip red_strip"></div>
 			<div class="faculty_header">
 				<div class="faculty_icon_box red_bg">
@@ -611,10 +611,15 @@
 					<span>Published Research in IEEE/ACM</span>
 				</li>
 			</ul>
-		</div>
 
-		<!-- Part-Time Card -->
-		<div class="faculty_profile_card">
+			<span class="faculty_cta">
+				View Full-time Faculty
+				<ChevronRight size={18} strokeWidth={2.5} class="faculty_cta_icon" />
+			</span>
+		</a>
+
+		<!-- Part-Time Card (links to the faculty directory subpage, part-time section) -->
+		<a class="faculty_profile_card" href="/teaching-learning/faculty#part-time">
 			<div class="card_decor_strip gold_strip"></div>
 			<div class="faculty_header">
 				<div class="faculty_icon_box gold_bg">
@@ -642,7 +647,12 @@
 					<span>Direct Liaison for OJT Programs</span>
 				</li>
 			</ul>
-		</div>
+
+			<span class="faculty_cta">
+				View Part-time Faculty
+				<ChevronRight size={18} strokeWidth={2.5} class="faculty_cta_icon" />
+			</span>
+		</a>
 	</div>
 </section>
 
@@ -1026,15 +1036,11 @@
 		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
+	/* Font, weight, tracking and the black→maroon gradient come from the global
+	   .t_display role. This title wraps to two lines, so it loosens the role's
+	   line-height of 1 to keep the descenders clear. */
 	.hero_title {
-		font-family: var(--font-heading);
-		font-size: clamp(2.5rem, 6vw, 5.5rem);
-		font-weight: 900;
-		color: var(--color-maroon);
-		line-height: 1.15;
-		letter-spacing: -0.01em;
-		margin: 0;
-		text-transform: uppercase;
+		line-height: 1.1;
 	}
 
 	@keyframes checkerboardFade {
@@ -1695,6 +1701,14 @@
 	}
 
 	.faculty_profile_card {
+		width: 100%;
+		text-align: left;
+		font: inherit;
+		color: inherit;
+		text-decoration: none;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
 		background: #fff;
 		border: 1px solid rgba(0, 0, 0, 0.08);
 		border-radius: 20px;
@@ -1708,6 +1722,32 @@
 	.faculty_profile_card:hover {
 		transform: translateY(-4px);
 		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+	}
+
+	.faculty_profile_card:focus-visible {
+		outline: 3px solid var(--color-gold);
+		outline-offset: 3px;
+	}
+
+	.faculty_cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 1.5rem;
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-maroon);
+	}
+
+	:global(.faculty_cta_icon) {
+		transition: transform 0.25s ease;
+	}
+
+	.faculty_profile_card:hover .faculty_cta :global(.faculty_cta_icon) {
+		transform: translateX(4px);
 	}
 
 	.card_decor_strip {

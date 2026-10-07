@@ -116,7 +116,7 @@
 <main class="research_page">
 	<section class="hero_section">
 		<div class="hero_content">
-			<h1 class="hero_title">RESEARCH</h1>
+			<h1 class="t_display hero_title">RESEARCH</h1>
 		</div>
 	</section>
 
@@ -362,6 +362,8 @@
 		padding: 2rem;
 	}
 
+	/* Font, weight, tracking and the black→maroon gradient all come from the
+	   global .t_display role. Only the page-specific bit stays here. */
 	.hero_title {
 		position: relative;
 		z-index: 1;
