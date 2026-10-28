@@ -4,6 +4,11 @@ node_modules
 AGENTS.md
 agents.md
 
+# Kiro: share steering rules, keep everything else local
+# (MCP endpoints are per-machine; Figma MCP dumps are throwaway scratch)
+.kiro/*
+!.kiro/steering/
+
 # Output
 .output
 .vercel
@@ -25,3 +30,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Scratch / scripting leftovers
+*.log
+.scratch/

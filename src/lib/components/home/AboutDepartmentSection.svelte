@@ -130,7 +130,7 @@
 		font-size: clamp(0.95rem, 1.35vw, 1.12rem);
 		line-height: 1.55;
 		font-weight: 400;
-		text-align: right;
+		text-align: justify;
 		margin: clamp(0.5rem, 2vw, 2rem) 0 0 0;
 		max-width: 68ch;
 	}
@@ -230,7 +230,7 @@
 		}
 
 		.intro-text p {
-			text-align: center;
+			text-align: justify;
 			max-width: 100%;
 			margin: 0;
 		}
@@ -267,7 +267,7 @@
 		}
 
 		.intro-text p {
-			text-align: center;
+			text-align: justify;
 			font-size: clamp(0.92rem, 2.8vw, 1.05rem);
 			line-height: 1.55;
 			max-width: 62ch;

@@ -1,9 +1,10 @@
 <script>
-	import { onMount } from 'svelte';
 	import {
 		BookOpen,
 		Building2,
 		ChevronDown,
+		ChevronLeft,
+		ChevronRight,
 		Download,
 		KeyRound,
 		Maximize2,
@@ -63,7 +64,8 @@
 		name: 'Aguila, Fermin',
 		role: 'Full Time Faculty',
 		count: 1,
-		image: '/img/sir-melvin.png'
+		image: '/img/sir-melvin.png',
+		publications: ['Placeholder research publication for faculty repository.']
 	}));
 
 	const chartBars = [
@@ -74,60 +76,33 @@
 		{ year: '2024', count: 10 }
 	];
 
-	/** @type {HTMLDivElement | undefined} */
-	let metricsSculpture;
-
 	const metricCardCount = 3;
+	const topMetricCardIndices = [0, 2, 1];
 	/** @type {number | null} */
 	let activeIncentiveIndex = $state(null);
+	let activeMetricIndex = $state(0);
+	let topMetricCardIndex = $derived(topMetricCardIndices[activeMetricIndex]);
+	let flippedFacultyIndices = $state(new Set());
 
 	/** @param {number} index */
 	const toggleIncentiveTrack = (index) => {
 		activeIncentiveIndex = activeIncentiveIndex === index ? null : index;
 	};
 
-	onMount(() => {
-		const element = metricsSculpture;
-		if (!element) return;
+	/** @param {number} index */
+	const toggleFacultyCard = (index) => {
+		if (flippedFacultyIndices.has(index)) {
+			flippedFacultyIndices.delete(index);
+		} else {
+			flippedFacultyIndices.add(index);
+		}
+		flippedFacultyIndices = new Set(flippedFacultyIndices);
+	};
 
-		const scrollPerCard = 320;
-		let animationFrame = 0;
-
-		const updateSnap = () => {
-			animationFrame = 0;
-
-			const rect = element.getBoundingClientRect();
-			const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-			const documentTop = rect.top + window.scrollY;
-			const start = documentTop - viewportHeight * 0.55;
-			const rawIndex = (window.scrollY - start) / scrollPerCard;
-			const index = Math.min(metricCardCount - 1, Math.max(0, Math.round(rawIndex)));
-			const topCardIndex = [0, 2, 1][index];
-
-			element.style.setProperty('--metrics-orbit', `${index * 120}deg`);
-			for (let cardIndex = 0; cardIndex < metricCardCount; cardIndex += 1) {
-				element.style.setProperty(
-					`--metric-radius-${cardIndex}`,
-					cardIndex === topCardIndex ? '246px' : '266px'
-				);
-			}
-		};
-
-		const requestSnap = () => {
-			if (animationFrame) return;
-			animationFrame = requestAnimationFrame(updateSnap);
-		};
-
-		requestSnap();
-		window.addEventListener('scroll', requestSnap, { passive: true });
-		window.addEventListener('resize', requestSnap);
-
-		return () => {
-			if (animationFrame) cancelAnimationFrame(animationFrame);
-			window.removeEventListener('scroll', requestSnap);
-			window.removeEventListener('resize', requestSnap);
-		};
-	});
+	/** @param {number} direction */
+	const rotateMetrics = (direction) => {
+		activeMetricIndex = (activeMetricIndex + direction + metricCardCount) % metricCardCount;
+	};
 </script>
 
 <svelte:head>
@@ -140,9 +115,8 @@
 
 <main class="research_page">
 	<section class="hero_section">
-		<div class="checkerboard_bg" aria-hidden="true"></div>
 		<div class="hero_content">
-			<h1 class="hero_title">RESEARCH</h1>
+			<h1 class="t_display hero_title">RESEARCH</h1>
 		</div>
 	</section>
 
@@ -208,13 +182,17 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="metrics_sculpture" bind:this={metricsSculpture}>
+		<div class="metrics_sculpture" style:--metrics-orbit={`${activeMetricIndex * 120}deg`}>
 			<div class="center_building_mark" aria-hidden="true">
 				<img src="/research/Center_Building.svg" alt="" />
 			</div>
 
-			<div class="cards_ring">
-				<div class="metric_spoke" style="--spoke-angle: 0deg; --spoke-radius: var(--metric-radius-0);">
+			<div class="cards_ring" id="metrics-ring">
+				<div
+					class="metric_spoke"
+					class:is_active={topMetricCardIndex === 0}
+					style="--spoke-angle: 0deg;"
+				>
 					<article class="metric_card">
 						<h3>Completed Research</h3>
 						<strong>70</strong>
@@ -222,7 +200,11 @@
 					</article>
 				</div>
 
-				<div class="metric_spoke" style="--spoke-angle: 120deg; --spoke-radius: var(--metric-radius-1);">
+				<div
+					class="metric_spoke"
+					class:is_active={topMetricCardIndex === 1}
+					style="--spoke-angle: 120deg;"
+				>
 					<article class="metric_card">
 						<h3>High-Impact Indexation Rate</h3>
 						<strong>89.13%</strong>
@@ -230,7 +212,11 @@
 					</article>
 				</div>
 
-				<div class="metric_spoke" style="--spoke-angle: 240deg; --spoke-radius: var(--metric-radius-2);">
+				<div
+					class="metric_spoke"
+					class:is_active={topMetricCardIndex === 2}
+					style="--spoke-angle: 240deg;"
+				>
 					<article class="metric_card">
 						<h3>Disseminated Publications</h3>
 						<strong>46</strong>
@@ -238,6 +224,25 @@
 					</article>
 				</div>
 			</div>
+
+			<button
+				class="metric_control metric_control_previous"
+				type="button"
+				aria-label="Show previous research metric"
+				aria-controls="metrics-ring"
+				onclick={() => rotateMetrics(-1)}
+			>
+				<ChevronLeft size={32} strokeWidth={2} />
+			</button>
+			<button
+				class="metric_control metric_control_next"
+				type="button"
+				aria-label="Show next research metric"
+				aria-controls="metrics-ring"
+				onclick={() => rotateMetrics(1)}
+			>
+				<ChevronRight size={32} strokeWidth={2} />
+			</button>
 		</div>
 
 		<div class="distribution_panel" id="research-repository">
@@ -279,18 +284,37 @@
 		<hr class="section_divider" />
 
 		<div class="faculty_repository">
-			{#each facultyResearchers as researcher}
-				<article class="faculty_card">
-					<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
-					<div class="published_badge">
-						<span>Published<br />Studies</span>
-						<strong>{researcher.count}</strong>
-					</div>
-					<div class="faculty_overlay">
-						<h3>{researcher.name}</h3>
-						<p>{researcher.role}</p>
-					</div>
-				</article>
+			{#each facultyResearchers as researcher, index}
+				<button
+					class="faculty_card"
+					class:is_flipped={flippedFacultyIndices.has(index)}
+					type="button"
+					aria-pressed={flippedFacultyIndices.has(index)}
+					onclick={() => toggleFacultyCard(index)}
+				>
+					<span class="faculty_card_inner">
+						<span class="faculty_card_face faculty_front">
+							<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
+							<span class="published_badge">
+								<span>Published<br />Studies</span>
+								<strong>{researcher.count}</strong>
+							</span>
+							<span class="faculty_overlay">
+								<strong>{researcher.name}</strong>
+								<span>{researcher.role}</span>
+							</span>
+						</span>
+						<span class="faculty_card_face faculty_back">
+							<span class="faculty_back_label">Published Research</span>
+							<strong>{researcher.name}</strong>
+							<span class="faculty_publications">
+								{#each researcher.publications as publication}
+									<span>{publication}</span>
+								{/each}
+							</span>
+						</span>
+					</span>
+				</button>
 			{/each}
 		</div>
 	</section>
@@ -309,9 +333,17 @@
 	}
 
 	.research_page {
+		position: relative;
+		isolation: isolate;
 		background: #ffffff;
 		color: #120f0f;
 		min-height: 100vh;
+	}
+
+	.research_page > section,
+	.research_page > :global(footer) {
+		position: relative;
+		z-index: 1;
 	}
 
 	.hero_section {
@@ -321,24 +353,7 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
-		background: #f5f5f5;
-	}
-
-	.checkerboard_bg {
-		position: absolute;
-		inset: 0;
-		background-color: #f7f7f7;
-		background-image:
-			linear-gradient(45deg, #e2e2e2 25%, transparent 25%),
-			linear-gradient(-45deg, #e2e2e2 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #e2e2e2 75%),
-			linear-gradient(-45deg, transparent 75%, #e2e2e2 75%);
-		background-position:
-			0 0,
-			0 60px,
-			60px -60px,
-			-60px 0;
-		background-size: 120px 120px;
+		background: transparent;
 	}
 
 	.hero_content {
@@ -347,17 +362,21 @@
 		padding: 2rem;
 	}
 
+	/* Font, weight, tracking and the black→maroon gradient all come from the
+	   global .t_display role. Only the page-specific bit stays here. */
 	.hero_title {
-		font-family: Helvetica, Arial, sans-serif;
-		font-size: clamp(4.25rem, 12vw, 10rem);
-		font-weight: 800;
-		letter-spacing: -0.03em;
-		line-height: 0.9;
+		position: relative;
+		z-index: 1;
+		font-family: 'Helvetica', Arial, sans-serif;
+		font-size: clamp(4rem, 8vw, 8rem);
+		font-weight: 600;
+		letter-spacing: 0.05em;
 		margin: 0;
-		background: linear-gradient(90deg, #120000 0%, #941518 78%);
+		background: linear-gradient(to right, #000000 0%, #941518 80%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		color: transparent;
-		text-align: center;
 	}
 
 	.content_section {
@@ -578,18 +597,16 @@
 	}
 
 	.metrics_sculpture {
-		--metric-card-width: 253px;
-		--metric-card-height: 237px;
-		--wheel-radius: 246px;
-		--building-mark-width: 426px;
-		--metric-radius-0: var(--wheel-radius);
-		--metric-radius-1: 266px;
-		--metric-radius-2: 266px;
-		--seal-offset: 57px;
+		--metrics-size: 1.35;
+		--metric-card-width: calc(280px * var(--metrics-size));
+		--metric-card-height: calc(237px * var(--metrics-size));
+		--wheel-radius: calc(246px * var(--metrics-size));
+		--building-mark-width: calc(426px * var(--metrics-size));
+		--seal-offset: calc(57px * var(--metrics-size));
 
 		position: relative;
-		width: min(100%, 824px);
-		min-height: 758px;
+		width: min(100%, calc(824px * var(--metrics-size)));
+		min-height: calc(758px * var(--metrics-size));
 		margin: 0 auto 3.5rem;
 	}
 
@@ -629,7 +646,12 @@
 		margin-left: calc(var(--metric-card-width) / -2);
 		margin-top: calc(var(--metric-card-height) / -2);
 		transform: rotate(var(--spoke-angle))
-			translateY(calc(-1 * var(--spoke-radius, var(--wheel-radius))));
+			translateY(calc(-1 * var(--spoke-radius, calc(266px * var(--metrics-size)))));
+		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.metric_spoke.is_active {
+		--spoke-radius: var(--wheel-radius);
 	}
 
 	.metric_card {
@@ -670,6 +692,50 @@
 		font-size: 1.04rem;
 		line-height: 1.2;
 		margin: 0;
+	}
+
+	.metric_control {
+		position: absolute;
+		top: 50%;
+		z-index: 4;
+		display: grid;
+		width: 58px;
+		height: 58px;
+		padding: 0;
+		place-items: center;
+		border: 2px solid #d49b1d;
+		border-radius: 50%;
+		background: #fff;
+		color: var(--color-maroon);
+		cursor: pointer;
+		transform: translateY(-50%);
+		transition:
+			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+			background 0.22s ease,
+			color 0.22s ease;
+	}
+
+	.metric_control:hover {
+		background: var(--color-maroon);
+		color: #fff;
+		transform: translateY(-50%) scale(1.06);
+	}
+
+	.metric_control:active {
+		transform: translateY(-50%) scale(0.98);
+	}
+
+	.metric_control:focus-visible {
+		outline: 3px solid rgba(140, 15, 19, 0.28);
+		outline-offset: 4px;
+	}
+
+	.metric_control_previous {
+		left: 0;
+	}
+
+	.metric_control_next {
+		right: 0;
 	}
 
 	.distribution_panel {
@@ -821,11 +887,37 @@
 		aspect-ratio: 1 / 1.22;
 		border-radius: 22px;
 		overflow: hidden;
+		padding: 0;
+		border: 0;
 		background: #730f12;
 		box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+		cursor: pointer;
+		perspective: 1200px;
+		text-align: left;
+		color: inherit;
 	}
 
-	.faculty_card::after {
+	.faculty_card_inner {
+		position: absolute;
+		inset: 0;
+		display: block;
+		transform-style: preserve-3d;
+		transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	.faculty_card.is_flipped .faculty_card_inner {
+		transform: rotateY(180deg);
+	}
+
+	.faculty_card_face {
+		position: absolute;
+		inset: 0;
+		display: block;
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
+
+	.faculty_front::after {
 		content: '';
 		position: absolute;
 		inset: 42% 0 0;
@@ -838,7 +930,7 @@
 		pointer-events: none;
 	}
 
-	.faculty_card img {
+	.faculty_front img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -885,7 +977,7 @@
 		z-index: 2;
 	}
 
-	.faculty_overlay h3 {
+	.faculty_overlay strong {
 		font-family: var(--font-body);
 		font-size: clamp(1.3rem, 1.6vw, 2rem);
 		font-weight: 800;
@@ -894,13 +986,47 @@
 		line-height: 1;
 	}
 
-	.faculty_overlay p {
+	.faculty_overlay span {
 		font-family: var(--font-body);
 		font-size: clamp(1rem, 1.2vw, 1.45rem);
 		font-style: italic;
 		font-weight: 800;
 		color: #ffd138;
 		margin: 0;
+	}
+
+	.faculty_back {
+		background: #fff8e4;
+		color: var(--color-maroon);
+		padding: 2rem;
+		box-sizing: border-box;
+		transform: rotateY(180deg);
+	}
+
+	.faculty_back_label {
+		display: block;
+		font-size: 0.7rem;
+		font-weight: 800;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: #a96800;
+		margin-bottom: 1.25rem;
+	}
+
+	.faculty_back > strong {
+		display: block;
+		font-family: var(--font-heading);
+		font-size: clamp(1.4rem, 1.8vw, 2.2rem);
+		line-height: 1.05;
+		margin-bottom: 1.5rem;
+	}
+
+	.faculty_publications {
+		display: block;
+		font-size: clamp(1rem, 1.15vw, 1.35rem);
+		font-weight: 600;
+		line-height: 1.4;
+		color: #322626;
 	}
 
 	@media (max-width: 1180px) {
@@ -940,19 +1066,6 @@
 	@media (max-width: 760px) {
 		.hero_section {
 			min-height: 72dvh;
-		}
-
-		.hero_title {
-			font-size: clamp(2.75rem, 15vw, 3.7rem);
-		}
-
-		.checkerboard_bg {
-			background-size: 82px 82px;
-			background-position:
-				0 0,
-				0 41px,
-				41px -41px,
-				-41px 0;
 		}
 
 		.content_section {
@@ -1066,6 +1179,10 @@
 		}
 
 		.center_building_mark {
+			display: none;
+		}
+
+		.metric_control {
 			display: none;
 		}
 
