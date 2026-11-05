@@ -9,6 +9,7 @@
 		Maximize2,
 		Network
 	} from 'lucide-svelte';
+	import { tick } from 'svelte';
 	import Footer from '$lib/components/footer.svelte';
 	import ditLogo from '$lib/assets/DIT Logo.svg';
 
@@ -124,21 +125,45 @@
 	let activeIncentiveIndex = $state(incentiveTracks.length - 1);
 	let activeMetricIndex = $state(0);
 	let activePanelSlide = $state(0);
-	let flippedFacultyIndices = $state(new Set());
+	let activeFacultyIndex = $state(0);
+	/** @type {HTMLDivElement | null} */
+	let facultyStripEl = $state(null);
+
+	/** @param {number} index */
+	const toggleFacultyCard = (index) => {
+		if (activeFacultyIndex === index) return; // one panel always stays open
+		activeFacultyIndex = index;
+		focusFacultyPanel(index);
+	};
+
+	/** @param {number} direction */
+	const stepFaculty = (direction) => {
+		const total = facultyResearchers.length;
+		activeFacultyIndex = (activeFacultyIndex + direction + total) % total;
+		focusFacultyPanel(activeFacultyIndex);
+	};
+
+	/** Only the strip scrolls; the page never moves. No auto-scroll on first load.
+	 *  @param {number} index */
+	const focusFacultyPanel = async (index) => {
+		await tick();
+		const strip = facultyStripEl;
+		if (!strip) return;
+		const panel = strip.querySelector(`[data-faculty-index="${index}"]`);
+		if (!(panel instanceof HTMLElement)) return;
+		const target =
+			panel.offsetLeft - (strip.clientWidth - panel.offsetWidth) / 2;
+		strip.scrollTo({
+			left: Math.max(0, target),
+			behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+				? 'auto'
+				: 'smooth'
+		});
+	};
 
 	/** @param {number} index */
 	const selectIncentiveTrack = (index) => {
 		activeIncentiveIndex = index;
-	};
-
-	/** @param {number} index */
-	const toggleFacultyCard = (index) => {
-		if (flippedFacultyIndices.has(index)) {
-			flippedFacultyIndices.delete(index);
-		} else {
-			flippedFacultyIndices.add(index);
-		}
-		flippedFacultyIndices = new Set(flippedFacultyIndices);
 	};
 
 	/** @param {number} direction */
@@ -418,38 +443,67 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="faculty_repository">
+		<div class="faculty_controls">
+			<span class="faculty_counter" aria-live="polite">
+				{activeFacultyIndex + 1} / {facultyResearchers.length}
+			</span>
+			<button
+				class="faculty_nav_button"
+				type="button"
+				aria-label="Previous faculty"
+				onclick={() => stepFaculty(-1)}
+			>
+				<ChevronLeft size={22} strokeWidth={3.2} />
+			</button>
+			<button
+				class="faculty_nav_button"
+				type="button"
+				aria-label="Next faculty"
+				onclick={() => stepFaculty(1)}
+			>
+				<ChevronRight size={22} strokeWidth={3.2} />
+			</button>
+		</div>
+
+		<div class="faculty_repository" bind:this={facultyStripEl}>
 			{#each facultyResearchers as researcher, index}
-				<button
-					class="faculty_card"
-					class:is_flipped={flippedFacultyIndices.has(index)}
-					type="button"
-					aria-pressed={flippedFacultyIndices.has(index)}
-					onclick={() => toggleFacultyCard(index)}
+				{@const isOpen = activeFacultyIndex === index}
+				<div
+					class="faculty_panel"
+					class:is_open={isOpen}
+					data-faculty-index={index}
 				>
-					<span class="faculty_card_inner">
-						<span class="faculty_card_face faculty_front">
-							<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
-							<span class="published_badge">
-								<span>Published<br />Studies</span>
-								<strong>{researcher.count}</strong>
-							</span>
-							<span class="faculty_overlay">
-								<strong>{researcher.name}</strong>
-								<span>{researcher.role}</span>
-							</span>
+					<button
+						class="faculty_portrait"
+						type="button"
+						aria-expanded={isOpen}
+						aria-controls="faculty-repository-{index}"
+						onclick={() => toggleFacultyCard(index)}
+					>
+						<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
+						<span class="faculty_portrait_gradient" aria-hidden="true"></span>
+						<span class="faculty_portrait_name" aria-hidden="true">{researcher.name}</span>
+						<span class="faculty_portrait_count" aria-hidden="true">
+							<strong>{researcher.count}</strong>
+							<span>Published<br />Studies</span>
 						</span>
-						<span class="faculty_card_face faculty_back">
-							<span class="faculty_back_label">Published Research</span>
-							<strong>{researcher.name}</strong>
-							<span class="faculty_publications">
-								{#each researcher.publications as publication}
-									<span>{publication}</span>
-								{/each}
-							</span>
-						</span>
-					</span>
-				</button>
+					</button>
+					<div
+						class="faculty_page"
+						id="faculty-repository-{index}"
+						aria-hidden={!isOpen}
+						aria-label="Published research by {researcher.name}"
+					>
+						<span class="faculty_page_label">Published Research</span>
+						<strong class="faculty_page_name">{researcher.name}</strong>
+						<span class="faculty_page_role">{researcher.role}</span>
+						<ul class="faculty_publications">
+							{#each researcher.publications as publication}
+								<li>{publication}</li>
+							{/each}
+						</ul>
+					</div>
+				</div>
 			{/each}
 		</div>
 	</section>
@@ -1171,218 +1225,285 @@
 		padding-bottom: 9.5rem;
 	}
 
-	.faculty_repository {
-		width: min(100%, 1570px);
-		margin: 0 auto;
-		border: 4px solid transparent;
-		border-radius: 16px;
-		background:
-			linear-gradient(#fff, #fff) padding-box,
-			linear-gradient(90deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%) border-box;
-		padding: 4.25rem 5.5rem;
-		box-sizing: border-box;
+	/* Faculty Researcher and Research Repository — expanding portrait strip.
+	   Closed panels are fixed-width slices; one open panel grows like a book
+	   opening (portrait shrinks left + returns to color, cream repository page
+	   slides in on the right). */
+	.faculty_controls {
+		width: min(100%, 1444px);
+		margin: 0 auto 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 0.75rem;
+	}
+
+	.faculty_counter {
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		color: var(--color-maroon);
+		margin-right: 0.25rem;
+	}
+
+	.faculty_nav_button {
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		border: 1.5px solid var(--color-gold);
+		background: #fff;
+		color: var(--color-maroon);
 		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 3.8rem 3.2rem;
-	}
-
-	.faculty_card {
-		position: relative;
-		aspect-ratio: 215.625 / 298.75;
-		border-radius: 16px;
-		padding: 0;
-		border: 0;
-		background: transparent;
-		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+		place-items: center;
 		cursor: pointer;
-		perspective: 1100px;
-		text-align: left;
-		color: inherit;
+		padding: 0;
+		transition:
+			background 0.22s ease,
+			color 0.22s ease,
+			transform 0.22s ease;
 	}
 
-	.faculty_card_inner {
-		position: absolute;
-		inset: 0;
-		display: block;
-		transform-style: preserve-3d;
-		transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+	.faculty_nav_button:hover {
+		background: var(--color-maroon);
+		color: #fff;
 	}
 
-	.faculty_card.is_flipped .faculty_card_inner {
-		transform: rotateY(180deg);
+	.faculty_nav_button:focus-visible {
+		outline: 2.5px solid var(--color-gold);
+		outline-offset: 3px;
 	}
 
-	.faculty_card_face {
-		position: absolute;
-		inset: 0;
-		display: block;
+	.faculty_repository {
+		width: min(100%, 1444px);
+		margin: 0 auto;
+		display: flex;
+		gap: 0.6rem;
+		height: 600px;
+		border-radius: 16px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		/* Scrollbar stays functional but invisible */
+		scrollbar-width: none;
+	}
+
+	.faculty_repository::-webkit-scrollbar {
+		display: none;
+	}
+
+	.faculty_panel {
+		position: relative;
+		flex: 1 1 0;
+		min-width: 5.5rem;
+		height: 100%;
 		border-radius: 16px;
 		overflow: hidden;
-		border: 3px solid transparent;
+		display: flex;
 		box-sizing: border-box;
-		backface-visibility: hidden;
-		-webkit-backface-visibility: hidden;
+		/* Transparent border on every panel keeps open/closed sizes stable;
+		   the open panel fills it with the page's gold gradient border. */
+		border: 2px solid transparent;
+		transition: flex-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.faculty_front::after {
-		content: '';
+	.faculty_panel.is_open {
+		flex-grow: 7.5;
+		border-color: transparent;
+		background: linear-gradient(0deg, #ca8106, #fac549) border-box;
+	}
+
+	.faculty_portrait {
+		position: relative;
+		flex: 0 0 100%;
+		width: 100%;
+		min-width: 0;
+		height: 100%;
+		border: 0;
+		padding: 0;
+		margin: 0;
+		background: var(--color-maroon-deep);
+		cursor: pointer;
+		overflow: hidden;
+		display: block;
+		text-align: left;
+		transition:
+			flex-basis 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+			width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.faculty_panel.is_open .faculty_portrait {
+		flex-basis: 40%;
+		width: 40%;
+	}
+
+	.faculty_portrait img {
 		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		height: 31%;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.72) 100%);
-		backdrop-filter: blur(5px);
-		-webkit-backdrop-filter: blur(5px);
-		-webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%);
-		mask-image: linear-gradient(180deg, transparent 0%, #000 45%);
-		pointer-events: none;
-	}
-
-	.faculty_front img {
+		inset: 0;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: 34% 18%;
 		display: block;
+		filter: grayscale(1) sepia(0.35);
+		transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.published_badge {
+	.faculty_portrait_gradient {
 		position: absolute;
-		top: 7%;
-		right: 7%;
-		width: 58px;
-		padding: 6px 0 4px;
-		border-radius: 6px;
-		background: #fff;
-		color: var(--c-maroon);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
-		z-index: 2;
+		inset: 0;
+		background: linear-gradient(
+			180deg,
+			rgba(148, 21, 24, 0.78) 0%,
+			rgba(33, 0, 0, 0.94) 100%
+		);
+		pointer-events: none;
+		transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.published_badge span {
-		font-family: var(--font-body);
-		font-size: 9px;
-		font-weight: 700;
-		line-height: 1.1;
-		letter-spacing: 0.04em;
-		text-align: center;
-	}
-
-	.published_badge strong {
-		font-family: var(--font-body);
-		font-size: 30px;
-		line-height: 1.1;
-		font-weight: 800;
-	}
-
-	.faculty_overlay {
+	.faculty_portrait_name {
 		position: absolute;
-		left: 7%;
-		right: 7%;
-		bottom: 5%;
-		z-index: 2;
-		color: #fff;
-	}
-
-	.faculty_overlay strong {
-		display: block;
+		left: 50%;
+		bottom: 1.25rem;
+		transform: translateX(-50%) rotate(180deg);
+		writing-mode: vertical-rl;
 		font-family: var(--font-heading);
-		font-size: 20px;
+		font-size: 0.8rem;
 		font-weight: 700;
-		line-height: 1.15;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
 		color: #fff;
-		margin: 0;
+		white-space: nowrap;
+		pointer-events: none;
+		transition: opacity 0.55s ease;
 	}
 
-	.faculty_overlay span {
-		display: block;
-		font-family: var(--font-body);
-		font-size: 14px;
-		font-style: italic;
-		font-weight: 500;
-		opacity: 0.95;
-		color: #fff;
-		margin: 2px 0 0;
-	}
-
-	.faculty_back {
-		background: linear-gradient(160deg, var(--c-maroon) 0%, #791618 100%);
-		border: 3px solid var(--c-gold-light);
-		color: #fff;
-		padding: 20px 18px;
-		box-sizing: border-box;
-		transform: rotateY(180deg);
+	.faculty_portrait_count {
+		position: absolute;
+		left: 1.1rem;
+		bottom: 1.1rem;
 		display: flex;
-		flex-direction: column;
-		gap: 10px;
-		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+		align-items: baseline;
+		gap: 0.6rem;
+		color: var(--color-gold-bright);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.55s ease 0.3s;
 	}
 
-	.faculty_back_label {
-		display: block;
+	.faculty_portrait_count strong {
+		font-family: var(--font-heading);
+		font-size: 2.6rem;
+		font-weight: 800;
+		line-height: 1;
+	}
+
+	.faculty_portrait_count > span {
 		font-family: var(--font-body);
-		font-size: 11px;
+		font-size: 0.62rem;
 		font-weight: 700;
 		letter-spacing: 0.14em;
+		line-height: 1.3;
 		text-transform: uppercase;
-		color: var(--c-gold-light);
-		margin-bottom: 0;
-	}
-
-	.faculty_back > strong {
-		display: block;
-		font-family: var(--font-heading);
-		font-size: 19px;
-		font-weight: 700;
-		line-height: 1.15;
 		color: #fff;
-		margin-bottom: 0;
 	}
 
-	.faculty_back::after {
-		content: '';
-		display: block;
-		width: 44px;
-		height: 3px;
-		border-radius: 2px;
-		background: linear-gradient(90deg, var(--c-gold-light), var(--c-gold-dark));
-		flex-shrink: 0;
+	.faculty_panel.is_open .faculty_portrait img {
+		filter: none;
+	}
+
+	.faculty_panel.is_open .faculty_portrait_gradient {
+		opacity: 0;
+	}
+
+	.faculty_panel.is_open .faculty_portrait_name {
+		opacity: 0;
+	}
+
+	.faculty_panel.is_open .faculty_portrait_count {
+		opacity: 1;
+	}
+
+	.faculty_page {
+		flex: 1 1 60%;
+		width: 60%;
+		min-width: 0;
+		flex-shrink: 1;
+		height: 100%;
+		box-sizing: border-box;
+		background: #fdf6e9;
+		padding: 1.75rem 1.9rem;
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+		opacity: 0;
+		transform: translateX(12%);
+		pointer-events: none;
+		transition:
+			opacity 0.55s ease 0.25s,
+			transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+	}
+
+	.faculty_panel.is_open .faculty_page {
+		opacity: 1;
+		transform: translateX(0);
+		pointer-events: auto;
+	}
+
+	.faculty_page_label {
+		font-family: var(--font-body);
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: #b8860b;
+	}
+
+	.faculty_page_name {
+		font-family: var(--font-heading);
+		font-size: 1.55rem;
+		font-weight: 800;
+		line-height: 1.2;
+		color: var(--color-maroon);
+		margin-top: 0.5rem;
+	}
+
+	.faculty_page_role {
+		font-family: var(--font-body);
+		font-size: 0.92rem;
+		font-style: italic;
+		color: #4a4a4a;
+		margin-top: 0.15rem;
 	}
 
 	.faculty_publications {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
 		list-style: none;
-		margin: 0;
-		padding: 0;
-		overflow-y: auto;
-		min-height: 0;
-		flex: 1;
+		margin: 1.1rem 0 0;
+		padding: 0.9rem 0 0;
+		border-top: 1.5px solid var(--color-gold);
+		flex: 1 0 auto;
+	}
+
+	.faculty_publications li {
 		font-family: var(--font-body);
-		font-size: 14px;
-		line-height: 1.45;
-		color: #fff4dc;
+		font-size: 0.9rem;
+		line-height: 1.5;
+		color: #2c2c2c;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid rgba(212, 155, 29, 0.45);
 	}
 
-	.faculty_publications span {
-		display: flex;
-		gap: 8px;
+	.faculty_publications li:last-child {
+		border-bottom: none;
 	}
 
-	.faculty_publications span::before {
-		content: '';
-		flex-shrink: 0;
-		width: 7px;
-		height: 7px;
-		border-radius: 50%;
-		background: var(--c-gold-light);
-		margin-top: 7px;
+	@media (prefers-reduced-motion: reduce) {
+		.faculty_panel,
+		.faculty_portrait img,
+		.faculty_portrait_gradient,
+		.faculty_portrait_name,
+		.faculty_portrait_count,
+		.faculty_page {
+			transition: none !important;
+		}
 	}
 
 	@media (max-width: 1180px) {
@@ -1398,9 +1519,65 @@
 		.incentive_detail {
 			padding: 2.5rem 2.25rem;
 		}
+	}
+
+	@media (max-width: 920px) {
+		.faculty_controls {
+			width: 100%;
+			padding: 0 0.25rem;
+			box-sizing: border-box;
+		}
 
 		.faculty_repository {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
+			width: 100%;
+			flex-direction: column;
+			height: auto;
+			max-height: 44rem;
+			gap: 0.6rem;
+			overflow-x: hidden;
+			overflow-y: auto;
+			padding-bottom: 0.5rem;
+		}
+
+		.faculty_panel {
+			flex: 0 0 4.5rem;
+			width: 100%;
+			min-width: 100%;
+			height: 4.5rem;
+			flex-direction: column;
+			transition: flex-basis 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+		}
+
+		.faculty_panel.is_open {
+			flex-basis: 36rem;
+			height: 36rem;
+		}
+
+		.faculty_panel.is_open .faculty_portrait {
+			flex-basis: 17rem;
+			width: 100%;
+			height: 17rem;
+		}
+
+		.faculty_portrait_name {
+			writing-mode: horizontal-tb;
+			left: 1rem;
+			right: 1rem;
+			bottom: 0.9rem;
+			transform: none;
+			text-align: center;
+		}
+
+		.faculty_portrait_count {
+			left: 1rem;
+			bottom: 0.9rem;
+		}
+
+		.faculty_page {
+			width: 100%;
+			flex: 1 1 auto;
+			height: 19rem;
+			padding: 1.25rem 1.1rem;
 		}
 	}
 
@@ -1588,12 +1765,6 @@
 		.faculty_section {
 			padding-top: 5rem;
 			padding-bottom: 5rem;
-		}
-
-		.faculty_repository {
-			grid-template-columns: 1fr;
-			padding: 1.25rem;
-			gap: 1.25rem;
 		}
 	}
 </style>
