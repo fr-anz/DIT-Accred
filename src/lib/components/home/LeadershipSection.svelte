@@ -5,7 +5,9 @@
 			name: 'Melvin C. Roxas, MSGITS',
 			role: 'Dean of College of Computer Information and Sciences',
 			img: '/img/sir-melvin.jpg',
-			position: 'center center',
+			/* Head top sits ~6.7% from the image top; with cover-cropping the
+			   card shows the head near the top edge (0% = crop from top). */
+			position: 'center 0%',
 			align: 'right',
 			roleMaxWidth: '290px'
 		},
@@ -15,7 +17,9 @@
 			name: 'John Dustin Santos, MIT',
 			role: 'Chairperson of Department of Information Technology',
 			img: '/img/sir-dustin.png',
-			position: 'center center',
+			/* Head top sits ~11.3% from the image top; 34% of the crop window
+			   lands both heads at the same height on the card (see melvin). */
+			position: 'center 34%',
 			align: 'left',
 			roleMaxWidth: '260px'
 		}
