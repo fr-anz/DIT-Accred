@@ -240,8 +240,8 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="program-compliance">
 	<div class="section_label">
-		<ClipboardCheck size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>PROGRAM COMPLIANCE &amp; GOVERNANCE</span>
+		<ClipboardCheck size={26} strokeWidth={1.5} class="section_icon maroon" />
+		<span class="t_eyebrow">PROGRAM COMPLIANCE &amp; GOVERNANCE</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -372,8 +372,8 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="curriculum-architecture">
 	<div class="section_label">
-		<BookOpen size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>CURRICULUM ARCHITECTURE &amp; INSTRUCTION DELIVERY</span>
+		<BookOpen size={26} strokeWidth={1.5} class="section_icon maroon" />
+		<span class="t_eyebrow">CURRICULUM ARCHITECTURE &amp; INSTRUCTION DELIVERY</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -576,8 +576,8 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="staff-faculty-profile">
 	<div class="section_label">
-		<Users size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>ACADEMIC STAFF &amp; FACULTY PROFILES</span>
+		<Users size={26} strokeWidth={1.5} class="section_icon maroon" />
+		<span class="t_eyebrow">ACADEMIC STAFF &amp; FACULTY PROFILES</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -661,8 +661,8 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="student-outcomes">
 	<div class="section_label">
-		<Target size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>STUDENT OUTCOMES &amp; ECO-SYSTEM</span>
+		<Target size={26} strokeWidth={1.5} class="section_icon maroon" />
+		<span class="t_eyebrow">STUDENT OUTCOMES &amp; ECO-SYSTEM</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -697,8 +697,8 @@
 ───────────────────────────────────────────── -->
 <section class="content_section" id="learner-graduate-qa">
 	<div class="section_label">
-		<Award size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>LEARNING &amp; GRADUATES OUTCOME</span>
+		<Award size={26} strokeWidth={1.5} class="section_icon maroon" />
+		<span class="t_eyebrow">LEARNING &amp; GRADUATES OUTCOME</span>
 	</div>
 	<hr class="section_divider" />
 
@@ -1063,34 +1063,23 @@
 		}
 	}
 
-	/* ── SECTION HEADERS ── */
+	/* ── SECTION HEADERS ──
+	   Same pattern as the Planning & QA page: maroon icon + the global
+	   .t_eyebrow role (Inter SemiBold, --fs-xl, 0.27em, gold gradient fill). */
 	.section_label {
 		display: flex;
 		align-items: center;
 		gap: 0.85rem;
-		font-family: var(--font-body);
-		font-size: 1.15rem;
-		font-weight: 700;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
 		margin-bottom: 0.85rem;
-		line-height: 1.3;
 	}
 
-	.section_label span {
-		/* `color` is the fallback for engines without background-clip: text.
-		   There is no unprefixed text-fill-color property, so only the -webkit- one
-		   is declared. */
-		color: #ca8106;
-		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
+	.section_label :global(.t_eyebrow) {
 		display: inline-block;
 	}
 
 	:global(.section_icon.maroon) {
-		color: var(--color-maroon);
+		color: var(--c-maroon);
+		flex-shrink: 0;
 	}
 
 	.section_divider {

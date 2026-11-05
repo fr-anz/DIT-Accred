@@ -38,8 +38,8 @@
     
     <div class="partners-header">
       <div class="partners-label">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="partners-icon"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span>GLOBAL PARTNERS & ACADEMIC COLLABORATIONS</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="partners-icon"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span class="t_eyebrow">GLOBAL PARTNERS & ACADEMIC COLLABORATIONS</span>
       </div>
       <hr class="partners-hr" />
     </div>
@@ -140,13 +140,8 @@
   .partners-label {
     display: flex;
     align-items: center;
-    justify-content: flex-start; 
-    gap: 12px;
-    font-family: var(--font-heading);
-    font-weight: 500; 
-    font-size: 1.5rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    justify-content: flex-start;
+    gap: 0.85rem;
     margin-bottom: 24px;
   }
 
@@ -163,16 +158,14 @@
   }
 
 
-  .partners-label span {
-    background: linear-gradient(to right, #fac549, #d18a0f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+  /* Type comes from the global .t_eyebrow role — same as Planning & QA. */
+  .partners-label :global(.t_eyebrow) {
+    display: inline-block;
   }
 
   .partners-icon {
-    color: var(--color-maroon);
+    color: var(--c-maroon);
+    flex-shrink: 0;
   }
 
   .partners-hr {

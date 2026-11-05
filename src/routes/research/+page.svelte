@@ -195,8 +195,8 @@
 
 	<section class="content_section policy_section" id="policy">
 		<header class="section_header">
-			<BookOpen size={22} strokeWidth={1.8} class="section_icon" />
-			<h2>Research Development &amp; Policy Framework</h2>
+			<BookOpen size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<h2 class="t_eyebrow">Research Development &amp; Policy Framework</h2>
 		</header>
 		<hr class="section_divider" />
 
@@ -250,8 +250,8 @@
 
 	<section class="content_section productivity_section" id="productivity">
 		<header class="section_header">
-			<KeyRound size={24} strokeWidth={1.8} class="section_icon" />
-			<h2>Key Productivity Metrics &amp; Faculty Engagement</h2>
+			<KeyRound size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<h2 class="t_eyebrow">Key Productivity Metrics &amp; Faculty Engagement</h2>
 		</header>
 		<hr class="section_divider" />
 
@@ -438,8 +438,8 @@
 
 	<section class="content_section faculty_section" id="published-research">
 		<header class="section_header">
-			<Network size={24} strokeWidth={1.8} class="section_icon" />
-			<h2>Faculty Researcher and Research Repository</h2>
+			<Network size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<h2 class="t_eyebrow">Faculty Researcher and Research Repository</h2>
 		</header>
 		<hr class="section_divider" />
 
@@ -579,26 +579,21 @@
 		padding-top: 6.75rem;
 	}
 
+	/* Same pattern as the Planning & QA page: maroon icon + the global
+	   .t_eyebrow role (Inter SemiBold, --fs-xl, 0.27em, gold gradient fill). */
 	.section_header {
 		display: flex;
 		align-items: center;
-		gap: 2.25rem;
+		gap: 0.85rem;
 	}
 
-	.section_header h2 {
-		font-family: var(--font-heading);
-		font-size: clamp(1.35rem, 2vw, 2rem);
-		font-weight: 800;
-		letter-spacing: 0.34em;
-		line-height: 1.2;
-		margin: 0;
-		text-transform: uppercase;
-		color: var(--color-maroon);
+	.section_header :global(.t_eyebrow) {
+		display: inline-block;
 	}
 
-	:global(.section_icon) {
-		color: var(--color-maroon);
-		flex: 0 0 auto;
+	:global(.section_icon.maroon) {
+		color: var(--c-maroon);
+		flex-shrink: 0;
 	}
 
 	.section_divider {
@@ -1615,7 +1610,7 @@
 			align-items: flex-start;
 		}
 
-		.section_header h2 {
+		.section_header :global(.t_eyebrow) {
 			font-size: 1rem;
 			letter-spacing: 0.2em;
 		}
