@@ -1090,8 +1090,11 @@
 	.faculty_repository {
 		width: min(100%, 1570px);
 		margin: 0 auto;
-		background: linear-gradient(90deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%);
+		border: 4px solid transparent;
 		border-radius: 16px;
+		background:
+			#fff padding-box,
+			linear-gradient(90deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%) border-box;
 		padding: 4.25rem 5.5rem;
 		box-sizing: border-box;
 		display: grid;
