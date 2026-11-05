@@ -65,7 +65,7 @@
 		name: 'Aguila, Fermin',
 		role: 'Full Time Faculty',
 		count: 1,
-		image: '/img/sir-melvin.png',
+		image: '/img/sir-melvin.jpg',
 		publications: ['Placeholder research publication for faculty repository.']
 	}));
 
@@ -1101,10 +1101,9 @@
 		position: relative;
 		aspect-ratio: 215.625 / 298.75;
 		border-radius: 16px;
-		overflow: hidden;
 		padding: 0;
 		border: 0;
-		background: #730f12;
+		background: transparent;
 		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 		cursor: pointer;
 		perspective: 1100px;
@@ -1128,6 +1127,10 @@
 		position: absolute;
 		inset: 0;
 		display: block;
+		border-radius: 16px;
+		overflow: hidden;
+		border: 3px solid transparent;
+		box-sizing: border-box;
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
 	}
