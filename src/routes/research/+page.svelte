@@ -305,10 +305,10 @@
 				<div class="engagement_row">
 					<svg class="engagement_donut" viewBox="0 0 340 340" role="img" aria-label="12 of 42 faculty engaged in research">
 						<g transform="translate(170 170) rotate(-90)">
-							<circle r="142" fill="none" stroke="#EFDADB" stroke-width="6" />
-							<circle class="donut_outer" r="142" fill="none" stroke="#9B1C1A" stroke-width="6" stroke-dasharray="654.29 892.21" />
-							<circle r="100" fill="none" stroke="#FAE8D6" stroke-width="6" />
-							<circle class="donut_inner" r="100" fill="none" stroke="#E5862A" stroke-width="6" stroke-dasharray="23.27 628.32" />
+							<circle r="142" fill="none" stroke="#EFDADB" stroke-width="36" />
+							<circle class="donut_outer" r="142" fill="none" stroke="#9B1C1A" stroke-width="36" stroke-dasharray="654.29 892.21" />
+							<circle r="100" fill="none" stroke="#FAE8D6" stroke-width="36" />
+							<circle class="donut_inner" r="100" fill="none" stroke="#E5862A" stroke-width="36" stroke-dasharray="23.27 628.32" />
 						</g>
 						<text x="170" y="178" text-anchor="middle" class="donut_value">12</text>
 						<text x="170" y="206" text-anchor="middle" class="donut_sub">of 42 faculty</text>
@@ -869,11 +869,13 @@
 		box-sizing: border-box;
 		border-radius: 30px;
 		border: 4px solid transparent;
-		background:
-			linear-gradient(#fff, #fff) padding-box,
-			linear-gradient(0deg, #ca8106, #fac549) border-box;
+		background: linear-gradient(0deg, #ca8106, #fac549) border-box;
 		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
 		overflow: hidden;
+	}
+
+	.panel_slide {
+		background: #fff;
 	}
 
 	.panel_slide {
