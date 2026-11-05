@@ -5,7 +5,7 @@
 			name: 'Melvin C. Roxas, MSGITS',
 			role: 'Dean of College of Computer Information and Sciences',
 			img: '/img/sir-melvin.jpg',
-			position: 'center center',
+			position: 'center 33%',
 			align: 'right',
 			roleMaxWidth: '290px'
 		},
@@ -15,7 +15,7 @@
 			name: 'John Dustin Santos, MIT',
 			role: 'Chairperson of Department of Information Technology',
 			img: '/img/sir-dustin.png',
-			position: 'center center',
+			position: 'center top',
 			align: 'left',
 			roleMaxWidth: '260px'
 		}
