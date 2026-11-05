@@ -1,15 +1,12 @@
 <script>
-	// Plain JS script block to comply with guidelines
+	import ditLogo from '$lib/assets/DIT Logo.jpg';
 </script>
 
 <footer class="footer_container">
 	<div class="footer_content">
 		<!-- Left: Brand info and contact -->
 		<div class="brand_column">
-			<h2 class="brand_title">
-				Department of Information Technology –<br />
-				Polytechnic University of the Philippines
-			</h2>
+			<img class="brand_logo" src={ditLogo} alt="DIT Logo" />
 
 			<div class="contact_info">
 				<svg
@@ -71,11 +68,6 @@
 					>
 				</a>
 			</div>
-
-			<p class="purpose_statement">
-				This site exists to make our accreditation evidence legible, navigable, and credible. It is
-				maintained by the DIT accreditation working group.
-			</p>
 		</div>
 
 		<!-- Middle: Portfolio navigation directory -->
@@ -116,16 +108,6 @@
 			</ul>
 		</div>
 	</div>
-
-	<!-- Bottom Row: Gold Gradient Bar -->
-	<div class="bottom_bar">
-		<div class="bottom_bar_content">
-			<span class="copyright_text"
-				>© 2026 PUP - DEPARTMENT OF INFORMATION TECHNOLOGY. ALL RIGHTS RESERVED.</span
-			>
-			<span class="phase_text">BUILT FOR AACCUP LEVEL IV — PHASE 2</span>
-		</div>
-	</div>
 </footer>
 
 <style>
@@ -160,12 +142,12 @@
 		gap: 1.25rem;
 	}
 
-	.brand_title {
-		font-size: 1.1rem;
-		font-weight: 700;
-		line-height: 1.5;
-		color: #fffefc;
-		margin: 0;
+	.brand_logo {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: #ffffff;
+		object-fit: cover;
 	}
 
 	.contact_info {
@@ -214,15 +196,6 @@
 		transform: translateY(-2px);
 	}
 
-	.purpose_statement {
-		font-size: 0.75rem;
-		font-style: italic;
-		line-height: 1.6;
-		color: rgba(255, 255, 255, 0.55);
-		margin: 0;
-		max-width: 480px;
-	}
-
 	.links_column {
 		display: flex;
 		flex-direction: column;
@@ -258,37 +231,5 @@
 	.footer_link:hover {
 		color: #cfa83a;
 		text-decoration: underline;
-	}
-
-	/* Bottom Gold Strip */
-	.bottom_bar {
-		background: linear-gradient(90deg, #cfa83a 0%, #b8912d 50%, #9e7d20 100%);
-		color: #3d0a0e;
-		padding: 1rem 2rem;
-		font-size: 0.72rem;
-		font-weight: 700;
-		letter-spacing: 0.05em;
-	}
-
-	.bottom_bar_content {
-		max-width: 1200px;
-		margin: 0 auto;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 1rem;
-	}
-
-	.phase_text {
-		font-style: italic;
-	}
-
-	@media (max-width: 768px) {
-		.bottom_bar_content {
-			flex-direction: column;
-			text-align: center;
-			gap: 0.5rem;
-		}
 	}
 </style>
