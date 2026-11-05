@@ -2,7 +2,6 @@
 	import {
 		BookOpen,
 		Building2,
-		ChevronDown,
 		ChevronLeft,
 		ChevronRight,
 		Download,
@@ -37,25 +36,21 @@
 	const incentiveTracks = [
 		{
 			title: 'High-Impact Research Incentivization',
-			width: '79%',
 			placeholder:
 				'Placeholder details for publication incentives, faculty mentoring, and indexed research targets.'
 		},
 		{
 			title: 'Undergraduate Competition Deployment',
-			width: '88%',
 			placeholder:
 				'Placeholder details for student research competitions, prototype reviews, and coach assignments.'
 		},
 		{
 			title: 'Capstone Commercialization & Standardization',
-			width: '96%',
 			placeholder:
 				'Placeholder details for capstone packaging, deployment readiness, and documentation standards.'
 		},
 		{
 			title: 'Joint Global Research Linkages',
-			width: '100%',
 			placeholder:
 				'Placeholder details for partner institutions, collaborative research tracks, and exchange outputs.'
 		}
@@ -125,15 +120,15 @@
 	];
 
 	const metricCardCount = metricCards.length;
-	/** @type {number | null} */
-	let activeIncentiveIndex = $state(null);
+	const incentiveTrackCount = incentiveTracks.length;
+	let activeIncentiveIndex = $state(incentiveTracks.length - 1);
 	let activeMetricIndex = $state(0);
 	let activePanelSlide = $state(0);
 	let flippedFacultyIndices = $state(new Set());
 
 	/** @param {number} index */
-	const toggleIncentiveTrack = (index) => {
-		activeIncentiveIndex = activeIncentiveIndex === index ? null : index;
+	const selectIncentiveTrack = (index) => {
+		activeIncentiveIndex = index;
 	};
 
 	/** @param {number} index */
@@ -180,42 +175,42 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="framework_grid">
-			{#each frameworkCards as card}
-				{@const Icon = card.icon}
-				<div class="framework_card">
-					<Icon size={44} strokeWidth={2.6} class="framework_icon" />
-					<h3>{card.title}</h3>
-					<p>{card.description}</p>
-				</div>
-			{/each}
-		</div>
+		<div class="framework_shell">
+			<div class="framework_cards_row">
+				{#each frameworkCards as card}
+					{@const Icon = card.icon}
+					<div class="framework_card">
+						<Icon size={220} strokeWidth={1.1} class="framework_bg_icon" aria-hidden="true" />
+						<h3>{card.title}</h3>
+						<p>{card.description}</p>
+					</div>
+				{/each}
+			</div>
 
-		<div class="incentive_stack" aria-label="Research development priority tracks">
-			{#each incentiveTracks as track, index}
-				<div class="incentive_item" style="--track-width: {track.width};">
-					<button
-						class="incentive_row"
-						type="button"
-						aria-expanded={activeIncentiveIndex === index}
-						aria-controls="incentive-panel-{index}"
-						onclick={() => toggleIncentiveTrack(index)}
-					>
-						<span>{track.title}</span>
-						<ChevronDown
-							size={26}
-							strokeWidth={2.3}
-							class={activeIncentiveIndex === index ? 'chevron_open' : ''}
-						/>
-					</button>
+			<div class="framework_detail_split">
+				<nav class="incentive_nav" aria-label="Research development priority tracks">
+					{#each incentiveTracks as track, index}
+						<button
+							class="incentive_row"
+							type="button"
+							class:is_active={activeIncentiveIndex === index}
+							aria-current={activeIncentiveIndex === index ? 'true' : undefined}
+							onclick={() => selectIncentiveTrack(index)}
+						>
+							<span>{track.title}</span>
+							<ChevronRight size={24} strokeWidth={2.6} aria-hidden="true" />
+						</button>
+					{/each}
+				</nav>
 
-					{#if activeIncentiveIndex === index}
-						<div class="incentive_panel" id="incentive-panel-{index}">
-							<p>{track.placeholder}</p>
-						</div>
-					{/if}
+				<div class="incentive_detail" aria-live="polite">
+					<img src={ditLogo} alt="" class="incentive_detail_logo" aria-hidden="true" />
+					<div class="incentive_detail_text">
+						<h3>{incentiveTracks[activeIncentiveIndex].title}</h3>
+						<p>{incentiveTracks[activeIncentiveIndex].placeholder}</p>
+					</div>
 				</div>
-			{/each}
+			</div>
 		</div>
 
 		<a
@@ -235,16 +230,34 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="metrics_carousel" id="metrics-ring" role="group" aria-roledescription="carousel" aria-label="Research metrics">
+		<div
+			class="metrics_carousel"
+			id="metrics-ring"
+			role="group"
+			aria-roledescription="carousel"
+			aria-label="Research metrics"
+		>
 			<div class="metrics_stage" style="--metrics-orbit: {activeMetricIndex * -120}deg;">
 				<svg class="hex_web" viewBox="0 0 707 739" aria-hidden="true">
 					<defs>
-						<linearGradient id="hexStroke" x1="496.275" y1="121.209" x2="209.94" y2="617.156" gradientUnits="userSpaceOnUse">
+						<linearGradient
+							id="hexStroke"
+							x1="496.275"
+							y1="121.209"
+							x2="209.94"
+							y2="617.156"
+							gradientUnits="userSpaceOnUse"
+						>
 							<stop stop-color="#FAC549" />
 							<stop offset="1" stop-color="#CA8106" />
 						</linearGradient>
 					</defs>
-					<path d="M444.215 696.215L680.215 287.451L631.737 199.418L173.126 196.756L120.375 287.451L346.875 696.215L444.215 696.215Z" fill="#fff" stroke="url(#hexStroke)" stroke-width="6" />
+					<path
+						d="M444.215 696.215L680.215 287.451L631.737 199.418L173.126 196.756L120.375 287.451L346.875 696.215L444.215 696.215Z"
+						fill="#fff"
+						stroke="url(#hexStroke)"
+						stroke-width="6"
+					/>
 					<path d="M122 290L398 411" stroke="url(#hexStroke)" stroke-width="6" />
 					<path d="M171 196L398 409" stroke="url(#hexStroke)" stroke-width="6" />
 					<path d="M633.998 204.002L397.998 409.002" stroke="url(#hexStroke)" stroke-width="6" />
@@ -259,7 +272,8 @@
 						class="metric_card"
 						class:is_active={i === activeMetricIndex}
 						class:has_long_value={card.longValue}
-						style="--card-left: {card.left}px; --card-top: {card.top}px; --card-rotate: {i * 120}deg;"
+						style="--card-left: {card.left}px; --card-top: {card.top}px; --card-rotate: {i *
+							120}deg;"
 						aria-label={card.label}
 						aria-current={i === activeMetricIndex ? 'true' : 'false'}
 						onclick={() => setActiveMetric(i)}
@@ -303,12 +317,31 @@
 				</p>
 
 				<div class="engagement_row">
-					<svg class="engagement_donut" viewBox="0 0 340 340" role="img" aria-label="12 of 42 faculty engaged in research">
+					<svg
+						class="engagement_donut"
+						viewBox="0 0 340 340"
+						role="img"
+						aria-label="12 of 42 faculty engaged in research"
+					>
 						<g transform="translate(170 170) rotate(-90)">
 							<circle r="142" fill="none" stroke="#EFDADB" stroke-width="36" />
-							<circle class="donut_outer" r="142" fill="none" stroke="#9B1C1A" stroke-width="36" stroke-dasharray="654.29 892.21" />
+							<circle
+								class="donut_outer"
+								r="142"
+								fill="none"
+								stroke="#9B1C1A"
+								stroke-width="36"
+								stroke-dasharray="654.29 892.21"
+							/>
 							<circle r="100" fill="none" stroke="#FAE8D6" stroke-width="36" />
-							<circle class="donut_inner" r="100" fill="none" stroke="#E5862A" stroke-width="36" stroke-dasharray="23.27 628.32" />
+							<circle
+								class="donut_inner"
+								r="100"
+								fill="none"
+								stroke="#E5862A"
+								stroke-width="36"
+								stroke-dasharray="23.27 628.32"
+							/>
 						</g>
 						<text x="170" y="178" text-anchor="middle" class="donut_value">12</text>
 						<text x="170" y="206" text-anchor="middle" class="donut_sub">of 42 faculty</text>
@@ -336,12 +369,17 @@
 			<div class="panel_slide" class:is_hidden={activePanelSlide !== 1}>
 				<h3>INDEXATION BREAKDOWN BY CALENDAR YEAR</h3>
 				<p>
-					The BSIT program has consistently published across premier academic databases from 2018
-					to 2025, totaling 59 papers — 54 indexed in SCOPUS or Web of Science and 5 in other
-					refereed journals.
+					The BSIT program has consistently published across premier academic databases from 2018 to
+					2025, totaling 59 papers — 54 indexed in SCOPUS or Web of Science and 5 in other refereed
+					journals.
 				</p>
 
-				<svg class="year_chart" viewBox="0 0 700 300" role="img" aria-label="Articles per year bar chart">
+				<svg
+					class="year_chart"
+					viewBox="0 0 700 300"
+					role="img"
+					aria-label="Articles per year bar chart"
+				>
 					<defs>
 						<linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
 							<stop offset="0" stop-color="#FCD97C" />
@@ -360,15 +398,10 @@
 						{@const h = item.count * 10.3}
 						{@const x = 61.6 + i * 80}
 						<g>
-							<rect
-								x={x + 10}
-								y={246 - h}
-								width="45"
-								height={h}
-								rx="10"
-								fill="url(#barGrad)"
-							/>
-							<text x={x + 32.5} y={246 - h - 8} text-anchor="middle" class="bar_value">{item.count}</text>
+							<rect x={x + 10} y={246 - h} width="45" height={h} rx="10" fill="url(#barGrad)" />
+							<text x={x + 32.5} y={246 - h - 8} text-anchor="middle" class="bar_value"
+								>{item.count}</text
+							>
 							<text x={x + 32.5} y="268" text-anchor="middle" class="bar_year">{item.year}</text>
 						</g>
 					{/each}
@@ -520,113 +553,129 @@
 		margin: 3.25rem 0 6.5rem;
 	}
 
-	.framework_grid {
+	/* Development & Policy Framework — gold-gradient-bordered shell (same border
+	   styling as the key productivity distribution panel), border-only top cards,
+	   and a nav-list + cream detail split below. */
+	.framework_shell {
+		width: min(100%, 1444px);
+		margin: 0 auto 4.25rem;
+		box-sizing: border-box;
+		border-radius: 34px;
+		border: 4px solid transparent;
+		background: linear-gradient(0deg, #ca8106, #fac549) border-box;
+		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+		overflow: hidden;
+	}
+
+	.framework_cards_row {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1.6rem;
-		width: min(100%, 1160px);
-		margin: 0 auto;
 	}
 
 	.framework_card {
-		min-height: 610px;
-		border: 2px solid #d2a32a;
-		border-radius: 18px;
-		padding: 5.75rem 2.5rem 3.75rem;
-		text-align: center;
-		display: grid;
-		grid-template-rows: 4.5rem 8.25rem auto;
-		justify-items: center;
-		align-content: start;
-		row-gap: 1.6rem;
+		position: relative;
+		overflow: hidden;
+		box-sizing: border-box;
+		padding: 3.25rem 2.75rem 3.5rem;
 		background: #fff;
+		transition:
+			background 0.25s ease,
+			box-shadow 0.25s ease;
 	}
 
-	:global(.framework_icon) {
-		color: #050505;
-		align-self: end;
+	.framework_card:hover {
+		background: #fff8e8;
+		box-shadow: inset 0 0 0 2px rgba(202, 129, 6, 0.55);
+	}
+
+	.framework_card + .framework_card {
+		border-left: 2px solid rgba(202, 129, 6, 0.55);
+	}
+
+	:global(.framework_bg_icon) {
+		position: absolute;
+		right: -2.5rem;
+		bottom: -3rem;
+		color: #fac549;
+		opacity: 0.28;
+		pointer-events: none;
+	}
+
+	.framework_card h3,
+	.framework_card p {
+		position: relative;
+		z-index: 1;
 	}
 
 	.framework_card h3 {
 		font-family: var(--font-heading);
-		font-size: clamp(1.2rem, 1.45vw, 1.62rem);
+		font-size: clamp(1.05rem, 1.3vw, 1.4rem);
 		font-weight: 800;
 		letter-spacing: 0.14em;
-		line-height: 1.15;
+		line-height: 1.2;
 		text-transform: uppercase;
+		text-align: center;
 		color: var(--color-maroon);
 		margin: 0;
-		max-width: 100%;
+		padding-bottom: 1.1rem;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 		text-wrap: balance;
 	}
 
 	.framework_card p {
 		font-family: var(--font-body);
-		font-size: clamp(1rem, 1.25vw, 1.28rem);
-		line-height: 1.12;
-		margin: 0;
-		max-width: 300px;
-		color: #0d0d0d;
+		font-size: clamp(0.98rem, 1.1vw, 1.18rem);
+		font-weight: 600;
+		line-height: 1.45;
+		margin: 1.4rem 0 0;
+		color: #1c1c1c;
 		text-wrap: pretty;
 	}
 
-	.incentive_stack {
-		width: min(100%, 1500px);
-		margin: 0 auto 4.25rem;
+	.framework_detail_split {
 		display: grid;
-		justify-items: center;
+		/* 1fr / 2fr keeps the nav|detail divider aligned with the first
+		   card-column divider above, so the lines form a clean grid. */
+		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+		border-top: 2px solid rgba(202, 129, 6, 0.55);
 	}
 
-	.incentive_item {
-		width: var(--track-width);
-		margin-top: -3px;
+	.incentive_nav {
+		display: grid;
+		grid-template-rows: repeat(4, minmax(0, 1fr));
+		background: #fff;
 	}
 
 	.incentive_row {
 		width: 100%;
-		height: 70px;
-		border: 2px solid #d2a32a;
-		border-radius: 18px;
-		background: #fff;
 		box-sizing: border-box;
+		border: 0;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+		background: #fff;
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		gap: 3rem;
-		padding: 0 3rem;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding: 1.1rem 1.75rem;
 		color: var(--color-maroon);
 		cursor: pointer;
+		text-align: left;
 		transition:
-			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-			border-color 0.22s ease,
-			background 0.22s ease;
+			background 0.22s ease,
+			color 0.22s ease;
+	}
+
+	.incentive_row:last-child {
+		border-bottom: 0;
 	}
 
 	.incentive_row span {
 		font-family: var(--font-heading);
-		font-size: clamp(0.95rem, 1.2vw, 1.35rem);
+		font-size: clamp(0.8rem, 0.95vw, 1.02rem);
 		font-weight: 800;
-		letter-spacing: 0.26em;
+		letter-spacing: 0.18em;
+		line-height: 1.45;
 		text-transform: uppercase;
-	}
-
-	.incentive_row:hover {
-		background: #fffaf0;
-		border-color: #bd850d;
-		transform: translateY(-1px);
-	}
-
-	.incentive_row:active {
-		transform: translateY(1px);
-	}
-
-	.incentive_row:focus-visible {
-		outline: 3px solid rgba(140, 15, 19, 0.28);
-		outline-offset: 3px;
-	}
-
-	:global(.chevron_open) {
-		transform: rotate(180deg);
 	}
 
 	.incentive_row :global(svg) {
@@ -634,38 +683,70 @@
 		transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.incentive_panel {
-		border: 2px solid #d2a32a;
-		border-top: 0;
-		border-radius: 0 0 18px 18px;
+	.incentive_row:hover {
 		background: #fffaf0;
-		margin: -14px auto 0;
-		padding: 1.75rem 2.25rem 1.5rem;
+	}
+
+	.incentive_row:focus-visible {
+		outline: 3px solid rgba(140, 15, 19, 0.28);
+		outline-offset: -3px;
+	}
+
+	.incentive_row.is_active {
+		background: #fdf3df;
+	}
+
+	.incentive_row.is_active :global(svg) {
+		color: #ca8106;
+		transform: translateX(4px);
+	}
+
+	.incentive_detail {
+		position: relative;
+		overflow: hidden;
 		box-sizing: border-box;
-		color: #4c1415;
-		animation: dropdown-reveal 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+		background: #fdf3df;
+		border-left: 2px solid rgba(202, 129, 6, 0.55);
+		padding: 3.25rem 3.5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
-	.incentive_panel p {
+	.incentive_detail_logo {
+		position: absolute;
+		right: -3rem;
+		bottom: -3.5rem;
+		width: 340px;
+		height: 340px;
+		object-fit: contain;
+		opacity: 0.16;
+		pointer-events: none;
+	}
+
+	.incentive_detail_text {
+		position: relative;
+		z-index: 1;
+	}
+
+	.incentive_detail h3 {
+		font-family: var(--font-heading);
+		font-size: clamp(1.15rem, 1.6vw, 1.7rem);
+		font-weight: 800;
+		letter-spacing: 0.12em;
+		line-height: 1.25;
+		text-transform: uppercase;
+		color: var(--color-maroon);
+		margin: 0;
+	}
+
+	.incentive_detail p {
 		font-family: var(--font-body);
-		font-size: clamp(0.95rem, 1.05vw, 1.12rem);
-		font-weight: 600;
-		line-height: 1.35;
-		margin: 0 auto;
-		max-width: 72ch;
-		text-align: center;
-	}
-
-	@keyframes dropdown-reveal {
-		from {
-			opacity: 0;
-			transform: translateY(-0.6rem);
-		}
-
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
+		font-size: clamp(1rem, 1.2vw, 1.25rem);
+		line-height: 1.55;
+		margin: 1.5rem 0 0;
+		max-width: 56ch;
+		color: #242424;
 	}
 
 	.manual_link {
@@ -862,12 +943,13 @@
 	.distribution_panel {
 		position: relative;
 		z-index: 2;
-		width: 800px;
-		max-width: 100%;
-		height: 560px;
+		/* Matches the incentive stack and faculty repository widths (1444px)
+		   so the panel fills the section like the other blocks do. */
+		width: min(100%, 1444px);
+		height: 640px;
 		margin: -36px auto 0;
 		box-sizing: border-box;
-		border-radius: 30px;
+		border-radius: 34px;
 		border: 4px solid transparent;
 		background: linear-gradient(0deg, #ca8106, #fac549) border-box;
 		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
@@ -881,7 +963,7 @@
 	.panel_slide {
 		position: absolute;
 		inset: 0;
-		padding: 30px 36px;
+		padding: 40px 56px;
 		box-sizing: border-box;
 		opacity: 1;
 		transform: translateX(0);
@@ -901,16 +983,17 @@
 		margin: 0;
 		text-align: center;
 		font-family: var(--font-body);
-		font-size: 22px;
+		font-size: 28px;
 		font-weight: 800;
 		letter-spacing: 0.05em;
 		color: #111;
 	}
 
 	.distribution_panel p {
-		margin: 16px 0 18px;
+		margin: 20px auto 24px;
+		max-width: 1100px;
 		font-family: var(--font-body);
-		font-size: 17px;
+		font-size: 20px;
 		line-height: 1.55;
 		text-align: justify;
 		color: #222;
@@ -921,12 +1004,12 @@
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
-		gap: 36px;
+		gap: 64px;
 	}
 
 	.engagement_donut {
-		width: 290px;
-		height: 290px;
+		width: 360px;
+		height: 360px;
 	}
 
 	.donut_outer {
@@ -939,51 +1022,51 @@
 
 	.donut_value {
 		font-family: var(--font-body);
-		font-size: 58px;
+		font-size: 72px;
 		font-weight: 800;
 		fill: #6e0f12;
 	}
 
 	.donut_sub {
 		font-family: var(--font-body);
-		font-size: 16px;
+		font-size: 20px;
 		fill: #444;
 	}
 
 	.donut_note {
 		font-family: var(--font-body);
-		font-size: 12px;
+		font-size: 15px;
 		fill: #777;
 	}
 
 	.faculty_status {
-		flex: 0 1 330px;
+		flex: 0 1 460px;
 		box-sizing: border-box;
 		border: 2px solid #fac549;
-		border-radius: 22px;
-		padding: 20px 22px;
+		border-radius: 26px;
+		padding: 28px 32px;
 		background: #fff;
 	}
 
 	.faculty_status_title {
 		font-family: var(--font-body);
-		font-size: 15px;
+		font-size: 18px;
 		font-weight: 700;
 		letter-spacing: 0.06em;
-		margin-bottom: 6px;
+		margin-bottom: 8px;
 	}
 
 	.status_row {
 		display: flex;
 		align-items: center;
-		gap: 10px;
-		padding: 10px 0;
+		gap: 14px;
+		padding: 14px 0;
 		border-top: 1px solid #222;
 	}
 
 	.status_dot {
-		width: 12px;
-		height: 12px;
+		width: 15px;
+		height: 15px;
 		border-radius: 50%;
 		flex-shrink: 0;
 		box-sizing: border-box;
@@ -1014,7 +1097,7 @@
 	.status_label {
 		display: block;
 		font-family: var(--font-body);
-		font-size: 12px;
+		font-size: 15px;
 		letter-spacing: 0.05em;
 		text-transform: uppercase;
 		color: #1b1b1b;
@@ -1023,13 +1106,13 @@
 	.status_note {
 		display: block;
 		font-family: var(--font-body);
-		font-size: 11px;
+		font-size: 13px;
 		color: #777;
 	}
 
 	.status_value {
 		font-family: var(--font-body);
-		font-size: 20px;
+		font-size: 26px;
 		font-weight: 700;
 		color: #ca8106;
 	}
@@ -1037,6 +1120,7 @@
 	.year_chart {
 		display: block;
 		width: 100%;
+		height: calc(100% - 130px);
 	}
 
 	.chart_axis_title {
@@ -1308,8 +1392,11 @@
 		}
 
 		.framework_card {
-			min-height: 560px;
-			padding: 5.5rem 2rem 3rem;
+			padding: 2.5rem 1.75rem 2.75rem;
+		}
+
+		.incentive_detail {
+			padding: 2.5rem 2.25rem;
 		}
 
 		.faculty_repository {
@@ -1318,20 +1405,22 @@
 	}
 
 	@media (max-width: 900px) {
-		.framework_grid {
+		.framework_cards_row {
 			grid-template-columns: 1fr;
-			gap: 1rem;
 		}
 
-		.framework_card {
-			min-height: auto;
-			padding: 3rem 1.5rem;
-			grid-template-rows: auto;
-			row-gap: 1.4rem;
+		.framework_card + .framework_card {
+			border-left: 0;
+			border-top: 2px solid rgba(202, 129, 6, 0.55);
 		}
 
-		.framework_card p {
-			margin-top: 0.8rem;
+		.framework_detail_split {
+			grid-template-columns: 1fr;
+		}
+
+		.incentive_detail {
+			border-left: 0;
+			border-top: 2px solid rgba(202, 129, 6, 0.55);
 		}
 	}
 
@@ -1358,34 +1447,17 @@
 			margin: 1.75rem 0 3rem;
 		}
 
-		.framework_grid {
-			grid-template-columns: 1fr;
-			gap: 1rem;
+		.framework_shell {
+			border-radius: 24px;
+			margin-bottom: 3rem;
 		}
 
 		.framework_card {
-			min-height: auto;
-			padding: 3rem 1.5rem;
-			grid-template-rows: auto;
-			row-gap: 1.4rem;
-		}
-
-		.framework_card p {
-			margin-top: 0.8rem;
-		}
-
-		.incentive_stack {
-			margin-top: 1.5rem;
-		}
-
-		.incentive_item {
-			width: 100%;
+			padding: 2rem 1.5rem;
 		}
 
 		.incentive_row {
-			height: auto;
 			min-height: 64px;
-			justify-content: space-between;
 			gap: 1rem;
 			padding: 0.9rem 1rem;
 		}
@@ -1396,13 +1468,8 @@
 			line-height: 1.35;
 		}
 
-		.incentive_panel {
-			margin-top: -10px;
-			padding: 1.35rem 1rem 1.15rem;
-		}
-
-		.incentive_panel p {
-			text-align: left;
+		.incentive_detail {
+			padding: 1.75rem 1.25rem;
 		}
 
 		.manual_link {
@@ -1476,26 +1543,46 @@
 		.distribution_panel {
 			width: 100%;
 			height: auto;
-			min-height: 480px;
+			min-height: 560px;
 			margin: 0;
 		}
 
 		.panel_slide {
+			position: relative;
+			inset: auto;
 			padding: 1.75rem 1.25rem;
+		}
+
+		.panel_slide.is_hidden {
+			display: none;
+		}
+
+		.distribution_panel h3 {
+			font-size: 20px;
 		}
 
 		.distribution_panel p {
 			text-align: left;
 			font-size: 15px;
+			margin: 14px 0 18px;
+		}
+
+		.engagement_row {
+			gap: 28px;
 		}
 
 		.engagement_donut {
-			width: 220px;
-			height: 220px;
+			width: 240px;
+			height: 240px;
+		}
+
+		.donut_value {
+			font-size: 56px;
 		}
 
 		.faculty_status {
 			flex: 1 1 100%;
+			padding: 20px 22px;
 		}
 
 		.faculty_section {
