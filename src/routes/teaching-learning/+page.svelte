@@ -955,24 +955,12 @@
 <Footer />
 
 <style>
-	/* ── DESIGN TOKENS ── */
-	:root {
-		--color-maroon: #5c0f16;
-		--color-maroon-mid: #801b1e;
-		--color-gold: #cfa83a;
-		--color-gold-light: #d4a843;
-		--color-gold-dark: #b8912d;
-		--color-bg: #ffffff;
-		--font-body: 'Inter', sans-serif;
-		--font-heading: 'Overpass', sans-serif;
-	}
-
 	.content_section {
 		width: 100%;
 		box-sizing: border-box;
 		padding: 2.5rem 10% 4rem 10%;
 		font-size: 1.05rem;
-		background: #fff;
+		background: var(--c-surface);
 	}
 
 	@media (max-width: 1024px) {
@@ -1081,7 +1069,7 @@
 		/* `color` is the fallback for engines without background-clip: text.
 		   There is no unprefixed text-fill-color property, so only the -webkit- one
 		   is declared. */
-		color: #ca8106;
+		color: var(--c-gold-dark);
 		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -1090,7 +1078,7 @@
 	}
 
 	:global(.section_icon.maroon) {
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 	}
 
 	.section_divider {
@@ -1110,7 +1098,7 @@
 		background: linear-gradient(135deg, #2a0a0d 0%, #160507 100%);
 		border-radius: 24px;
 		padding: 3rem 2.5rem;
-		color: #fff;
+		color: var(--c-surface);
 		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 	}
 
@@ -1118,7 +1106,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.1rem;
 		font-weight: 900;
-		color: var(--color-gold);
+		color: var(--c-gold);
 		letter-spacing: 0.1em;
 		margin: 0 0 1.5rem 0;
 		text-transform: uppercase;
@@ -1134,7 +1122,7 @@
 	}
 
 	.highlight_text {
-		color: var(--color-gold-light);
+		color: var(--c-gold-light);
 		font-weight: 700;
 	}
 
@@ -1166,7 +1154,7 @@
 
 	.compliance_subcard:hover {
 		transform: translateY(-4px);
-		border-color: var(--color-gold-light);
+		border-color: var(--c-gold-light);
 	}
 
 	.card_bg_image {
@@ -1198,7 +1186,7 @@
 		font-family: var(--font-body);
 		font-size: 0.72rem;
 		font-weight: 800;
-		color: var(--color-gold-light);
+		color: var(--c-gold-light);
 		letter-spacing: 0.1em;
 		margin-bottom: 0.25rem;
 	}
@@ -1207,7 +1195,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.5rem;
 		font-weight: 800;
-		color: #fff;
+		color: var(--c-surface);
 		margin: 0 0 0.15rem 0;
 	}
 
@@ -1224,7 +1212,7 @@
 		border-radius: 24px;
 		overflow: hidden;
 		padding: 3.5rem 2.5rem;
-		color: #fff;
+		color: var(--c-surface);
 		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 	}
 
@@ -1256,7 +1244,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.1rem;
 		font-weight: 900;
-		color: var(--color-gold);
+		color: var(--c-gold);
 		letter-spacing: 0.08em;
 		margin: 0 0 3.5rem 0;
 		text-transform: uppercase;
@@ -1307,24 +1295,24 @@
 
 	.timeline_node:hover .node_icon_wrapper {
 		transform: scale(1.1) translateY(-3px);
-		background: #fff;
-		border-color: #fff;
+		background: var(--c-surface);
+		border-color: var(--c-surface);
 	}
 
 	:global(.node_icon) {
-		color: #fff;
+		color: var(--c-surface);
 		transition: color 0.3s ease;
 	}
 
 	.timeline_node:hover :global(.node_icon) {
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 	}
 
 	.node_title {
 		font-family: var(--font-heading);
 		font-size: 1.05rem;
 		font-weight: 700;
-		color: #fff;
+		color: var(--c-surface);
 		margin: 0 0 0.4rem 0;
 	}
 
@@ -1366,7 +1354,7 @@
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: #fff;
+		background: var(--c-surface);
 	}
 
 	/* ── SECTION 2: CURRICULUM ARCHITECTURE ── */
@@ -1384,8 +1372,8 @@
 	}
 
 	.unit_allocation_card {
-		background: #fff;
-		border: 1.5px solid var(--color-gold);
+		background: var(--c-surface);
+		border: 1.5px solid var(--c-gold);
 		border-radius: 20px;
 		padding: 2.25rem 2rem;
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
@@ -1399,7 +1387,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.2rem;
 		font-weight: 800;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		margin: 0 0 2rem 0;
 		letter-spacing: 0.02em;
 	}
@@ -1427,7 +1415,7 @@
 	}
 
 	.item_value {
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		font-weight: 800;
 	}
 
@@ -1442,17 +1430,17 @@
 	.progress_bar {
 		height: 100%;
 		border-radius: 2px;
-		background: var(--color-gold);
+		background: var(--c-gold);
 	}
 
 	.total_credits_banner {
-		background: var(--color-maroon);
+		background: var(--c-maroon-deep);
 		border-radius: 12px;
 		padding: 1.25rem 1.75rem;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.banner_label {
@@ -1474,7 +1462,7 @@
 		font-family: var(--font-heading);
 		font-size: 2.2rem;
 		font-weight: 900;
-		color: var(--color-gold-light);
+		color: var(--c-gold-light);
 		line-height: 1;
 	}
 
@@ -1484,7 +1472,7 @@
 		font-weight: 500;
 		font-style: italic;
 		margin: 0;
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.curriculum_right_panel {
@@ -1515,7 +1503,7 @@
 		border: none;
 		cursor: pointer;
 		border-radius: 10px 10px 0 0;
-		color: #fff;
+		color: var(--c-surface);
 		opacity: 0.65;
 		transition: opacity 0.25s ease;
 	}
@@ -1525,11 +1513,12 @@
 	}
 
 	.circular_btn {
-		background: var(--color-maroon);
+		background: var(--c-maroon-deep);
 	}
 
 	.experiential_btn {
-		background: #a8811d;
+		background: var(--c-gold);
+		color: var(--c-ink);
 	}
 
 	.enhancement_content_panel {
@@ -1551,7 +1540,7 @@
 	}
 
 	.enhancement_card {
-		background: #ffffff;
+		background: var(--c-surface);
 		border-radius: 12px;
 		padding: 1.5rem;
 		box-shadow: none;
@@ -1571,14 +1560,14 @@
 	}
 
 	:global(.card_icon) {
-		color: #cfa83a;
+		color: var(--c-gold);
 	}
 
 	.card_title {
 		font-family: var(--font-heading);
 		font-size: 0.88rem;
 		font-weight: 800;
-		color: #cfa83a;
+		color: var(--c-gold);
 		letter-spacing: 0.05em;
 		margin: 0;
 	}
@@ -1596,7 +1585,7 @@
 		background: linear-gradient(135deg, #2a0a0d 0%, #160507 100%);
 		border-radius: 20px;
 		padding: 2.25rem 2rem;
-		color: #fff;
+		color: var(--c-surface);
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 	}
 
@@ -1604,7 +1593,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.1rem;
 		font-weight: 900;
-		color: var(--color-gold);
+		color: var(--c-gold);
 		letter-spacing: 0.05em;
 		margin: 0 0 1.5rem 0;
 	}
@@ -1627,7 +1616,7 @@
 		border-radius: 8px;
 		border: 1px solid rgba(207, 168, 58, 0.35);
 		background: transparent;
-		color: var(--color-gold-light);
+		color: var(--c-gold-light);
 		cursor: pointer;
 		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
@@ -1637,9 +1626,9 @@
 	}
 
 	.explorer_tab_btn.active {
-		background: var(--color-gold);
-		color: #1a1a1a;
-		border-color: var(--color-gold);
+		background: var(--c-gold);
+		color: var(--c-ink);
+		border-color: var(--c-gold);
 		box-shadow: 0 4px 12px rgba(207, 168, 58, 0.25);
 	}
 
@@ -1660,7 +1649,7 @@
 		border-bottom: 1.5px solid rgba(255, 255, 255, 0.35);
 		font-family: var(--font-body);
 		font-size: 0.9rem;
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.course_row:last-child {
@@ -1674,16 +1663,16 @@
 
 	.course_code {
 		font-weight: 800;
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.course_name {
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.course_units {
 		font-weight: 800;
-		color: #fff;
+		color: var(--c-surface);
 		font-size: 0.9rem;
 	}
 
@@ -1709,7 +1698,7 @@
 		cursor: pointer;
 		display: flex;
 		flex-direction: column;
-		background: #fff;
+		background: var(--c-surface);
 		border: 1px solid rgba(0, 0, 0, 0.08);
 		border-radius: 20px;
 		padding: 2.5rem 2.25rem;
@@ -1725,7 +1714,7 @@
 	}
 
 	.faculty_profile_card:focus-visible {
-		outline: 3px solid var(--color-gold);
+		outline: 3px solid var(--c-gold);
 		outline-offset: 3px;
 	}
 
@@ -1739,7 +1728,7 @@
 		font-weight: 800;
 		letter-spacing: 0.04em;
 		text-transform: uppercase;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 	}
 
 	:global(.faculty_cta_icon) {
@@ -1759,11 +1748,11 @@
 	}
 
 	.red_strip {
-		background: var(--color-maroon);
+		background: var(--c-maroon-deep);
 	}
 
 	.gold_strip {
-		background: var(--color-gold);
+		background: var(--c-gold);
 	}
 
 	.faculty_header {
@@ -1780,15 +1769,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.red_bg {
-		background: var(--color-maroon);
+		background: var(--c-maroon-deep);
 	}
 
 	.gold_bg {
-		background: var(--color-gold);
+		background: var(--c-gold);
 	}
 
 	.header_titles {
@@ -1800,7 +1789,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		margin: 0;
 	}
 
@@ -1849,11 +1838,11 @@
 	}
 
 	:global(.red_check) {
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 	}
 
 	:global(.gold_check) {
-		color: var(--color-gold-dark);
+		color: var(--c-gold-dark);
 	}
 
 	/* ── SECTION 4: STUDENT OUTCOMES ── */
@@ -1931,14 +1920,14 @@
 	.org_content {
 		position: relative;
 		z-index: 2;
-		color: #fff;
+		color: var(--c-surface);
 	}
 
 	.org_title {
 		font-family: var(--font-heading);
 		font-size: 2.2rem;
 		font-weight: 900;
-		color: #fff;
+		color: var(--c-surface);
 		margin: 0 0 0.5rem 0;
 		letter-spacing: -0.01em;
 	}
@@ -1968,7 +1957,7 @@
 		font-weight: 900;
 		/* `color` is the fallback for engines without background-clip: text.
 		   There is no unprefixed text-fill-color property. */
-		color: #ca8106;
+		color: var(--c-gold-dark);
 		background: linear-gradient(180deg, #fac549 0%, #ca8106 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -2001,8 +1990,8 @@
 		height: 44px;
 		border-radius: 50%;
 		border: 1.5px solid rgba(92, 15, 22, 0.12);
-		background: #fff;
-		color: var(--color-maroon);
+		background: var(--c-surface);
+		color: var(--c-maroon-deep);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -2013,9 +2002,9 @@
 	}
 
 	.slide_nav_btn:hover {
-		background: var(--color-maroon);
-		color: #fff;
-		border-color: var(--color-maroon);
+		background: var(--c-maroon-deep);
+		color: var(--c-surface);
+		border-color: var(--c-maroon-deep);
 		transform: scale(1.08);
 	}
 
@@ -2138,7 +2127,7 @@
 		height: 50px;
 		border-radius: 50%;
 		background: rgba(207, 168, 58, 0.95);
-		color: #1a1a1a;
+		color: var(--c-ink);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -2159,7 +2148,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: #fff;
+		color: var(--c-surface);
 		margin: 0;
 		line-height: 1.25;
 	}
@@ -2167,7 +2156,7 @@
 	.alum_role_tag {
 		font-family: var(--font-body);
 		font-size: 0.8rem;
-		color: var(--color-gold);
+		color: var(--c-gold);
 		font-weight: 600;
 		font-style: italic;
 		line-height: 1.35;
@@ -2191,7 +2180,7 @@
 	}
 
 	.dot_indicator.active {
-		background: var(--color-gold);
+		background: var(--c-gold);
 		transform: scale(1.4);
 		width: 20px;
 		border-radius: 4px;
@@ -2212,8 +2201,8 @@
 	}
 
 	.employment_horizon_card {
-		background: #fff;
-		border: 1.5px solid var(--color-gold);
+		background: var(--c-surface);
+		border: 1.5px solid var(--c-gold);
 		border-radius: 20px;
 		padding: 2.5rem 2.25rem;
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
@@ -2223,7 +2212,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
 		font-weight: 900;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		margin: 0 0 1.75rem 0;
 		line-height: 1.35;
 		letter-spacing: 0.02em;
@@ -2256,33 +2245,33 @@
 	.th_left {
 		text-align: left;
 		font-weight: 800;
-		color: #1a1a1a;
+		color: var(--c-ink);
 	}
 
 	.th_right {
 		text-align: right;
 		font-weight: 800;
-		color: var(--color-gold-dark);
+		color: var(--c-gold-dark);
 	}
 
 	.td_left {
 		text-align: left;
 		font-weight: 700;
-		color: #1a1a1a;
+		color: var(--c-ink);
 	}
 
 	.td_right {
 		text-align: right;
 		font-weight: 800;
-		color: var(--color-gold-dark);
+		color: var(--c-gold-dark);
 	}
 
 	/* PEO Score Card */
 	.peo_attainment_card {
-		background: linear-gradient(135deg, #cfa83a 0%, #b8912d 100%);
+		background: var(--grad-gold);
 		border-radius: 20px;
 		padding: 2.5rem 2.25rem;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		box-shadow: 0 8px 30px rgba(207, 168, 58, 0.15);
 		display: flex;
 		flex-direction: column;
@@ -2293,7 +2282,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.2rem;
 		font-weight: 800;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		margin: 0 0 1.75rem 0;
 		letter-spacing: 0.02em;
 	}
@@ -2306,14 +2295,14 @@
 	}
 
 	.peo_score_tile {
-		background: #fff;
+		background: var(--c-surface);
 		border-radius: 12px;
 		padding: 1.25rem 1rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		border-top: 4px solid var(--color-maroon);
+		border-top: 4px solid var(--c-maroon-deep);
 		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 	}
 
@@ -2329,7 +2318,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.6rem;
 		font-weight: 900;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		line-height: 1.1;
 		margin-bottom: 0.25rem;
 	}
@@ -2338,12 +2327,12 @@
 		font-family: var(--font-body);
 		font-size: 0.58rem;
 		font-weight: 800;
-		color: var(--color-gold-dark);
+		color: var(--c-gold-dark);
 		letter-spacing: 0.05em;
 	}
 
 	.satisfaction_loop_box {
-		background: #fff;
+		background: var(--c-surface);
 		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -2360,14 +2349,14 @@
 	.loop_label {
 		font-size: 0.72rem;
 		font-weight: 800;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		letter-spacing: 0.02em;
 	}
 
 	.loop_percentage {
 		font-size: 1.15rem;
 		font-weight: 900;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 	}
 
 	.loop_progress_track {
@@ -2381,7 +2370,7 @@
 
 	.loop_progress_bar {
 		height: 100%;
-		background: var(--color-maroon);
+		background: var(--c-maroon-deep);
 		border-radius: 3px;
 	}
 
@@ -2408,7 +2397,7 @@
 	}
 
 	.modal_content {
-		background: #fff;
+		background: var(--c-surface);
 		border-radius: 28px;
 		width: 100%;
 		max-width: 860px;
@@ -2509,7 +2498,7 @@
 		font-family: var(--font-heading);
 		font-size: 1.3rem;
 		font-weight: 900;
-		color: var(--color-maroon);
+		color: var(--c-maroon-deep);
 		margin: 0 0 0.2rem 0;
 		line-height: 1.15;
 	}
@@ -2517,7 +2506,7 @@
 	.detail_alum_role {
 		font-family: var(--font-body);
 		font-size: 0.85rem;
-		color: var(--color-gold-dark);
+		color: var(--c-gold-dark);
 		font-weight: 700;
 		font-style: italic;
 		margin: 0 0 0.9rem 0;
@@ -2554,8 +2543,8 @@
 	}
 
 	.detail_batch_tag {
-		background: var(--color-maroon);
-		color: #fff;
+		background: var(--c-maroon-deep);
+		color: var(--c-surface);
 		font-family: var(--font-body);
 		font-size: 0.68rem;
 		font-weight: 700;
@@ -2565,7 +2554,7 @@
 
 	.detail_honors_tag {
 		background: rgba(207, 168, 58, 0.15);
-		color: var(--color-gold-dark);
+		color: var(--c-gold-dark);
 		font-family: var(--font-body);
 		font-size: 0.68rem;
 		font-weight: 700;
@@ -2590,7 +2579,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-		background: #fff;
+		background: var(--c-surface);
 		justify-content: center;
 	}
 
@@ -2598,7 +2587,7 @@
 		font-family: var(--font-heading);
 		font-size: 0.8rem;
 		font-weight: 900;
-		color: #1a1a1a;
+		color: var(--c-ink);
 		letter-spacing: 0.1em;
 		margin: 0;
 		text-transform: uppercase;
@@ -2643,7 +2632,7 @@
 		border-radius: 50%;
 		background: rgba(207, 168, 58, 0.15);
 		border: 2px solid rgba(207, 168, 58, 0.45);
-		color: var(--color-gold);
+		color: var(--c-gold);
 		display: flex;
 		align-items: center;
 		justify-content: center;
