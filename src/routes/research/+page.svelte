@@ -68,20 +68,66 @@
 		publications: ['Placeholder research publication for faculty repository.']
 	}));
 
-	const chartBars = [
-		{ year: '2018', count: 11 },
-		{ year: '2019', count: 19 },
-		{ year: '2022', count: 14 },
-		{ year: '2023', count: 16 },
-		{ year: '2024', count: 10 }
+	const metricCards = [
+		{
+			label: 'Completed Research',
+			value: '70',
+			desc: 'Spanning 2018 to 2024 academic cycles',
+			longValue: false,
+			left: 323.5,
+			top: -19
+		},
+		{
+			label: 'High-Impact Indexation Rate',
+			value: '89.13%',
+			desc: 'All published articles are indexed in premier global databases.',
+			longValue: true,
+			left: 540.87,
+			top: 375
+		},
+		{
+			label: 'Disseminated Publications',
+			value: '46',
+			desc: 'Papers published in refereed and indexed platforms.',
+			longValue: false,
+			left: 106.13,
+			top: 375
+		}
 	];
 
-	const metricCardCount = 3;
-	const topMetricCardIndices = [0, 2, 1];
+	const indexationByYear = [
+		{ year: '2018', count: 3 },
+		{ year: '2019', count: 10 },
+		{ year: '2020', count: 3 },
+		{ year: '2021', count: 16 },
+		{ year: '2022', count: 7 },
+		{ year: '2023', count: 7 },
+		{ year: '2024', count: 3 },
+		{ year: '2025', count: 10 }
+	];
+
+	const facultyStatus = [
+		{ label: 'Full time faculty', value: 15, note: '', tone: 'ft' },
+		{
+			label: 'Full time faculty engaged in research',
+			value: 11,
+			note: '73% of full-time',
+			tone: 'ft-engaged'
+		},
+		{ label: 'Part-time faculty', value: 27, note: '', tone: 'pt' },
+		{
+			label: 'Part-time faculty engaged in research',
+			value: 1,
+			note: '4% of part-time',
+			tone: 'pt-engaged'
+		}
+	];
+
+	const metricCardCount = metricCards.length;
 	/** @type {number | null} */
 	let activeIncentiveIndex = $state(null);
 	let activeMetricIndex = $state(0);
-	let topMetricCardIndex = $derived(topMetricCardIndices[activeMetricIndex]);
+	let activePanelSlide = $state(0);
 	let flippedFacultyIndices = $state(new Set());
 
 	/** @param {number} index */
@@ -102,6 +148,12 @@
 	/** @param {number} direction */
 	const rotateMetrics = (direction) => {
 		activeMetricIndex = (activeMetricIndex + direction + metricCardCount) % metricCardCount;
+		activePanelSlide = (activePanelSlide + direction + 2) % 2;
+	};
+
+	/** @param {number} index */
+	const setActiveMetric = (index) => {
+		activeMetricIndex = index;
 	};
 </script>
 
@@ -182,96 +234,145 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div class="metrics_sculpture" style:--metrics-orbit={`${activeMetricIndex * 120}deg`}>
-			<div class="center_building_mark" aria-hidden="true">
-				<img src="/research/Center_Building.svg" alt="" />
-			</div>
+		<div class="metrics_carousel" id="metrics-ring" role="group" aria-roledescription="carousel" aria-label="Research metrics">
+			<div class="metrics_stage" style="--metrics-orbit: {activeMetricIndex * -120}deg;">
+				<svg class="hex_web" viewBox="0 0 707 739" aria-hidden="true">
+					<defs>
+						<linearGradient id="hexStroke" x1="496.275" y1="121.209" x2="209.94" y2="617.156" gradientUnits="userSpaceOnUse">
+							<stop stop-color="#FAC549" />
+							<stop offset="1" stop-color="#CA8106" />
+						</linearGradient>
+					</defs>
+					<path d="M444.215 696.215L680.215 287.451L631.737 199.418L173.126 196.756L120.375 287.451L346.875 696.215L444.215 696.215Z" fill="#fff" stroke="url(#hexStroke)" stroke-width="6" />
+					<path d="M122 290L398 411" stroke="url(#hexStroke)" stroke-width="6" />
+					<path d="M171 196L398 409" stroke="url(#hexStroke)" stroke-width="6" />
+					<path d="M633.998 204.002L397.998 409.002" stroke="url(#hexStroke)" stroke-width="6" />
+					<path d="M681 289.999L398 408.999" stroke="url(#hexStroke)" stroke-width="6" />
+					<path d="M444.998 696.999L397.998 408.999" stroke="url(#hexStroke)" stroke-width="6" />
+					<path d="M346 697.001L398 409.001" stroke="url(#hexStroke)" stroke-width="6" />
+				</svg>
 
-			<div class="cards_ring" id="metrics-ring">
-				<div
-					class="metric_spoke"
-					class:is_active={topMetricCardIndex === 0}
-					style="--spoke-angle: 0deg;"
-				>
-					<article class="metric_card">
-						<h3>Completed Research</h3>
-						<strong>70</strong>
-						<p>Spanning 2018 to 2024 academic cycles</p>
-					</article>
-				</div>
+				{#each metricCards as card, i}
+					<button
+						type="button"
+						class="metric_card"
+						class:is_active={i === activeMetricIndex}
+						class:has_long_value={card.longValue}
+						style="--card-left: {card.left}px; --card-top: {card.top}px; --card-rotate: {i * 120}deg;"
+						aria-label={card.label}
+						aria-current={i === activeMetricIndex ? 'true' : 'false'}
+						onclick={() => setActiveMetric(i)}
+					>
+						<span class="metric_card_label">{card.label}</span>
+						<span class="metric_card_value">{card.value}</span>
+						<span class="metric_card_desc">{card.desc}</span>
+					</button>
+				{/each}
 
-				<div
-					class="metric_spoke"
-					class:is_active={topMetricCardIndex === 1}
-					style="--spoke-angle: 120deg;"
-				>
-					<article class="metric_card">
-						<h3>High-Impact Indexation Rate</h3>
-						<strong>89.13%</strong>
-						<p>All published articles are indexed in premier global databases.</p>
-					</article>
-				</div>
-
-				<div
-					class="metric_spoke"
-					class:is_active={topMetricCardIndex === 2}
-					style="--spoke-angle: 240deg;"
-				>
-					<article class="metric_card">
-						<h3>Disseminated Publications</h3>
-						<strong>46</strong>
-						<p>Papers published in refereed and indexed platforms.</p>
-					</article>
-				</div>
+				<img class="center_logo" src="/research/Center_Building.svg" alt="" aria-hidden="true" />
 			</div>
 
 			<button
 				class="metric_control metric_control_previous"
 				type="button"
-				aria-label="Show previous research metric"
+				aria-label="Rotate left"
 				aria-controls="metrics-ring"
 				onclick={() => rotateMetrics(-1)}
 			>
-				<ChevronLeft size={32} strokeWidth={2} />
+				<ChevronLeft size={22} strokeWidth={3.2} />
 			</button>
 			<button
 				class="metric_control metric_control_next"
 				type="button"
-				aria-label="Show next research metric"
+				aria-label="Rotate right"
 				aria-controls="metrics-ring"
 				onclick={() => rotateMetrics(1)}
 			>
-				<ChevronRight size={32} strokeWidth={2} />
+				<ChevronRight size={22} strokeWidth={3.2} />
 			</button>
 		</div>
 
-		<div class="distribution_panel" id="research-repository">
-			<h3>Annual Distribution of Completed Research</h3>
-			<p>
-				Dissemination tracking underscores the strong peer verification of the department's
-				scientific outputs, with a clear post-pandemic growth trajectory driven by targeted faculty
-				mentoring.
-			</p>
+		<div class="distribution_panel" id="research-repository" aria-live="polite">
+			<div class="panel_slide" class:is_hidden={activePanelSlide !== 0}>
+				<h3>FACULTY RESEARCH ENGAGEMENT</h3>
+				<p>
+					The department's research quality is driven by a dedicated core of active faculty whose
+					sustained scholarly engagement continues to elevate the program's international academic
+					footprint.
+				</p>
 
-			<div class="chart_frame" aria-label="Annual completed research bar chart">
-				<div class="chart_legend">
-					<span class="legend_dot"></span>
-					<span>Studies per Year</span>
-				</div>
-				<div class="chart_body">
-					<span class="axis_label">Studies Count</span>
-					<div class="chart_grid">
-						{#each chartBars as item}
-							<div class="bar_group">
-								<div class="bar" style="--value: {item.count};">
-									<span>{item.count}</span>
+				<div class="engagement_row">
+					<svg class="engagement_donut" viewBox="0 0 340 340" role="img" aria-label="12 of 42 faculty engaged in research">
+						<g transform="translate(170 170) rotate(-90)">
+							<circle r="142" fill="none" stroke="#EFDADB" stroke-width="36" />
+							<circle class="donut_outer" r="142" fill="none" stroke="#9B1C1A" stroke-width="36" stroke-dasharray="654.29 892.21" />
+							<circle r="100" fill="none" stroke="#FAE8D6" stroke-width="36" />
+							<circle class="donut_inner" r="100" fill="none" stroke="#E5862A" stroke-width="36" stroke-dasharray="23.27 628.32" />
+						</g>
+						<text x="170" y="178" text-anchor="middle" class="donut_value">12</text>
+						<text x="170" y="206" text-anchor="middle" class="donut_sub">of 42 faculty</text>
+						<text x="170" y="225" text-anchor="middle" class="donut_note">engaged in research</text>
+					</svg>
+
+					<div class="faculty_status">
+						<div class="faculty_status_title">FACULTY STATUS</div>
+						{#each facultyStatus as row}
+							<div class="status_row tone_{row.tone}">
+								<span class="status_dot" aria-hidden="true"></span>
+								<div class="status_text">
+									<span class="status_label">{row.label}</span>
+									{#if row.note}
+										<span class="status_note">{row.note}</span>
+									{/if}
 								</div>
-								<span class="bar_year">{item.year}</span>
+								<span class="status_value">{row.value}</span>
 							</div>
 						{/each}
 					</div>
 				</div>
-				<span class="year_axis">Year</span>
+			</div>
+
+			<div class="panel_slide" class:is_hidden={activePanelSlide !== 1}>
+				<h3>INDEXATION BREAKDOWN BY CALENDAR YEAR</h3>
+				<p>
+					The BSIT program has consistently published across premier academic databases from 2018
+					to 2025, totaling 59 papers — 54 indexed in SCOPUS or Web of Science and 5 in other
+					refereed journals.
+				</p>
+
+				<svg class="year_chart" viewBox="0 0 700 300" role="img" aria-label="Articles per year bar chart">
+					<defs>
+						<linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" stop-color="#FCD97C" />
+							<stop offset="1" stop-color="#F2A53A" />
+						</linearGradient>
+					</defs>
+					<text x="0" y="14" class="chart_axis_title">ARTICLES PER YEAR</text>
+					<rect x="550" y="5" width="11" height="11" rx="3" fill="#F7B94A" />
+					<text x="567" y="14.5" class="chart_legend_text">Articles</text>
+					{#each [0, 5, 10, 15, 20] as tick}
+						{@const y = 246 - tick * 10.3}
+						<line x1="44" x2="684" y1={y} y2={y} class="grid_line" class:baseline={tick === 0} />
+						<text x="34" y={y + 4} text-anchor="end" class="chart_tick">{tick}</text>
+					{/each}
+					{#each indexationByYear as item, i}
+						{@const h = item.count * 10.3}
+						{@const x = 61.6 + i * 80}
+						<g>
+							<rect
+								x={x + 10}
+								y={246 - h}
+								width="45"
+								height={h}
+								rx="10"
+								fill="url(#barGrad)"
+							/>
+							<text x={x + 32.5} y={246 - h - 8} text-anchor="middle" class="bar_value">{item.count}</text>
+							<text x={x + 32.5} y="268" text-anchor="middle" class="bar_year">{item.year}</text>
+						</g>
+					{/each}
+					<text x="364" y="290" text-anchor="middle" class="chart_axis_title">YEAR</text>
+				</svg>
 			</div>
 		</div>
 	</section>
@@ -596,138 +697,156 @@
 		padding-top: 11rem;
 	}
 
-	.metrics_sculpture {
-		--metrics-size: 1.35;
-		--metric-card-width: calc(280px * var(--metrics-size));
-		--metric-card-height: calc(237px * var(--metrics-size));
-		--wheel-radius: calc(246px * var(--metrics-size));
-		--building-mark-width: calc(426px * var(--metrics-size));
-		--seal-offset: calc(57px * var(--metrics-size));
-
+	/* Key Productivity — hexagon metric carousel (ported from the Framer reference) */
+	.metrics_carousel {
+		--carousel-scale: 0.88;
+		--carousel-w: calc(866px * var(--carousel-scale));
+		--carousel-h: calc(704px * var(--carousel-scale));
 		position: relative;
-		width: min(100%, calc(824px * var(--metrics-size)));
-		min-height: calc(758px * var(--metrics-size));
+		width: var(--carousel-w);
+		max-width: 100%;
+		height: var(--carousel-h);
 		margin: 0 auto 3.5rem;
 	}
 
-	.center_building_mark {
-		position: absolute;
-		left: 50%;
-		top: calc(50% + var(--seal-offset));
-		width: min(82vw, var(--building-mark-width));
-		aspect-ratio: 619 / 536;
-		transform: translate(-50%, -50%);
-		z-index: 1;
-	}
-
-	.center_building_mark img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-
-	.cards_ring {
-		position: absolute;
-		inset: 0;
-		transform-origin: 50% 50%;
-		transform: rotate(var(--metrics-orbit, 0deg));
-		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-		will-change: transform;
-		z-index: 3;
-	}
-
-	.metric_spoke {
+	.metrics_stage {
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		width: var(--metric-card-width);
-		height: var(--metric-card-height);
-		margin-left: calc(var(--metric-card-width) / -2);
-		margin-top: calc(var(--metric-card-height) / -2);
-		transform: rotate(var(--spoke-angle))
-			translateY(calc(-1 * var(--spoke-radius, calc(266px * var(--metrics-size)))));
+		width: 866px;
+		height: 704px;
+		margin-left: -433px;
+		margin-top: -352px;
+		transform-origin: 50% 50%;
+		transform: rotate(var(--metrics-orbit, 0deg)) scale(var(--carousel-scale));
 		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+		z-index: 1;
+		pointer-events: none;
 	}
 
-	.metric_spoke.is_active {
-		--spoke-radius: var(--wheel-radius);
+	.hex_web {
+		position: absolute;
+		left: 183.5px;
+		top: 117px;
+		width: 442px;
+		height: 462px;
+		display: block;
+		overflow: visible;
 	}
 
 	.metric_card {
-		width: 100%;
-		height: 100%;
-		border: 3px solid transparent;
-		border-radius: 12px;
+		position: absolute;
+		left: var(--card-left);
+		top: var(--card-top);
+		width: 219px;
+		height: 247px;
+		box-sizing: border-box;
+		border-radius: 26px;
+		border: 4px solid transparent;
 		background:
 			linear-gradient(#fff, #fff) padding-box,
-			linear-gradient(155deg, #eec25c, #d99b1d 45%, #c07f06) border-box;
-		box-sizing: border-box;
-		padding: 1.46rem 1.33rem 1.66rem;
-		text-align: center;
+			linear-gradient(0deg, #ca8106, #fac549) border-box;
+		padding: 0 14px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.73rem;
+		gap: 8px;
+		text-align: center;
+		cursor: pointer;
+		pointer-events: auto;
+		transform: rotate(var(--card-rotate, 0deg));
+		transform-origin: 50% 50%;
+		transition:
+			transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 0.3s ease;
 	}
 
-	.metric_card h3 {
+	.metric_card.is_active {
+		box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25);
+		z-index: 120;
+	}
+
+	.metric_card:not(.is_active) {
+		box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+		z-index: 45;
+	}
+
+	.metric_card:focus-visible {
+		outline: 3px solid rgba(140, 15, 19, 0.35);
+		outline-offset: 4px;
+	}
+
+	.metric_card_label {
 		font-family: var(--font-body);
-		font-size: 1.33rem;
-		font-weight: 800;
-		line-height: 1.1;
-		margin: 0;
-	}
-
-	.metric_card strong {
-		display: block;
-		font-size: 4rem;
-		font-weight: 300;
-		line-height: 0.9;
-		margin: 0.2rem 0;
-	}
-
-	.metric_card p {
-		font-size: 1.04rem;
+		font-size: 17px;
+		font-weight: 700;
 		line-height: 1.2;
-		margin: 0;
+		color: #1b1b1b;
+	}
+
+	.metric_card_value {
+		font-family: var(--font-body);
+		font-size: 58px;
+		font-weight: 800;
+		line-height: 1.05;
+		color: #6e0f12;
+	}
+
+	.metric_card.has_long_value .metric_card_value {
+		font-size: 46px;
+	}
+
+	.metric_card_desc {
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		line-height: 1.35;
+		color: #555;
+	}
+
+	.center_logo {
+		position: absolute;
+		left: 367px;
+		top: 307px;
+		width: 132px;
+		height: 132px;
+		object-fit: contain;
+		z-index: 250;
+		pointer-events: none;
 	}
 
 	.metric_control {
 		position: absolute;
-		top: 50%;
-		z-index: 4;
-		display: grid;
-		width: 58px;
-		height: 58px;
-		padding: 0;
-		place-items: center;
-		border: 2px solid #d49b1d;
+		top: 347px;
+		z-index: 300;
+		width: 52px;
+		height: 52px;
 		border-radius: 50%;
-		background: #fff;
-		color: var(--color-maroon);
+		border: none;
+		padding: 0;
+		display: grid;
+		place-items: center;
 		cursor: pointer;
-		transform: translateY(-50%);
+		color: #fff;
+		background: linear-gradient(135deg, #fac549, #ca8106);
+		box-shadow: 0 6px 16px rgba(202, 129, 6, 0.4);
 		transition:
 			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-			background 0.22s ease,
-			color 0.22s ease;
+			filter 0.22s ease;
 	}
 
 	.metric_control:hover {
-		background: var(--color-maroon);
-		color: #fff;
-		transform: translateY(-50%) scale(1.06);
+		transform: scale(1.06);
+		filter: saturate(1.1);
 	}
 
 	.metric_control:active {
-		transform: translateY(-50%) scale(0.98);
+		transform: scale(0.98);
 	}
 
 	.metric_control:focus-visible {
-		outline: 3px solid rgba(140, 15, 19, 0.28);
-		outline-offset: 4px;
+		outline: 3px solid rgba(140, 15, 19, 0.35);
+		outline-offset: 3px;
 	}
 
 	.metric_control_previous {
@@ -738,131 +857,226 @@
 		right: 0;
 	}
 
+	/* Detail panel — gold-bordered slides (faculty engagement / indexation by year) */
 	.distribution_panel {
-		width: min(100%, 1120px);
-		margin: 0 auto;
-		border: 3px solid #d88c00;
-		border-radius: 20px;
-		padding: 3.75rem 5.25rem 4.25rem;
+		position: relative;
+		z-index: 2;
+		width: 800px;
+		max-width: 100%;
+		height: 560px;
+		margin: -36px auto 0;
 		box-sizing: border-box;
+		border-radius: 30px;
+		border: 4px solid transparent;
+		background:
+			linear-gradient(#fff, #fff) padding-box,
+			linear-gradient(0deg, #ca8106, #fac549) border-box;
+		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+		overflow: hidden;
+	}
+
+	.panel_slide {
+		position: absolute;
+		inset: 0;
+		padding: 30px 36px;
+		box-sizing: border-box;
+		opacity: 1;
+		transform: translateX(0);
+		transition:
+			opacity 0.5s ease,
+			transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+		pointer-events: auto;
+	}
+
+	.panel_slide.is_hidden {
+		opacity: 0;
+		transform: translateX(-48px);
+		pointer-events: none;
 	}
 
 	.distribution_panel h3 {
-		font-family: var(--font-heading);
-		font-size: clamp(1.25rem, 1.65vw, 1.95rem);
-		font-weight: 800;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
+		margin: 0;
 		text-align: center;
-		margin: 0 0 3rem;
+		font-family: var(--font-body);
+		font-size: 22px;
+		font-weight: 800;
+		letter-spacing: 0.05em;
+		color: #111;
 	}
 
 	.distribution_panel p {
+		margin: 16px 0 18px;
 		font-family: var(--font-body);
-		font-size: clamp(1.05rem, 1.45vw, 1.65rem);
-		line-height: 1.25;
-		margin: 0 auto 2.5rem;
+		font-size: 17px;
+		line-height: 1.55;
 		text-align: justify;
-		max-width: 820px;
+		color: #222;
 	}
 
-	.chart_frame {
-		position: relative;
-		width: min(100%, 720px);
-		margin: 0 auto;
-		border: 2px solid rgba(0, 0, 0, 0.55);
-		padding: 4.25rem 4.5rem 3rem;
+	.engagement_row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 36px;
+	}
+
+	.engagement_donut {
+		width: 290px;
+		height: 290px;
+	}
+
+	.donut_outer {
+		transition: stroke-dasharray 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
+	}
+
+	.donut_inner {
+		transition: stroke-dasharray 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s;
+	}
+
+	.donut_value {
+		font-family: var(--font-body);
+		font-size: 58px;
+		font-weight: 800;
+		fill: #6e0f12;
+	}
+
+	.donut_sub {
+		font-family: var(--font-body);
+		font-size: 16px;
+		fill: #444;
+	}
+
+	.donut_note {
+		font-family: var(--font-body);
+		font-size: 12px;
+		fill: #777;
+	}
+
+	.faculty_status {
+		flex: 0 1 330px;
+		box-sizing: border-box;
+		border: 2px solid #fac549;
+		border-radius: 22px;
+		padding: 20px 22px;
+		background: #fff;
+	}
+
+	.faculty_status_title {
+		font-family: var(--font-body);
+		font-size: 15px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		margin-bottom: 6px;
+	}
+
+	.status_row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 0;
+		border-top: 1px solid #222;
+	}
+
+	.status_dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		flex-shrink: 0;
 		box-sizing: border-box;
 	}
 
-	.chart_legend {
-		position: absolute;
-		top: 2.25rem;
-		right: 8rem;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		font-size: 0.8rem;
-		color: #6a6a6a;
+	.tone_ft .status_dot {
+		border: 2px solid #9b1c1a;
+		background: #f4e3e4;
 	}
 
-	.legend_dot {
-		width: 22px;
-		height: 22px;
-		border-radius: 999px;
-		background: #7f1518;
+	.tone_ft-engaged .status_dot {
+		background: #9b1c1a;
 	}
 
-	.chart_body {
-		position: relative;
-		display: grid;
-		grid-template-columns: 58px 1fr;
-		align-items: end;
-		min-height: 315px;
+	.tone_pt .status_dot {
+		border: 2px solid #f0b36b;
+		background: #fbebd9;
 	}
 
-	.axis_label {
-		align-self: center;
-		justify-self: center;
-		writing-mode: vertical-rl;
-		transform: rotate(180deg);
-		font-size: 1.1rem;
+	.tone_pt-engaged .status_dot {
+		background: #e5862a;
+	}
+
+	.status_text {
+		flex: 1;
+	}
+
+	.status_label {
+		display: block;
+		font-family: var(--font-body);
+		font-size: 12px;
+		letter-spacing: 0.05em;
 		text-transform: uppercase;
-		color: #3d3d3d;
-		letter-spacing: 0.04em;
+		color: #1b1b1b;
 	}
 
-	.chart_grid {
-		height: 280px;
-		border-left: 1px solid rgba(0, 0, 0, 0.18);
-		border-bottom: 1px solid rgba(0, 0, 0, 0.45);
-		background-image:
-			linear-gradient(to top, rgba(0, 0, 0, 0.12) 1px, transparent 1px),
-			linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-		background-size:
-			100% 46px,
-			20% 100%;
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		align-items: end;
-		padding: 0 1.1rem;
-		gap: 1.45rem;
+	.status_note {
+		display: block;
+		font-family: var(--font-body);
+		font-size: 11px;
+		color: #777;
 	}
 
-	.bar_group {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-end;
-		height: 100%;
-		gap: 0.85rem;
+	.status_value {
+		font-family: var(--font-body);
+		font-size: 20px;
+		font-weight: 700;
+		color: #ca8106;
 	}
 
-	.bar {
-		width: 66px;
-		height: calc(var(--value) * 12px);
-		min-height: 100px;
-		border-radius: 999px 999px 26px 26px;
-		background: #7f1518;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #fff;
-		font-size: 0.82rem;
+	.year_chart {
+		display: block;
+		width: 100%;
+	}
+
+	.chart_axis_title {
+		font-family: var(--font-body);
+		font-size: 10px;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		fill: #666;
+	}
+
+	.chart_legend_text {
+		font-family: var(--font-body);
+		font-size: 13px;
+		fill: #444;
+	}
+
+	.chart_tick {
+		font-family: var(--font-body);
+		font-size: 12px;
+		fill: #555;
+	}
+
+	.grid_line {
+		stroke: #e4e4e4;
+		stroke-dasharray: 4 5;
+	}
+
+	.grid_line.baseline {
+		stroke: #b8b8b8;
+		stroke-dasharray: none;
+	}
+
+	.bar_value {
+		font-family: var(--font-body);
+		font-size: 17px;
+		font-weight: 700;
+		fill: #6e0f12;
 	}
 
 	.bar_year {
-		font-size: 0.8rem;
-		color: #595959;
-	}
-
-	.year_axis {
-		display: block;
-		text-align: center;
-		font-size: 1.15rem;
-		text-transform: uppercase;
-		color: #646464;
-		margin-top: 1.6rem;
+		font-family: var(--font-body);
+		font-size: 13px;
+		fill: #333;
 	}
 
 	.faculty_section {
@@ -1144,85 +1358,86 @@
 			padding-top: 5.5rem;
 		}
 
-		.metrics_sculpture {
+		.metrics_carousel {
 			width: 100%;
-			min-height: auto;
+			height: auto;
 			margin: 0 0 2.5rem;
-			transform: none;
-		}
-
-		.cards_ring {
-			position: static;
 			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-			transform: none;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			gap: 1.25rem;
 		}
 
-		.metric_spoke {
+		.metrics_stage {
 			position: static;
 			width: 100%;
 			height: auto;
-			margin: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
 			transform: none;
+			pointer-events: auto;
+		}
+
+		.hex_web,
+		.center_logo {
+			display: none;
 		}
 
 		.metric_card {
-			width: 100%;
+			position: static;
+			width: min(100%, 340px);
 			height: auto;
-			min-height: auto;
-			padding: 2.75rem 2rem;
+			min-height: 200px;
+			padding: 2rem 1.25rem;
+			transform: none;
 		}
 
-		.metric_card strong {
-			font-size: 4.5rem;
+		.metric_card_value {
+			font-size: 3.5rem;
 		}
 
-		.center_building_mark {
-			display: none;
+		.metric_card.has_long_value .metric_card_value {
+			font-size: 2.75rem;
 		}
 
 		.metric_control {
-			display: none;
+			position: static;
+			transform: none;
+		}
+
+		.metric_control_previous,
+		.metric_control_next {
+			left: auto;
+			right: auto;
 		}
 
 		.distribution_panel {
-			padding: 2.25rem 1.25rem;
+			width: 100%;
+			height: auto;
+			min-height: 480px;
+			margin: 0;
+		}
+
+		.panel_slide {
+			padding: 1.75rem 1.25rem;
 		}
 
 		.distribution_panel p {
 			text-align: left;
+			font-size: 15px;
 		}
 
-		.chart_frame {
-			padding: 4rem 1rem 2rem;
+		.engagement_donut {
+			width: 220px;
+			height: 220px;
 		}
 
-		.chart_legend {
-			top: 1rem;
-			right: 1rem;
-		}
-
-		.chart_body {
-			grid-template-columns: 36px 1fr;
-			min-height: 260px;
-		}
-
-		.axis_label {
-			font-size: 0.85rem;
-		}
-
-		.chart_grid {
-			height: 240px;
-			gap: 0.5rem;
-			padding: 0 0.5rem;
-		}
-
-		.bar {
-			width: 34px;
-			height: calc(var(--value) * 9px);
-			min-height: 76px;
-			font-size: 0.65rem;
+		.faculty_status {
+			flex: 1 1 100%;
 		}
 
 		.faculty_section {
