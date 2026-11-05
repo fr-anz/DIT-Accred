@@ -699,7 +699,7 @@
 
 	/* Key Productivity — hexagon metric carousel (ported from the Framer reference) */
 	.metrics_carousel {
-		--carousel-scale: 0.88;
+		--carousel-scale: 0.95;
 		--carousel-w: calc(866px * var(--carousel-scale));
 		--carousel-h: calc(704px * var(--carousel-scale));
 		position: relative;
