@@ -1088,8 +1088,8 @@
 	.faculty_repository {
 		width: min(100%, 1570px);
 		margin: 0 auto;
-		background: linear-gradient(90deg, #fac645 0%, #d58c00 100%);
-		border-radius: 22px;
+		background: linear-gradient(90deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%);
+		border-radius: 16px;
 		padding: 4.25rem 5.5rem;
 		box-sizing: border-box;
 		display: grid;
@@ -1099,15 +1099,15 @@
 
 	.faculty_card {
 		position: relative;
-		aspect-ratio: 1 / 1.22;
-		border-radius: 22px;
+		aspect-ratio: 215.625 / 298.75;
+		border-radius: 16px;
 		overflow: hidden;
 		padding: 0;
 		border: 0;
 		background: #730f12;
-		box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 		cursor: pointer;
-		perspective: 1200px;
+		perspective: 1100px;
 		text-align: left;
 		color: inherit;
 	}
@@ -1135,13 +1135,15 @@
 	.faculty_front::after {
 		content: '';
 		position: absolute;
-		inset: 42% 0 0;
-		background: linear-gradient(
-			180deg,
-			transparent 0%,
-			rgba(15, 16, 17, 0.34) 42%,
-			rgba(237, 247, 247, 0.8) 100%
-		);
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 31%;
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.72) 100%);
+		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(5px);
+		-webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%);
+		mask-image: linear-gradient(180deg, transparent 0%, #000 45%);
 		pointer-events: none;
 	}
 
@@ -1155,93 +1157,140 @@
 
 	.published_badge {
 		position: absolute;
-		top: 1.6rem;
-		right: 1.6rem;
-		width: 88px;
-		height: 92px;
-		border-radius: 8px;
-		background: #fff8e4;
-		color: var(--color-maroon);
+		top: 7%;
+		right: 7%;
+		width: 58px;
+		padding: 6px 0 4px;
+		border-radius: 6px;
+		background: #fff;
+		color: var(--c-maroon);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		box-shadow: 0 3px 7px rgba(0, 0, 0, 0.22);
+		text-align: center;
+		box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 		z-index: 2;
 	}
 
 	.published_badge span {
-		font-size: 0.58rem;
-		font-weight: 800;
-		line-height: 1.05;
-		letter-spacing: 0.08em;
+		font-family: var(--font-body);
+		font-size: 9px;
+		font-weight: 700;
+		line-height: 1.1;
+		letter-spacing: 0.04em;
 		text-align: center;
 	}
 
 	.published_badge strong {
-		font-size: 3rem;
-		line-height: 0.9;
-		font-weight: 500;
+		font-family: var(--font-body);
+		font-size: 30px;
+		line-height: 1.1;
+		font-weight: 800;
 	}
 
 	.faculty_overlay {
 		position: absolute;
-		left: 2rem;
-		right: 1.5rem;
-		bottom: 1.75rem;
+		left: 7%;
+		right: 7%;
+		bottom: 5%;
 		z-index: 2;
+		color: #fff;
 	}
 
 	.faculty_overlay strong {
-		font-family: var(--font-body);
-		font-size: clamp(1.3rem, 1.6vw, 2rem);
-		font-weight: 800;
+		display: block;
+		font-family: var(--font-heading);
+		font-size: 20px;
+		font-weight: 700;
+		line-height: 1.15;
 		color: #fff;
-		margin: 0 0 0.2rem;
-		line-height: 1;
-	}
-
-	.faculty_overlay span {
-		font-family: var(--font-body);
-		font-size: clamp(1rem, 1.2vw, 1.45rem);
-		font-style: italic;
-		font-weight: 800;
-		color: #ffd138;
 		margin: 0;
 	}
 
+	.faculty_overlay span {
+		display: block;
+		font-family: var(--font-body);
+		font-size: 14px;
+		font-style: italic;
+		font-weight: 500;
+		opacity: 0.95;
+		color: #fff;
+		margin: 2px 0 0;
+	}
+
 	.faculty_back {
-		background: #fff8e4;
-		color: var(--color-maroon);
-		padding: 2rem;
+		background: linear-gradient(160deg, var(--c-maroon) 0%, #791618 100%);
+		border: 3px solid var(--c-gold-light);
+		color: #fff;
+		padding: 20px 18px;
 		box-sizing: border-box;
 		transform: rotateY(180deg);
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
 	}
 
 	.faculty_back_label {
 		display: block;
-		font-size: 0.7rem;
-		font-weight: 800;
-		letter-spacing: 0.16em;
+		font-family: var(--font-body);
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: #a96800;
-		margin-bottom: 1.25rem;
+		color: var(--c-gold-light);
+		margin-bottom: 0;
 	}
 
 	.faculty_back > strong {
 		display: block;
 		font-family: var(--font-heading);
-		font-size: clamp(1.4rem, 1.8vw, 2.2rem);
-		line-height: 1.05;
-		margin-bottom: 1.5rem;
+		font-size: 19px;
+		font-weight: 700;
+		line-height: 1.15;
+		color: #fff;
+		margin-bottom: 0;
+	}
+
+	.faculty_back::after {
+		content: '';
+		display: block;
+		width: 44px;
+		height: 3px;
+		border-radius: 2px;
+		background: linear-gradient(90deg, var(--c-gold-light), var(--c-gold-dark));
+		flex-shrink: 0;
 	}
 
 	.faculty_publications {
-		display: block;
-		font-size: clamp(1rem, 1.15vw, 1.35rem);
-		font-weight: 600;
-		line-height: 1.4;
-		color: #322626;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		overflow-y: auto;
+		min-height: 0;
+		flex: 1;
+		font-family: var(--font-body);
+		font-size: 14px;
+		line-height: 1.45;
+		color: #fff4dc;
+	}
+
+	.faculty_publications span {
+		display: flex;
+		gap: 8px;
+	}
+
+	.faculty_publications span::before {
+		content: '';
+		flex-shrink: 0;
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: var(--c-gold-light);
+		margin-top: 7px;
 	}
 
 	@media (max-width: 1180px) {
