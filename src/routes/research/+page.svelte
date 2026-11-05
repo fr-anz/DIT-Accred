@@ -11,6 +11,7 @@
 		Network
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import ditLogo from '$lib/assets/DIT Logo.svg';
 
 	const frameworkCards = [
 		{
@@ -269,7 +270,7 @@
 					</button>
 				{/each}
 
-				<img class="center_logo" src="/research/Center_Building.svg" alt="" aria-hidden="true" />
+				<img class="center_logo" src={ditLogo} alt="DIT logo" aria-hidden="true" />
 			</div>
 
 			<button
@@ -699,7 +700,7 @@
 
 	/* Key Productivity — hexagon metric carousel (ported from the Framer reference) */
 	.metrics_carousel {
-		--carousel-scale: 0.95;
+		--carousel-scale: 1.2;
 		--carousel-w: calc(866px * var(--carousel-scale));
 		--carousel-h: calc(704px * var(--carousel-scale));
 		position: relative;
