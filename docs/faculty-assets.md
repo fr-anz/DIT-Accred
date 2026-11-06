@@ -59,8 +59,13 @@ official faculty roster before replacing the sample directory records.
 | Planning & Quality Assurance | `663:1199` |
 
 The current token cleanup follows the canonical values already documented in
-`DESIGN_SYSTEM.md` and defined in `src/routes/layout.css`. A live Figma comparison
-remains pending because this conversation does not expose the Figma MCP tools.
+`DESIGN_SYSTEM.md` and defined in `src/routes/layout.css`.
+
+Figma MCP access was verified on 2026-11-06 by reading the Teaching & Learning
+frame and retrieving design context and a screenshot for the Experiential tab
+(`622:694`). That tab uses an orange gradient in Figma. The current color cleanup
+standardizes the repository's documented gold tokens; full reconciliation of
+Figma gradients, spacing, typography, and interactions remains separate work.
 
 ## Narrative reports and remaining content
 
