@@ -3,21 +3,17 @@
 		Globe,
 		Flag,
 		BadgeCheck,
-		SquareCheck,
 		Workflow,
-		BookOpen,
-		Award,
-		Building2,
 		PenLine,
 		FileText,
 		Briefcase,
 		Plane,
-		Star,
 		Share2,
-		CircleDot,
 		CheckCircle2
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import '$lib/styles/accreditation-pages.css';
+	let videoPlaying = $state(false);
 
 	/**
 	 * @typedef {1 | 2 | 4 | 17} SdgId
@@ -52,12 +48,6 @@
 	/** @type {SdgId | null} */
 	let hoveredSdg = $state(null);
 
-	const wuriRankings = [
-		{ rank: 21, label: 'Generative AI Application' },
-		{ rank: 39, label: 'Student Support Engagement' },
-		{ rank: 50, label: 'Symbol / Promotion' }
-	];
-
 	const qsCategories = [
 		{ stars: 5, label: 'Employability' },
 		{ stars: 5, label: 'Online Learning' },
@@ -77,1400 +67,1015 @@
 	/>
 </svelte:head>
 
-<!-- ─────────────────────────────────────────────
+<main class="assigned_page planning_page">
+	<!-- ─────────────────────────────────────────────
   HERO SECTION
 ───────────────────────────────────────────── -->
-<section class="hero_section">
-	<div class="checkerboard_bg" aria-hidden="true"></div>
-	<div class="hero_content">
-		<h1 class="t_display hero_title">PLANNING &amp; QUALITY ASSURANCE</h1>
-	</div>
-</section>
+	<section class="hero_section">
+		<div class="checkerboard_bg" aria-hidden="true"></div>
+		<div class="hero_content">
+			<h1 class="t_display hero_title">PLANNING &amp; QUALITY<br />ASSURANCE</h1>
+		</div>
+	</section>
 
-<!-- ─────────────────────────────────────────────
+	<!-- ─────────────────────────────────────────────
   SECTION 1: STRATEGIC INTERNATIONAL BENCHMARKING
 ───────────────────────────────────────────── -->
-<section class="content_section" id="strategic-benchmarking">
-	<div class="section_label">
-		<Globe size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span class="t_eyebrow">STRATEGIC INTERNATIONAL BENCHMARKING</span>
-	</div>
-	<hr class="section_divider" />
-
-	<div class="benchmarking_grid">
-		<div class="benchmarking_text">
-			<p>
-				The Bachelor of Science in Information Technology (BSIT) program benefits directly from
-				active engagement in internationally recognized higher education ranking systems and
-				regional quality networks. These external validations ensure the curriculum remains
-				comparable with global computing education standards.
-			</p>
+	<section class="content_section" id="strategic-benchmarking">
+		<div class="section_label">
+			<Globe size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">STRATEGIC INTERNATIONAL BENCHMARKING</span>
 		</div>
-		<div class="aaccup_card">
-			<BadgeCheck size={42} strokeWidth={1.5} class="aaccup_icon" />
-			<p class="aaccup_level">LEVEL IV</p>
-			<p class="aaccup_status_label">AACCUP STATUS</p>
-			<hr class="aaccup_divider" />
-			<p class="aaccup_sub">On-going Application</p>
-		</div>
-	</div>
-</section>
+		<hr class="section_divider" />
 
-<!-- ─────────────────────────────────────────────
+		<div class="benchmarking_grid">
+			<div class="benchmarking_text">
+				<p>
+					The Bachelor of Science in Information Technology (BSIT) program benefits directly from
+					active engagement in internationally recognized higher education ranking systems and
+					regional quality networks. These external validations ensure the curriculum remains
+					comparable with global computing education standards.
+				</p>
+			</div>
+			<div class="aaccup_card">
+				<BadgeCheck size={42} strokeWidth={1.5} class="aaccup_icon" />
+				<p class="aaccup_level">LEVEL IV</p>
+				<p class="aaccup_status_label">AACCUP STATUS</p>
+				<hr class="aaccup_divider" />
+				<p class="aaccup_sub">On-going Application</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
   SECTION 2: UNIVERSITY SUPPORT FUNCTIONS
 ───────────────────────────────────────────── -->
-<section class="content_section" id="university-support">
-	<div class="section_label">
-		<Flag size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span class="t_eyebrow">UNIVERSITY SUPPORT FUNCTIONS</span>
-	</div>
-	<hr class="section_divider" />
+	<section class="content_section" id="university-support">
+		<div class="section_label">
+			<Flag size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">UNIVERSITY SUPPORT FUNCTIONS</span>
+		</div>
+		<hr class="section_divider" />
 
-	<!-- Video embed -->
-	<div class="video_wrapper">
-		<div class="video_screen">
-			<iframe
-				src="https://www.youtube.com/embed/Lp_x4dWvLs4"
-				title="University Support Functions Video"
-				class="video_iframe"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-				allowfullscreen
-			></iframe>
+		<!-- Video embed -->
+		<div class="video_wrapper">
+			<div class="video_screen">
+				{#if videoPlaying}
+					<iframe
+						src="https://www.youtube.com/embed/Lp_x4dWvLs4?autoplay=1"
+						title="University Support Functions Video"
+						class="video_iframe"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen
+					></iframe>
+				{:else}
+					<button
+						class="video_preview"
+						type="button"
+						aria-label="Play University Support Functions video"
+						onclick={() => (videoPlaying = true)}
+					>
+						<img
+							src="/planning/figma/video-preview.jpg"
+							alt="University development and infrastructure"
+							loading="lazy"
+						/>
+						<span class="play_button"
+							><svg
+								width="30"
+								height="30"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+								aria-hidden="true"><path d="M8 4v16l13-8z" /></svg
+							></span
+						>
+					</button>
+				{/if}
+			</div>
+		</div>
+
+		<!-- Two-column support content -->
+		<div class="support_grid">
+			<!-- Left column -->
+			<div class="support_left">
+				<!-- Strategic Priority card -->
+				<div class="priority_card">
+					<h3 class="priority_card_title">STRATEGIC PRIORITY</h3>
+					<ul class="priority_list">
+						<li class="priority_item">
+							<span class="priority_num">01</span>
+							<span class="priority_text"
+								>Academic Program Development &amp; Internationalization</span
+							>
+						</li>
+						<li class="priority_item">
+							<span class="priority_num">02</span>
+							<span class="priority_text">Human Resource Development</span>
+						</li>
+						<li class="priority_item last">
+							<span class="priority_num">03</span>
+							<span class="priority_text">Institutional-Level Quality Assurance</span>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Core Functions card -->
+				<div class="core_functions_card">
+					<h3 class="core_functions_title">CORE FUNCTIONS</h3>
+					<div class="functions_grid">
+						<div class="function_pill">Higher Education Programs</div>
+						<div class="function_pill">Research Programs</div>
+						<div class="function_pill">Extension &amp; Tech Advisory</div>
+						<div class="function_pill">Customer Satisfaction</div>
+					</div>
+				</div>
+				<div class="report_status">
+					<button type="button" disabled><FileText size={20} />Narrative Report</button><span
+						>Coming soon</span
+					>
+				</div>
+			</div>
+
+			<!-- Right column: Support Feed -->
+			<div class="support_feed">
+				<div class="feed_header">
+					<Share2 size={16} strokeWidth={1.5} />
+					<h3 class="feed_title">UNIVERSITY SUPPORT FEED</h3>
+				</div>
+				<div class="feed_cards">
+					<div class="feed_card">
+						<h4 class="feed_card_title">Quality Assurance</h4>
+						<p class="feed_card_desc">
+							Training via QAC and UTLDO for syllabi development and accreditation monitoring.
+						</p>
+					</div>
+					<div class="feed_card">
+						<h4 class="feed_card_title">Research &amp; Faculty</h4>
+						<p class="feed_card_desc">
+							Incentives for research presentation and faculty development grants (FSD PHP 20,000).
+						</p>
+					</div>
+					<div class="feed_card">
+						<h4 class="feed_card_title">Infrastructure</h4>
+						<p class="feed_card_desc">
+							PUP SINTA and Document Tracking System (DTS) for efficient request management.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  SECTION 3: DEPARTMENT-LEVEL PROCESS
+───────────────────────────────────────────── -->
+	<section class="content_section" id="dept-process">
+		<div class="section_label">
+			<Workflow size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">DEPARTMENT-LEVEL PROCESS</span>
+		</div>
+		<hr class="section_divider" />
+
+		<div class="process_cards_grid">
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<PenLine size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">Curriculum<br />Revision</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Based on CHED Memorandum Order No. 32 series of 2017.</p>
+			</div>
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<FileText size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">Syllabi<br />Prep</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Regular updates for industry and government sensitivity.</p>
+			</div>
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<Briefcase size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">Internship</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Established MOA with strategic industry partners.</p>
+			</div>
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<Plane size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">International<br />Affairs</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Institutionalization of global partnerships and mobility.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  PHOTO STRIP
+───────────────────────────────────────────── -->
+	<div class="photo_strip" aria-label="Department photo gallery">
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-1.jpg"
+				alt="Students and faculty in an IT laboratory setting"
+				class="strip_photo img_pos_1"
+			/>
+		</div>
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-2.jpg"
+				alt="Students listening to a presentation on Converge ICT Solutions"
+				class="strip_photo img_pos_2"
+			/>
+		</div>
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-3.jpg"
+				alt="Faculty and staff group with Banua Palawan tribe members"
+				class="strip_photo img_pos_3"
+			/>
+		</div>
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-4.jpg"
+				alt="Department faculty meeting and planning session"
+				class="strip_photo img_pos_4"
+			/>
 		</div>
 	</div>
 
-	<!-- Two-column support content -->
-	<div class="support_grid">
-		<!-- Left column -->
-		<div class="support_left">
-			<!-- Strategic Priority card -->
-			<div class="priority_card">
-				<h3 class="priority_card_title">STRATEGIC PRIORITY</h3>
-				<ul class="priority_list">
-					<li class="priority_item">
-						<span class="priority_num">01</span>
-						<span class="priority_text"
-							>Academic Program Development &amp; Internationalization</span
-						>
+	<!-- ─────────────────────────────────────────────
+  SECTION 4: VERIFIED INTERNATIONAL RANKINGS
+───────────────────────────────────────────── -->
+	<section class="content_section" id="rankings">
+		<div class="section_label">
+			<BadgeCheck size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
+		</div>
+		<hr class="section_divider" />
+
+		<div class="rankings_grid">
+			<!-- QS Stars card -->
+			<div class="ranking_card qs_card">
+				<div class="qs_header">
+					<img src="/planning/figma/qs-stars.png" alt="QS Stars" class="qs_logo_img" />
+					<div class="qs_rating_crop">
+						<img src="/planning/figma/qs-rating.png" alt="3 Stars" class="qs_stars_box_img" />
+					</div>
+				</div>
+
+				<h3 class="qs_rating_title">3-Star Overall Rating</h3>
+				<p class="qs_rating_desc">
+					QS Stars University Rating System alignment with global computing education standards.
+				</p>
+
+				<div class="qs_category_grid">
+					{#each qsCategories as cat (cat.label)}
+						<div class="qs_cat_tile">
+							<span class="qs_cat_stars">{cat.stars} <span>stars</span></span>
+							<span class="qs_cat_label">{cat.label}</span>
+						</div>
+					{/each}
+				</div>
+
+				<div class="qs_validated_row">
+					<CheckCircle2 size={16} class="validated_icon_circle" />
+					<span>Validated Module: Teaching &amp; IT Systems</span>
+				</div>
+			</div>
+
+			<!-- WURI Rankings card -->
+			<div class="ranking_card wuri_card">
+				<div class="wuri_header">
+					<div class="wuri_logo_crop">
+						<img src="/planning/figma/wuri.png" alt="WURI" class="wuri_logo_img" />
+					</div>
+					<div class="wuri_world_rank">
+						<span class="wuri_rank_label">World Rank:</span>
+						<span class="wuri_rank_num">271st</span>
+					</div>
+				</div>
+				<p class="wuri_desc">Innovative Universities globally among 1,072 institutions.</p>
+				<hr class="wuri_divider" />
+				<ul class="wuri_rankings_list">
+					<li class="wuri_rank_item">
+						<span class="wuri_rank_badge">21</span>
+						<div class="wuri_rank_details">
+							<span class="wuri_rank_text">Generative AI Application</span>
+							<div class="wuri_progress_track">
+								<div class="wuri_progress_bar" style="width: 85%;"></div>
+							</div>
+						</div>
 					</li>
-					<li class="priority_item">
-						<span class="priority_num">02</span>
-						<span class="priority_text">Human Resource Development</span>
+					<li class="wuri_rank_item">
+						<span class="wuri_rank_badge">39</span>
+						<div class="wuri_rank_details">
+							<span class="wuri_rank_text">Student Support Engagement</span>
+							<div class="wuri_progress_track">
+								<div class="wuri_progress_bar" style="width: 65%;"></div>
+							</div>
+						</div>
 					</li>
-					<li class="priority_item last">
-						<span class="priority_num">03</span>
-						<span class="priority_text">Institutional-Level Quality Assurance</span>
+					<li class="wuri_rank_item">
+						<span class="wuri_rank_badge">50</span>
+						<div class="wuri_rank_details">
+							<span class="wuri_rank_text">Symbol / Promotion</span>
+							<div class="wuri_progress_track">
+								<div class="wuri_progress_bar" style="width: 50%;"></div>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</div>
 
-			<!-- Core Functions card -->
-			<div class="core_functions_card">
-				<h3 class="core_functions_title">CORE FUNCTIONS</h3>
-				<div class="functions_grid">
-					<div class="function_pill">Higher Education Programs</div>
-					<div class="function_pill">Research Programs</div>
-					<div class="function_pill">Extension &amp; Tech Advisory</div>
-					<div class="function_pill">Customer Satisfaction</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Right column: Support Feed -->
-		<div class="support_feed">
-			<div class="feed_header">
-				<Share2 size={16} strokeWidth={1.5} />
-				<h3 class="feed_title">UNIVERSITY SUPPORT FEED</h3>
-			</div>
-			<div class="feed_cards">
-				<div class="feed_card">
-					<h4 class="feed_card_title">Quality Assurance</h4>
-					<p class="feed_card_desc">
-						Training via QAC and UTLDO for syllabi development and accreditation monitoring.
+			<!-- Impact Rankings & AUN-QA column -->
+			<div class="impact_column">
+				<!-- Impact Rankings card -->
+				<div class="ranking_card impact_card">
+					<p class="impact_label">The Impact Rankings</p>
+					<h2 class="impact_number">1501+</h2>
+					<p class="impact_desc">
+						Validated against UN Sustainable Development Goals (SDGs) through community digital
+						inclusion.
 					</p>
-				</div>
-				<div class="feed_card">
-					<h4 class="feed_card_title">Research &amp; Faculty</h4>
-					<p class="feed_card_desc">
-						Incentives for research presentation and faculty development grants (FSD PHP 20,000).
-					</p>
-				</div>
-				<div class="feed_card">
-					<h4 class="feed_card_title">Infrastructure</h4>
-					<p class="feed_card_desc">
-						PUP SINTA and Document Tracking System (DTS) for efficient request management.
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 
-<!-- ─────────────────────────────────────────────
-  SECTION 3: DEPARTMENT-LEVEL PROCESS
-───────────────────────────────────────────── -->
-<section class="content_section" id="dept-process">
-	<div class="section_label">
-		<Workflow size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span class="t_eyebrow">DEPARTMENT-LEVEL PROCESS</span>
-	</div>
-	<hr class="section_divider" />
+					<!-- SDG Badges with hover tooltip -->
+					<div class="sdg_badges_row">
+						{#each sdgIds as id (id)}
+							<button
+								type="button"
+								class="sdg_badge"
+								style="background-color: {sdgData[id].color};"
+								onmouseenter={() => (hoveredSdg = id)}
+								onmouseleave={() => (hoveredSdg = null)}
+								aria-label="SDG {id}: {sdgData[id].label}"
+								onfocus={() => (hoveredSdg = id)}
+								onblur={() => (hoveredSdg = null)}
+								onclick={() => (hoveredSdg = hoveredSdg === id ? null : id)}
+							>
+								<span class="sdg_num">{String(id).padStart(2, '0')}</span>
 
-	<div class="process_cards_grid">
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<PenLine size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">Curriculum<br />Revision</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Based on CHED Memorandum Order No. 32 series of 2017.</p>
-		</div>
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<FileText size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">Syllabi<br />Prep</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Regular updates for industry and government sensitivity.</p>
-		</div>
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<Briefcase size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">Internship</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Established MOA with strategic industry partners.</p>
-		</div>
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<Plane size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">International<br />Affairs</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Institutionalization of global partnerships and mobility.</p>
-		</div>
-	</div>
-</section>
-
-<!-- ─────────────────────────────────────────────
-  PHOTO STRIP
-───────────────────────────────────────────── -->
-<div class="photo_strip" aria-label="Department photo gallery">
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-1.jpg"
-			alt="Students and faculty in an IT laboratory setting"
-			class="strip_photo img_pos_1"
-		/>
-	</div>
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-2.jpg"
-			alt="Students listening to a presentation on Converge ICT Solutions"
-			class="strip_photo img_pos_2"
-		/>
-	</div>
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-3.jpg"
-			alt="Faculty and staff group with Banua Palawan tribe members"
-			class="strip_photo img_pos_3"
-		/>
-	</div>
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-4.jpg"
-			alt="Department faculty meeting and planning session"
-			class="strip_photo img_pos_4"
-		/>
-	</div>
-</div>
-
-<!-- ─────────────────────────────────────────────
-  SECTION 4: VERIFIED INTERNATIONAL RANKINGS
-───────────────────────────────────────────── -->
-<section class="content_section" id="rankings">
-	<div class="section_label">
-		<BadgeCheck size={26} strokeWidth={1.5} class="section_icon maroon" />
-		<span class="t_eyebrow">VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
-	</div>
-	<hr class="section_divider" />
-
-	<div class="rankings_grid">
-		<!-- QS Stars card -->
-		<div class="ranking_card qs_card">
-			<div class="qs_header">
-				<img src="/planning/qs-logo.png" alt="QS Stars" class="qs_logo_img" />
-				<img src="/planning/qs-stars-box.png" alt="3 Stars" class="qs_stars_box_img" />
-			</div>
-
-			<h3 class="qs_rating_title">3-Star Overall Rating</h3>
-			<p class="qs_rating_desc">
-				QS Stars University Rating System alignment with global computing education standards.
-			</p>
-
-			<div class="qs_category_grid">
-				{#each qsCategories as cat}
-					<div class="qs_cat_tile">
-						<span class="qs_cat_stars">{cat.stars} stars</span>
-						<span class="qs_cat_label">{cat.label}</span>
-					</div>
-				{/each}
-			</div>
-
-			<div class="qs_validated_row">
-				<CheckCircle2 size={16} class="validated_icon_circle" />
-				<span>Validated Module: Teaching &amp; IT Systems</span>
-			</div>
-		</div>
-
-		<!-- WURI Rankings card -->
-		<div class="ranking_card wuri_card">
-			<div class="wuri_header">
-				<img src="/planning/wuri-logo.png" alt="WURI" class="wuri_logo_img" />
-				<div class="wuri_world_rank">
-					<span class="wuri_rank_label">World Rank:</span>
-					<span class="wuri_rank_num">271st</span>
-				</div>
-			</div>
-			<p class="wuri_desc">Innovative Universities globally among 1,072 institutions.</p>
-			<hr class="wuri_divider" />
-			<ul class="wuri_rankings_list">
-				<li class="wuri_rank_item">
-					<span class="wuri_rank_badge">21</span>
-					<div class="wuri_rank_details">
-						<span class="wuri_rank_text">Generative AI Application</span>
-						<div class="wuri_progress_track">
-							<div class="wuri_progress_bar" style="width: 85%;"></div>
-						</div>
-					</div>
-				</li>
-				<li class="wuri_rank_item">
-					<span class="wuri_rank_badge">39</span>
-					<div class="wuri_rank_details">
-						<span class="wuri_rank_text">Student Support Engagement</span>
-						<div class="wuri_progress_track">
-							<div class="wuri_progress_bar" style="width: 65%;"></div>
-						</div>
-					</div>
-				</li>
-				<li class="wuri_rank_item">
-					<span class="wuri_rank_badge">50</span>
-					<div class="wuri_rank_details">
-						<span class="wuri_rank_text">Symbol / Promotion</span>
-						<div class="wuri_progress_track">
-							<div class="wuri_progress_bar" style="width: 50%;"></div>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-
-		<!-- Impact Rankings & AUN-QA column -->
-		<div class="impact_column">
-			<!-- Impact Rankings card -->
-			<div class="ranking_card impact_card">
-				<p class="impact_label">The Impact Rankings</p>
-				<h2 class="impact_number">1501+</h2>
-				<p class="impact_desc">
-					Validated against UN Sustainable Development Goals (SDGs) through community digital
-					inclusion.
-				</p>
-
-				<!-- SDG Badges with hover tooltip -->
-				<div class="sdg_badges_row">
-					{#each sdgIds as id}
-						<div
-							class="sdg_badge"
-							style="background-color: {sdgData[id].color};"
-							onmouseenter={() => (hoveredSdg = id)}
-							onmouseleave={() => (hoveredSdg = null)}
-							role="button"
-							tabindex="0"
-							aria-label="SDG {id}: {sdgData[id].label}"
-							onkeydown={(e) => {
-								if (e.key === 'Enter' || e.key === ' ') hoveredSdg = hoveredSdg === id ? null : id;
-							}}
-						>
-							<span class="sdg_num">{String(id).padStart(2, '0')}</span>
-
-							{#if hoveredSdg === id}
-								<div class="sdg_tooltip" role="tooltip">
-									<div class="sdg_tooltip_left">
-										<span class="sdg_tooltip_title">SDG</span>
-										<span class="sdg_tooltip_num" style="color: {sdgData[id].color};">
-											{String(id).padStart(2, '0')}
-										</span>
+								{#if hoveredSdg === id}
+									<div class="sdg_tooltip" role="tooltip">
+										<div class="sdg_tooltip_left">
+											<span class="sdg_tooltip_title">SDG</span>
+											<span class="sdg_tooltip_num" style="color: {sdgData[id].color};">
+												{String(id).padStart(2, '0')}
+											</span>
+										</div>
+										<div class="sdg_tooltip_right">
+											<span class="sdg_tooltip_range">{sdgData[id].range}</span>
+										</div>
 									</div>
-									<div class="sdg_tooltip_right">
-										<span class="sdg_tooltip_range">{sdgData[id].range}</span>
-									</div>
-								</div>
-							{/if}
-						</div>
-					{/each}
+								{/if}
+							</button>
+						{/each}
+					</div>
 				</div>
-			</div>
 
-			<!-- AUN-QA Network card -->
-			<div class="ranking_card aunqa_card">
-				<div class="aunqa_header">
-					<Share2 size={18} strokeWidth={1.5} class="aunqa_icon" />
-					<h3 class="aunqa_title">AUN-QA Network</h3>
+				<!-- AUN-QA Network card -->
+				<div class="ranking_card aunqa_card">
+					<div class="aunqa_header">
+						<Share2 size={18} strokeWidth={1.5} class="aunqa_icon" />
+						<h3 class="aunqa_title">AUN-QA Network</h3>
+					</div>
+					<p class="aunqa_desc">
+						Active regional alignment of learning outcomes with ASEAN higher education standards.
+					</p>
 				</div>
-				<p class="aunqa_desc">
-					Active regional alignment of learning outcomes with ASEAN higher education standards.
-				</p>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+</main>
 
 <Footer />
 
 <style>
-	/* ── DESIGN TOKENS ──
-	   Aliases onto the canonical brand tokens in src/routes/layout.css so this page
-	   stops carrying its own divergent palette. Values now match the Figma canvas. */
-	:root {
-		--color-maroon: var(--c-maroon);
-		--color-maroon-mid: var(--c-maroon-mid);
-		--color-maroon-deep: var(--c-maroon-deep);
-		--color-gold: var(--c-gold);
-		--color-gold-light: var(--c-gold-light);
-		--color-gold-dark: var(--c-gold-dark);
-		--color-bg: var(--c-surface);
-	}
-
-	.content_section {
-		width: 100%;
-		box-sizing: border-box;
-		padding: 2.5rem 10% 4rem 10%; /* Fluid 10% side padding matching the community page scale at 100% zoom */
-		font-size: 1.05rem;
-	}
-
-	@media (max-width: 1024px) {
-		.content_section {
-			padding: 2.5rem 6% 4rem 6%;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.content_section {
-			padding: 2rem 1.5rem 3.5rem 1.5rem;
-		}
-	}
-
-	#strategic-benchmarking {
-		padding-top: 4.5rem; /* Separator from hero fold */
-	}
-
-	#university-support,
-	#dept-process {
-		padding-top: 1rem; /* Reduced top padding to tighten the spacing between consecutive sections */
-	}
-
-	/* ── HERO ── */
-	.hero_section {
-		position: relative;
-		height: 100dvh; /* Covers the screen completely when landing/clicking Planning */
-		min-height: 600px;
+	.report_status {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		gap: 18px;
+		font-size: 14px;
+		color: var(--c-maroon);
+	}
+	.report_status button {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 16px 24px;
+		border: 1px solid var(--c-maroon);
+		border-radius: 10px;
+		background: white;
+		color: var(--c-maroon);
+		opacity: 0.65;
+	}
+	.wuri_logo_crop {
+		position: relative;
+		width: 54%;
+		aspect-ratio: 278 / 102;
 		overflow: hidden;
-		background-color: #f8f6f3;
+	}
+	.qs_cat_stars span {
+		font-size: 0.68em;
 	}
 
-	/* 16px checkerboard tile, #fafafa / #ebebeb — matches the Figma hero fill exactly.
-	   Reproduced in CSS rather than shipped as a raster so it stays crisp at any DPI. */
-	.checkerboard_bg {
-		position: absolute;
-		inset: 0;
-		background-color: #fafafa;
-		background-image:
-			linear-gradient(45deg, #ebebeb 25%, transparent 25%),
-			linear-gradient(-45deg, #ebebeb 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #ebebeb 75%),
-			linear-gradient(-45deg, transparent 75%, #ebebeb 75%);
-		background-size: 32px 32px;
-		background-position:
-			0 0,
-			0 16px,
-			16px -16px,
-			-16px 0px;
-		animation: checkerboardFade 1.2s ease-out forwards;
-	}
-
-	.hero_content {
-		position: relative;
-		z-index: 1;
-		text-align: center;
-		padding: 4rem 2rem;
-		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-	}
-
-	/* Inherits Montserrat Bold + the black→maroon gradient from the global .t_display
-	   role. Only the page-specific bits live here: this hero caps at 130px rather
-	   than the 150px used on the faculty/research heroes (Figma node 979:692). */
 	.hero_title {
-		font-size: clamp(2.5rem, 6.8vw, 130px);
-		line-height: 1.12;
 		max-width: 1811px;
-		text-wrap: balance;
+		font-size: clamp(38px, 6.77vw, 130px);
+		line-height: 1.15;
+		background-image: linear-gradient(127deg, #000, #901518);
 	}
-
-	@keyframes checkerboardFade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-
-	@keyframes heroFadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	/* ── SHARED SECTION WRAPPER ── */
-	/* Row wrapper only. The text itself carries the global .t_eyebrow role, which
-	   supplies Inter SemiBold / 0.27em / gold gradient. */
-	.section_label {
-		display: flex;
-		align-items: center;
-		gap: 0.85rem;
-		margin-bottom: 0.85rem;
-	}
-
-	.section_label :global(.t_eyebrow) {
-		display: inline-block;
-	}
-
-	:global(.section_icon) {
-		color: var(--color-gold-dark);
-		flex-shrink: 0;
-	}
-
-	:global(.section_icon.maroon) {
-		color: var(--color-maroon);
-	}
-
-	.section_divider {
-		border: none;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
-		margin: 0.5rem 0 3rem 0;
-	}
-
-	/* ── STRATEGIC BENCHMARKING ── */
-	.benchmarking_grid {
+	#strategic-benchmarking {
+		padding-top: clamp(65px, 5.36vw, 103px);
 		display: grid;
-		grid-template-columns: 1fr 380px;
-		gap: 4.5rem;
-		align-items: center;
+		grid-template-columns: 1143fr 434fr;
+		column-gap: clamp(40px, 6.2vw, 119px);
+		align-items: start;
 	}
-
-	@media (max-width: 900px) {
-		.benchmarking_grid {
-			grid-template-columns: 1fr;
-			gap: 2.5rem;
-		}
+	#strategic-benchmarking .section_label {
+		grid-column: 1;
 	}
-
-	/* Figma: Inter Regular 28px / 40px line-height, black, 1143px column */
+	#strategic-benchmarking .section_divider {
+		grid-column: 1;
+		margin-bottom: clamp(25px, 2.6vw, 50px);
+	}
+	.benchmarking_grid {
+		display: contents;
+	}
+	.benchmarking_text {
+		grid-column: 1;
+	}
 	.benchmarking_text p {
-		font-family: var(--font-body);
-		font-size: clamp(1.05rem, 1.2vw, 1.2rem);
-		color: var(--c-ink);
-		line-height: 1.43;
-		max-width: 820px;
 		margin: 0;
 	}
-
 	.aaccup_card {
-		background: var(--grad-gold);
+		grid-column: 2;
+		grid-row: 1 / 4;
 		border-radius: 25px;
-		padding: 1.75rem 2rem;
+		background: linear-gradient(104deg, #fac549, #ca8106);
 		text-align: center;
-		width: 380px;
-		height: 250px;
-		box-shadow: 0 8px 24px rgba(202, 129, 6, 0.15);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.4rem;
-		box-sizing: border-box;
-		transition:
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			box-shadow 0.3s ease;
+		padding: clamp(25px, 2.6vw, 50px) 20px;
 	}
-
-	.aaccup_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.28);
+	.aaccup_card :global(svg) {
+		color: white;
+		width: clamp(40px, 3.125vw, 60px);
+		height: clamp(40px, 3.125vw, 60px);
+		margin: 0 auto 16px;
 	}
-
-	@media (max-width: 900px) {
-		.aaccup_card {
-			width: 100%;
-			max-width: 380px;
-			margin: 0 auto;
-		}
-	}
-
-	:global(.aaccup_icon) {
-		color: #ffffff;
-		margin-bottom: 0.25rem;
-	}
-
-	/* Figma: "LEVEL IV" Inter Regular 24px, 6.48px tracking (= 0.27em), uppercase */
 	.aaccup_level {
-		font-family: var(--font-body);
-		font-size: clamp(1rem, 1.15vw, 1.2rem);
-		font-weight: 400;
-		color: var(--c-ink);
-		margin: 0;
-		letter-spacing: 0.27em;
-		text-transform: uppercase;
-	}
-
-	/* Figma: "AACCUP STATUS" Inter Bold 24px var(--c-maroon), 6.48px tracking */
-	.aaccup_status_label {
-		font-family: var(--font-body);
-		font-size: clamp(1rem, 1.15vw, 1.2rem);
+		font-size: clamp(17px, 1.25vw, 24px);
 		font-weight: 700;
 		letter-spacing: 0.27em;
+		margin: 0 0 12px;
+	}
+	.aaccup_status_label {
 		color: var(--c-maroon);
+		font-size: clamp(17px, 1.25vw, 24px);
 		margin: 0;
-		text-transform: uppercase;
 	}
-
 	.aaccup_divider {
-		border: none;
-		border-top: 1px solid rgba(148, 21, 24, 0.35);
-		width: 175px;
-		max-width: 100%;
-		margin: 0.4rem 0;
+		border: 0;
+		border-top: 1px solid #222;
+		margin: 18px 0;
 	}
-
-	/* Figma: "On-going Application" Inter Italic 24px */
 	.aaccup_sub {
-		font-family: var(--font-body);
-		font-size: clamp(0.95rem, 1.05vw, 1.1rem);
+		font-size: clamp(16px, 1.25vw, 24px);
 		font-style: italic;
-		color: var(--c-ink);
 		margin: 0;
 	}
-
-	/* ── VIDEO ── */
-	/* ── VIDEO ── */
 	.video_wrapper {
-		margin-bottom: 3rem;
-		border-radius: 24px;
-		overflow: hidden;
-		background: #1e1e1e;
-		border: 12px solid #1e1e1e;
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-		box-sizing: border-box;
+		width: 79.4%;
+		margin: 0 auto clamp(45px, 4.167vw, 80px);
+		padding: clamp(24px, 2.656vw, 51px);
+		border-radius: 25px;
+		background: var(--panel-maroon);
 	}
-
 	.video_screen {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		aspect-ratio: 1241 / 590;
+		position: relative;
 		overflow: hidden;
-		background: transparent;
+		border-radius: 10px;
 	}
-
 	.video_iframe {
 		width: 100%;
-		aspect-ratio: 16 / 9;
-		border: none;
-		display: block;
+		height: 100%;
+		border: 0;
 	}
-
-	/* ── SUPPORT GRID ── */
+	.video_preview {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		display: grid;
+		place-items: center;
+		background: #eee;
+	}
+	.video_preview img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.play_button {
+		position: relative;
+		width: clamp(50px, 4.167vw, 80px);
+		height: clamp(50px, 4.167vw, 80px);
+		display: grid;
+		place-items: center;
+		color: var(--c-maroon);
+		background: #fffc;
+		border-radius: 50%;
+		box-shadow: 0 4px 20px #0002;
+	}
 	.support_grid {
 		display: grid;
-		grid-template-columns: 1.05fr 1fr;
-		gap: 3rem; /* Expanded for better breathing room on desktop */
+		grid-template-columns: 872fr 772fr;
+		gap: clamp(26px, 2.344vw, 45px);
 	}
-
-	@media (max-width: 760px) {
-		.support_grid {
-			grid-template-columns: 1fr;
-			gap: 2rem;
-		}
-	}
-
 	.support_left {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: clamp(25px, 2.344vw, 45px);
 	}
-
-	/* Priority card */
 	.priority_card {
-		background: #fff;
-		border: 1.5px solid var(--color-gold);
-		border-radius: 16px;
-		padding: 2rem;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+		border: 2px solid var(--c-gold);
+		border-radius: 25px;
+		padding: clamp(28px, 3.073vw, 59px);
+		flex: 1;
 	}
-
 	.priority_card_title {
-		font-family: var(--font-heading);
-		font-size: 1.1rem;
-		font-weight: 800;
-		color: var(--color-maroon);
-		letter-spacing: 0.02em;
-		margin: 0 0 1.25rem 0;
+		color: var(--c-maroon);
+		margin: 0 0 clamp(28px, 3.125vw, 60px);
+		font: 700 clamp(24px, 2.083vw, 40px)/1.25 var(--font-heading);
+		letter-spacing: 0.04em;
 	}
-
 	.priority_list {
-		list-style: none;
 		padding: 0;
 		margin: 0;
-		display: flex;
-		flex-direction: column;
+		list-style: none;
 	}
-
 	.priority_item {
 		display: flex;
+		gap: clamp(20px, 2.083vw, 40px);
 		align-items: center;
-		gap: 1.25rem;
-		padding: 1rem 0;
-		border-bottom: 1.5px solid #5e5e5e;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		padding: clamp(20px, 1.667vw, 32px) 0;
+		border-bottom: 1px solid #ddd;
 	}
-
-	.priority_item:hover {
-		transform: translateX(8px);
+	.priority_item:first-child {
+		padding-top: 0;
 	}
-
 	.priority_item.last {
-		border-bottom: none;
+		border: 0;
 		padding-bottom: 0;
 	}
-
 	.priority_num {
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: var(--c-gold);
-		font-family: var(--font-body);
-		min-width: 28px;
+		color: var(--c-gold-dark);
+		font-size: clamp(20px, 1.458vw, 28px);
+		font-weight: 700;
 	}
-
-	.priority_text {
-		font-size: 0.88rem;
-		color: #000000;
-		font-family: var(--font-body);
-		font-weight: 600;
-		line-height: 1.45;
-	}
-
-	/* Core Functions card */
 	.core_functions_card {
-		background: linear-gradient(180deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%);
-		border-radius: 16px;
-		padding: 2rem;
-		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
+		border-radius: 25px;
+		padding: clamp(28px, 2.76vw, 53px);
+		background: linear-gradient(105deg, #fac549, #ca8106);
 	}
-
 	.core_functions_title {
-		font-family: var(--font-heading);
-		font-size: 1.1rem;
-		font-weight: 800;
-		color: #000000;
-		letter-spacing: 0.02em;
-		margin: 0 0 1.25rem 0;
+		margin: 0 0 clamp(25px, 2.083vw, 40px);
+		color: #000;
+		font: 700 clamp(22px, 1.667vw, 32px)/1.3 var(--font-heading);
 	}
-
 	.functions_grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 0.65rem;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(16px, 1.354vw, 26px);
 	}
-
 	.function_pill {
-		background: #ffffff;
-		border-radius: 4px;
-		padding: 0.85rem 1rem;
-		border-left: 4px solid var(--c-maroon);
-		font-size: 0.8rem;
-		font-weight: 700;
+		padding: 18px 20px;
+		background: white;
+		border-left: 6px solid var(--c-maroon);
+		border-radius: 10px;
+		font-size: clamp(13px, 1.042vw, 20px);
 		color: var(--c-maroon);
-		font-family: var(--font-body);
-		line-height: 1.3;
-		display: flex;
-		align-items: center;
 	}
-
-	/* Support Feed */
 	.support_feed {
-		background: linear-gradient(180deg, var(--c-maroon) 0%, #1e1e1e 100%);
-		border-radius: 16px;
-		padding: 2rem;
-		color: #fff;
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+		background: var(--panel-maroon);
+		padding: clamp(30px, 3.646vw, 70px);
+		border-radius: 25px;
 	}
-
 	.feed_header {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		border-bottom: 1.5px solid #5e5e5e;
-		padding-bottom: 0.85rem;
+		gap: 15px;
+		color: var(--c-gold-light);
+		margin-bottom: clamp(32px, 3.125vw, 60px);
 	}
-
+	.feed_header :global(svg) {
+		display: none;
+	}
 	.feed_title {
-		font-size: 0.85rem;
-		font-weight: 800;
-		color: var(--c-gold);
-		letter-spacing: 0.1em;
-		font-family: var(--font-body);
 		margin: 0;
+		font: 700 clamp(21px, 1.667vw, 32px)/1.3 var(--font-heading);
 	}
-
-	:global(.feed_header svg) {
-		color: var(--c-gold);
-	}
-
 	.feed_cards {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
+		display: grid;
+		gap: clamp(25px, 2.188vw, 42px);
 	}
-
 	.feed_card {
-		background: #ffffff;
-		border-radius: 8px;
-		padding: 1.1rem 1.25rem;
-		color: #000000;
+		background: white;
+		border-radius: 10px;
+		padding: clamp(25px, 2.083vw, 40px);
 	}
-
 	.feed_card_title {
-		font-size: 0.92rem;
-		font-weight: 800;
-		color: var(--c-gold);
-		margin: 0 0 0.4rem 0;
-		font-family: var(--font-body);
+		margin: 0 0 20px;
+		color: var(--c-gold-dark);
+		font: 700 clamp(20px, 1.458vw, 28px)/1.3 var(--font-heading);
 	}
-
 	.feed_card_desc {
-		font-size: 0.8rem;
-		line-height: 1.6;
-		color: var(--c-ink);
 		margin: 0;
-		font-family: var(--font-body);
+		line-height: 1.3;
 	}
-
-	/* ── DEPARTMENT-LEVEL PROCESS ── */
 	.process_cards_grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1.5rem; /* Expanded from 1.25rem for alignment with rankings grid */
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: clamp(22px, 2.292vw, 44px);
 	}
-
-	@media (max-width: 760px) {
-		.process_cards_grid {
-			grid-template-columns: repeat(2, 1fr);
-			gap: 1.25rem;
-		}
-	}
-
-	@media (max-width: 460px) {
-		.process_cards_grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
 	.process_card {
-		border: 4px solid rgba(160, 22, 24, 0.45); /* Thicker red/maroon borders matching figma */
-		border-radius: 30px; /* Tighter matching figma */
-		padding: 2.25rem 1.5rem;
-		text-align: center;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.85rem;
-		min-height: 330px; /* Tall portrait rectangular shape */
-		box-sizing: border-box;
-		transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-		cursor: default;
+		padding: clamp(25px, 2.188vw, 42px);
+		border: 2px solid var(--c-maroon);
+		border-radius: 25px;
+		box-shadow: 4px 6px 9px #94151830;
 	}
-
-	.process_card:hover {
-		transform: translateY(-4px);
-		border-color: var(--color-gold);
-		box-shadow: 0 8px 24px rgba(207, 168, 58, 0.15);
+	.process_card:nth-child(even) {
+		border-color: var(--c-gold);
+		box-shadow: 4px 6px 9px #ca810630;
 	}
-
-	.process_divider {
-		border: none;
-		border-top: 1.5px solid rgba(140, 15, 19, 0.18);
-		width: 45px;
-		margin: 0.4rem auto;
-	}
-
 	.process_icon_wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 0.5rem; /* Clean white card backgrounds, no background circle behind icons */
+		margin-bottom: clamp(24px, 2.083vw, 40px);
 	}
-
-	:global(.process_icon) {
-		color: var(--color-maroon);
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	.process_icon_wrapper :global(svg) {
+		width: clamp(50px, 5vw, 96px);
+		height: clamp(50px, 5vw, 96px);
+		color: var(--c-maroon);
 	}
-
-	.process_card:hover :global(.process_icon) {
-		transform: scale(1.12);
-	}
-
 	.process_card_title {
-		font-family: var(--font-heading); /* Overpass */
-		font-size: 2rem; /* 32px matching Figma specification */
-		font-weight: 600; /* SemiBold matching Figma specification */
-		color: var(--c-maroon); /* Maroon color matching Figma specification */
+		min-height: 2.6em;
 		margin: 0;
-		line-height: 1; /* 100% line-height matching Figma specification */
-		letter-spacing: 0.04em; /* 4% letter-spacing matching Figma specification */
-		text-align: center;
+		color: var(--c-maroon);
+		font: 700 clamp(20px, 1.667vw, 32px)/1.3 var(--font-heading);
 	}
-
+	.process_divider {
+		border: 0;
+		border-top: 1px solid #888;
+		margin: 22px 0;
+	}
 	.process_card_desc {
-		font-family: var(--font-body);
-		font-size: 0.85rem; /* Matching figma */
-		color: #444;
-		line-height: 1.6;
-		margin: 0.5rem 0 0 0;
+		margin: 0;
 	}
-
-	/* ── PHOTO STRIP ── */
 	.photo_strip {
-		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		height: 260px;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		height: clamp(160px, 21.927vw, 421px);
+		margin: 0 auto clamp(35px, 3.125vw, 60px);
+		max-width: 1920px;
 		overflow: hidden;
-		margin: 0; /* Let it sit perfectly flush between process and rankings sections */
 	}
-
-	@media (max-width: 768px) {
-		.photo_strip {
-			grid-template-columns: repeat(2, 1fr);
-			height: 520px;
-		}
-	}
-
 	.photo_strip_item {
-		width: 100%;
-		height: 100%;
+		min-width: 0;
 		overflow: hidden;
-		position: relative;
 	}
-
 	.strip_photo {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		display: block;
-		filter: brightness(0.92);
-		transition:
-			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-			filter 0.4s ease;
 	}
-
-	.photo_strip_item:hover .strip_photo {
-		transform: scale(1.06);
-		filter: brightness(1);
-	}
-
-	/* Target center/crop focus to show the humans clearly */
-	.img_pos_1 {
-		object-position: center 20%;
-	}
-
-	.img_pos_2 {
-		object-position: center 30%;
-	}
-
-	.img_pos_3 {
-		object-position: center 40%;
-	}
-
-	.img_pos_4 {
-		object-position: center 25%;
-	}
-
-	/* ── RANKINGS SECTION ── */
 	.rankings_grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1.5rem; /* Expanded from 1.25rem */
-		align-items: stretch;
+		grid-template-columns: 613fr 603fr 393fr;
+		gap: clamp(22px, 2.135vw, 41px);
+		align-items: start;
 	}
-
-	@media (max-width: 900px) {
-		.rankings_grid {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	@media (max-width: 600px) {
-		.rankings_grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
 	.ranking_card {
-		border-radius: 20px;
-		padding: 1.75rem 1.5rem;
-		border: 1.5px solid var(--color-gold);
-		background: #fff;
-		box-sizing: border-box;
-		transition:
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			box-shadow 0.3s ease,
-			border-color 0.3s ease;
+		border: 2px solid var(--c-gold);
+		border-radius: 25px;
+		padding: clamp(24px, 2.083vw, 40px);
 	}
-
-	.ranking_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-		border-color: rgba(180, 150, 80, 0.7);
-	}
-
-	/* QS Stars card */
-	.qs_card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
 	.qs_header {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 0.5rem;
+		align-items: center;
+		gap: 20px;
+		margin-bottom: clamp(25px, 2.604vw, 50px);
 	}
-
 	.qs_logo_img {
-		height: 38px;
-		object-fit: contain;
+		width: 40%;
+		height: auto;
 	}
-
+	.qs_rating_crop {
+		position: relative;
+		width: 34%;
+		aspect-ratio: 172 / 61;
+		overflow: hidden;
+	}
 	.qs_stars_box_img {
-		height: 28px;
-		object-fit: contain;
+		position: absolute;
+		max-width: none;
+		width: 292.84%;
+		height: 579.9%;
+		left: -63.58%;
+		top: -180.41%;
 	}
-
 	.qs_rating_title {
-		font-family: var(--font-heading);
-		font-size: 1.15rem;
-		font-weight: 800;
-		color: var(--c-gold);
-		margin: 0;
+		color: var(--c-gold-dark);
+		font: 700 clamp(22px, 1.667vw, 32px)/1.3 var(--font-heading);
+		margin: 0 0 22px;
 	}
-
 	.qs_rating_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: #444;
-		line-height: 1.55;
-		margin: 0;
+		margin: 0 0 clamp(35px, 3.646vw, 70px);
 	}
-
 	.qs_category_grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 0.6rem;
-		margin-top: 0.25rem;
+		gap: clamp(18px, 1.771vw, 34px);
 	}
-
 	.qs_cat_tile {
-		background: linear-gradient(180deg, var(--c-maroon) 0%, #1e1e1e 100%);
+		background: var(--panel-maroon);
 		border-radius: 10px;
-		padding: 0.85rem 1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
+		padding: clamp(22px, 1.563vw, 30px) 10px;
+		text-align: center;
 	}
-
 	.qs_cat_stars {
-		font-family: var(--font-heading);
-		font-size: 1.3rem;
-		font-weight: 900;
-		color: #fff;
-		line-height: 1.1;
+		display: block;
+		font: 700 clamp(26px, 3.125vw, 60px)/1.2 var(--font-heading);
+		color: white;
+		white-space: nowrap;
 	}
-
 	.qs_cat_label {
-		font-family: var(--font-body);
-		font-size: 0.72rem;
-		color: var(--c-gold);
+		display: block;
+		color: var(--c-gold-light);
+		font-size: clamp(13px, 1.25vw, 24px);
 		font-style: italic;
-		font-weight: 600;
 	}
-
 	.qs_validated_row {
+		border-top: 1px solid #888;
+		padding-top: clamp(25px, 2.6vw, 50px);
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		font-weight: 700;
+		gap: 15px;
 		color: var(--c-maroon);
-		padding-top: 1rem;
-		border-top: 1.5px solid #5e5e5e;
-		margin-top: auto;
+		margin-top: clamp(30px, 3.125vw, 60px);
+		font-size: clamp(14px, 1.25vw, 24px);
 	}
-
-	:global(.validated_icon_circle) {
-		fill: var(--c-maroon);
-		color: #ffffff;
-		flex-shrink: 0;
+	.qs_validated_row :global(svg) {
+		flex: 0 0 auto;
+		width: 28px;
+		height: 28px;
 	}
-
-	/* WURI card */
-	.wuri_card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
 	.wuri_header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 0.25rem;
+		gap: 20px;
+		margin-bottom: 26px;
 	}
-
 	.wuri_logo_img {
-		height: 38px;
-		object-fit: contain;
+		position: absolute;
+		max-width: none;
+		width: 112.94%;
+		height: 383.52%;
+		left: -12.94%;
+		top: -145.74%;
 	}
-
 	.wuri_world_rank {
 		text-align: right;
-		white-space: nowrap;
 	}
-
 	.wuri_rank_label {
 		display: block;
-		font-size: 0.6rem;
-		color: #888;
-		font-family: var(--font-body);
+		font-size: clamp(14px, 1.146vw, 22px);
 	}
-
 	.wuri_rank_num {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 900;
-		color: var(--c-gold);
+		display: block;
+		color: var(--c-gold-dark);
+		font: 700 clamp(24px, 1.875vw, 36px)/1.2 var(--font-heading);
 	}
-
 	.wuri_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: #444;
-		line-height: 1.55;
 		margin: 0;
 	}
-
 	.wuri_divider {
-		border: none;
-		border-top: 1.5px solid #5e5e5e;
-		margin: 0.25rem 0;
+		border: 0;
+		border-top: 1px solid #888;
+		margin: clamp(25px, 2.604vw, 50px) 0;
 	}
-
 	.wuri_rankings_list {
 		list-style: none;
-		padding: 0;
 		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		margin-top: auto;
+		padding: 0;
+		display: grid;
+		gap: clamp(30px, 2.604vw, 50px);
 	}
-
 	.wuri_rank_item {
 		display: flex;
 		align-items: center;
-		gap: 0.85rem;
+		gap: clamp(20px, 1.979vw, 38px);
 	}
-
 	.wuri_rank_badge {
+		display: grid;
+		place-items: center;
+		width: clamp(56px, 4.688vw, 90px);
+		height: clamp(56px, 4.688vw, 90px);
 		background: var(--c-maroon);
-		color: #fff;
-		font-family: var(--font-heading);
-		font-size: 1.2rem;
-		font-weight: 900;
-		border-radius: 6px;
-		width: 44px;
-		height: 44px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-		box-sizing: border-box;
+		color: white;
+		border-radius: 0;
+		flex: 0 0 auto;
+		font: 700 clamp(28px, 2.5vw, 48px)/1 var(--font-heading);
 	}
-
 	.wuri_rank_details {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		flex-grow: 1;
+		flex: 1;
 	}
-
 	.wuri_rank_text {
-		font-family: var(--font-body);
-		font-size: 0.78rem;
-		color: var(--c-ink);
-		font-weight: 800;
 		text-transform: uppercase;
-		letter-spacing: 0.02em;
-		line-height: 1.2;
+		font-family: var(--font-heading);
+		font-size: clamp(15px, 1.25vw, 24px);
 	}
-
 	.wuri_progress_track {
-		width: 100%;
-		height: 3px;
-		background: #eae5db;
-		border-radius: 2px;
-		overflow: hidden;
+		height: 7px;
+		background: #f4e6c9;
+		border-radius: 5px;
+		margin-top: 15px;
 	}
-
 	.wuri_progress_bar {
 		height: 100%;
-		background: linear-gradient(90deg, var(--c-gold-dark) 0%, var(--c-gold-light) 100%);
-		border-radius: 2px;
+		border-radius: inherit;
+		background: var(--c-gold-dark);
 	}
-
-	/* Impact + AUN column */
 	.impact_column {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
+		display: grid;
+		gap: clamp(28px, 2.083vw, 40px);
 	}
-
 	.impact_card {
-		background: linear-gradient(180deg, var(--c-maroon) 0%, #1e1e1e 100%);
-		border: none;
-		color: #fff;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		box-sizing: border-box;
-		border-radius: 20px;
-		padding: 1.75rem 1.5rem;
-		transition:
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			box-shadow 0.3s ease;
+		border: 0;
+		background: var(--panel-maroon);
+		color: white;
+		text-align: left;
+		padding: clamp(24px, 1.875vw, 36px);
 	}
-
-	.impact_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 12px 30px rgba(73, 21, 22, 0.3);
-		border: none;
-	}
-
 	.impact_label {
-		font-family: var(--font-body);
-		font-size: 0.75rem;
-		color: rgba(255, 255, 255, 0.7);
-		margin: 0 0 0.35rem 0;
-		letter-spacing: 0.05em;
+		margin: 0 0 30px;
+		font: 400 clamp(14px, 0.833vw, 16px)/1.3 var(--font-body);
 	}
-
 	.impact_number {
-		font-family: var(--font-heading);
-		font-size: 3.5rem;
-		font-weight: 900;
-		color: var(--c-gold);
-		margin: 0 0 0.5rem 0;
-		line-height: 1;
+		color: var(--c-gold-light);
+		font: 700 clamp(46px, 4.167vw, 80px)/1.2 var(--font-heading);
+		margin: 0 0 24px;
 	}
-
 	.impact_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: #ffffff;
-		line-height: 1.65;
-		margin: 0 0 1.25rem 0;
+		font-size: clamp(14px, 1.042vw, 20px);
+		margin: 0 0 32px;
 	}
-
-	/* SDG badges */
 	.sdg_badges_row {
 		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px;
 	}
-
 	.sdg_badge {
 		position: relative;
-		width: 44px;
-		height: 44px;
-		border-radius: 6px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		border: 0;
+		padding: 0;
+		color: white;
+		width: clamp(34px, 2.5vw, 48px);
+		height: clamp(34px, 2.5vw, 48px);
+		border-radius: 3px;
 		cursor: pointer;
-		transition: transform 0.2s ease;
-		user-select: none;
+		display: grid;
+		place-items: center;
 	}
-
-	.sdg_badge:hover {
-		transform: scale(1.08);
-		z-index: 20;
-	}
-
 	.sdg_num {
-		font-family: var(--font-heading);
-		font-size: 0.95rem;
-		font-weight: 900;
-		color: #fff;
+		font-size: clamp(16px, 1.25vw, 24px);
+		font-weight: 700;
 	}
-
 	.sdg_tooltip {
 		position: absolute;
-		top: calc(100% + 12px);
+		bottom: calc(100% + 12px);
 		left: 50%;
 		transform: translateX(-50%);
-		background: #fff;
-		border-radius: 8px;
-		padding: 0.5rem 0.85rem;
-		width: 170px;
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		z-index: 100;
-		pointer-events: none;
-		animation: tooltipSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		gap: 22px;
+		width: 205px;
+		padding: 20px;
+		background: white;
+		border: 1px solid var(--c-gold);
+		box-shadow: 0 8px 20px #0002;
+		border-radius: 12px;
+		color: #111;
+		z-index: 5;
 	}
-
-	@keyframes tooltipSlide {
-		from {
-			opacity: 0;
-			transform: translate(-50%, 8px);
-		}
-		to {
-			opacity: 1;
-			transform: translate(-50%, 0);
-		}
-	}
-
-	/* Arrow pointing up */
-	.sdg_tooltip::after {
-		content: '';
-		position: absolute;
-		bottom: 100%;
-		left: 50%;
-		transform: translateX(-50%);
-		border: 8px solid transparent;
-		border-bottom-color: #fff;
-	}
-
 	.sdg_tooltip_left {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		line-height: 1.1;
+		display: grid;
 	}
-
 	.sdg_tooltip_title {
-		font-family: var(--font-body);
-		font-size: 0.6rem;
-		font-weight: 800;
-		color: #555;
-		letter-spacing: 0.05em;
-		margin: 0;
+		font-size: 15px;
 	}
-
 	.sdg_tooltip_num {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 800;
-		margin: 1px 0 0 0;
-	}
-
-	.sdg_tooltip_right {
-		display: flex;
-		align-items: center;
-	}
-
-	.sdg_tooltip_range {
-		font-family: var(--font-body);
-		font-size: 1.1rem;
+		font-size: 36px;
 		font-weight: 700;
-		color: var(--c-ink);
-		letter-spacing: -0.02em;
-		white-space: nowrap;
 	}
-
+	.sdg_tooltip_range {
+		font-size: 18px;
+	}
 	.aunqa_card {
-		background: linear-gradient(180deg, var(--c-gold-light) 0%, var(--c-gold-dark) 100%);
-		border: none;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.25);
-		justify-content: center;
-		box-sizing: border-box;
-		border-radius: 20px;
-		padding: 1.75rem 1.5rem;
-		transition:
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			box-shadow 0.3s ease;
+		border: 0;
+		background: linear-gradient(106deg, #fac549, #ca8106);
+		color: #000;
 	}
-
-	.aunqa_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.35);
-		border: none;
-	}
-
 	.aunqa_header {
 		display: flex;
+		gap: 14px;
 		align-items: center;
-		gap: 0.6rem;
+		margin-bottom: 24px;
 	}
-
-	:global(.aunqa_icon) {
+	.aunqa_header :global(svg) {
+		flex: 0 0 auto;
+		width: 30px;
+		height: 30px;
 		color: var(--c-maroon);
 	}
-
 	.aunqa_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 800;
-		color: #000000;
+		color: var(--c-maroon);
+		font: 700 clamp(21px, 1.667vw, 32px)/1.3 var(--font-heading);
 		margin: 0;
 	}
-
 	.aunqa_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: #000000;
-		line-height: 1.6;
+		font-size: clamp(14px, 1.042vw, 20px);
 		margin: 0;
+	}
+	@media (max-width: 1000px) {
+		.rankings_grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.impact_column {
+			grid-column: 1 / -1;
+			grid-template-columns: 1fr 1fr;
+		}
+		.process_cards_grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.support_feed {
+			padding: 28px;
+		}
+	}
+	@media (max-width: 700px) {
+		.hero_title {
+			font-size: clamp(32px, 6.77vw, 48px);
+			padding: 0 15px;
+		}
+		#strategic-benchmarking {
+			display: block;
+		}
+		.aaccup_card {
+			margin-top: 30px;
+		}
+		.video_wrapper {
+			width: 100%;
+			padding: 20px;
+		}
+		.support_grid {
+			grid-template-columns: 1fr;
+		}
+		.photo_strip {
+			grid-template-columns: 1fr 1fr;
+			height: 320px;
+		}
+		.rankings_grid {
+			grid-template-columns: 1fr;
+		}
+		.impact_column {
+			grid-template-columns: 1fr;
+		}
+		.qs_cat_stars {
+			font-size: 36px;
+		}
+		.qs_cat_label {
+			font-size: 16px;
+		}
+		.priority_item {
+			font-size: 15px;
+		}
+	}
+	@media (max-width: 420px) {
+		.process_cards_grid {
+			gap: 15px;
+		}
+		.process_card {
+			padding: 20px 16px;
+		}
+		.process_card_title {
+			font-size: 17px;
+		}
+		.functions_grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
