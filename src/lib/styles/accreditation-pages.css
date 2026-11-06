@@ -1,0 +1,124 @@
+/* Geometry and type sampled from Figma frames 622:547, 663:1199 and 839:1452.
+   Shared navigation and footer remain owned by the existing layout/components. */
+.assigned_page {
+	--color-maroon: var(--c-maroon);
+	--color-maroon-mid: var(--c-maroon-mid);
+	--color-maroon-deep: var(--c-maroon-deep);
+	--color-gold: var(--c-gold);
+	--color-gold-light: var(--c-gold-light);
+	--color-gold-dark: var(--c-gold-dark);
+	--color-bg: var(--c-surface);
+	--panel-dark: linear-gradient(158.39deg, #451516 1.293%, #1a1614 59.262%, #392e1f 92.429%);
+	--panel-maroon: linear-gradient(119.55deg, #8e1518 0%, #1e1e1e 100%);
+	--panel-paper: linear-gradient(138.77deg, #ffddde 0%, #ffffff 50%, #ffe9b6 100%);
+	--page-gutter: clamp(20px, 5.8333vw, 112px);
+	color: var(--c-ink);
+	font-family: var(--font-body);
+	background: var(--c-surface);
+}
+
+.assigned_page *,
+.assigned_page *::before,
+.assigned_page *::after {
+	box-sizing: border-box;
+}
+.assigned_page .content_section {
+	width: 100%;
+	max-width: 1920px;
+	margin: 0 auto;
+	padding: clamp(36px, 3.125vw, 60px) var(--page-gutter) clamp(48px, 5.625vw, 108px);
+	font-size: clamp(14px, 1.14583vw, 22px);
+	line-height: 1.35;
+	letter-spacing: 0.04em;
+}
+.assigned_page .hero_section {
+	position: relative;
+	display: grid;
+	place-items: center;
+	height: clamp(420px, calc(55.052vw - 96px), 961px);
+	overflow: hidden;
+	background: #f7f7f7;
+}
+.assigned_page .checkerboard_bg {
+	position: absolute;
+	inset: 0;
+	background: url('/design/page-ground.png') center / cover no-repeat;
+}
+.assigned_page .hero_content {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	text-align: center;
+}
+.assigned_page .hero_title {
+	margin: 0 auto;
+	text-transform: uppercase;
+}
+.assigned_page .section_label {
+	display: flex;
+	align-items: center;
+	gap: clamp(18px, 2.083vw, 40px);
+	margin: 0 0 clamp(22px, 2.083vw, 40px);
+}
+.assigned_page .section_label .t_eyebrow {
+	font-size: clamp(13px, 1.667vw, 32px);
+	line-height: 1.5;
+	font-weight: 600;
+}
+.assigned_page .section_icon {
+	flex: 0 0 auto;
+	width: clamp(24px, 2.344vw, 45px);
+	height: clamp(24px, 2.344vw, 45px);
+	color: var(--c-maroon);
+}
+.assigned_page .section_divider {
+	margin: 0 0 clamp(32px, 3.44vw, 66px);
+	border: 0;
+	border-top: 1.5px solid #8e8e8e;
+}
+.assigned_page button,
+.assigned_page a {
+	-webkit-tap-highlight-color: transparent;
+}
+.assigned_page button:focus-visible,
+.assigned_page a:focus-visible {
+	outline: 3px solid var(--c-gold-dark);
+	outline-offset: 6px;
+}
+.assigned_page img {
+	max-width: 100%;
+}
+.assigned_page .panel_title {
+	font-family: var(--font-heading);
+	font-size: clamp(20px, 1.875vw, 36px);
+	font-weight: 700;
+	line-height: 1.25;
+	letter-spacing: 0.04em;
+	color: var(--c-maroon);
+}
+
+@media (max-width: 700px) {
+	.assigned_page .hero_section {
+		height: 440px;
+	}
+	.assigned_page .section_label {
+		gap: 14px;
+		align-items: flex-start;
+	}
+	.assigned_page .section_label .t_eyebrow {
+		font-size: 13px;
+		letter-spacing: 0.18em;
+	}
+	.assigned_page .section_divider {
+		margin-bottom: 28px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.assigned_page *,
+	.assigned_page *::before,
+	.assigned_page *::after {
+		scroll-behavior: auto !important;
+		animation: none !important;
+		transition: none !important;
+	}
+}
