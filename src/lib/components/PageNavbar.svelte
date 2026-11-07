@@ -359,7 +359,6 @@
 	.tab-link.active {
 		color: var(--c-maroon);
 		font-weight: 600;
-		background: rgba(148, 21, 24, 0.08);
 	}
 
 	.chevron {
