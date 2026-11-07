@@ -1,6 +1,7 @@
 <script>
   import Footer from '$lib/components/footer.svelte';
   import { onMount } from 'svelte';
+  import NarrativeButton from '$lib/components/NarrativeButton.svelte';
 
   let activeTab = $state(0);
   let showGallery = $state(false);
@@ -82,7 +83,7 @@
 
     <header class="agenda-header">
       <div class="accent-square"></div>
-      <h2>COMMUNITY EXTENSION POLICY AND STRATEGIC AGENDA</h2>
+      <h2 class="t_eyebrow">COMMUNITY EXTENSION POLICY AND STRATEGIC AGENDA</h2>
     </header>
 
     <div class="agenda-content-grid">
@@ -107,7 +108,7 @@
 
     <div class="maturity-framework">
       <div class="framework-header">
-        <h2>EVOLUTION OF EXTENSION MATURITY FRAMEWORK</h2>
+        <h2 class="t_eyebrow">EVOLUTION OF EXTENSION MATURITY FRAMEWORK</h2>
         <hr class="framework-divider" />
         <p class="framework-description">
           The department’s extension agenda operates as a strategic, needs-driven, and technology-enabled cycle. The program has systematically transitioned away from episodic awareness campaigns toward highly scalable, sustainable ICT interventions divided into three core pillars:
@@ -159,9 +160,9 @@
   <section class="technical-profiles">
     <header class="section-header">
       <div class="icon-box">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
       </div>
-      <h2>TECHNICAL PROFILES</h2>
+      <h2 class="t_eyebrow">TECHNICAL PROFILES</h2>
     </header>
 
     <hr class="header-divider" />
@@ -177,7 +178,7 @@
         {/each}
       </div>
 
-      <div class="profile-card">
+<div class="profile-card">
         <div class="card-header-split">
           <div class="header-left">
             <div class="badge">FEATURED</div>
@@ -214,15 +215,25 @@
           </div>
         </div>
       </div>
-    </div>
+      
+      <!-- BUTTON PLACED HERE: Outside and underneath the maroon profile card -->
+      <div class="narrative-action-wrapper">
+        <a href="https://drive.google.com/" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+          Download Narrative Report
+        </a>
+      </div>
+      
+    </div> <!-- End of tab-container -->
+
+    
   </section>
 
   <!-- PUP IVOTE++ SHOWCASE SECTION -->
   <section class="ivote-showcase">
     <div class="ivote-left">
       <div class="ivote-header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ivote-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
-        <h2>PUP IVOTE++</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ivote-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
+        <h2 class="t_eyebrow">PUP IVOTE++</h2>
       </div>
       
       <h3 class="ivote-sub">High-Impact Special Deployment<br/>Showcase: The PUP iVOTE++ System</h3>
@@ -306,8 +317,8 @@
         </button>
         
         <div class="gallery-header">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6a1316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
-          <h2>PUP IVOTE++ GALLERY</h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6a1316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>
+          <h2 class="t_eyebrow">PUP IVOTE++ GALLERY</h2>
         </div>
 
         <div class="gallery-grid-container">
@@ -327,6 +338,32 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Overpass:wght@600;700;800;900&display=swap');
+
+  .narrative-action-wrapper {
+    margin-top: 24px; /* Creates space between the maroon card and the button */
+    display: flex;
+    justify-content: flex-start; /* Aligns the button to the left side */
+    width: 100%;
+  }
+
+  .narrative-btn {
+    display: inline-block;
+    padding: 12px 32px;
+    border: 3px solid #941518;
+    border-radius: 12px;
+    background-color: transparent;
+    color: #941518;
+    font-family: var(--font-heading, 'Overpass', sans-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .narrative-btn:hover {
+    background-color: #941518;
+    color: #dfb75f;
+  }
 
   /* --- HERO SECTION --- */
   .community-hero {
@@ -379,13 +416,10 @@
     background-color: #555555; 
   }
 
-  .agenda-header h2 {
-    font-family: 'Overpass', sans-serif; 
-    color: #ef9b08; 
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    margin: 0;
+  /* Type comes from the global .t_eyebrow role (Inter SemiBold, --fs-xl,
+     0.27em, gold gradient fill) — same as Planning & QA section headers. */
+  .agenda-header :global(.t_eyebrow) {
+    display: inline-block;
   }
 
   .agenda-content-grid {
@@ -441,12 +475,9 @@
     color: #1A1515;
   }
 
-  .framework-header h2 {
-    font-family: 'Overpass', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 800;
+  .framework-header :global(.t_eyebrow) {
+    display: inline-block;
     margin: 0 0 16px 0;
-    letter-spacing: 0.02em;
   }
 
   .framework-divider {
@@ -570,10 +601,10 @@
 
   /* --- TECHNICAL PROFILES SECTION --- */
   .technical-profiles {
-    padding: 80px 10%;
+    padding: 80px 10% 40px 10%;
     background-color: #FFFFFF;
     width: 100%;
-    margin-bottom: 80px; 
+    margin-bottom: 0px; 
   }
   .section-header {
     display: flex;
@@ -587,13 +618,8 @@
     align-items: center;
     justify-content: center;
   }
-  .section-header h2 {
-    font-family: 'Overpass', sans-serif;
-    color: #c98e16;
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-    margin: 0;
+  .section-header :global(.t_eyebrow) {
+    display: inline-block;
   }
   .header-divider {
     border: none;
@@ -793,16 +819,8 @@
   .ivote-icon {
     color: #FAC549;
   }
-  .ivote-header h2 {
-    font-family: 'Overpass', sans-serif;
-    background: linear-gradient(to right, #FAC549 0%, #CA8106 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    margin: 0;
+  .ivote-header :global(.t_eyebrow) {
+    display: inline-block;
   }
   .ivote-sub {
     font-family: 'Inter', sans-serif;
@@ -1104,13 +1122,8 @@
     gap: 16px;
     margin-bottom: 40px;
   }
-  .gallery-header h2 {
-    font-family: 'Overpass', sans-serif;
-    color: #6a1316;
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    margin: 0;
+  .gallery-header :global(.t_eyebrow) {
+    display: inline-block;
   }
   .gallery-grid-container {
     background-color: #2a1f1b;

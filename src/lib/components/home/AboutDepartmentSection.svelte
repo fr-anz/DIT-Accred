@@ -6,8 +6,8 @@
 
 <section class="about-section">
 	<div class="about-header">
-		<Info size={35} color="#941518" />
-		<h2 class="about-title">About the Department</h2>
+		<Info size={26} strokeWidth={1.5} class="section_icon maroon" />
+		<h2 class="t_eyebrow">About the Department</h2>
 	</div>
 	<div class="header-line"></div>
 
@@ -69,20 +69,22 @@
 		position: relative;
 	}
 
+	/* Same pattern as the Planning & QA page: maroon icon + the global
+	   .t_eyebrow role (Inter SemiBold, --fs-xl, 0.27em, gold gradient fill). */
 	.about-header {
 		display: flex;
 		align-items: center;
-		gap: clamp(0.75rem, 2vw, 1.25rem);
+		gap: 0.85rem;
+		margin-bottom: 0.85rem;
 	}
 
-	.about-title {
-		color: #fac549;
-		font-size: clamp(1rem, 2vw, 2rem);
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: clamp(0.12em, 1vw, 0.27em);
-		margin: 0;
-		line-height: 1.3;
+	.about-header :global(.t_eyebrow) {
+		display: inline-block;
+	}
+
+	:global(.section_icon.maroon) {
+		color: var(--c-maroon);
+		flex-shrink: 0;
 	}
 
 	.header-line {
