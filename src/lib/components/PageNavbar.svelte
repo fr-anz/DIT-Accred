@@ -111,6 +111,7 @@
 				>
 					<a
 						class="tab-link section-tab"
+						class:active={isActive(item)}
 						href={resolveHref(item.href)}
 						aria-current={isActive(item) ? 'page' : undefined}
 						aria-haspopup={hasSections(item) ? 'true' : undefined}
@@ -374,6 +375,7 @@
 	.tab-link.active {
 		color: var(--c-maroon);
 		font-weight: 600;
+		background: rgba(148, 21, 24, 0.08);
 	}
 
 	.tab-link.active::after,
