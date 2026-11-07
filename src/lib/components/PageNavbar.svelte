@@ -356,32 +356,10 @@
 		background: rgba(207, 168, 58, 0.08);
 	}
 
-	.tab-link::after {
-		position: absolute;
-		right: 10px;
-		bottom: 3px;
-		left: 10px;
-		height: 1.5px;
-		border-radius: 9999px;
-		background: var(--c-gold);
-		content: '';
-		opacity: 0;
-		transform: scaleX(0.72);
-		transition:
-			opacity 0.2s ease,
-			transform 0.2s ease;
-	}
-
 	.tab-link.active {
 		color: var(--c-maroon);
 		font-weight: 600;
 		background: rgba(148, 21, 24, 0.08);
-	}
-
-	.tab-link.active::after,
-	.tab-group:focus-within .tab-link::after {
-		opacity: 1;
-		transform: scaleX(1);
 	}
 
 	.chevron {
@@ -492,11 +470,6 @@
 		.tab-link {
 			font-size: 13.5px;
 			padding: 8px 7px;
-		}
-
-		.tab-link::after {
-			right: 7px;
-			left: 7px;
 		}
 
 		.brand-kicker,
@@ -654,7 +627,6 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		.tab-link,
-		.tab-link::after,
 		.chevron,
 		.dropdown,
 		.drawer-toggle,
