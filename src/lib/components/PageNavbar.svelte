@@ -302,19 +302,19 @@
 		font-family: var(--font-heading);
 		font-size: 14px;
 		font-weight: 700;
-		color: var(--c-ink);
+		background-image: var(--grad-gold);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
 		white-space: nowrap;
-	}
-
-	.brand-title span {
-		color: var(--c-maroon);
 	}
 
 	.brand-subtitle {
 		font-family: var(--font-body);
 		font-size: 9px;
+		font-weight: 500;
 		font-style: italic;
-		color: rgba(26, 26, 26, 0.6);
+		color: #888;
 	}
 
 	.desktop-tabs {
