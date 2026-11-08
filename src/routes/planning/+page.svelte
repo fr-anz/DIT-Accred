@@ -190,9 +190,9 @@
 					</div>
 				</div>
 				<div class="report_status">
-					<button type="button" disabled><FileText size={20} />Narrative Report</button><span
-						>Coming soon</span
-					>
+					<a class="report-button" href="https://bit.ly/ITL4Area5" target="_blank" rel="noopener noreferrer">
+						<FileText size={20} />Narrative Report
+					</a>
 				</div>
 			</div>
 
@@ -460,16 +460,12 @@
 		font-size: 14px;
 		color: var(--c-maroon);
 	}
-	.report_status button {
+	.report_status a {
 		display: flex;
 		align-items: center;
 		gap: 12px;
 		padding: 16px 24px;
-		border: 1px solid var(--c-maroon);
-		border-radius: 10px;
-		background: white;
-		color: var(--c-maroon);
-		opacity: 0.65;
+		border: 1px solid transparent;
 	}
 	.wuri_logo_crop {
 		position: relative;
