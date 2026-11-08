@@ -97,6 +97,61 @@
 	color: var(--c-maroon);
 }
 
+/* Shared organization-card and photo-gallery layout. */
+.assigned_page .orgs_marquee_track,
+.assigned_page .photo_gallery_grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: clamp(18px, 1.979vw, 38px);
+}
+.assigned_page .org_card,
+.assigned_page .photo_gallery_card {
+	position: relative;
+	overflow: hidden;
+	border-radius: 15px;
+}
+.assigned_page .photo_gallery_card {
+	min-width: 0;
+	aspect-ratio: 1;
+	padding: 0;
+	border: 0;
+	background: var(--c-shell);
+	cursor: zoom-in;
+	transition: box-shadow 0.2s;
+}
+.assigned_page .photo_gallery_image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* The same modal surface is used by the alumni and achievement viewers. */
+.assigned_page .modal_content {
+	background: var(--c-surface);
+	border-radius: 28px;
+	width: 100%;
+	max-width: 860px;
+	max-height: 90vh;
+	box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+	position: relative;
+	overflow: auto;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (hover: hover) {
+	.assigned_page .photo_gallery_card:hover {
+		box-shadow: 0 12px 30px #5c0f1612;
+	}
+}
+
+@media (max-width: 800px) {
+	.assigned_page .orgs_marquee_track,
+	.assigned_page .photo_gallery_grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
 @media (max-width: 700px) {
 	.assigned_page .hero_section {
 		height: 440px;

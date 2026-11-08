@@ -6,6 +6,19 @@
 	let showGallery = $state(false);
 	let currentImageIndex = $state(0);
 
+	/** @param {HTMLDialogElement} dialog */
+	function openGalleryDialog(dialog) {
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+		dialog.showModal();
+
+		return {
+			destroy() {
+				document.body.style.overflow = previousOverflow;
+			}
+		};
+	}
+
 	const profiles = [
 		{
 			tabLabel: 'DIGITAL LITERACY',
@@ -232,7 +245,7 @@
 				{#each profiles as profile, index}
 					<button
 						class="tab-btn {activeTab === index ? 'active' : ''}"
-						on:click={() => (activeTab = index)}
+						onclick={() => (activeTab = index)}
 					>
 						{profile.tabLabel}
 					</button>
@@ -378,7 +391,7 @@
 				{/each}
 				<div class="fade-scrim"></div>
 
-				<button class="gallery-link" on:click={() => (showGallery = true)}>VIEW FULL GALLERY</button
+				<button class="gallery-link" onclick={() => (showGallery = true)}>VIEW FULL GALLERY</button
 				>
 
 				<div class="fade-archive-text">
@@ -403,9 +416,22 @@
 		</div>
 	</section>
 	{#if showGallery}
-		<div class="gallery-modal-overlay" on:click={() => (showGallery = false)}>
-			<div class="gallery-modal-content" on:click|stopPropagation>
-				<button class="close-modal" on:click={() => (showGallery = false)}>
+		<dialog
+			class="gallery-modal-overlay"
+			aria-labelledby="gallery-title"
+			use:openGalleryDialog
+			onclose={() => (showGallery = false)}
+			onclick={(event) => {
+				if (event.target === event.currentTarget) event.currentTarget.close();
+			}}
+		>
+			<div class="gallery-modal-content">
+				<button
+					class="close-modal"
+					type="button"
+					aria-label="Close gallery"
+					onclick={(event) => event.currentTarget.closest('dialog')?.close()}
+				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="32"
@@ -436,7 +462,7 @@
 							d="M9 10h6"
 						/><path d="M9 14h6" /></svg
 					>
-					<h2 class="t_eyebrow">PUP IVOTE++ GALLERY</h2>
+					<h2 id="gallery-title" class="t_eyebrow">PUP IVOTE++ GALLERY</h2>
 				</div>
 
 				<div class="gallery-grid-container">
@@ -447,7 +473,7 @@
 					{/each}
 				</div>
 			</div>
-		</div>
+		</dialog>
 	{/if}
 
 	<Footer />
@@ -1208,6 +1234,14 @@
 
 	/* --- MODAL GALLERY STYLES --- */
 	.gallery-modal-overlay {
+		width: 100%;
+		height: 100%;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		border: none;
+		box-sizing: border-box;
+		color: inherit;
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -1220,6 +1254,9 @@
 		justify-content: center;
 		padding: 40px;
 		animation: fadeIn 0.2s ease-out;
+	}
+	.gallery-modal-overlay::backdrop {
+		background: transparent;
 	}
 	@keyframes fadeIn {
 		from {

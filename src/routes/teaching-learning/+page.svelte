@@ -18,6 +18,7 @@
 		Network
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import StudentAchievementsGallery from '$lib/components/StudentAchievementsGallery.svelte';
 	import '$lib/styles/accreditation-pages.css';
 	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
@@ -702,6 +703,8 @@
 				{/each}
 			</div>
 		</div>
+
+		<StudentAchievementsGallery />
 	</section>
 
 	<!-- ─────────────────────────────────────────────
@@ -985,10 +988,6 @@
 		inset: 0;
 		background: none;
 		border: 0;
-	}
-	.modal_content {
-		max-height: 90vh;
-		overflow-y: auto;
 	}
 	/* Teaching & Learning: Figma sections 622:558 through 622:876. */
 	.hero_title {
@@ -1427,18 +1426,10 @@
 	.faculty_cta {
 		display: none;
 	}
-	.orgs_marquee_track {
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: clamp(18px, 1.979vw, 38px);
-	}
 	.org_card {
-		position: relative;
-		overflow: hidden;
 		aspect-ratio: 395 / 678;
 		background-size: auto 100%;
 		background-position: center;
-		border-radius: 15px;
 	}
 	.org_overlay {
 		position: absolute;
@@ -1723,9 +1714,6 @@
 		.curriculum_right_panel {
 			gap: 28px;
 		}
-		.orgs_marquee_track {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
 		.alumni_cards_container {
 			gap: 18px;
 		}
@@ -1810,14 +1798,6 @@
 	}
 
 	.modal_content {
-		background: #fff;
-		border-radius: 28px;
-		width: 100%;
-		max-width: 860px;
-		box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
-		position: relative;
-		overflow: auto;
-		border: 1px solid rgba(255, 255, 255, 0.08);
 		animation: modalZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
