@@ -119,6 +119,8 @@
 		}
 	];
 
+	
+
 	// Total slide pages: one page per 3 alumni
 	const totalSlidePages = Math.ceil(alumniList.length / 3);
 
@@ -464,6 +466,7 @@
 					</div>
 				</div>
 			</div>
+			
 
 			<!-- Right Column: Tabs & Interactive Explorer -->
 			<div class="curriculum_right_panel">
@@ -561,6 +564,8 @@
 					</div>
 				</div>
 
+				
+
 				<!-- Interactive Explorer Card -->
 				<div class="interactive_explorer_card">
 					<h3 class="explorer_title">INTERACTIVE CURRICULUM EXPLORER</h3>
@@ -591,6 +596,12 @@
 					</div>
 				</div>
 			</div>
+
+				<div class="narrative-action-wrapper">
+					<a href="https://drive.google.com/YOUR_LINK_HERE" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+						Download Narrative Report
+					</a>
+				</div>
 		</div>
 	</section>
 
@@ -983,6 +994,42 @@
 <Footer />
 
 <style>
+
+	.narrative-action-wrapper {
+		margin-top: 0px;
+		display: flex;
+		justify-content: flex-start;
+	}
+
+	.narrative-btn {
+		display: inline-block;
+		padding: 12px 32px;
+		border: 3px solid #941518;
+		border-radius: 12px;
+		background-color: transparent;
+		color: #941518;
+		font-family: var(--font-heading, 'Overpass', sans-serif);
+		font-size: 1.1rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+
+	.narrative-btn:hover {
+		background-color: #941518;
+		color: #dfb75f;
+	}
+	/* Reduces the bottom space of the curriculum section */
+	#curriculum-architecture {
+		margin-bottom: 0;
+		padding-bottom: 80px; 
+	}
+
+	/* Reduces the top space of the faculty section */
+	#staff-faculty-profile {
+		margin-top: 0;
+		padding-top: 40px; 
+	}
 	.modal_backdrop {
 		position: absolute;
 		inset: 0;

@@ -1,10 +1,10 @@
 <script>
-	import Footer from '$lib/components/footer.svelte';
-	import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
+  import Footer from '$lib/components/footer.svelte';
 
-	let activeTab = $state(0);
-	let showGallery = $state(false);
-	let currentImageIndex = $state(0);
+  let activeTab = $state(0);
+  let showGallery = $state(false);
+  let currentImageIndex = $state(0);
 
 	/** @param {HTMLDialogElement} dialog */
 	function openGalleryDialog(dialog) {
@@ -217,23 +217,10 @@
 		</div>
 	</section>
 
-	<section id="technical-profiles" class="technical-profiles">
+<section id="technical-profiles" class="technical-profiles">
 		<header class="section-header">
 			<div class="icon-box">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="26"
-					height="26"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.5"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path
-						d="M9 10h6"
-					/><path d="M9 14h6" /></svg
-				>
+				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
 			</div>
 			<h2 class="t_eyebrow">TECHNICAL PROFILES</h2>
 		</header>
@@ -243,10 +230,7 @@
 		<div class="tab-container">
 			<div class="tabs">
 				{#each profiles as profile, index}
-					<button
-						class="tab-btn {activeTab === index ? 'active' : ''}"
-						onclick={() => (activeTab = index)}
-					>
+					<button class="tab-btn {activeTab === index ? 'active' : ''}" onclick={() => (activeTab = index)}>
 						{profile.tabLabel}
 					</button>
 				{/each}
@@ -279,13 +263,7 @@
 					</div>
 
 					<div class="content-right">
-						<div
-							class="image-grid {profiles[activeTab].images.length === 5
-								? 'grid-5'
-								: profiles[activeTab].images.length === 4
-									? 'grid-4'
-									: 'grid-2'}"
-						>
+						<div class="image-grid {profiles[activeTab].images.length === 5 ? 'grid-5' : profiles[activeTab].images.length === 4 ? 'grid-4' : 'grid-2'}">
 							{#each profiles[activeTab].images as img}
 								<div class="img-wrapper">
 									<img src={img} alt="Deployment Archive" />
@@ -295,28 +273,23 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- BUTTON SECURELY PLACED HERE -->
+			<div class="narrative-action-wrapper">
+				<a href="https://bit.ly/ITL4Area3 " class="narrative-btn" target="_blank" rel="noopener noreferrer">
+					Download Narrative Report
+				</a>
+			</div>
+
 		</div>
 	</section>
+
 
 	<!-- PUP IVOTE++ SHOWCASE SECTION -->
 	<section id="ivote-showcase" class="ivote-showcase">
 		<div class="ivote-left">
 			<div class="ivote-header">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="26"
-					height="26"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.5"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="ivote-icon"
-					><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path
-						d="M9 10h6"
-					/><path d="M9 14h6" /></svg
-				>
+				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ivote-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
 				<h2 class="t_eyebrow">PUP IVOTE++</h2>
 			</div>
 
@@ -338,10 +311,7 @@
 
 			<div class="ivote-cards-container">
 				<div class="ivote-card">
-					<div
-						class="iv-card-bg"
-						style="background-image: url('https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80');"
-					></div>
+					<div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80');"></div>
 					<div class="iv-card-content">
 						<h5>HYBRID<br />OPERATIONS</h5>
 						<span>100% RELIABLE</span>
@@ -350,10 +320,7 @@
 				</div>
 
 				<div class="ivote-card">
-					<div
-						class="iv-card-bg"
-						style="background-image: url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80');"
-					></div>
+					<div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80');"></div>
 					<div class="iv-card-content">
 						<h5>CROSS-BRANCH</h5>
 						<span>ALL ACCESS</span>
@@ -365,10 +332,7 @@
 				</div>
 
 				<div class="ivote-card">
-					<div
-						class="iv-card-bg"
-						style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80');"
-					></div>
+					<div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80');"></div>
 					<div class="iv-card-content">
 						<h5>TECH-TRANSFER</h5>
 						<span>COMMUNITY LEAD</span>
@@ -384,15 +348,11 @@
 		<div class="ivote-right">
 			<div class="archive-fade-container">
 				{#each archiveFadeImages as img, idx}
-					<div
-						class="fade-slide {currentImageIndex === idx ? 'active' : ''}"
-						style="background-image: url('{img}');"
-					></div>
+					<div class="fade-slide {currentImageIndex === idx ? 'active' : ''}" style="background-image: url('{img}');"></div>
 				{/each}
 				<div class="fade-scrim"></div>
 
-				<button class="gallery-link" onclick={() => (showGallery = true)}>VIEW FULL GALLERY</button
-				>
+				<button class="gallery-link" onclick={() => (showGallery = true)}>VIEW FULL GALLERY</button>
 
 				<div class="fade-archive-text">
 					<h2 class="archive-title-large">PUP IVOTE++</h2>
@@ -482,6 +442,48 @@
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Overpass:wght@600;700;800;900&display=swap');
 
+.narrative-action-wrapper {
+		display: flex;
+		justify-content: center; 
+		width: 100%;
+		margin-top: 1.5rem; 
+		margin-bottom: 0;   
+	}
+
+	.narrative-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		max-width: 700px; /* Stretches it out to match the research button */
+		padding: 18px 32px; /* Increased height slightly for a larger click target */
+		border: 3px solid #941518;
+		border-radius: 12px;
+		background-color: transparent;
+		color: #941518;
+		font-family: var(--font-heading, 'Overpass', sans-serif);
+		font-size: 1.4rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+
+	.narrative-btn:hover {
+		background-color: #941518;
+		color: #dfb75f;
+	}
+
+  /* --- HERO SECTION --- */
+  .community-hero {
+    position: relative;
+    width: 100%;
+    height: 100vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0; 
+    overflow: hidden;
+  }
 	/* --- HERO SECTION --- */
 	.community-hero {
 		position: relative;
@@ -728,6 +730,127 @@
 		}
 	}
 
+  /* --- TECHNICAL PROFILES SECTION --- */
+  .technical-profiles {
+    padding: 80px 10% 40px 10%;
+    background-color: #FFFFFF;
+    width: 100%;
+    margin-bottom: 0px; 
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .icon-box {
+    color: #941518;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .section-header :global(.t_eyebrow) {
+    display: inline-block;
+  }
+  .header-divider {
+    border: none;
+    height: 1px;
+    background-color: #d1d1d1;
+    margin-bottom: 40px;
+  }
+  .tab-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    padding-left: 0; 
+    position: relative; 
+    z-index: 10;
+  }
+  .tab-btn {
+    font-family: 'Overpass', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    color: #FFFFFF;
+    background-color: #b87910;
+    border: none;
+    border-top: 3px solid transparent; 
+    padding: 16px 24px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover { background-color: #9c660c; }
+  .tab-btn.active {
+    background-color: #6a1316;
+    font-weight: 800; 
+    border-top: 3px solid #ef9b08; 
+    position: relative;
+    z-index: 2;
+  }
+  .profile-card {
+    background: linear-gradient(135deg, #6a1316 0%, #201a1a 100%);
+    border-radius: 0 12px 12px 12px; 
+    padding: 48px;
+    color: #FFFFFF;
+    position: relative;
+    z-index: 1;
+    margin-top: -1px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+  .card-header-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+  }
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-right {
+    display: flex;
+    align-items: flex-end; 
+    justify-content: flex-end;
+  }
+  .badge {
+    font-family: 'Overpass', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #ef9b08; 
+    border: 1px solid #ef9b08; 
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+  }
+  .profile-title {
+    font-family: 'Overpass', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.4;
+    letter-spacing: 0.05em;
+    margin: 0 0 12px 0;
+  }
+  .partner-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #d1d1d1;
+    margin: 0; 
+  }
+  .archives-title {
+    font-family: 'Overpass', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    margin: 0; 
+    color: #e5e5e5;
+  }
 	/* --- TECHNICAL PROFILES SECTION --- */
 	.technical-profiles {
 		padding: 80px 10%;

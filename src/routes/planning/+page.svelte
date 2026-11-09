@@ -189,9 +189,10 @@
 						<div class="function_pill">Customer Satisfaction</div>
 					</div>
 				</div>
-				<div class="report_status">
-					<a class="report-button" href="https://bit.ly/ITL4Area5" target="_blank" rel="noopener noreferrer">
-						<FileText size={20} />Narrative Report
+				<div class="narrative-action-wrapper">
+					<a href="https://bit.ly/ITL4Area5" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+						Download Narrative Report
+
 					</a>
 				</div>
 			</div>
@@ -453,19 +454,34 @@
 <Footer />
 
 <style>
-	.report_status {
+.narrative-action-wrapper {
 		display: flex;
-		align-items: center;
-		gap: 18px;
-		font-size: 14px;
-		color: var(--c-maroon);
+		justify-content: center; /* Changed from flex-start to center it */
+		width: 100%;
+		margin: 0rem 0; /* Adds spacing around the button */
 	}
-	.report_status a {
+
+	.narrative-btn {
 		display: flex;
+		justify-content: center;
 		align-items: center;
-		gap: 12px;
-		padding: 16px 24px;
-		border: 1px solid transparent;
+		width: 100%;
+		max-width: 700px; /* Stretches it out to match the research button */
+		padding: 18px 32px; /* Increased height slightly for a larger click target */
+		border: 3px solid #941518;
+		border-radius: 12px;
+		background-color: transparent;
+		color: #941518;
+		font-family: var(--font-heading, 'Overpass', sans-serif);
+		font-size: 1.4rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+
+	.narrative-btn:hover {
+		background-color: #941518;
+		color: #dfb75f;
 	}
 	.wuri_logo_crop {
 		position: relative;
