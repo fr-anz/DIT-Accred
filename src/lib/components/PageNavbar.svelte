@@ -11,6 +11,7 @@
 	let openDesktopHref = $state<string | null>(null);
 	let drawerOpen = $state(false);
 	let openMobileHref = $state<string | null>(null);
+	let closeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	let activePath = $derived($page.url.pathname);
 	let activeTarget = $derived(`${$page.url.pathname}${$page.url.hash}`);
@@ -35,8 +36,20 @@
 		return activePath === item.href;
 	}
 
-	function toggleDesktop(item: NavItem) {
-		openDesktopHref = openDesktopHref === item.href ? null : item.href;
+	function openDesktop(item: NavItem) {
+		if (closeTimeout) {
+			clearTimeout(closeTimeout);
+			closeTimeout = null;
+		}
+		openDesktopHref = item.href;
+	}
+
+	function scheduleDesktopClose() {
+		if (closeTimeout) clearTimeout(closeTimeout);
+		closeTimeout = setTimeout(() => {
+			openDesktopHref = null;
+			closeTimeout = null;
+		}, 150);
 	}
 
 	function toggleMobile(item: NavItem) {
@@ -44,6 +57,10 @@
 	}
 
 	function closeMenus() {
+		if (closeTimeout) {
+			clearTimeout(closeTimeout);
+			closeTimeout = null;
+		}
 		openDesktopHref = null;
 		drawerOpen = false;
 		openMobileHref = null;
@@ -86,39 +103,31 @@
 			</a>
 
 			{#each sectionItems as item (item.href)}
-				<div class="tab-group">
-					<div
-						class="tab-combo"
+				<div
+					class="tab-group"
+					role="none"
+					onmouseenter={() => hasSections(item) && openDesktop(item)}
+					onmouseleave={() => hasSections(item) && scheduleDesktopClose()}
+				>
+					<a
+						class="tab-link section-tab"
 						class:active={isActive(item)}
-						class:open={openDesktopHref === item.href}
+						href={resolveHref(item.href)}
+						aria-current={isActive(item) ? 'page' : undefined}
+						aria-haspopup={hasSections(item) ? 'true' : undefined}
+						aria-expanded={hasSections(item) ? openDesktopHref === item.href : undefined}
+						aria-controls={hasSections(item) ? `menu-${item.href.slice(1)}` : undefined}
+						onclick={closeMenus}
 					>
-						<a
-							class="tab-link section-tab"
-							href={resolveHref(item.href)}
-							aria-current={isActive(item) ? 'page' : undefined}
-							onclick={closeMenus}
-						>
-							{desktopLabel(item)}
-						</a>
-
+						{desktopLabel(item)}
 						{#if hasSections(item)}
-							<button
-								class="tab-menu-button"
-								type="button"
-								aria-label={`Open ${desktopLabel(item)} menu`}
-								aria-expanded={openDesktopHref === item.href}
-								aria-controls={`menu-${item.href.slice(1)}`}
-								aria-haspopup="true"
-								onclick={() => toggleDesktop(item)}
-							>
-								<span class="chevron">
-									<ChevronDown size={14} strokeWidth={1.75} />
-								</span>
-							</button>
+							<span class="chevron">
+								<ChevronDown size={14} strokeWidth={1.75} />
+							</span>
 						{/if}
-					</div>
+					</a>
 
-					{#if openDesktopHref === item.href}
+					{#if hasSections(item) && openDesktopHref === item.href}
 						<div class="dropdown" id={`menu-${item.href.slice(1)}`}>
 							<a class="overview-link" href={resolveHref(item.href)} onclick={closeMenus}>
 								<span>{displayLabel(item)}</span>
@@ -232,203 +241,149 @@
 
 <style>
 	.page-navbar {
-		position: relative;
-		z-index: 20;
-		width: 100%;
-		min-height: 96px;
-		background: rgba(255, 255, 255, 0.61);
-		background:
-			linear-gradient(0deg, rgba(255, 255, 255, 0.61) 0%, rgba(255, 255, 255, 0.61) 100%),
-			linear-gradient(135deg, #ffddde 2%, #fff0f0 21%, #ffffff 50%, #faf2e5 75%, #edd3a6 96%);
-		border-radius: 0 0 25px 25px;
-		overflow: visible;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(18px) saturate(140%);
-		-webkit-backdrop-filter: blur(18px) saturate(140%);
+		position: absolute;
+		top: 20px;
+		left: 0;
+		right: 0;
+		z-index: 50;
+		display: flex;
+		justify-content: center;
+		padding-inline: clamp(16px, 3vw, 40px);
+		pointer-events: none;
 	}
 
 	.nav-shell {
-		position: relative;
+		pointer-events: auto;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		min-height: 96px;
-		padding: 0 45px;
-		gap: 20px;
+		gap: 24px;
+		width: min(1400px, 100%);
+		padding: 10px 12px 10px 20px;
+		border-radius: 9999px;
+		background: var(--c-surface);
+		box-shadow:
+			0 1px 8px rgba(0, 0, 0, 0.08),
+			0 8px 24px rgba(0, 0, 0, 0.06);
 	}
 
 	.brand-link {
 		display: inline-flex;
 		align-items: center;
 		flex: 0 0 auto;
-		gap: 16px;
-		color: #000000;
+		gap: 12px;
+		color: var(--c-ink);
 		text-decoration: none;
 	}
 
 	.brand-logo {
-		width: 50px;
-		height: 50px;
+		width: 40px;
+		height: 40px;
 		flex: 0 0 auto;
 		border-radius: 50%;
-		background: #ffffff;
+		background: var(--c-shell);
 		object-fit: cover;
 	}
 
 	.brand-copy {
 		display: grid;
-		color: #000000;
 		line-height: 1;
 	}
 
 	.brand-kicker {
-		font-family: 'Overpass', sans-serif;
-		font-size: 12px;
-		font-weight: 400;
-		line-height: 14px;
+		font-family: var(--font-body);
+		font-size: 9px;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgba(26, 26, 26, 0.6);
 	}
 
 	.brand-title {
-		color: #cfa83a;
-		font-family: 'Montserrat', 'Overpass', sans-serif;
-		font-size: 15px;
+		font-family: var(--font-heading);
+		font-size: 14px;
 		font-weight: 700;
-		line-height: 18px;
+		background-image: var(--grad-gold);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
 		white-space: nowrap;
 	}
 
-	.brand-title span {
-		color: #cfa83a;
-	}
-
 	.brand-subtitle {
-		font-family: 'Overpass', sans-serif;
-		font-size: 12px;
+		font-family: var(--font-body);
+		font-size: 9px;
+		font-weight: 500;
 		font-style: italic;
-		font-weight: 400;
-		line-height: 18px;
+		color: #888;
 	}
 
 	.desktop-tabs {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		column-gap: 24px;
+		column-gap: 4px;
 	}
 
 	.tab-group {
 		position: relative;
 	}
 
-	.tab-combo {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 6px 0;
-	}
-
-	.tab-combo.open .section-tab {
-		color: #6f5b24;
-	}
-
-	.tab-link,
-	.tab-menu-button {
+	.tab-link {
 		position: relative;
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		gap: 4px;
+		gap: 5px;
 		border: 0;
 		background: transparent;
-		color: #000000;
+		color: var(--c-ink);
 		cursor: pointer;
-		font-family: 'Overpass', sans-serif;
+		font-family: var(--font-heading);
 		font-size: 15px;
 		font-weight: 400;
-		line-height: 22.4px;
-		padding: 0;
+		line-height: 1.4;
+		padding: 8px 10px;
+		border-radius: 9999px;
 		text-decoration: none;
-		transition: color 0.2s ease;
+		transition:
+			color 0.2s ease,
+			background 0.2s ease;
 		white-space: nowrap;
 	}
 
-	.tab-link::after {
-		position: absolute;
-		right: 0;
-		bottom: -7px;
-		left: 0;
-		height: 1px;
-		background: rgba(207, 168, 58, 0.72);
-		content: '';
-		opacity: 0;
-		transform: scaleX(0.72);
-		transition:
-			opacity 0.2s ease,
-			transform 0.2s ease;
+	.tab-link:hover {
+		color: var(--c-gold-dark);
+		background: rgba(207, 168, 58, 0.08);
 	}
 
-	.section-tab::after {
-		bottom: -6px;
-	}
-
-	.tab-menu-button {
-		width: 16px;
-		height: 22px;
+	.tab-link.active {
+		color: var(--c-maroon);
+		font-weight: 600;
 	}
 
 	.chevron {
 		flex: 0 0 auto;
+		display: inline-flex;
 		transition: transform 0.2s ease;
 	}
 
-	.tab-combo.open .chevron,
-	.mobile-accordion.open .chevron {
+	.tab-group:is(:hover, :focus-within) .chevron {
 		transform: rotate(180deg);
-	}
-
-	.tab-link:hover,
-	.tab-menu-button:hover {
-		color: #cfa83a;
-	}
-
-	.tab-link.active {
-		color: #6f5b24;
-		font-weight: 600;
-	}
-
-	.tab-link.active::after,
-	.tab-combo.active .section-tab::after {
-		opacity: 1;
-		transform: scaleX(1);
-	}
-
-	.brand-link:focus-visible,
-	.tab-link:focus-visible,
-	.tab-menu-button:focus-visible,
-	.drawer-toggle:focus-visible,
-	.mobile-link:focus-visible,
-	.mobile-accordion:focus-visible,
-	.dropdown a:focus-visible,
-	.mobile-panel a:focus-visible {
-		outline: 2px solid rgba(207, 168, 58, 0.78);
-		outline-offset: 4px;
 	}
 
 	.dropdown {
 		position: absolute;
-		top: calc(100% + 24px);
+		top: calc(100% + 14px);
 		right: 0;
 		z-index: 30;
 		width: min(360px, calc(100vw - 32px));
 		padding: 12px;
-		border: 1px solid rgba(255, 255, 255, 0.7);
-		border-radius: 14px;
-		background: rgba(255, 255, 255, 0.72);
+		border: 1px solid rgba(0, 0, 0, 0.06);
+		border-radius: 16px;
+		background: var(--c-surface);
 		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.35),
-			0 18px 48px rgba(46, 7, 7, 0.12);
-		backdrop-filter: blur(18px) saturate(140%);
-		-webkit-backdrop-filter: blur(18px) saturate(140%);
+			0 1px 8px rgba(0, 0, 0, 0.08),
+			0 18px 48px rgba(0, 0, 0, 0.12);
 	}
 
 	.overview-link {
@@ -436,14 +391,14 @@
 		gap: 2px;
 		padding: 11px 12px;
 		border-radius: 10px;
-		background: rgba(255, 255, 255, 0.45);
-		color: #000000;
-		font-weight: 800;
+		background: var(--c-shell);
+		color: var(--c-ink);
+		font-weight: 700;
 		text-decoration: none;
 	}
 
 	.overview-link small {
-		color: rgba(0, 0, 0, 0.62);
+		color: rgba(26, 26, 26, 0.62);
 		font-size: 12px;
 		font-weight: 600;
 	}
@@ -456,11 +411,10 @@
 		padding: 0;
 	}
 
-	.dropdown li a,
-	.mobile-panel a {
+	.dropdown li a {
 		display: block;
 		border-radius: 10px;
-		color: #000000;
+		color: var(--c-ink);
 		font-size: 14px;
 		font-weight: 600;
 		line-height: 1.32;
@@ -472,34 +426,22 @@
 	}
 
 	.dropdown li a:hover,
-	.dropdown li a.active,
-	.mobile-panel a:hover,
-	.mobile-panel a.active {
-		background: rgba(255, 255, 255, 0.55);
-		color: #cfa83a;
-	}
-
-	.dropdown p,
-	.mobile-panel p {
-		margin: 8px 0 0;
-		color: rgba(0, 0, 0, 0.72);
-		font-size: 14px;
-		line-height: 1.55;
-		padding: 0 11px 4px;
+	.dropdown li a.active {
+		background: var(--c-shell);
+		color: var(--c-gold-dark);
 	}
 
 	.drawer-toggle {
 		display: none;
 		align-items: center;
 		justify-content: center;
-		width: 44px;
-		height: 44px;
+		width: 40px;
+		height: 40px;
 		flex: 0 0 auto;
-		border: 1px solid rgba(255, 255, 255, 0.7);
-		border-radius: 12px;
-		background: rgba(255, 255, 255, 0.45);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
-		color: #000000;
+		border: 0;
+		border-radius: 9999px;
+		background: var(--c-shell);
+		color: var(--c-ink);
 		cursor: pointer;
 		transition:
 			background 0.2s ease,
@@ -507,39 +449,26 @@
 	}
 
 	.drawer-toggle:hover {
-		background: rgba(255, 255, 255, 0.62);
+		background: rgba(0, 0, 0, 0.06);
 	}
 
-	.drawer-toggle:active,
-	.tab-menu-button:active,
-	.mobile-link:active,
-	.mobile-accordion:active,
-	.dropdown a:active,
-	.mobile-panel a:active {
+	.drawer-toggle:active {
 		transform: translateY(1px);
 	}
 
 	.mobile-drawer {
 		display: none;
+		pointer-events: auto;
 	}
 
-	@media (min-width: 1480px) {
+	@media (max-width: 1280px) and (min-width: 1181px) {
 		.desktop-tabs {
-			position: absolute;
-			top: 35px;
-			right: 45px;
-			justify-content: center;
-		}
-	}
-
-	@media (max-width: 1479px) and (min-width: 1181px) {
-		.nav-shell {
-			padding: 0 28px;
-			gap: 12px;
+			column-gap: 0;
 		}
 
-		.brand-link {
-			gap: 12px;
+		.tab-link {
+			font-size: 13.5px;
+			padding: 8px 7px;
 		}
 
 		.brand-kicker,
@@ -549,29 +478,10 @@
 
 		.brand-title {
 			font-size: 13px;
-			line-height: 16px;
-		}
-
-		.desktop-tabs {
-			column-gap: 18px;
-		}
-
-		.tab-combo {
-			gap: 4px;
-			padding: 5px 0;
-		}
-
-		.tab-link,
-		.tab-menu-button {
-			font-size: 14px;
 		}
 	}
 
 	@media (max-width: 1180px) {
-		.nav-shell {
-			padding: 0 28px;
-		}
-
 		.desktop-tabs {
 			display: none;
 		}
@@ -583,9 +493,20 @@
 		.mobile-drawer {
 			display: grid;
 			gap: 6px;
-			max-height: calc(100dvh - 96px);
+			position: absolute;
+			top: calc(100% + 10px);
+			left: clamp(16px, 3vw, 40px);
+			right: clamp(16px, 3vw, 40px);
+			z-index: 40;
+			max-height: calc(100dvh - 120px);
 			overflow-y: auto;
-			padding: 0 28px 22px;
+			padding: 16px;
+			border: 1px solid rgba(0, 0, 0, 0.06);
+			border-radius: 20px;
+			background: var(--c-surface);
+			box-shadow:
+				0 1px 8px rgba(0, 0, 0, 0.08),
+				0 18px 48px rgba(0, 0, 0, 0.12);
 			overscroll-behavior: contain;
 		}
 
@@ -595,10 +516,10 @@
 			align-items: center;
 			justify-content: space-between;
 			width: 100%;
-			border: 1px solid rgba(255, 255, 255, 0.7);
+			border: 0;
 			border-radius: 12px;
-			background: rgba(255, 255, 255, 0.22);
-			color: #000000;
+			background: transparent;
+			color: var(--c-ink);
 			cursor: pointer;
 			font: inherit;
 			font-size: 15px;
@@ -612,11 +533,20 @@
 				transform 0.2s ease;
 		}
 
+		.mobile-link:hover,
+		.mobile-accordion:hover {
+			background: var(--c-shell);
+		}
+
 		.mobile-link.active,
 		.mobile-accordion.active {
-			color: #6f5b24;
-			background: rgba(255, 255, 255, 0.28);
-			box-shadow: inset 3px 0 0 rgba(207, 168, 58, 0.6);
+			color: var(--c-maroon);
+			background: rgba(148, 21, 24, 0.06);
+			box-shadow: inset 3px 0 0 var(--c-gold);
+		}
+
+		.mobile-accordion .chevron {
+			color: rgba(26, 26, 26, 0.55);
 		}
 
 		.mobile-panel {
@@ -624,55 +554,83 @@
 			gap: 2px;
 			padding: 6px 6px 10px 14px;
 		}
+
+		.mobile-panel a {
+			display: block;
+			border-radius: 10px;
+			color: var(--c-ink);
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 1.32;
+			padding: 9px 11px;
+			text-decoration: none;
+			transition:
+				background 0.2s ease,
+				color 0.2s ease;
+		}
+
+		.mobile-panel a:hover,
+		.mobile-panel a.active {
+			background: var(--c-shell);
+			color: var(--c-gold-dark);
+		}
+
+		.mobile-panel p {
+			margin: 8px 0 0;
+			padding: 0 11px 4px;
+			color: rgba(26, 26, 26, 0.72);
+			font-size: 14px;
+			line-height: 1.55;
+		}
 	}
 
 	@media (max-width: 560px) {
 		.page-navbar {
-			min-height: 78px;
-			border-radius: 0 0 18px 18px;
+			top: 12px;
+			padding-inline: 12px;
 		}
 
 		.nav-shell {
-			min-height: 78px;
-			padding: 0 16px;
 			gap: 12px;
-		}
-
-		.brand-link {
-			min-width: 0;
-			gap: 10px;
+			padding: 8px 10px 8px 14px;
 		}
 
 		.brand-logo {
-			width: 44px;
-			height: 44px;
-		}
-
-		.brand-copy {
-			min-width: 0;
+			width: 36px;
+			height: 36px;
 		}
 
 		.brand-kicker {
-			font-size: 9px;
+			font-size: 8px;
 		}
 
 		.brand-title {
-			font-size: 11px;
-			white-space: normal;
+			font-size: 12px;
 		}
 
 		.brand-subtitle {
-			font-size: 9px;
+			font-size: 8px;
 		}
 
 		.drawer-toggle {
-			width: 40px;
-			height: 40px;
+			width: 38px;
+			height: 38px;
 		}
 
 		.mobile-drawer {
-			max-height: calc(100dvh - 78px);
-			padding: 0 16px 16px;
+			top: calc(100% + 8px);
+			max-height: calc(100dvh - 90px);
+			padding: 12px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.tab-link,
+		.chevron,
+		.dropdown,
+		.drawer-toggle,
+		.mobile-drawer {
+			transition: none;
 		}
 	}
 </style>

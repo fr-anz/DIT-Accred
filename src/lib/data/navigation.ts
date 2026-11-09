@@ -16,25 +16,19 @@ export const navItems: NavItem[] = [
 		href: '/research',
 		label: 'Research',
 		subItems: [
-			{ label: 'Policy Framework & Governance Ecosystem', href: '/research#policy' },
+			{ label: 'Research Development & Policy Framework', href: '/research#policy' },
 			{ label: 'Key Productivity Metrics & Faculty Engagement', href: '/research#productivity' },
-			{ label: 'Completed Research Repository', href: '/research#research-repository' },
-			{ label: 'Published & Indexed Research Directory', href: '/research#published-research' },
 			{
-				label: 'Competitive Research Distinctions & International Awards',
-				href: '/research#research-awards'
-			},
-			{ label: 'Strategic Future Research Development Blueprint', href: '/research#rd-blueprint' }
+				label: 'Faculty Researcher and Research Repository',
+				href: '/research#published-research'
+			}
 		]
 	},
 	{
 		href: '/teaching-learning',
 		label: 'Teaching & Learning',
 		subItems: [
-			{
-				label: 'Program Compliance & Governance Framework',
-				href: '/teaching-learning#program-compliance'
-			},
+			{ label: 'Program Compliance & Governance', href: '/teaching-learning#program-compliance' },
 			{
 				label: 'Curriculum Architecture & Instruction Delivery',
 				href: '/teaching-learning#curriculum-architecture'
@@ -44,14 +38,7 @@ export const navItems: NavItem[] = [
 				href: '/teaching-learning#staff-faculty-profile'
 			},
 			{ label: 'Student Outcomes', href: '/teaching-learning#student-outcomes' },
-			{
-				label: 'Learner & Graduates Quality Assessment',
-				href: '/teaching-learning#learner-graduate-qa'
-			},
-			{
-				label: 'External Program Quality Assurance Badges',
-				href: '/teaching-learning#external-program-qa'
-			}
+			{ label: 'Learning & Graduates Outcome', href: '/teaching-learning#learner-graduate-qa' }
 		]
 	},
 	{
@@ -62,47 +49,23 @@ export const navItems: NavItem[] = [
 				label: 'Community Extension Policy & Strategic Agenda',
 				href: '/community#community-extension-agenda'
 			},
-			{
-				label: 'Master Registry of Completed & Ongoing Extension Projects',
-				href: '/community#registry-of-projects'
-			},
-			{
-				label: 'Deep-Dive Profiles of Featured Extensions',
-				href: '/community#profiles-extensions'
-			},
-			{ label: 'The PUP iVote++ System', href: '/community#vote-system' }
+			{ label: 'Technical Profiles', href: '/community#technical-profiles' },
+			{ label: 'PUP iVote++ System', href: '/community#ivote-showcase' }
 		]
 	},
-	{
-		href: '/internationalization',
-		label: 'Internationalization',
-		subItems: [
-			{
-				label: 'Internationalization of Research Engagement',
-				href: '/internationalization#research-engagement'
-			},
-			{
-				label: 'Internationalization of the Student Learning Experience',
-				href: '/internationalization#internationalization-experience'
-			}
-		]
-	},
+	{ href: '/internationalization', label: 'Internationalization' },
 	{
 		href: '/planning',
 		label: 'Planning and Quality Assurance',
-		description:
-			"The Planning and Quality Assurance Page serves as a dedicated portal highlighting the institution's commitment to international excellence, curricular rigor, and strategic growth."
-	},
-	{
-		href: '/compliance',
-		label: 'Compliance',
 		subItems: [
+			{ label: 'Strategic International Benchmarking', href: '/planning#strategic-benchmarking' },
+			{ label: 'University Support Functions', href: '/planning#university-support' },
+			{ label: 'Department-Level Process', href: '/planning#dept-process' },
 			{
-				label: 'Quality Assurance & Institutional Accreditations',
-				href: '/compliance#qa-accreditations'
-			},
-			{ label: 'Core Operational Pillars', href: '/compliance#core-pillars' },
-			{ label: 'Quality Management Systems (ISO 9001:2015)', href: '/compliance#qms' }
+				label: 'International Rankings & Institutional Impact',
+				href: '/planning#rankings'
+			}
 		]
-	}
+	},
+	{ href: '/compliance', label: 'Compliance' }
 ];

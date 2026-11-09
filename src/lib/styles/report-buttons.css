@@ -1,0 +1,33 @@
+/* Shared appearance; each button keeps its own sizing and layout. */
+a.report-button,
+a.btn.btn-report {
+	border-color: transparent;
+	border-radius: 16px;
+	background: linear-gradient(90deg, #f9c644 0%, #d78a00 100%);
+	color: #fff;
+	text-decoration: none;
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease;
+}
+
+@media (hover: hover) {
+	a.report-button:hover,
+	a.btn.btn-report:hover {
+		filter: saturate(1.08);
+	}
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+	a.report-button:hover,
+	a.btn.btn-report:hover {
+		transform: translateY(-2px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	a.report-button,
+	a.btn.btn-report {
+		transition: none;
+	}
+}

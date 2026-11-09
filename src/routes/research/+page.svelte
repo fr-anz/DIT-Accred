@@ -239,7 +239,7 @@
 		</div>
 
 		<a
-			class="manual_link"
+			class="manual_link report-button"
 			href="/research"
 			aria-label="Access full PUP Research and Development Manual"
 		>
@@ -803,10 +803,6 @@
 		min-height: 82px;
 		margin: 0 auto;
 		padding: 1.2rem 2.25rem;
-		border-radius: 16px;
-		background: linear-gradient(90deg, #f9c644 0%, #d78a00 100%);
-		color: #fff;
-		text-decoration: none;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -814,14 +810,6 @@
 		font-family: var(--font-body);
 		font-size: clamp(1rem, 1.4vw, 1.55rem);
 		box-sizing: border-box;
-		transition:
-			transform 0.2s ease,
-			filter 0.2s ease;
-	}
-
-	.manual_link:hover {
-		transform: translateY(-2px);
-		filter: saturate(1.08);
 	}
 
 	.productivity_section {

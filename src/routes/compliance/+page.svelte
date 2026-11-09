@@ -1,6 +1,8 @@
 <script>
   import Footer from '$lib/components/footer.svelte';
   import cablesSvg from '$lib/assets/Cables.svg';
+  import Button from '$lib/components/Button.svelte';
+  import { complianceReports, narrativeReports } from '$lib/data/reportLinks';
 
   // Svelte 5 Runes
   let scrollY = $state(0);
@@ -51,6 +53,7 @@
     return Math.max(0, progress - startPercent);
   });
 
+  /** @type {HTMLElement[]} */
   let rowElements = $state([]);
   let activeArea = $derived.by(() => {
     const currentScroll = scrollY; 
@@ -72,22 +75,9 @@
     return null;
   });
 
-  const titles = [
-    "Data Privacy and Information Security",
-    "Governance, Risk, and Compliance Frameworks",
-    "Policies, Standards, and Operational Procedures",
-    "Infrastructure, Cloud Operations, and Resilience",
-    "Identity, Authentication, and Access Management",
-    "Incident Response, Forensics, and Mitigation",
-    "Vulnerability Assessment and Threat Management",
-    "Application Security Architecture and DevSecOps",
-    "Business Continuity and Disaster Recovery Planning",
-    "Regulatory Audits, Assurance, and Verification"
-  ];
-
-  const complianceAreas = titles.map((titleText, i) => ({
+  const complianceAreas = complianceReports.map((report, i) => ({
+    ...report,
     id: i + 1,
-    title: titleText,
     side: (i + 1) % 2 === 0 ? 'left' : 'right'
   }));
 </script>
@@ -135,7 +125,7 @@
             <!-- LEFT SIDE -->
             <div class="area-half left-half">
               {#if area.side === 'left'}
-                <div class="area-card left-card">
+                <a class="area-card left-card" href={area.href} target="_blank" rel="noopener noreferrer">
                   <div class="info-section">
                     <span class="area-label">Area {area.id}</span>
                     <div class="dots-grid">
@@ -150,7 +140,7 @@
                   <div class="port-column">
                     <div class="port-box"><div class="port"></div></div>
                   </div>
-                </div>
+                </a>
                 <!-- Precision Connection Wire -->
                 <div class="wire wire-left"></div>
               {/if}
@@ -160,7 +150,7 @@
             <div class="area-half right-half">
               {#if area.side === 'right'}
                 <div class="wire wire-right"></div>
-                <div class="area-card right-card">
+                <a class="area-card right-card" href={area.href} target="_blank" rel="noopener noreferrer">
                   <div class="port-column">
                     <div class="port-box"><div class="port"></div></div>
                   </div>
@@ -175,7 +165,7 @@
                   <div class="content-box">
                     <span class="title-text">{area.title}</span>
                   </div>
-                </div>
+                </a>
               {/if}
             </div>
 
@@ -192,10 +182,38 @@
     </div>
   </section>
 
+  <section id="narrative" class="narrative-section" aria-labelledby="narrative-title">
+    <h2 id="narrative-title" class="t_eyebrow">Narrative Reports</h2>
+    <div class="narrative-links">
+      {#each narrativeReports as report (report.href)}
+        <Button href={report.href} variant="report" external>{report.title}</Button>
+      {/each}
+    </div>
+  </section>
+
   <Footer />
 </main>
 
 <style>
+  .narrative-section {
+    width: min(100%, 1500px);
+    margin: 0 auto;
+    padding: 40px 5% 80px;
+    scroll-margin-top: 24px;
+  }
+
+  .narrative-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .area-card:focus-visible {
+    outline: 3px solid var(--color-maroon);
+    outline-offset: 4px;
+  }
+
   :root {
     --color-maroon: #941518;
     --color-gold: #cfa83a;
@@ -387,6 +405,7 @@
 
   /* ── WIDE CARDS ── */
   .area-card {
+    text-decoration: none;
     display: flex;
     background: linear-gradient(180deg, #dfb75f 0%, #c49635 100%);
     border: 2px solid #a68430;
