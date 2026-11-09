@@ -37,15 +37,15 @@ const partners = [
 <main>
   <section class="hero-section">
     <div class="hero-bg"></div> 
-    <h1 class="hero-title">INTERNATIONALIZATION</h1>
+    <h1 class="t_display hero-title">INTERNATIONALIZATION</h1>
   </section>
 
   <section class="partners-section">
     
     <div class="partners-header">
       <div class="partners-label">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="partners-icon"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span>GLOBAL PARTNERS & ACADEMIC COLLABORATIONS</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="partners-icon"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span class="t_eyebrow">GLOBAL PARTNERS & ACADEMIC COLLABORATIONS</span>
       </div>
       <hr class="partners-hr" />
     </div>
@@ -109,19 +109,17 @@ const partners = [
     z-index: 0;
   }
 
+  /* Font, weight, tracking and the black→maroon gradient come from the global
+     .t_display role.
+
+     Size is overridden because this is the longest title on the site and one
+     unbreakable word. The role's 150px cap is too wide, and the old 4rem lower
+     bound overflowed badly on mobile: at 390px the title measured 872px. This
+     clamp keeps it inside the viewport from 390px up to 1920px. */
   .hero-title {
     position: relative;
     z-index: 1;
-    font-family: 'Helvetica', Arial, sans-serif; 
-    font-size: clamp(4rem, 8vw, 8rem); 
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    margin: 0;
-    background: linear-gradient(to right, #000000 0%, #941518 80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+    font-size: clamp(1.5rem, 6.6vw, 128px);
     text-align: center;
     padding: 0 5%;
   }
@@ -148,13 +146,8 @@ const partners = [
   .partners-label {
     display: flex;
     align-items: center;
-    justify-content: flex-start; 
-    gap: 12px;
-    font-family: var(--font-heading);
-    font-weight: 500; 
-    font-size: 1.5rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    justify-content: flex-start;
+    gap: 0.85rem;
     margin-bottom: 24px;
   }
 
@@ -175,7 +168,8 @@ const partners = [
   }
 
   .partners-icon {
-    color: var(--color-maroon);
+    color: var(--c-maroon);
+    flex-shrink: 0;
   }
 
   .partners-hr {

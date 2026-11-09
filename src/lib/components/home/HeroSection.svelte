@@ -1,5 +1,5 @@
 <script>
-	let { videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4' } = $props();
+	let { videoUrl = 'https://cdn.theavenir.dev/videos/home.mov' } = $props();
 </script>
 
 <header class="video-container">

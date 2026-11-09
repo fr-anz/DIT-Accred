@@ -3,20 +3,17 @@
 		Globe,
 		Flag,
 		BadgeCheck,
-		SquareCheck,
-		BookOpen,
-		Award,
-		Building2,
+		Workflow,
 		PenLine,
 		FileText,
 		Briefcase,
 		Plane,
-		Star,
 		Share2,
-		CircleDot,
 		CheckCircle2
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import '$lib/styles/accreditation-pages.css';
+	let videoPlaying = $state(false);
 
 	/**
 	 * @typedef {1 | 2 | 4 | 17} SdgId
@@ -28,34 +25,28 @@
 	const sdgData = {
 		1: {
 			label: 'No Poverty',
-			color: '#F5C242',
+			color: 'var(--c-gold-light)',
 			range: '43.6 - 52.7'
 		},
 		2: {
 			label: 'Zero Hunger',
-			color: '#C57E00',
+			color: 'var(--c-gold-dark)',
 			range: '13.7 - 40.9'
 		},
 		4: {
 			label: 'Quality Education',
-			color: '#8C0F13',
+			color: 'var(--c-maroon)',
 			range: '25.7 - 44.1'
 		},
 		17: {
 			label: 'Partnerships for the Goals',
-			color: '#5F1013',
+			color: 'var(--c-maroon-deep)',
 			range: '36.9 - 52.8'
 		}
 	};
 
 	/** @type {SdgId | null} */
 	let hoveredSdg = $state(null);
-
-	const wuriRankings = [
-		{ rank: 21, label: 'Generative AI Application' },
-		{ rank: 39, label: 'Student Support Engagement' },
-		{ rank: 50, label: 'Symbol / Promotion' }
-	];
 
 	const qsCategories = [
 		{ stars: 5, label: 'Employability' },
@@ -76,1558 +67,1027 @@
 	/>
 </svelte:head>
 
-<!-- ─────────────────────────────────────────────
+<main class="assigned_page planning_page">
+	<!-- ─────────────────────────────────────────────
   HERO SECTION
 ───────────────────────────────────────────── -->
-<section class="hero_section">
-	<div class="checkerboard_bg" aria-hidden="true"></div>
-	<div class="hero_content">
-		<h1 class="hero_title">PLANNING &amp; QUALITY<br />ASSURANCE</h1>
-	</div>
-</section>
+	<section class="hero_section">
+		<div class="checkerboard_bg" aria-hidden="true"></div>
+		<div class="hero_content">
+			<h1 class="t_display hero_title">PLANNING &amp; QUALITY<br />ASSURANCE</h1>
+		</div>
+	</section>
 
-<!-- ─────────────────────────────────────────────
+	<!-- ─────────────────────────────────────────────
   SECTION 1: STRATEGIC INTERNATIONAL BENCHMARKING
 ───────────────────────────────────────────── -->
-<section class="content_section" id="strategic-benchmarking">
-	<div class="section_label">
-		<Globe size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>STRATEGIC INTERNATIONAL BENCHMARKING</span>
-	</div>
-	<hr class="section_divider" />
-
-	<div class="benchmarking_grid">
-		<div class="benchmarking_text">
-			<p>
-				The Bachelor of Science in Information Technology (BSIT) program benefits directly from
-				active engagement in internationally recognized higher education ranking systems and regional
-				quality networks. These external validations ensure the curriculum remains comparable with
-				global computing education standards.
-			</p>
+	<section class="content_section" id="strategic-benchmarking">
+		<div class="section_label">
+			<Globe size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">STRATEGIC INTERNATIONAL BENCHMARKING</span>
 		</div>
-		<div class="aaccup_card">
-			<BadgeCheck size={42} strokeWidth={1.5} class="aaccup_icon" />
-			<p class="aaccup_level">LEVEL IV</p>
-			<p class="aaccup_status_label">AACCUP STATUS</p>
-			<hr class="aaccup_divider" />
-			<p class="aaccup_sub">On-going Application</p>
-		</div>
-	</div>
-</section>
+		<hr class="section_divider" />
 
-<!-- ─────────────────────────────────────────────
+		<div class="benchmarking_grid">
+			<div class="benchmarking_text">
+				<p>
+					The Bachelor of Science in Information Technology (BSIT) program benefits directly from
+					active engagement in internationally recognized higher education ranking systems and
+					regional quality networks. These external validations ensure the curriculum remains
+					comparable with global computing education standards.
+				</p>
+			</div>
+			<div class="aaccup_card">
+				<BadgeCheck size={42} strokeWidth={1.5} class="aaccup_icon" />
+				<p class="aaccup_level">LEVEL IV</p>
+				<p class="aaccup_status_label">AACCUP STATUS</p>
+				<hr class="aaccup_divider" />
+				<p class="aaccup_sub">On-going Application</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
   SECTION 2: UNIVERSITY SUPPORT FUNCTIONS
 ───────────────────────────────────────────── -->
-<section class="content_section" id="university-support">
-	<div class="section_label">
-		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>UNIVERSITY SUPPORT FUNCTIONS</span>
-	</div>
-	<hr class="section_divider" />
+	<section class="content_section" id="university-support">
+		<div class="section_label">
+			<Flag size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">UNIVERSITY SUPPORT FUNCTIONS</span>
+		</div>
+		<hr class="section_divider" />
 
-	<!-- Video embed placeholder -->
-	<div class="video_wrapper">
-		<div class="video_screen">
-			<div class="video_checkerboard" aria-hidden="true"></div>
-			<div class="video_overlay">
-				<button class="play_btn" aria-label="Play video">
-					<svg class="play_icon" viewBox="0 0 24 24" fill="currentColor">
-						<polygon points="6,3 20,12 6,21" />
-					</svg>
-				</button>
-				<div class="video_meta">
-					<p class="video_title_text">UNIVERSITY SUPPORT FUNCTIONS</p>
-					<p class="video_subtitle_text">DIT-PUP — AACCUP Level IV</p>
+		<!-- Video embed -->
+		<div class="video_wrapper">
+			<div class="video_screen">
+				{#if videoPlaying}
+					<iframe
+						src="https://www.youtube.com/embed/Lp_x4dWvLs4?autoplay=1"
+						title="University Support Functions Video"
+						class="video_iframe"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen
+					></iframe>
+				{:else}
+					<button
+						class="video_preview"
+						type="button"
+						aria-label="Play University Support Functions video"
+						onclick={() => (videoPlaying = true)}
+					>
+						<img
+							src="/planning/figma/video-preview.jpg"
+							alt="University development and infrastructure"
+							loading="lazy"
+						/>
+						<span class="play_button"
+							><svg
+								width="30"
+								height="30"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+								aria-hidden="true"><path d="M8 4v16l13-8z" /></svg
+							></span
+						>
+					</button>
+				{/if}
+			</div>
+		</div>
+
+		<!-- Two-column support content -->
+		<div class="support_grid">
+			<!-- Left column -->
+			<div class="support_left">
+				<!-- Strategic Priority card -->
+				<div class="priority_card">
+					<h3 class="priority_card_title">STRATEGIC PRIORITY</h3>
+					<ul class="priority_list">
+						<li class="priority_item">
+							<span class="priority_num">01</span>
+							<span class="priority_text"
+								>Academic Program Development &amp; Internationalization</span
+							>
+						</li>
+						<li class="priority_item">
+							<span class="priority_num">02</span>
+							<span class="priority_text">Human Resource Development</span>
+						</li>
+						<li class="priority_item last">
+							<span class="priority_num">03</span>
+							<span class="priority_text">Institutional-Level Quality Assurance</span>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Core Functions card -->
+				<div class="core_functions_card">
+					<h3 class="core_functions_title">CORE FUNCTIONS</h3>
+					<div class="functions_grid">
+						<div class="function_pill">Higher Education Programs</div>
+						<div class="function_pill">Research Programs</div>
+						<div class="function_pill">Extension &amp; Tech Advisory</div>
+						<div class="function_pill">Customer Satisfaction</div>
+					</div>
+				</div>
+				<div class="narrative-action-wrapper">
+					<a href="https://bit.ly/ITL4Area5" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+						Download Narrative Report
+
+					</a>
 				</div>
 			</div>
-			<!-- Fake video control bar -->
-			<div class="video_controls" aria-hidden="true">
-				<span class="ctrl_icon">▶</span>
-				<div class="timeline_track">
-					<div class="timeline_progress"></div>
+
+			<!-- Right column: Support Feed -->
+			<div class="support_feed">
+				<div class="feed_header">
+					<Share2 size={16} strokeWidth={1.5} />
+					<h3 class="feed_title">UNIVERSITY SUPPORT FEED</h3>
 				</div>
-				<span class="ctrl_time">1:24 / 5:00</span>
-				<span class="ctrl_icon">⤢</span>
+				<div class="feed_cards">
+					<div class="feed_card">
+						<h4 class="feed_card_title">Quality Assurance</h4>
+						<p class="feed_card_desc">
+							Training via QAC and UTLDO for syllabi development and accreditation monitoring.
+						</p>
+					</div>
+					<div class="feed_card">
+						<h4 class="feed_card_title">Research &amp; Faculty</h4>
+						<p class="feed_card_desc">
+							Incentives for research presentation and faculty development grants (FSD PHP 20,000).
+						</p>
+					</div>
+					<div class="feed_card">
+						<h4 class="feed_card_title">Infrastructure</h4>
+						<p class="feed_card_desc">
+							PUP SINTA and Document Tracking System (DTS) for efficient request management.
+						</p>
+					</div>
+				</div>
 			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  SECTION 3: DEPARTMENT-LEVEL PROCESS
+───────────────────────────────────────────── -->
+	<section class="content_section" id="dept-process">
+		<div class="section_label">
+			<Workflow size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">DEPARTMENT-LEVEL PROCESS</span>
+		</div>
+		<hr class="section_divider" />
+
+		<div class="process_cards_grid">
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<PenLine size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">Curriculum<br />Revision</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Based on CHED Memorandum Order No. 32 series of 2017.</p>
+			</div>
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<FileText size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">Syllabi<br />Prep</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Regular updates for industry and government sensitivity.</p>
+			</div>
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<Briefcase size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">Internship</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Established MOA with strategic industry partners.</p>
+			</div>
+			<div class="process_card">
+				<div class="process_icon_wrapper">
+					<Plane size={36} strokeWidth={1.5} class="process_icon" />
+				</div>
+				<h4 class="process_card_title">International<br />Affairs</h4>
+				<hr class="process_divider" />
+				<p class="process_card_desc">Institutionalization of global partnerships and mobility.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  PHOTO STRIP
+───────────────────────────────────────────── -->
+	<div class="photo_strip" aria-label="Department photo gallery">
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-1.jpg"
+				alt="Students and faculty in an IT laboratory setting"
+				class="strip_photo img_pos_1"
+			/>
+		</div>
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-2.jpg"
+				alt="Students listening to a presentation on Converge ICT Solutions"
+				class="strip_photo img_pos_2"
+			/>
+		</div>
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-3.jpg"
+				alt="Faculty and staff group with Banua Palawan tribe members"
+				class="strip_photo img_pos_3"
+			/>
+		</div>
+		<div class="photo_strip_item">
+			<img
+				src="/planning/figma/photo-strip-4.jpg"
+				alt="Department faculty meeting and planning session"
+				class="strip_photo img_pos_4"
+			/>
 		</div>
 	</div>
 
-	<!-- Two-column support content -->
-	<div class="support_grid">
-		<!-- Left column -->
-		<div class="support_left">
-			<!-- Strategic Priority card -->
-			<div class="priority_card">
-				<h3 class="priority_card_title">STRATEGIC PRIORITY</h3>
-				<ul class="priority_list">
-					<li class="priority_item">
-						<span class="priority_num">01</span>
-						<span class="priority_text">Academic Program Development &amp; Internationalization</span>
+	<!-- ─────────────────────────────────────────────
+  SECTION 4: VERIFIED INTERNATIONAL RANKINGS
+───────────────────────────────────────────── -->
+	<section class="content_section" id="rankings">
+		<div class="section_label">
+			<BadgeCheck size={26} strokeWidth={1.5} class="section_icon maroon" />
+			<span class="t_eyebrow">VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
+		</div>
+		<hr class="section_divider" />
+
+		<div class="rankings_grid">
+			<!-- QS Stars card -->
+			<div class="ranking_card qs_card">
+				<div class="qs_header">
+					<img src="/planning/figma/qs-stars.png" alt="QS Stars" class="qs_logo_img" />
+					<div class="qs_rating_crop">
+						<img src="/planning/figma/qs-rating.png" alt="3 Stars" class="qs_stars_box_img" />
+					</div>
+				</div>
+
+				<h3 class="qs_rating_title">3-Star Overall Rating</h3>
+				<p class="qs_rating_desc">
+					QS Stars University Rating System alignment with global computing education standards.
+				</p>
+
+				<div class="qs_category_grid">
+					{#each qsCategories as cat (cat.label)}
+						<div class="qs_cat_tile">
+							<span class="qs_cat_stars">{cat.stars} <span>stars</span></span>
+							<span class="qs_cat_label">{cat.label}</span>
+						</div>
+					{/each}
+				</div>
+
+				<div class="qs_validated_row">
+					<CheckCircle2 size={16} class="validated_icon_circle" />
+					<span>Validated Module: Teaching &amp; IT Systems</span>
+				</div>
+			</div>
+
+			<!-- WURI Rankings card -->
+			<div class="ranking_card wuri_card">
+				<div class="wuri_header">
+					<div class="wuri_logo_crop">
+						<img src="/planning/figma/wuri.png" alt="WURI" class="wuri_logo_img" />
+					</div>
+					<div class="wuri_world_rank">
+						<span class="wuri_rank_label">World Rank:</span>
+						<span class="wuri_rank_num">271st</span>
+					</div>
+				</div>
+				<p class="wuri_desc">Innovative Universities globally among 1,072 institutions.</p>
+				<hr class="wuri_divider" />
+				<ul class="wuri_rankings_list">
+					<li class="wuri_rank_item">
+						<span class="wuri_rank_badge">21</span>
+						<div class="wuri_rank_details">
+							<span class="wuri_rank_text">Generative AI Application</span>
+							<div class="wuri_progress_track">
+								<div class="wuri_progress_bar" style="width: 85%;"></div>
+							</div>
+						</div>
 					</li>
-					<li class="priority_item">
-						<span class="priority_num">02</span>
-						<span class="priority_text">Human Resource Development</span>
+					<li class="wuri_rank_item">
+						<span class="wuri_rank_badge">39</span>
+						<div class="wuri_rank_details">
+							<span class="wuri_rank_text">Student Support Engagement</span>
+							<div class="wuri_progress_track">
+								<div class="wuri_progress_bar" style="width: 65%;"></div>
+							</div>
+						</div>
 					</li>
-					<li class="priority_item last">
-						<span class="priority_num">03</span>
-						<span class="priority_text">Institutional-Level Quality Assurance</span>
+					<li class="wuri_rank_item">
+						<span class="wuri_rank_badge">50</span>
+						<div class="wuri_rank_details">
+							<span class="wuri_rank_text">Symbol / Promotion</span>
+							<div class="wuri_progress_track">
+								<div class="wuri_progress_bar" style="width: 50%;"></div>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</div>
 
-			<!-- Core Functions card -->
-			<div class="core_functions_card">
-				<h3 class="core_functions_title">CORE FUNCTIONS</h3>
-				<div class="functions_grid">
-					<div class="function_pill">Higher Education Programs</div>
-					<div class="function_pill">Research Programs</div>
-					<div class="function_pill">Extension &amp; Tech Advisory</div>
-					<div class="function_pill">Customer Satisfaction</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Right column: Support Feed -->
-		<div class="support_feed">
-			<div class="feed_header">
-				<Share2 size={16} strokeWidth={1.5} />
-				<h3 class="feed_title">UNIVERSITY SUPPORT FEED</h3>
-			</div>
-			<div class="feed_cards">
-				<div class="feed_card">
-					<h4 class="feed_card_title">Quality Assurance</h4>
-					<p class="feed_card_desc">
-						Training via QAC and UTLDO for syllabi development and accreditation monitoring.
+			<!-- Impact Rankings & AUN-QA column -->
+			<div class="impact_column">
+				<!-- Impact Rankings card -->
+				<div class="ranking_card impact_card">
+					<p class="impact_label">The Impact Rankings</p>
+					<h2 class="impact_number">1501+</h2>
+					<p class="impact_desc">
+						Validated against UN Sustainable Development Goals (SDGs) through community digital
+						inclusion.
 					</p>
-				</div>
-				<div class="feed_card">
-					<h4 class="feed_card_title">Research &amp; Faculty</h4>
-					<p class="feed_card_desc">
-						Incentives for research presentation and faculty development grants (FSD PHP 20,000).
-					</p>
-				</div>
-				<div class="feed_card">
-					<h4 class="feed_card_title">Infrastructure</h4>
-					<p class="feed_card_desc">
-						PUP SINTA and Document Tracking System (DTS) for efficient request management.
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 
-<!-- ─────────────────────────────────────────────
-  SECTION 3: DEPARTMENT-LEVEL PROCESS
-───────────────────────────────────────────── -->
-<section class="content_section" id="dept-process">
-	<div class="section_label">
-		<Flag size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>DEPARTMENT-LEVEL PROCESS</span>
-	</div>
-	<hr class="section_divider" />
+					<!-- SDG Badges with hover tooltip -->
+					<div class="sdg_badges_row">
+						{#each sdgIds as id (id)}
+							<button
+								type="button"
+								class="sdg_badge"
+								style="background-color: {sdgData[id].color};"
+								onmouseenter={() => (hoveredSdg = id)}
+								onmouseleave={() => (hoveredSdg = null)}
+								aria-label="SDG {id}: {sdgData[id].label}"
+								onfocus={() => (hoveredSdg = id)}
+								onblur={() => (hoveredSdg = null)}
+								onclick={() => (hoveredSdg = hoveredSdg === id ? null : id)}
+							>
+								<span class="sdg_num">{String(id).padStart(2, '0')}</span>
 
-	<div class="process_cards_grid">
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<PenLine size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">Curriculum<br />Revision</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Based on CHED Memorandum Order No. 32 series of 2017.</p>
-		</div>
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<FileText size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">Syllabi<br />Prep</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">
-				Regular updates for industry and government sensitivity.
-			</p>
-		</div>
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<Briefcase size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">Internship</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Established MOA with strategic industry partners.</p>
-		</div>
-		<div class="process_card">
-			<div class="process_icon_wrapper">
-				<Plane size={36} strokeWidth={1.5} class="process_icon" />
-			</div>
-			<h4 class="process_card_title">International<br />Affairs</h4>
-			<hr class="process_divider" />
-			<p class="process_card_desc">Institutionalization of global partnerships and mobility.</p>
-		</div>
-	</div>
-</section>
-
-<!-- ─────────────────────────────────────────────
-  PHOTO STRIP
-───────────────────────────────────────────── -->
-<div class="photo_strip" aria-label="Department photo gallery">
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-1.jpg"
-			alt="Students and faculty in an IT laboratory setting"
-			class="strip_photo img_pos_1"
-		/>
-	</div>
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-2.jpg"
-			alt="Students listening to a presentation on Converge ICT Solutions"
-			class="strip_photo img_pos_2"
-		/>
-	</div>
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-3.jpg"
-			alt="Faculty and staff group with Banua Palawan tribe members"
-			class="strip_photo img_pos_3"
-		/>
-	</div>
-	<div class="photo_strip_item">
-		<img
-			src="/planning/photo-strip-4.jpg"
-			alt="Department faculty meeting and planning session"
-			class="strip_photo img_pos_4"
-		/>
-	</div>
-</div>
-
-<!-- ─────────────────────────────────────────────
-  SECTION 4: VERIFIED INTERNATIONAL RANKINGS
-───────────────────────────────────────────── -->
-<section class="content_section" id="rankings">
-	<div class="section_label">
-		<BadgeCheck size={20} strokeWidth={1.5} class="section_icon maroon" />
-		<span>VERIFIED INTERNATIONAL RANKINGS &amp; INSTITUTIONAL IMPACT</span>
-	</div>
-	<hr class="section_divider" />
-
-	<div class="rankings_grid">
-
-		<!-- QS Stars card -->
-		<div class="ranking_card qs_card">
-			<div class="qs_header">
-				<div class="qs_logo_row">
-					<Award size={18} strokeWidth={1.5} class="qs_logo_icon" />
-					<span class="qs_org">QS Stars</span>
-				</div>
-				<div class="qs_stars_row" aria-label="3 out of 5 stars">
-					{#each [1, 2, 3, 4, 5] as s}
-						<Star
-							size={14}
-							strokeWidth={0}
-							fill={s <= 3 ? '#FAC549' : '#FCEFCA'}
-						/>
-					{/each}
-				</div>
-			</div>
-
-			<h3 class="qs_rating_title">3-Star Overall Rating</h3>
-			<p class="qs_rating_desc">
-				QS Stars University Rating System alignment with global computing education standards.
-			</p>
-
-			<div class="qs_category_grid">
-				{#each qsCategories as cat}
-					<div class="qs_cat_tile">
-						<span class="qs_cat_stars">{cat.stars} stars</span>
-						<span class="qs_cat_label">{cat.label}</span>
-					</div>
-				{/each}
-			</div>
-
-			<div class="qs_validated_row">
-				<CheckCircle2 size={16} class="validated_icon_circle" />
-				<span>Validated Module: Teaching &amp; IT Systems</span>
-			</div>
-		</div>
-
-		<!-- WURI Rankings card -->
-		<div class="ranking_card wuri_card">
-			<div class="wuri_header">
-				<div>
-					<h3 class="wuri_title">WURI Rankings<br />2024</h3>
-				</div>
-				<div class="wuri_world_rank">
-					<span class="wuri_rank_label">World Rank:</span>
-					<span class="wuri_rank_num">271st</span>
-				</div>
-			</div>
-			<p class="wuri_desc">Innovative Universities globally among 1,072 institutions.</p>
-			<hr class="wuri_divider" />
-			<ul class="wuri_rankings_list">
-				<li class="wuri_rank_item">
-					<span class="wuri_rank_badge">21</span>
-					<div class="wuri_rank_details">
-						<span class="wuri_rank_text">Generative AI Application</span>
-						<div class="wuri_progress_track">
-							<div class="wuri_progress_bar" style="width: 85%;"></div>
-						</div>
-					</div>
-				</li>
-				<li class="wuri_rank_item">
-					<span class="wuri_rank_badge">39</span>
-					<div class="wuri_rank_details">
-						<span class="wuri_rank_text">Student Support Engagement</span>
-						<div class="wuri_progress_track">
-							<div class="wuri_progress_bar" style="width: 65%;"></div>
-						</div>
-					</div>
-				</li>
-				<li class="wuri_rank_item">
-					<span class="wuri_rank_badge">50</span>
-					<div class="wuri_rank_details">
-						<span class="wuri_rank_text">Symbol / Promotion</span>
-						<div class="wuri_progress_track">
-							<div class="wuri_progress_bar" style="width: 50%;"></div>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-
-		<!-- Impact Rankings & AUN-QA column -->
-		<div class="impact_column">
-			<!-- Impact Rankings card -->
-			<div class="ranking_card impact_card">
-				<p class="impact_label">The Impact Rankings</p>
-				<h2 class="impact_number">1501+</h2>
-				<p class="impact_desc">
-					Validated against UN Sustainable Development Goals (SDGs) through community digital
-					inclusion.
-				</p>
-
-				<!-- SDG Badges with hover tooltip -->
-				<div class="sdg_badges_row">
-					{#each sdgIds as id}
-						<div
-							class="sdg_badge"
-							style="background-color: {sdgData[id].color};"
-							onmouseenter={() => (hoveredSdg = id)}
-							onmouseleave={() => (hoveredSdg = null)}
-							role="button"
-							tabindex="0"
-							aria-label="SDG {id}: {sdgData[id].label}"
-							onkeydown={(e) => {
-								if (e.key === 'Enter' || e.key === ' ') hoveredSdg = hoveredSdg === id ? null : id;
-							}}
-						>
-							<span class="sdg_num">{String(id).padStart(2, '0')}</span>
-
-							{#if hoveredSdg === id}
-								<div class="sdg_tooltip" role="tooltip">
-									<div class="sdg_tooltip_left">
-										<span class="sdg_tooltip_title">SDG</span>
-										<span class="sdg_tooltip_num" style="color: {sdgData[id].color};">
-											{String(id).padStart(2, '0')}
-										</span>
+								{#if hoveredSdg === id}
+									<div class="sdg_tooltip" role="tooltip">
+										<div class="sdg_tooltip_left">
+											<span class="sdg_tooltip_title">SDG</span>
+											<span class="sdg_tooltip_num" style="color: {sdgData[id].color};">
+												{String(id).padStart(2, '0')}
+											</span>
+										</div>
+										<div class="sdg_tooltip_right">
+											<span class="sdg_tooltip_range">{sdgData[id].range}</span>
+										</div>
 									</div>
-									<div class="sdg_tooltip_right">
-										<span class="sdg_tooltip_range">{sdgData[id].range}</span>
-									</div>
-								</div>
-							{/if}
-						</div>
-					{/each}
+								{/if}
+							</button>
+						{/each}
+					</div>
 				</div>
-			</div>
 
-			<!-- AUN-QA Network card -->
-			<div class="ranking_card aunqa_card">
-				<div class="aunqa_header">
-					<Share2 size={18} strokeWidth={1.5} class="aunqa_icon" />
-					<h3 class="aunqa_title">AUN-QA Network</h3>
+				<!-- AUN-QA Network card -->
+				<div class="ranking_card aunqa_card">
+					<div class="aunqa_header">
+						<Share2 size={18} strokeWidth={1.5} class="aunqa_icon" />
+						<h3 class="aunqa_title">AUN-QA Network</h3>
+					</div>
+					<p class="aunqa_desc">
+						Active regional alignment of learning outcomes with ASEAN higher education standards.
+					</p>
 				</div>
-				<p class="aunqa_desc">
-					Active regional alignment of learning outcomes with ASEAN higher education standards.
-				</p>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+</main>
 
 <Footer />
 
 <style>
-	/* ── DESIGN TOKENS ── */
-	:root {
-		--color-maroon: #5c0f16;
-		--color-maroon-mid: #801b1e;
-		--color-gold: #cfa83a;
-		--color-gold-light: #d4a843;
-		--color-gold-dark: #b8912d;
-		--color-bg: #ffffff;
-		--font-body: 'Inter', sans-serif;
-		--font-heading: 'Overpass', sans-serif;
-		--section-max-width: 1280px; /* Zoom 125% equivalent sizing (less white space) */
-	}
-
-	.content_section {
-		width: 100%;
-		box-sizing: border-box;
-		padding: 2.5rem 10% 4rem 10%; /* Fluid 10% side padding matching the community page scale at 100% zoom */
-		font-size: 1.05rem;
-	}
-
-	@media (max-width: 1024px) {
-		.content_section {
-			padding: 2.5rem 6% 4rem 6%;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.content_section {
-			padding: 2rem 1.5rem 3.5rem 1.5rem;
-		}
-	}
-
-	#strategic-benchmarking {
-		padding-top: 4.5rem; /* Separator from hero fold */
-	}
-
-	#university-support,
-	#dept-process {
-		padding-top: 1rem; /* Reduced top padding to tighten the spacing between consecutive sections */
-	}
-
-	/* ── HERO ── */
-	.hero_section {
-		position: relative;
-		height: 100dvh; /* Covers the screen completely when landing/clicking Planning */
-		min-height: 600px;
+.narrative-action-wrapper {
 		display: flex;
-		align-items: center;
+		justify-content: center; /* Changed from flex-start to center it */
+		width: 100%;
+		margin: 0rem 0; /* Adds spacing around the button */
+	}
+
+	.narrative-btn {
+		display: flex;
 		justify-content: center;
-		overflow: hidden;
-		background-color: #f8f6f3;
+		align-items: center;
+		width: 100%;
+		max-width: 700px; /* Stretches it out to match the research button */
+		padding: 18px 32px; /* Increased height slightly for a larger click target */
+		border: 3px solid #941518;
+		border-radius: 12px;
+		background-color: transparent;
+		color: #941518;
+		font-family: var(--font-heading, 'Overpass', sans-serif);
+		font-size: 1.4rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all 0.2s ease;
 	}
 
-	.checkerboard_bg {
-		position: absolute;
-		inset: 0;
-		opacity: 0.85;
-		background-image: linear-gradient(45deg, #e5e3de 25%, transparent 25%),
-			linear-gradient(-45deg, #e5e3de 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #e5e3de 75%),
-			linear-gradient(-45deg, transparent 75%, #e5e3de 75%);
-		background-size: 40px 40px;
-		background-position:
-			0 0,
-			0 20px,
-			20px -20px,
-			-20px 0px;
-		animation: checkerboardFade 1.2s ease-out forwards;
+	.narrative-btn:hover {
+		background-color: #941518;
+		color: #dfb75f;
 	}
-
-	.hero_content {
+	.wuri_logo_crop {
 		position: relative;
-		z-index: 1;
-		text-align: center;
-		padding: 4rem 2rem;
-		animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		width: 54%;
+		aspect-ratio: 278 / 102;
+		overflow: hidden;
+	}
+	.qs_cat_stars span {
+		font-size: 0.68em;
 	}
 
 	.hero_title {
-		font-family: var(--font-heading);
-		font-size: clamp(2.5rem, 6vw, 5.5rem);
-		font-weight: 900;
-		color: var(--color-maroon);
+		max-width: 1811px;
+		font-size: clamp(38px, 6.77vw, 130px);
 		line-height: 1.15;
-		letter-spacing: -0.01em;
-		margin: 0;
-		text-transform: uppercase;
+		background-image: linear-gradient(127deg, #000, #901518);
 	}
-
-	@keyframes checkerboardFade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 0.85;
-		}
-	}
-
-	@keyframes heroFadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	/* ── SHARED SECTION WRAPPER ── */
-	.section_label {
-		display: flex;
-		align-items: center;
-		gap: 0.85rem;
-		font-family: var(--font-body);
-		font-size: 1.15rem; /* Proportional scale to match figma reference */
-		font-weight: 700;
-		letter-spacing: 0.2em; /* 20% letter-spacing for the adjusted font scale */
-		text-transform: uppercase;
-		margin-bottom: 0.85rem;
-		line-height: 1.3;
-	}
-
-	.section_label span {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		text-fill-color: transparent;
-		display: inline-block;
-	}
-
-	:global(.section_icon) {
-		color: var(--color-gold-dark);
-		flex-shrink: 0;
-	}
-
-	:global(.section_icon.maroon) {
-		color: var(--color-maroon);
-	}
-
-	.section_divider {
-		border: none;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
-		margin: 0.5rem 0 3rem 0;
-	}
-
-	/* ── STRATEGIC BENCHMARKING ── */
-	.benchmarking_grid {
+	#strategic-benchmarking {
+		padding-top: clamp(65px, 5.36vw, 103px);
 		display: grid;
-		grid-template-columns: 1fr 380px;
-		gap: 4.5rem;
-		align-items: center;
+		grid-template-columns: 1143fr 434fr;
+		column-gap: clamp(40px, 6.2vw, 119px);
+		align-items: start;
 	}
-
-	@media (max-width: 900px) {
-		.benchmarking_grid {
-			grid-template-columns: 1fr;
-			gap: 2.5rem;
-		}
+	#strategic-benchmarking .section_label {
+		grid-column: 1;
 	}
-
+	#strategic-benchmarking .section_divider {
+		grid-column: 1;
+		margin-bottom: clamp(25px, 2.6vw, 50px);
+	}
+	.benchmarking_grid {
+		display: contents;
+	}
+	.benchmarking_text {
+		grid-column: 1;
+	}
 	.benchmarking_text p {
-		font-family: var(--font-body);
-		font-size: 1.15rem;
-		color: #2c2c2c;
-		line-height: 1.85;
-		max-width: 720px;
 		margin: 0;
 	}
-
 	.aaccup_card {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
-		border-radius: 20px;
-		padding: 1.75rem 2rem;
+		grid-column: 2;
+		grid-row: 1 / 4;
+		border-radius: 25px;
+		background: linear-gradient(104deg, #fac549, #ca8106);
 		text-align: center;
-		width: 380px;
-		height: 250px;
-		box-shadow: 0 8px 24px rgba(202, 129, 6, 0.15);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.4rem;
-		box-sizing: border-box;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+		padding: clamp(25px, 2.6vw, 50px) 20px;
 	}
-
-	.aaccup_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.28);
+	.aaccup_card :global(svg) {
+		color: white;
+		width: clamp(40px, 3.125vw, 60px);
+		height: clamp(40px, 3.125vw, 60px);
+		margin: 0 auto 16px;
 	}
-
-	@media (max-width: 900px) {
-		.aaccup_card {
-			width: 100%;
-			max-width: 380px;
-			margin: 0 auto;
-		}
-	}
-
-	:global(.aaccup_icon) {
-		color: #ffffff;
-		margin-bottom: 0.25rem;
-	}
-
 	.aaccup_level {
-		font-family: var(--font-heading);
-		font-size: 1.6rem;
-		font-weight: 800;
-		color: #1a1a1a;
-		margin: 0;
-		letter-spacing: 0.05em;
+		font-size: clamp(17px, 1.25vw, 24px);
+		font-weight: 700;
+		letter-spacing: 0.27em;
+		margin: 0 0 12px;
 	}
-
 	.aaccup_status_label {
-		font-family: var(--font-body);
-		font-size: 0.8rem;
-		font-weight: 800;
-		letter-spacing: 0.12em;
-		color: #8c0f13;
+		color: var(--c-maroon);
+		font-size: clamp(17px, 1.25vw, 24px);
 		margin: 0;
-		text-transform: uppercase;
 	}
-
 	.aaccup_divider {
-		border: none;
-		border-top: 1px solid rgba(140, 15, 19, 0.25);
-		width: 60px;
-		margin: 0.4rem 0;
+		border: 0;
+		border-top: 1px solid #222;
+		margin: 18px 0;
 	}
-
 	.aaccup_sub {
-		font-family: var(--font-body);
-		font-size: 0.9rem;
+		font-size: clamp(16px, 1.25vw, 24px);
 		font-style: italic;
-		color: #1a1a1a;
 		margin: 0;
 	}
-
-	/* ── VIDEO ── */
 	.video_wrapper {
-		margin-bottom: 2.5rem;
-		border-radius: 16px;
-		overflow: hidden;
-		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-		border: 3px solid #1a1a1a;
-		background: #1a1a1a;
+		width: 79.4%;
+		margin: 0 auto clamp(45px, 4.167vw, 80px);
+		padding: clamp(24px, 2.656vw, 51px);
+		border-radius: 25px;
+		background: var(--panel-maroon);
 	}
-
 	.video_screen {
+		aspect-ratio: 1241 / 590;
 		position: relative;
-		width: 100%;
-		aspect-ratio: 16 / 7;
 		overflow: hidden;
-		cursor: pointer;
+		border-radius: 10px;
 	}
-
-	.video_checkerboard {
-		position: absolute;
-		inset: 0;
-		background-color: #f0ece5;
-		background-image: linear-gradient(45deg, #d9d4c9 25%, transparent 25%),
-			linear-gradient(-45deg, #d9d4c9 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #d9d4c9 75%),
-			linear-gradient(-45deg, transparent 75%, #d9d4c9 75%);
-		background-size: 32px 32px;
-		background-position:
-			0 0,
-			0 16px,
-			16px -16px,
-			-16px 0px;
-	}
-
-	.video_overlay {
-		position: relative;
-		z-index: 10;
+	.video_iframe {
 		width: 100%;
 		height: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 1.25rem;
-		background-color: rgba(92, 15, 22, 0.1);
-		transition: background-color 0.3s ease;
+		border: 0;
 	}
-
-	.video_screen:hover .video_overlay {
-		background-color: rgba(92, 15, 22, 0.2);
-	}
-
-	.play_btn {
-		width: 72px;
-		height: 72px;
-		border-radius: 50%;
-		background: #fff;
-		border: none;
-		box-shadow: 0 8px 28px rgba(92, 15, 22, 0.25);
-		display: flex;
-		align-items: center;
-		justify-content: center;
+	.video_preview {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		padding: 0;
 		cursor: pointer;
-		transition:
-			transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-			box-shadow 0.2s ease;
-		padding-left: 5px;
+		display: grid;
+		place-items: center;
+		background: #eee;
 	}
-
-	.play_btn:hover {
-		transform: scale(1.12);
-		box-shadow: 0 12px 36px rgba(92, 15, 22, 0.35);
-	}
-
-	.play_icon {
-		width: 26px;
-		height: 26px;
-		color: var(--color-maroon);
-	}
-
-	.video_meta {
-		text-align: center;
-		color: var(--color-maroon);
-	}
-
-	.video_title_text {
-		font-family: var(--font-heading);
-		font-size: 1.1rem;
-		font-weight: 800;
-		letter-spacing: 0.05em;
-		margin: 0;
-	}
-
-	.video_subtitle_text {
-		font-size: 0.78rem;
-		font-weight: 600;
-		opacity: 0.8;
-		margin: 0.2rem 0 0 0;
-	}
-
-	.video_controls {
+	.video_preview img {
 		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 15;
-		background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
-		padding: 2rem 1.25rem 0.6rem;
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		color: #fff;
-		font-size: 0.75rem;
-		opacity: 0;
-		transform: translateY(4px);
-		transition:
-			opacity 0.3s ease,
-			transform 0.3s ease;
-		pointer-events: none;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
-
-	.video_screen:hover .video_controls {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	.ctrl_icon {
-		font-size: 0.9rem;
-		opacity: 0.85;
-	}
-
-	.timeline_track {
-		flex-grow: 1;
-		height: 4px;
-		background: rgba(255, 255, 255, 0.3);
-		border-radius: 2px;
+	.play_button {
 		position: relative;
+		width: clamp(50px, 4.167vw, 80px);
+		height: clamp(50px, 4.167vw, 80px);
+		display: grid;
+		place-items: center;
+		color: var(--c-maroon);
+		background: #fffc;
+		border-radius: 50%;
+		box-shadow: 0 4px 20px #0002;
 	}
-
-	.timeline_progress {
-		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		width: 28%;
-		background: var(--color-gold);
-		border-radius: 2px;
-	}
-
-	.ctrl_time {
-		font-size: 0.7rem;
-		opacity: 0.85;
-		white-space: nowrap;
-	}
-
-	/* ── SUPPORT GRID ── */
 	.support_grid {
 		display: grid;
-		grid-template-columns: 1.05fr 1fr;
-		gap: 3rem; /* Expanded for better breathing room on desktop */
+		grid-template-columns: 872fr 772fr;
+		gap: clamp(26px, 2.344vw, 45px);
 	}
-
-	@media (max-width: 760px) {
-		.support_grid {
-			grid-template-columns: 1fr;
-			gap: 2rem;
-		}
-	}
-
 	.support_left {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: clamp(25px, 2.344vw, 45px);
 	}
-
-	/* Priority card */
 	.priority_card {
-		background: #fff;
-		border: 1px solid rgba(207, 168, 58, 0.3);
-		border-radius: 12px;
-		padding: 2rem; /* Expanded from 1.75rem for premium feel */
-		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+		border: 2px solid var(--c-gold);
+		border-radius: 25px;
+		padding: clamp(28px, 3.073vw, 59px);
+		flex: 1;
 	}
-
 	.priority_card_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 900;
-		color: var(--color-maroon);
-		letter-spacing: 0.05em;
-		margin: 0 0 1.25rem 0;
+		color: var(--c-maroon);
+		margin: 0 0 clamp(28px, 3.125vw, 60px);
+		font: 700 clamp(24px, 2.083vw, 40px)/1.25 var(--font-heading);
+		letter-spacing: 0.04em;
 	}
-
 	.priority_list {
-		list-style: none;
 		padding: 0;
 		margin: 0;
-		display: flex;
-		flex-direction: column;
+		list-style: none;
 	}
-
 	.priority_item {
 		display: flex;
+		gap: clamp(20px, 2.083vw, 40px);
 		align-items: center;
-		gap: 1.25rem;
-		padding: 0.85rem 1rem;
-		margin: 0 -1rem;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-		border-radius: 8px;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-bottom-color 0.3s ease;
+		padding: clamp(20px, 1.667vw, 32px) 0;
+		border-bottom: 1px solid #ddd;
 	}
-
-	.priority_item:hover {
-		transform: translateX(8px);
-		background-color: rgba(207, 168, 58, 0.08);
-		border-bottom-color: transparent;
+	.priority_item:first-child {
+		padding-top: 0;
 	}
-
 	.priority_item.last {
-		border-bottom: none;
+		border: 0;
+		padding-bottom: 0;
 	}
-
 	.priority_num {
-		font-size: 0.9rem;
+		color: var(--c-gold-dark);
+		font-size: clamp(20px, 1.458vw, 28px);
 		font-weight: 700;
-		color: var(--color-gold);
-		font-family: var(--font-body);
-		min-width: 24px;
 	}
-
-	.priority_text {
-		font-size: 0.85rem;
-		color: #222;
-		font-family: var(--font-body);
-		line-height: 1.45;
-	}
-
-	/* Core Functions card */
 	.core_functions_card {
-		background: var(--color-gold);
-		border-radius: 12px;
-		padding: 2rem; /* Expanded padding */
-		box-shadow: 0 4px 20px rgba(207, 168, 58, 0.2);
+		border-radius: 25px;
+		padding: clamp(28px, 2.76vw, 53px);
+		background: linear-gradient(105deg, #fac549, #ca8106);
 	}
-
 	.core_functions_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 900;
-		color: #1a1a1a;
-		letter-spacing: 0.05em;
-		margin: 0 0 1rem 0;
+		margin: 0 0 clamp(25px, 2.083vw, 40px);
+		color: #000;
+		font: 700 clamp(22px, 1.667vw, 32px)/1.3 var(--font-heading);
 	}
-
 	.functions_grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 0.65rem;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(16px, 1.354vw, 26px);
 	}
-
 	.function_pill {
-		background: #fff;
-		border-radius: 6px;
-		padding: 0.7rem 1rem;
-		border-left: 5px solid var(--color-maroon);
-		font-size: 0.78rem;
-		font-weight: 700;
-		color: var(--color-maroon);
-		font-family: var(--font-body);
-		line-height: 1.3;
+		padding: 18px 20px;
+		background: white;
+		border-left: 6px solid var(--c-maroon);
+		border-radius: 10px;
+		font-size: clamp(13px, 1.042vw, 20px);
+		color: var(--c-maroon);
 	}
-
-	/* Support Feed */
 	.support_feed {
-		background: var(--color-maroon);
-		border-radius: 12px;
-		padding: 2rem; /* Expanded padding */
-		color: #fff;
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-		box-shadow: 0 4px 20px rgba(92, 15, 22, 0.15);
+		background: var(--panel-maroon);
+		padding: clamp(30px, 3.646vw, 70px);
+		border-radius: 25px;
 	}
-
 	.feed_header {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-		padding-bottom: 0.85rem;
+		gap: 15px;
+		color: var(--c-gold-light);
+		margin-bottom: clamp(32px, 3.125vw, 60px);
 	}
-
+	.feed_header :global(svg) {
+		display: none;
+	}
 	.feed_title {
-		font-size: 0.85rem;
-		font-weight: 800;
-		color: var(--color-gold);
-		letter-spacing: 0.1em;
-		font-family: var(--font-body);
 		margin: 0;
+		font: 700 clamp(21px, 1.667vw, 32px)/1.3 var(--font-heading);
 	}
-
 	.feed_cards {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
+		display: grid;
+		gap: clamp(25px, 2.188vw, 42px);
 	}
-
 	.feed_card {
-		background: #fff;
-		border-radius: 8px;
-		padding: 1.1rem 1.25rem;
-		color: #2b2b2b;
+		background: white;
+		border-radius: 10px;
+		padding: clamp(25px, 2.083vw, 40px);
 	}
-
 	.feed_card_title {
-		font-size: 0.92rem;
-		font-weight: 700;
-		color: var(--color-gold-dark);
-		margin: 0 0 0.4rem 0;
-		font-family: var(--font-body);
+		margin: 0 0 20px;
+		color: var(--c-gold-dark);
+		font: 700 clamp(20px, 1.458vw, 28px)/1.3 var(--font-heading);
 	}
-
 	.feed_card_desc {
-		font-size: 0.78rem;
-		line-height: 1.6;
-		color: #444;
 		margin: 0;
-		font-family: var(--font-body);
+		line-height: 1.3;
 	}
-
-	/* ── DEPARTMENT-LEVEL PROCESS ── */
 	.process_cards_grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1.5rem; /* Expanded from 1.25rem for alignment with rankings grid */
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: clamp(22px, 2.292vw, 44px);
 	}
-
-	@media (max-width: 760px) {
-		.process_cards_grid {
-			grid-template-columns: repeat(2, 1fr);
-			gap: 1.25rem;
-		}
-	}
-
-	@media (max-width: 460px) {
-		.process_cards_grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
 	.process_card {
-		border: 4px solid rgba(160, 22, 24, 0.45); /* Thicker red/maroon borders matching figma */
-		border-radius: 30px; /* Tighter matching figma */
-		padding: 2.25rem 1.5rem;
-		text-align: center;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.85rem;
-		min-height: 330px; /* Tall portrait rectangular shape */
-		box-sizing: border-box;
-		transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-		cursor: default;
+		padding: clamp(25px, 2.188vw, 42px);
+		border: 2px solid var(--c-maroon);
+		border-radius: 25px;
+		box-shadow: 4px 6px 9px #94151830;
 	}
-
-	.process_card:hover {
-		transform: translateY(-4px);
-		border-color: var(--color-gold);
-		box-shadow: 0 8px 24px rgba(207, 168, 58, 0.15);
+	.process_card:nth-child(even) {
+		border-color: var(--c-gold);
+		box-shadow: 4px 6px 9px #ca810630;
 	}
-
-	.process_divider {
-		border: none;
-		border-top: 1.5px solid rgba(140, 15, 19, 0.18);
-		width: 45px;
-		margin: 0.4rem auto;
-	}
-
 	.process_icon_wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 0.5rem; /* Clean white card backgrounds, no background circle behind icons */
+		margin-bottom: clamp(24px, 2.083vw, 40px);
 	}
-
-	:global(.process_icon) {
-		color: var(--color-maroon);
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	.process_icon_wrapper :global(svg) {
+		width: clamp(50px, 5vw, 96px);
+		height: clamp(50px, 5vw, 96px);
+		color: var(--c-maroon);
 	}
-
-	.process_card:hover :global(.process_icon) {
-		transform: scale(1.12);
-	}
-
 	.process_card_title {
-		font-family: var(--font-heading); /* Overpass */
-		font-size: 2rem; /* 32px matching Figma specification */
-		font-weight: 600; /* SemiBold matching Figma specification */
-		color: #941518; /* Maroon color matching Figma specification */
+		min-height: 2.6em;
 		margin: 0;
-		line-height: 1; /* 100% line-height matching Figma specification */
-		letter-spacing: 0.04em; /* 4% letter-spacing matching Figma specification */
-		text-align: center;
+		color: var(--c-maroon);
+		font: 700 clamp(20px, 1.667vw, 32px)/1.3 var(--font-heading);
 	}
-
+	.process_divider {
+		border: 0;
+		border-top: 1px solid #888;
+		margin: 22px 0;
+	}
 	.process_card_desc {
-		font-family: var(--font-body);
-		font-size: 0.85rem; /* Matching figma */
-		color: #444;
-		line-height: 1.6;
-		margin: 0.5rem 0 0 0;
+		margin: 0;
 	}
-
-	/* ── PHOTO STRIP ── */
 	.photo_strip {
-		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		height: 260px;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		height: clamp(160px, 21.927vw, 421px);
+		margin: 0 auto clamp(35px, 3.125vw, 60px);
+		max-width: 1920px;
 		overflow: hidden;
-		margin: 0; /* Let it sit perfectly flush between process and rankings sections */
 	}
-
-	@media (max-width: 768px) {
-		.photo_strip {
-			grid-template-columns: repeat(2, 1fr);
-			height: 520px;
-		}
-	}
-
 	.photo_strip_item {
-		width: 100%;
-		height: 100%;
+		min-width: 0;
 		overflow: hidden;
-		position: relative;
 	}
-
 	.strip_photo {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		display: block;
-		filter: brightness(0.92);
-		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 	}
-
-	.photo_strip_item:hover .strip_photo {
-		transform: scale(1.06);
-		filter: brightness(1);
-	}
-
-	/* Target center/crop focus to show the humans clearly */
-	.img_pos_1 {
-		object-position: center 20%;
-	}
-
-	.img_pos_2 {
-		object-position: center 30%;
-	}
-
-	.img_pos_3 {
-		object-position: center 40%;
-	}
-
-	.img_pos_4 {
-		object-position: center 25%;
-	}
-
-	/* ── RANKINGS SECTION ── */
 	.rankings_grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1.5rem; /* Expanded from 1.25rem */
-		align-items: stretch;
+		grid-template-columns: 613fr 603fr 393fr;
+		gap: clamp(22px, 2.135vw, 41px);
+		align-items: start;
 	}
-
-	@media (max-width: 900px) {
-		.rankings_grid {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	@media (max-width: 600px) {
-		.rankings_grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
 	.ranking_card {
-		border-radius: 20px;
-		padding: 1.75rem 1.5rem;
-		border: 1.5px dashed rgba(180, 150, 80, 0.35);
-		background: #fff;
-		box-sizing: border-box;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+		border: 2px solid var(--c-gold);
+		border-radius: 25px;
+		padding: clamp(24px, 2.083vw, 40px);
 	}
-
-	.ranking_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-		border-color: rgba(180, 150, 80, 0.7);
-	}
-
-	/* QS Stars card */
-	.qs_card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
 	.qs_header {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 0.5rem;
-	}
-
-	.qs_logo_row {
-		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 20px;
+		margin-bottom: clamp(25px, 2.604vw, 50px);
 	}
-
-	:global(.qs_logo_icon) {
-		color: #8c0f13;
-		flex-shrink: 0;
+	.qs_logo_img {
+		width: 40%;
+		height: auto;
 	}
-
-	.qs_org {
-		font-family: var(--font-body);
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: #1a1a1a;
+	.qs_rating_crop {
+		position: relative;
+		width: 34%;
+		aspect-ratio: 172 / 61;
+		overflow: hidden;
 	}
-
-	.qs_stars_row {
-		display: flex;
-		gap: 3px;
+	.qs_stars_box_img {
+		position: absolute;
+		max-width: none;
+		width: 292.84%;
+		height: 579.9%;
+		left: -63.58%;
+		top: -180.41%;
 	}
-
 	.qs_rating_title {
-		font-family: var(--font-heading);
-		font-size: 1.15rem;
-		font-weight: 800;
-		color: #8c0f13;
-		margin: 0;
+		color: var(--c-gold-dark);
+		font: 700 clamp(22px, 1.667vw, 32px)/1.3 var(--font-heading);
+		margin: 0 0 22px;
 	}
-
 	.qs_rating_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: #444;
-		line-height: 1.55;
-		margin: 0;
+		margin: 0 0 clamp(35px, 3.646vw, 70px);
 	}
-
 	.qs_category_grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 0.6rem;
-		margin-top: 0.25rem;
+		gap: clamp(18px, 1.771vw, 34px);
 	}
-
 	.qs_cat_tile {
-		background: #8c0f13;
+		background: var(--panel-maroon);
 		border-radius: 10px;
-		padding: 0.85rem 1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
+		padding: clamp(22px, 1.563vw, 30px) 10px;
+		text-align: center;
 	}
-
 	.qs_cat_stars {
-		font-family: var(--font-heading);
-		font-size: 1.3rem;
-		font-weight: 900;
-		color: #fff;
-		line-height: 1.1;
-	}
-
-	.qs_cat_label {
-		font-family: var(--font-body);
-		font-size: 0.72rem;
-		color: #fac549;
-		font-style: italic;
-		font-weight: 600;
-	}
-
-	.qs_validated_row {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		font-weight: 700;
-		color: #8c0f13;
-		padding-top: 1rem;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
-		margin-top: auto;
-	}
-
-	:global(.validated_icon_circle) {
-		fill: #8c0f13;
-		color: #ffffff;
-		flex-shrink: 0;
-	}
-
-	/* WURI card */
-	.wuri_card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.wuri_header {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 0.25rem;
-	}
-
-	.wuri_title {
-		font-family: var(--font-heading);
-		font-size: 1.2rem;
-		font-weight: 900;
-		color: #1a1a1a;
-		margin: 0;
-		line-height: 1.25;
-	}
-
-	.wuri_world_rank {
-		text-align: right;
+		display: block;
+		font: 700 clamp(26px, 3.125vw, 60px)/1.2 var(--font-heading);
+		color: white;
 		white-space: nowrap;
 	}
-
+	.qs_cat_label {
+		display: block;
+		color: var(--c-gold-light);
+		font-size: clamp(13px, 1.25vw, 24px);
+		font-style: italic;
+	}
+	.qs_validated_row {
+		border-top: 1px solid #888;
+		padding-top: clamp(25px, 2.6vw, 50px);
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		color: var(--c-maroon);
+		margin-top: clamp(30px, 3.125vw, 60px);
+		font-size: clamp(14px, 1.25vw, 24px);
+	}
+	.qs_validated_row :global(svg) {
+		flex: 0 0 auto;
+		width: 28px;
+		height: 28px;
+	}
+	.wuri_header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		margin-bottom: 26px;
+	}
+	.wuri_logo_img {
+		position: absolute;
+		max-width: none;
+		width: 112.94%;
+		height: 383.52%;
+		left: -12.94%;
+		top: -145.74%;
+	}
+	.wuri_world_rank {
+		text-align: right;
+	}
 	.wuri_rank_label {
 		display: block;
-		font-size: 0.6rem;
-		color: #888;
-		font-family: var(--font-body);
+		font-size: clamp(14px, 1.146vw, 22px);
 	}
-
 	.wuri_rank_num {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 900;
-		color: #8c0f13;
+		display: block;
+		color: var(--c-gold-dark);
+		font: 700 clamp(24px, 1.875vw, 36px)/1.2 var(--font-heading);
 	}
-
 	.wuri_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: #444;
-		line-height: 1.55;
 		margin: 0;
 	}
-
 	.wuri_divider {
-		border: none;
-		border-top: 1.5px solid rgba(0, 0, 0, 0.08);
-		margin: 0.25rem 0;
+		border: 0;
+		border-top: 1px solid #888;
+		margin: clamp(25px, 2.604vw, 50px) 0;
 	}
-
 	.wuri_rankings_list {
 		list-style: none;
-		padding: 0;
 		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		margin-top: auto;
+		padding: 0;
+		display: grid;
+		gap: clamp(30px, 2.604vw, 50px);
 	}
-
 	.wuri_rank_item {
 		display: flex;
 		align-items: center;
-		gap: 0.85rem;
+		gap: clamp(20px, 1.979vw, 38px);
 	}
-
 	.wuri_rank_badge {
-		background: #8c0f13;
-		color: #fff;
-		font-family: var(--font-heading);
-		font-size: 1.2rem;
-		font-weight: 900;
-		border-radius: 6px;
-		width: 48px;
-		height: 42px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-		box-sizing: border-box;
+		display: grid;
+		place-items: center;
+		width: clamp(56px, 4.688vw, 90px);
+		height: clamp(56px, 4.688vw, 90px);
+		background: var(--c-maroon);
+		color: white;
+		border-radius: 0;
+		flex: 0 0 auto;
+		font: 700 clamp(28px, 2.5vw, 48px)/1 var(--font-heading);
 	}
-
 	.wuri_rank_details {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		flex-grow: 1;
+		flex: 1;
 	}
-
 	.wuri_rank_text {
-		font-family: var(--font-body);
-		font-size: 0.78rem;
-		color: #1a1a1a;
-		font-weight: 800;
 		text-transform: uppercase;
-		letter-spacing: 0.02em;
-		line-height: 1.2;
+		font-family: var(--font-heading);
+		font-size: clamp(15px, 1.25vw, 24px);
 	}
-
 	.wuri_progress_track {
-		width: 100%;
-		height: 3px;
-		background: #EAE5DB;
-		border-radius: 2px;
-		overflow: hidden;
+		height: 7px;
+		background: #f4e6c9;
+		border-radius: 5px;
+		margin-top: 15px;
 	}
-
 	.wuri_progress_bar {
 		height: 100%;
-		background: linear-gradient(90deg, #ca8106 0%, #fac549 100%);
-		border-radius: 2px;
+		border-radius: inherit;
+		background: var(--c-gold-dark);
 	}
-
-	/* Impact + AUN column */
 	.impact_column {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
+		display: grid;
+		gap: clamp(28px, 2.083vw, 40px);
 	}
-
 	.impact_card {
-		background: linear-gradient(180deg, #451516 0%, #1A1614 65%, #392E1F 100%);
-		border: none;
-		color: #fff;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		box-sizing: border-box;
-		border-radius: 20px;
-		padding: 1.75rem 1.5rem;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+		border: 0;
+		background: var(--panel-maroon);
+		color: white;
+		text-align: left;
+		padding: clamp(24px, 1.875vw, 36px);
 	}
-
-	.impact_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 12px 30px rgba(73, 21, 22, 0.3);
-		border: none;
-	}
-
 	.impact_label {
-		font-family: var(--font-body);
-		font-size: 0.75rem;
-		color: rgba(255, 255, 255, 0.6);
-		margin: 0 0 0.35rem 0;
-		letter-spacing: 0.05em;
+		margin: 0 0 30px;
+		font: 400 clamp(14px, 0.833vw, 16px)/1.3 var(--font-body);
 	}
-
 	.impact_number {
-		font-family: var(--font-heading);
-		font-size: 3.5rem;
-		font-weight: 900;
-		color: #fff;
-		margin: 0 0 0.5rem 0;
-		line-height: 1;
+		color: var(--c-gold-light);
+		font: 700 clamp(46px, 4.167vw, 80px)/1.2 var(--font-heading);
+		margin: 0 0 24px;
 	}
-
 	.impact_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: rgba(255, 255, 255, 0.75);
-		line-height: 1.65;
-		margin: 0 0 1.25rem 0;
+		font-size: clamp(14px, 1.042vw, 20px);
+		margin: 0 0 32px;
 	}
-
-	/* SDG badges */
 	.sdg_badges_row {
 		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px;
 	}
-
 	.sdg_badge {
 		position: relative;
-		width: 44px;
-		height: 44px;
-		border-radius: 6px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		border: 0;
+		padding: 0;
+		color: white;
+		width: clamp(34px, 2.5vw, 48px);
+		height: clamp(34px, 2.5vw, 48px);
+		border-radius: 3px;
 		cursor: pointer;
-		transition: transform 0.2s ease;
-		user-select: none;
+		display: grid;
+		place-items: center;
 	}
-
-	.sdg_badge:hover {
-		transform: scale(1.08);
-		z-index: 20;
-	}
-
 	.sdg_num {
-		font-family: var(--font-heading);
-		font-size: 0.95rem;
-		font-weight: 900;
-		color: #fff;
+		font-size: clamp(16px, 1.25vw, 24px);
+		font-weight: 700;
 	}
-
 	.sdg_tooltip {
 		position: absolute;
-		top: calc(100% + 12px);
+		bottom: calc(100% + 12px);
 		left: 50%;
 		transform: translateX(-50%);
-		background: #fff;
-		border-radius: 8px;
-		padding: 0.5rem 0.85rem;
-		width: 170px;
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		z-index: 100;
-		pointer-events: none;
-		animation: tooltipSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		gap: 22px;
+		width: 205px;
+		padding: 20px;
+		background: white;
+		border: 1px solid var(--c-gold);
+		box-shadow: 0 8px 20px #0002;
+		border-radius: 12px;
+		color: #111;
+		z-index: 5;
 	}
-
-	@keyframes tooltipSlide {
-		from {
-			opacity: 0;
-			transform: translate(-50%, 8px);
-		}
-		to {
-			opacity: 1;
-			transform: translate(-50%, 0);
-		}
-	}
-
-	/* Arrow pointing up */
-	.sdg_tooltip::after {
-		content: '';
-		position: absolute;
-		bottom: 100%;
-		left: 50%;
-		transform: translateX(-50%);
-		border: 8px solid transparent;
-		border-bottom-color: #fff;
-	}
-
 	.sdg_tooltip_left {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		line-height: 1.1;
+		display: grid;
 	}
-
 	.sdg_tooltip_title {
-		font-family: var(--font-body);
-		font-size: 0.6rem;
-		font-weight: 800;
-		color: #555;
-		letter-spacing: 0.05em;
-		margin: 0;
+		font-size: 15px;
 	}
-
 	.sdg_tooltip_num {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 800;
-		margin: 1px 0 0 0;
-	}
-
-	.sdg_tooltip_right {
-		display: flex;
-		align-items: center;
-	}
-
-	.sdg_tooltip_range {
-		font-family: var(--font-body);
-		font-size: 1.1rem;
+		font-size: 36px;
 		font-weight: 700;
-		color: #1a1a1a;
-		letter-spacing: -0.02em;
-		white-space: nowrap;
 	}
-
+	.sdg_tooltip_range {
+		font-size: 18px;
+	}
 	.aunqa_card {
-		background: linear-gradient(180deg, #FAC549 0%, #CA8106 100%);
-		border: none;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		box-shadow: 0 6px 24px rgba(202, 129, 6, 0.2);
-		justify-content: center;
-		box-sizing: border-box;
-		border-radius: 20px;
-		padding: 1.75rem 1.5rem;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+		border: 0;
+		background: linear-gradient(106deg, #fac549, #ca8106);
+		color: #000;
 	}
-
-	.aunqa_card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 12px 32px rgba(202, 129, 6, 0.35);
-		border: none;
-	}
-
 	.aunqa_header {
 		display: flex;
+		gap: 14px;
 		align-items: center;
-		gap: 0.6rem;
+		margin-bottom: 24px;
 	}
-
-	:global(.aunqa_icon) {
-		color: #3d0a0e;
+	.aunqa_header :global(svg) {
+		flex: 0 0 auto;
+		width: 30px;
+		height: 30px;
+		color: var(--c-maroon);
 	}
-
 	.aunqa_title {
-		font-family: var(--font-heading);
-		font-size: 1rem;
-		font-weight: 800;
-		color: #3d0a0e;
+		color: var(--c-maroon);
+		font: 700 clamp(21px, 1.667vw, 32px)/1.3 var(--font-heading);
 		margin: 0;
 	}
-
 	.aunqa_desc {
-		font-family: var(--font-body);
-		font-size: 0.82rem;
-		color: rgba(61, 10, 14, 0.8);
-		line-height: 1.6;
+		font-size: clamp(14px, 1.042vw, 20px);
 		margin: 0;
+	}
+	@media (max-width: 1000px) {
+		.rankings_grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.impact_column {
+			grid-column: 1 / -1;
+			grid-template-columns: 1fr 1fr;
+		}
+		.process_cards_grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.support_feed {
+			padding: 28px;
+		}
+	}
+	@media (max-width: 700px) {
+		.hero_title {
+			font-size: clamp(32px, 6.77vw, 48px);
+			padding: 0 15px;
+		}
+		#strategic-benchmarking {
+			display: block;
+		}
+		.aaccup_card {
+			margin-top: 30px;
+		}
+		.video_wrapper {
+			width: 100%;
+			padding: 20px;
+		}
+		.support_grid {
+			grid-template-columns: 1fr;
+		}
+		.photo_strip {
+			grid-template-columns: 1fr 1fr;
+			height: 320px;
+		}
+		.rankings_grid {
+			grid-template-columns: 1fr;
+		}
+		.impact_column {
+			grid-template-columns: 1fr;
+		}
+		.qs_cat_stars {
+			font-size: 36px;
+		}
+		.qs_cat_label {
+			font-size: 16px;
+		}
+		.priority_item {
+			font-size: 15px;
+		}
+	}
+	@media (max-width: 420px) {
+		.process_cards_grid {
+			gap: 15px;
+		}
+		.process_card {
+			padding: 20px 16px;
+		}
+		.process_card_title {
+			font-size: 17px;
+		}
+		.functions_grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
