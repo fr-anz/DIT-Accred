@@ -4,8 +4,9 @@
   import binusLogo from '$lib/assets/internationalization/binus.png';
   import unpamLogo from '$lib/assets/internationalization/unpam.png';
   import umpsaLogo from '$lib/assets/internationalization/umpsa.png';
+  import pcabLogo from '$lib/assets/internationalization/pcab.png';
 
-  const partners = [
+const partners = [
     {
       logo: binusLogo,
       name: 'Bina Nusantara University',
@@ -20,6 +21,11 @@
       logo: umpsaLogo,
       name: 'Universiti Malaysia Pahang Al-Sultan Abdullah',
       location: 'Pekan Pahang, Malaysia'
+    },
+    {
+      logo: pcabLogo,
+      name: 'PCS Information and Computing Accreditation Board (PICAB)',
+      location: 'Manila, Philippines'
     }
   ];
 </script>
@@ -157,8 +163,6 @@
     margin: 0 0 80px 0; 
   }
 
-
-  /* Type comes from the global .t_eyebrow role — same as Planning & QA. */
   .partners-label :global(.t_eyebrow) {
     display: inline-block;
   }
@@ -181,6 +185,11 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 32px;
     margin-bottom: 60px;
+  }
+
+  /* CENTERS THE 4TH BOX IN THE MIDDLE ROW */
+  .partner-card:nth-child(4) {
+    grid-column: 2;
   }
 
   .partner-card {
@@ -210,7 +219,7 @@
       -2px -2px 15px rgba(140, 15, 19, 0.1);
   }
 
-.partner-card-logo {
+  .partner-card-logo {
     height: 150px; 
     width: auto;
     max-width: 100%;
@@ -219,7 +228,6 @@
     display: block;
   }
 
-  /* gray line */
   .card-divider {
     width: 150px;
     height: 1px;
@@ -228,18 +236,16 @@
     margin: 0 0 24px 0;
   }
 
-.partner-card-name {
+  .partner-card-name {
     color: #941518;
     font-family: var(--font-heading);
     font-size: 1.8rem; 
     font-weight: 700;
     
     margin: 0 0 25px 0;
-
     padding-top: 10px;
     
     line-height: 1.35;
-
   }
 
   .partner-card-location {
@@ -250,13 +256,16 @@
     font-style: italic;
     
     margin: 0;
-    
   }
 
   /* RESPONSIVE BREAKPOINTS */
   @media (max-width: 1024px) {
     .partners-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+    /* Reset centering on tablet since it becomes a 2-column layout */
+    .partner-card:nth-child(4) {
+      grid-column: auto;
     }
   }
 
