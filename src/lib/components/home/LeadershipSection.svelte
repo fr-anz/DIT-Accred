@@ -26,7 +26,6 @@
 	];
 
 	const detailContent = {
-		heading: 'Excellence in Every Byte',
 		paragraphs: [
 			'Welcome to the Bachelor of Science in Information Technology program of our Sintang Paaralan, Polytechnic University of the Philippines, where education is empowered by excellence, innovation, and service to the nation.',
 			'The BSIT program is committed to developing competent, adaptive, and socially responsible technology professionals equipped with the knowledge and practical skills needed in today’s rapidly evolving digital world. Through quality instruction, relevant training, hands-on experiences, and industry-aligned learning, students are prepared in the fields of software development, networking, database systems, cybersecurity, systems analysis, and emerging technologies.',
