@@ -13,6 +13,7 @@
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 	import '$lib/styles/accreditation-pages.css';
+	import '$lib/styles/assigned-page-motion.css';
 	let videoPlaying = $state(false);
 
 	/**
@@ -190,9 +191,13 @@
 					</div>
 				</div>
 				<div class="narrative-action-wrapper">
-					<a href="https://bit.ly/ITL4Area5" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+					<a
+						href="https://bit.ly/ITL4Area5"
+						class="narrative-btn"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						Download Narrative Report
-
 					</a>
 				</div>
 			</div>
@@ -454,7 +459,7 @@
 <Footer />
 
 <style>
-.narrative-action-wrapper {
+	.narrative-action-wrapper {
 		display: flex;
 		justify-content: center; /* Changed from flex-start to center it */
 		width: 100%;
