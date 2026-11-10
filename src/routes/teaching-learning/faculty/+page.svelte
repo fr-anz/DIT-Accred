@@ -4,6 +4,7 @@
 	import { resolve } from '$app/paths';
 	import Footer from '$lib/components/footer.svelte';
 	import '$lib/styles/accreditation-pages.css';
+	import '$lib/styles/assigned-page-motion.css';
 
 	// Names, specializations and cutout crops from Figma 880:1597.
 	// The Domingo card repeats Comendador's photo in Figma; use the supplied faculty original instead.

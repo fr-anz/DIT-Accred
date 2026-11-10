@@ -15,11 +15,15 @@
 		Compass,
 		MessageSquareWarning,
 		RotateCw,
-		Network
+		Network,
+		Pause,
+		Play
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 	import StudentAchievementsGallery from '$lib/components/StudentAchievementsGallery.svelte';
 	import '$lib/styles/accreditation-pages.css';
+	import '$lib/styles/assigned-page-motion.css';
+	import { narrativeReports } from '$lib/data/reportLinks';
 	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
 	/** @type {HTMLDivElement | undefined} */
@@ -40,6 +44,10 @@
 	let selectedAlumIndex = $state(null); // Index of alum for detailed modal
 	/** Slideshow: which page of 3 we're on (0 = first 3, 1 = second 3) */
 	let slidePage = $state(0);
+	let organizationsPaused = $state(false);
+	const narrativeReport = narrativeReports.find(
+		(report) => report.title === 'Teaching and Learning'
+	);
 	/** @type {CourseYear[]} */
 	const courseYears = [1, 2, 3, 4];
 
@@ -118,8 +126,6 @@
 			testimonialVideoUrl: ''
 		}
 	];
-
-	
 
 	// Total slide pages: one page per 3 alumni
 	const totalSlidePages = Math.ceil(alumniList.length / 3);
@@ -466,7 +472,6 @@
 					</div>
 				</div>
 			</div>
-			
 
 			<!-- Right Column: Tabs & Interactive Explorer -->
 			<div class="curriculum_right_panel">
@@ -564,8 +569,6 @@
 					</div>
 				</div>
 
-				
-
 				<!-- Interactive Explorer Card -->
 				<div class="interactive_explorer_card">
 					<h3 class="explorer_title">INTERACTIVE CURRICULUM EXPLORER</h3>
@@ -583,25 +586,34 @@
 						{/each}
 					</div>
 
-					<div class="courses_list_container">
-						{#each coursesByYear[activeYear] as course (course.code)}
-							<div class="course_row">
-								<div class="course_details">
-									<span class="course_code">{course.code}:</span>
-									<span class="course_name">{course.name}</span>
+					{#key activeYear}
+						<div class="courses_list_container">
+							{#each coursesByYear[activeYear] as course (course.code)}
+								<div class="course_row">
+									<div class="course_details">
+										<span class="course_code">{course.code}:</span>
+										<span class="course_name">{course.name}</span>
+									</div>
+									<span class="course_units">{course.units} units</span>
 								</div>
-								<span class="course_units">{course.units} units</span>
-							</div>
-						{/each}
-					</div>
+							{/each}
+						</div>
+					{/key}
 				</div>
 			</div>
 
-				<div class="narrative-action-wrapper">
-					<a href="https://drive.google.com/YOUR_LINK_HERE" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+			<div class="narrative-action-wrapper">
+				{#if narrativeReport}
+					<a
+						href={narrativeReport.href}
+						class="narrative-btn"
+						target="_blank"
+						rel="external noopener noreferrer"
+					>
 						Download Narrative Report
 					</a>
-				</div>
+				{/if}
+			</div>
 		</div>
 	</section>
 
@@ -701,18 +713,36 @@
 		<hr class="section_divider" />
 
 		<div class="orgs_marquee_wrapper">
-			<div class="orgs_marquee_track">
-				<!-- First set of 9 cards -->
-				{#each organizations as org (org.title)}
-					<div class="org_card" style="background-image: url('{org.img}')">
-						<div class="org_overlay"></div>
-						<div class="org_content">
-							<h3 class="org_title">{org.title}</h3>
-							<p class="org_desc">{org.desc}</p>
-						</div>
+			<div class="orgs_marquee_track" id="organization-track" class:paused={organizationsPaused}>
+				{#each [false, true] as duplicate (duplicate)}
+					<div class="orgs_marquee_group" aria-hidden={duplicate}>
+						{#each organizations as org (org.title)}
+							<div class="org_card" style="background-image: url('{org.img}')">
+								<div class="org_overlay"></div>
+								<div class="org_content">
+									<h3 class="org_title">{org.title}</h3>
+									<p class="org_desc">{org.desc}</p>
+								</div>
+							</div>
+						{/each}
 					</div>
 				{/each}
 			</div>
+		</div>
+		<div class="orgs_motion_controls">
+			<button
+				class="orgs_motion_toggle"
+				type="button"
+				aria-controls="organization-track"
+				aria-pressed={organizationsPaused}
+				onclick={() => (organizationsPaused = !organizationsPaused)}
+			>
+				{#if organizationsPaused}<Play size={16} aria-hidden="true" />{:else}<Pause
+						size={16}
+						aria-hidden="true"
+					/>{/if}
+				{organizationsPaused ? 'Resume' : 'Pause'} organization animation
+			</button>
 		</div>
 
 		<StudentAchievementsGallery />
@@ -994,7 +1024,6 @@
 <Footer />
 
 <style>
-
 	.narrative-action-wrapper {
 		margin-top: 0px;
 		display: flex;
@@ -1022,13 +1051,13 @@
 	/* Reduces the bottom space of the curriculum section */
 	#curriculum-architecture {
 		margin-bottom: 0;
-		padding-bottom: 80px; 
+		padding-bottom: 80px;
 	}
 
 	/* Reduces the top space of the faculty section */
 	#staff-faculty-profile {
 		margin-top: 0;
-		padding-top: 40px; 
+		padding-top: 40px;
 	}
 	.modal_backdrop {
 		position: absolute;
