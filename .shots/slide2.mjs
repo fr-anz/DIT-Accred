@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+await page.goto('http://127.0.0.1:5174/research', { waitUntil: 'networkidle' });
+await page.locator('.metric_control_next').click();
+await page.waitForTimeout(400);
+await page.evaluate(() => document.getElementById('research-repository')?.scrollIntoView({ block: 'center' }));
+await page.waitForTimeout(900);
+await page.screenshot({ path: '/tmp/shots/after-indexation2.png' });
+await browser.close();
+console.log('done');

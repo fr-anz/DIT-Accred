@@ -237,7 +237,7 @@
   .hero-section {
     position: relative;
     width: 100%;
-    height: 100vh; 
+    height: 100dvh; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -534,5 +534,14 @@
   .area-row.scroll-active .wire {
     background-color: var(--color-green);
     box-shadow: 0 0 16px var(--color-green);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-bg {
+      animation: hero-backdrop-in 1.2s ease-out;
+    }
+    .hero-title {
+      animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
   }
 </style>
