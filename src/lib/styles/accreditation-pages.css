@@ -35,7 +35,7 @@
 	position: relative;
 	display: grid;
 	place-items: center;
-	height: clamp(420px, calc(55.052vw - 96px), 961px);
+	height: 100dvh;
 	overflow: hidden;
 	background: #f7f7f7;
 }
@@ -43,6 +43,20 @@
 	position: absolute;
 	inset: 0;
 	background: url('/design/page-ground.png') center / cover no-repeat;
+}
+/* Page photos replace the shared texture. A 70% wash keeps the gradient
+   title readable, matching the 30% photo opacity on the other heroes. */
+.assigned_page.planning_page .checkerboard_bg,
+.assigned_page.teaching_page .checkerboard_bg {
+	background:
+		linear-gradient(rgb(247 247 247 / 0.7), rgb(247 247 247 / 0.7)),
+		var(--hero-photo) center / cover no-repeat;
+}
+.assigned_page.planning_page {
+	--hero-photo: url('/img/pages/planning-hero.jpg');
+}
+.assigned_page.teaching_page {
+	--hero-photo: url('/img/pages/teaching-hero.jpg');
 }
 .assigned_page .hero_content {
 	position: relative;
@@ -153,9 +167,6 @@
 }
 
 @media (max-width: 700px) {
-	.assigned_page .hero_section {
-		height: 440px;
-	}
 	.assigned_page .section_label {
 		gap: 14px;
 		align-items: flex-start;

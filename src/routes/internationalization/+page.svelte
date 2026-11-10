@@ -92,7 +92,7 @@ const partners = [
   .hero-section {
     position: relative;
     width: 100%;
-    height: 100vh; 
+    height: 100dvh; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,6 +103,7 @@ const partners = [
   .hero-bg {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('/img/pages/internationalization-hero.jpg');
     background-size: cover;
     background-position: center;
     opacity: 0.3; 
@@ -272,6 +273,15 @@ const partners = [
   @media (max-width: 768px) {
     .partners-grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-bg {
+      animation: hero-backdrop-in 1.2s ease-out;
+    }
+    .hero-title {
+      animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
   }
 </style>

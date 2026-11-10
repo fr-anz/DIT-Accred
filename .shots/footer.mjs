@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const [prefix, width = '1920'] = process.argv.slice(2);
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: +width, height: 1400 } });
+await page.goto('http://localhost:5174/', { waitUntil: 'networkidle' });
+await page.waitForTimeout(800);
+await page.evaluate(() => document.querySelector('footer')?.scrollIntoView({ block: 'end' }));
+await page.waitForTimeout(600);
+await page.screenshot({ path: `/tmp/shots/${prefix}-footer.png` });
+await browser.close();
+console.log('done', prefix);

@@ -188,6 +188,7 @@
 
 <main class="research_page">
 	<section class="hero_section">
+		<div class="hero_bg" aria-hidden="true"></div>
 		<div class="hero_content">
 			<h1 class="t_display hero_title">RESEARCH</h1>
 		</div>
@@ -543,6 +544,15 @@
 		justify-content: center;
 		overflow: hidden;
 		background: transparent;
+	}
+
+	/* Photo sits at 30% so the gradient title stays readable, matching the
+	   other page heroes. */
+	.hero_bg {
+		position: absolute;
+		inset: 0;
+		background: url('/img/pages/research-hero.jpg') center / cover no-repeat;
+		opacity: 0.3;
 	}
 
 	.hero_content {
@@ -1585,10 +1595,6 @@
 	}
 
 	@media (max-width: 760px) {
-		.hero_section {
-			min-height: 72dvh;
-		}
-
 		.content_section {
 			padding: 4rem 1.25rem 2.5rem;
 		}
@@ -1748,6 +1754,15 @@
 		.faculty_section {
 			padding-top: 5rem;
 			padding-bottom: 5rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.hero_bg {
+			animation: hero-backdrop-in 1.2s ease-out;
+		}
+		.hero_content {
+			animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1);
 		}
 	}
 </style>
