@@ -15,9 +15,7 @@
 		Compass,
 		MessageSquareWarning,
 		RotateCw,
-		Network,
-		Pause,
-		Play
+		Network
 	} from 'lucide-svelte';
 	import Footer from '$lib/components/footer.svelte';
 	import StudentAchievementsGallery from '$lib/components/StudentAchievementsGallery.svelte';
@@ -44,7 +42,6 @@
 	let selectedAlumIndex = $state(null); // Index of alum for detailed modal
 	/** Slideshow: which page of 3 we're on (0 = first 3, 1 = second 3) */
 	let slidePage = $state(0);
-	let organizationsPaused = $state(false);
 	const narrativeReport = narrativeReports.find(
 		(report) => report.title === 'Teaching and Learning'
 	);
@@ -713,7 +710,7 @@
 		<hr class="section_divider" />
 
 		<div class="orgs_marquee_wrapper">
-			<div class="orgs_marquee_track" id="organization-track" class:paused={organizationsPaused}>
+			<div class="orgs_marquee_track">
 				{#each [false, true] as duplicate (duplicate)}
 					<div class="orgs_marquee_group" aria-hidden={duplicate}>
 						{#each organizations as org (org.title)}
@@ -729,22 +726,6 @@
 				{/each}
 			</div>
 		</div>
-		<div class="orgs_motion_controls">
-			<button
-				class="orgs_motion_toggle"
-				type="button"
-				aria-controls="organization-track"
-				aria-pressed={organizationsPaused}
-				onclick={() => (organizationsPaused = !organizationsPaused)}
-			>
-				{#if organizationsPaused}<Play size={16} aria-hidden="true" />{:else}<Pause
-						size={16}
-						aria-hidden="true"
-					/>{/if}
-				{organizationsPaused ? 'Resume' : 'Pause'} organization animation
-			</button>
-		</div>
-
 		<StudentAchievementsGallery />
 	</section>
 

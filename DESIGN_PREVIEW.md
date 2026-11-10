@@ -38,8 +38,8 @@ Comendador's photograph. Other portrait crops follow their Figma cards.
 
 The follow-up restores hero entrances, card and image hover feedback, tab/year
 and alumni changes, Planning tooltips and faculty dialog entrances. The four
-organization cards loop continuously with a pause/resume control and pause on
-desktop hover. Reduced-motion mode uses a static grid with no duplicate cards
+organization cards loop continuously and pause on desktop hover.
+Reduced-motion mode uses a static grid with no duplicate cards
 or entrance/hover transforms. The newer navbar, report controls and student
 achievements gallery remain in place.
 

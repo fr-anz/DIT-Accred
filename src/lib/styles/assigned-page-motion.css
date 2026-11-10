@@ -23,24 +23,6 @@
 .assigned_page.teaching_page .orgs_marquee_group[aria-hidden='true'] {
 	display: none;
 }
-.assigned_page.teaching_page .orgs_motion_controls {
-	display: flex;
-	justify-content: flex-end;
-	margin-top: 14px;
-}
-.assigned_page.teaching_page .orgs_motion_toggle {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	min-height: 44px;
-	padding: 8px 14px;
-	border: 1px solid var(--c-gold);
-	border-radius: 8px;
-	background: var(--c-surface);
-	color: var(--c-maroon);
-	font: 500 14px/1.3 var(--font-body);
-	cursor: pointer;
-}
 
 @media (max-width: 800px) {
 	.assigned_page.teaching_page .orgs_marquee_group {
@@ -63,10 +45,6 @@
 	}
 	.assigned_page.teaching_page .orgs_marquee_group[aria-hidden='true'] {
 		display: grid;
-	}
-	.assigned_page.teaching_page .orgs_marquee_track.paused,
-	.assigned_page.teaching_page .orgs_marquee_wrapper:focus-within .orgs_marquee_track {
-		animation-play-state: paused;
 	}
 
 	/* These keyed surfaces re-enter when a tab, course year or alumni page changes. */
@@ -193,12 +171,6 @@
 		.assigned_page.faculty_page .back_link:hover {
 			gap: 16px;
 		}
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.assigned_page.teaching_page .orgs_motion_controls {
-		display: none;
 	}
 }
 
