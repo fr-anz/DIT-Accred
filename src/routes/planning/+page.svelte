@@ -190,9 +190,13 @@
 					</div>
 				</div>
 				<div class="narrative-action-wrapper">
-					<a href="https://bit.ly/ITL4Area5" class="narrative-btn" target="_blank" rel="noopener noreferrer">
-						Download Narrative Report
-
+					<a
+						href="https://bit.ly/ITL4Area5"
+						class="narrative-btn"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						View Full Narrative Report
 					</a>
 				</div>
 			</div>
@@ -454,11 +458,12 @@
 <Footer />
 
 <style>
-.narrative-action-wrapper {
+    .narrative-action-wrapper {
 		display: flex;
-		justify-content: center; /* Changed from flex-start to center it */
+		justify-content: center; 
 		width: 100%;
-		margin: 0rem 0; /* Adds spacing around the button */
+		margin-top: 1.5rem; 
+		margin-bottom: 0;   
 	}
 
 	.narrative-btn {

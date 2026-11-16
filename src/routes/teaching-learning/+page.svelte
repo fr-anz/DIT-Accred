@@ -598,8 +598,8 @@
 			</div>
 
 				<div class="narrative-action-wrapper">
-					<a href="https://drive.google.com/YOUR_LINK_HERE" class="narrative-btn" target="_blank" rel="noopener noreferrer">
-						Download Narrative Report
+					<a href="https://bit.ly/ITL4Area2" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+						View Full Narrative Report
 					</a>
 				</div>
 		</div>
@@ -994,22 +994,27 @@
 <Footer />
 
 <style>
-
-	.narrative-action-wrapper {
-		margin-top: 0px;
+    .narrative-action-wrapper {
 		display: flex;
-		justify-content: flex-start;
+		justify-content: center; 
+		width: 100%;
+		margin-top: 1.5rem; 
+		margin-bottom: 0;   
 	}
 
 	.narrative-btn {
-		display: inline-block;
-		padding: 12px 32px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		max-width: 700px; /* Stretches it out to match the research button */
+		padding: 18px 32px; /* Increased height slightly for a larger click target */
 		border: 3px solid #941518;
 		border-radius: 12px;
 		background-color: transparent;
 		color: #941518;
 		font-family: var(--font-heading, 'Overpass', sans-serif);
-		font-size: 1.1rem;
+		font-size: 1.4rem;
 		font-weight: 700;
 		text-decoration: none;
 		transition: all 0.2s ease;
