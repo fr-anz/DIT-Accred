@@ -173,7 +173,6 @@
 			</div>
 
 			<div class="expanded-copy">
-				<h2>{detailContent.heading}</h2>
 				<p>
 					{detailContent.paragraphs[0].split(detailContent.highlights.program)[0]}
 					<span class="highlight-red">{detailContent.highlights.program}</span>
@@ -564,15 +563,6 @@
 		justify-content: center;
 	}
 
-	.expanded-copy h2 {
-		font-family: 'Overpass', sans-serif;
-		font-weight: 700;
-		color: #941518;
-		font-size: clamp(2rem, 3.4vw, 2.35rem);
-		margin: 0 0 clamp(1.5rem, 3vw, 2rem) 0;
-		line-height: 1.15;
-	}
-
 	.expanded-copy p {
 		font-family: 'Inter', sans-serif;
 		color: #000000;
@@ -706,10 +696,6 @@
 
 		.card-info {
 			padding: 1rem 1.25rem;
-		}
-
-		.expanded-copy h2 {
-			font-size: clamp(1.5rem, 6vw, 2rem);
 		}
 
 		.expanded-copy p {
