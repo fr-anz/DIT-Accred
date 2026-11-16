@@ -1,0 +1,232 @@
+/* Restore the pre-redesign motion without changing the Figma card geometry.
+   All entrances and transforms opt out when reduced motion is requested. */
+.assigned_page {
+	--motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.assigned_page.teaching_page .orgs_marquee_wrapper {
+	--org-gap: clamp(18px, 1.979vw, 38px);
+	overflow: hidden;
+	padding-block: 8px;
+}
+.assigned_page.teaching_page .orgs_marquee_track {
+	display: flex;
+	gap: var(--org-gap);
+}
+.assigned_page.teaching_page .orgs_marquee_group {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: var(--org-gap);
+	flex: 0 0 100%;
+	min-width: 0;
+}
+.assigned_page.teaching_page .orgs_marquee_group[aria-hidden='true'] {
+	display: none;
+}
+
+@media (max-width: 800px) {
+	.assigned_page.teaching_page .orgs_marquee_group {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.assigned_page:is(.teaching_page, .planning_page) .checkerboard_bg {
+		animation: assigned-backdrop-in 1.2s ease-out;
+	}
+	.assigned_page:is(.teaching_page, .planning_page) .hero_content,
+	.assigned_page.faculty_page .directory_header_inner {
+		animation: assigned-hero-in 1s var(--motion-ease);
+	}
+
+	/* A duplicate group makes the original continuous marquee loop seamless. */
+	.assigned_page.teaching_page .orgs_marquee_track {
+		animation: assigned-org-scroll 35s linear infinite;
+	}
+	.assigned_page.teaching_page .orgs_marquee_group[aria-hidden='true'] {
+		display: grid;
+	}
+
+	/* These keyed surfaces re-enter when a tab, course year or alumni page changes. */
+	.assigned_page.teaching_page
+		:is(.enhancement_grid, .courses_list_container, .alumni_portrait_card) {
+		animation: assigned-surface-in 0.35s var(--motion-ease) backwards;
+	}
+	.assigned_page.teaching_page .alumni_portrait_card:nth-child(2) {
+		animation-delay: 40ms;
+	}
+	.assigned_page.teaching_page .alumni_portrait_card:nth-child(3) {
+		animation-delay: 80ms;
+	}
+	.assigned_page.faculty_page .fmodal_overlay {
+		animation: assigned-backdrop-in 0.3s ease;
+	}
+	.assigned_page.faculty_page .fmodal_card {
+		animation: assigned-faculty-dialog-in 0.4s var(--motion-ease);
+	}
+	.assigned_page.planning_page .sdg_tooltip {
+		animation: assigned-tooltip-in 0.25s var(--motion-ease);
+	}
+
+	.assigned_page:is(.teaching_page, .planning_page, .faculty_page)
+		:is(
+			.compliance_subcard,
+			.enhancement_card,
+			.faculty_profile_card,
+			.org_card,
+			.alumni_portrait_card,
+			.faculty_portrait_card,
+			.aaccup_card,
+			.process_card,
+			.ranking_card,
+			.photo_gallery_card
+		) {
+		transition:
+			transform 0.3s var(--motion-ease),
+			box-shadow 0.3s ease;
+	}
+	.assigned_page:is(.teaching_page, .planning_page, .faculty_page)
+		:is(
+			.card_bg_image,
+			.portrait_img,
+			.strip_photo,
+			.gallery_frame img,
+			.photo_gallery_image,
+			.node_icon_wrapper,
+			.process_icon
+		) {
+		transition: transform 0.4s var(--motion-ease);
+	}
+	.assigned_page.teaching_page
+		:is(.enhancement_tab_btn, .explorer_tab_btn, .slide_nav_btn, .dot_indicator),
+	.assigned_page.faculty_page .fmodal_close,
+	.assigned_page.planning_page :is(.priority_item, .sdg_badge, .play_button) {
+		transition:
+			transform 0.25s var(--motion-ease),
+			background-color 0.25s ease,
+			color 0.25s ease,
+			opacity 0.25s ease;
+	}
+	.assigned_page.faculty_page .back_link {
+		transition: gap 0.25s ease;
+	}
+
+	/* Match hover feedback for keyboard users on interactive cards. */
+	.assigned_page.teaching_page
+		:is(.faculty_profile_card, .alumni_portrait_card, .photo_gallery_card):focus-visible,
+	.assigned_page.faculty_page .faculty_portrait_card:focus-visible {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 30px #5c0f1626;
+	}
+	.assigned_page.planning_page .sdg_badge:focus-visible {
+		transform: scale(1.08);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.assigned_page.teaching_page .orgs_marquee_wrapper:hover .orgs_marquee_track {
+			animation-play-state: paused;
+		}
+		.assigned_page:is(.teaching_page, .planning_page, .faculty_page)
+			:is(
+				.compliance_subcard,
+				.enhancement_card,
+				.faculty_profile_card,
+				.org_card,
+				.alumni_portrait_card,
+				.faculty_portrait_card,
+				.aaccup_card,
+				.process_card,
+				.ranking_card,
+				.photo_gallery_card
+			):hover {
+			transform: translateY(-4px);
+			box-shadow: 0 12px 30px #5c0f1626;
+		}
+		.assigned_page.teaching_page .compliance_subcard:hover .card_bg_image,
+		.assigned_page.teaching_page .alumni_portrait_card:hover .portrait_img,
+		.assigned_page.teaching_page .photo_gallery_card:hover .photo_gallery_image,
+		.assigned_page.planning_page .photo_strip_item:hover .strip_photo,
+		.assigned_page.faculty_page .gallery_frame:hover img {
+			transform: scale(1.05);
+		}
+		.assigned_page.teaching_page .timeline_node:hover .node_icon_wrapper,
+		.assigned_page.planning_page .process_card:hover .process_icon {
+			transform: translateY(-3px) scale(1.1);
+		}
+		.assigned_page.planning_page .priority_item:hover {
+			transform: translateX(8px);
+		}
+		.assigned_page.planning_page .sdg_badge:hover,
+		.assigned_page.planning_page .video_preview:hover .play_button,
+		.assigned_page.faculty_page .fmodal_close:hover {
+			transform: scale(1.08);
+		}
+		.assigned_page.teaching_page .slide_nav_btn:hover {
+			background: var(--c-maroon);
+			color: white;
+		}
+		.assigned_page.teaching_page :is(.enhancement_tab_btn, .explorer_tab_btn):hover {
+			transform: translateY(-2px);
+		}
+		.assigned_page.faculty_page .back_link:hover {
+			gap: 16px;
+		}
+	}
+}
+
+@keyframes assigned-hero-in {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes assigned-backdrop-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@keyframes assigned-surface-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes assigned-faculty-dialog-in {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+@keyframes assigned-tooltip-in {
+	from {
+		opacity: 0;
+		transform: translate(-50%, 8px);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, 0);
+	}
+}
+@keyframes assigned-org-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(calc(-100% - var(--org-gap)));
+	}
+}

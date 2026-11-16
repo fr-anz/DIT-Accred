@@ -244,3 +244,19 @@ h6,
 h1 {
 	font-family: 'Overpass', sans-serif;
 }
+
+/* Page hero entrance, matching the Teaching & Learning hero (1.2s backdrop
+   fade, 1s title rise). Each keyframe sets only `from`, so it animates to
+   the element's own value. Hero photos that sit at 30% opacity fade to 30%
+   and don't overshoot to full opacity. */
+@keyframes hero-backdrop-in {
+	from {
+		opacity: 0;
+	}
+}
+@keyframes hero-title-in {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+}

@@ -1,10 +1,15 @@
 <script>
-  import { onMount } from 'svelte';
-  import Footer from '$lib/components/footer.svelte';
+	import { onMount } from 'svelte';
+	import Footer from '$lib/components/footer.svelte';
 
-  let activeTab = $state(0);
-  let showGallery = $state(false);
-  let currentImageIndex = $state(0);
+	import ivote1 from '$lib/assets/community/ivote1.png';
+	import ivote2 from '$lib/assets/community/ivote2.png';
+	import ivote3 from '$lib/assets/community/ivote3.png';
+	import ivote4 from '$lib/assets/community/ivote4.png';
+
+	let activeTab = $state(0);
+	let currentImageIndex = $state(0);
+	let showGallery = $state(false);
 
 	/** @param {HTMLDialogElement} dialog */
 	function openGalleryDialog(dialog) {
@@ -28,13 +33,7 @@
 				'Responding directly to emerging corporate concerns regarding generative AI misuse, lack of data privacy, and missing digital ethics parameters.',
 			content:
 				'Facilitated a complete extension cycle—from needs tracking to structured assessment. Instruction pathways covered responsible AI principles (transparency, fairness, privacy, and human oversight) paired with hands-on labs in prompt engineering and foundational AI tools. Participant evaluation logs yielded high satisfaction ratings, confirming the instructional relevance.',
-			images: [
-				'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400',
-				'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=400',
-				'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=400',
-				'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80&w=400',
-				'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800'
-			]
+			images: [ivote1, ivote2, ivote3, ivote4]
 		},
 		{
 			tabLabel: 'ECONOMIC EMPOWERMENT',
@@ -44,10 +43,7 @@
 				'Improving productivity, widening market reach, and ensuring the business sustainability of small local distributors.',
 			content:
 				'Designed as a multi-part, structured seminar series that maps and assesses the current technological capabilities of local entrepreneurs. Training tracks explicitly bridge defined skill gaps and guide small business owners through actionable templates for corporate digital tool adoption.',
-			images: [
-				'https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&q=80&w=600',
-				'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=600'
-			]
+			images: [ivote1, ivote2]
 		},
 		{
 			tabLabel: 'SOLUTION ENGINEERING',
@@ -58,31 +54,13 @@
 				'Eliminating administrative inefficiencies regarding paper-based test preparation, grade logs, and data assessments.',
 			content:
 				'Scheduled for active deployment from 2026 through 2028, this initiative marks a high level of extension maturity by transforming core department research outputs into a deployable software platform. The project features a structured, multi-phase rollout covering software installation, user training, system enhancements, and long-term impact analysis. It embeds specialized Monitoring, Evaluation, Accountability, and Learning (MEAL) mechanisms to guarantee data security and continuous system optimization.',
-			images: [
-				'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=600',
-				'https://images.unsplash.com/photo-1568225367115-8b43833bdfc5?auto=format&fit=crop&q=80&w=600'
-			]
+			images: [ivote3, ivote4]
 		}
 	];
 
-	const archiveFadeImages = [
-		'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=1000',
-		'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1000',
-		'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1000',
-		'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80&w=1000',
-		'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000'
-	];
+	const archiveFadeImages = [ivote1, ivote2, ivote3, ivote4];
 
-	const galleryImages = [
-		'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80',
-		'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80'
-	];
+	const galleryImages = [ivote1, ivote2, ivote3, ivote4, ivote1, ivote2, ivote3, ivote4];
 
 	onMount(() => {
 		const interval = setInterval(() => {
@@ -143,7 +121,7 @@
 			</div>
 
 			<div class="framework-cards-grid">
-				<div class="pillar-card card-bg-1">
+				<div class="pillar-card card-bg-1" style="--bg-image: url('{ivote1}');">
 					<span class="card-number">0 1</span>
 					<div class="card-content">
 						<h4>Awareness & Digital Ethics</h4>
@@ -153,7 +131,7 @@
 					</div>
 				</div>
 
-				<div class="pillar-card card-bg-2">
+				<div class="pillar-card card-bg-2" style="--bg-image: url('{ivote2}');">
 					<span class="card-number">0 2</span>
 					<div class="card-content">
 						<h4>Economic & Skills Empowerment Seminars</h4>
@@ -164,7 +142,7 @@
 					</div>
 				</div>
 
-				<div class="pillar-card card-bg-3">
+				<div class="pillar-card card-bg-3" style="--bg-image: url('{ivote3}');">
 					<span class="card-number">0 3</span>
 					<div class="card-content">
 						<h4>Applied Technical Solution Deployment</h4>
@@ -217,7 +195,7 @@
 		</div>
 	</section>
 
-<section id="technical-profiles" class="technical-profiles">
+	<section id="technical-profiles" class="technical-profiles">
 		<header class="section-header">
 			<div class="icon-box">
 				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
@@ -263,7 +241,7 @@
 					</div>
 
 					<div class="content-right">
-						<div class="image-grid {profiles[activeTab].images.length === 5 ? 'grid-5' : profiles[activeTab].images.length === 4 ? 'grid-4' : 'grid-2'}">
+						<div class="image-grid {profiles[activeTab].images.length === 4 ? 'grid-4' : profiles[activeTab].images.length === 2 ? 'grid-2' : 'grid-5'}">
 							{#each profiles[activeTab].images as img}
 								<div class="img-wrapper">
 									<img src={img} alt="Deployment Archive" />
@@ -274,16 +252,13 @@
 				</div>
 			</div>
 
-			<!-- BUTTON SECURELY PLACED HERE -->
 			<div class="narrative-action-wrapper">
-				<a href="https://bit.ly/ITL4Area3 " class="narrative-btn" target="_blank" rel="noopener noreferrer">
-					Download Narrative Report
+				<a href="https://bit.ly/ITL4Area3" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+					View Full Narrative Report
 				</a>
 			</div>
-
 		</div>
 	</section>
-
 
 	<!-- PUP IVOTE++ SHOWCASE SECTION -->
 	<section id="ivote-showcase" class="ivote-showcase">
@@ -311,7 +286,7 @@
 
 			<div class="ivote-cards-container">
 				<div class="ivote-card">
-					<div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80');"></div>
+					<div class="iv-card-bg" style="background-image: url('{ivote1}');"></div>
 					<div class="iv-card-content">
 						<h5>HYBRID<br />OPERATIONS</h5>
 						<span>100% RELIABLE</span>
@@ -320,7 +295,7 @@
 				</div>
 
 				<div class="ivote-card">
-					<div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80');"></div>
+					<div class="iv-card-bg" style="background-image: url('{ivote2}');"></div>
 					<div class="iv-card-content">
 						<h5>CROSS-BRANCH</h5>
 						<span>ALL ACCESS</span>
@@ -332,7 +307,7 @@
 				</div>
 
 				<div class="ivote-card">
-					<div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80');"></div>
+					<div class="iv-card-bg" style="background-image: url('{ivote3}');"></div>
 					<div class="iv-card-content">
 						<h5>TECH-TRANSFER</h5>
 						<span>COMMUNITY LEAD</span>
@@ -365,7 +340,7 @@
 	<!-- MULA SA'YO TEXT SECTION -->
 	<section class="motto-text-section">
 		<div class="motto-content">
-			<h1 class="motto-title" data-text="Mula sa'yo,&#10;para sa bayan">
+			<h1 class="motto-title" data-text="Mula sa'yo,&#10;para sa bayan" style="--motto-bg: url('{ivote1}');">
 				<span class="keep-together">Mula sa'yo,</span><br />
 				<span class="keep-together">para sa bayan</span>
 			</h1>
@@ -375,6 +350,7 @@
 			</p>
 		</div>
 	</section>
+
 	{#if showGallery}
 		<dialog
 			class="gallery-modal-overlay"
@@ -442,7 +418,7 @@
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Overpass:wght@600;700;800;900&display=swap');
 
-.narrative-action-wrapper {
+    .narrative-action-wrapper {
 		display: flex;
 		justify-content: center; 
 		width: 100%;
@@ -477,7 +453,7 @@
   .community-hero {
     position: relative;
     width: 100%;
-    height: 100vh; 
+    height: 100dvh; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -488,7 +464,7 @@
 	.community-hero {
 		position: relative;
 		width: 100%;
-		height: 100vh;
+		height: 100dvh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -681,14 +657,12 @@
 		color: #f0f0f0;
 	}
 
-	.card-bg-1 {
-		background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80');
-	}
-	.card-bg-2 {
-		background-image: url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80');
-	}
+	.card-bg-1,
+	.card-bg-2,
 	.card-bg-3 {
-		background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80');
+		background-image: var(--bg-image);
+		background-size: cover;
+		background-position: center;
 	}
 
 	.verification-bar {
@@ -1325,7 +1299,7 @@
 		width: 100%;
 		height: 100%;
 		white-space: pre-line;
-		background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80');
+		background-image: var(--motto-bg);
 		background-size: cover;
 		background-position: center;
 		-webkit-background-clip: text;
@@ -1498,4 +1472,15 @@
 			padding: 24px;
 		}
 	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.hero-bg {
+			animation: hero-backdrop-in 1.2s ease-out;
+		}
+		.hero-title {
+			animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+	}
 </style>
+
+

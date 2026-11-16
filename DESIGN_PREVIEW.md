@@ -1,6 +1,7 @@
 # Assigned page design preview
 
-Branch: `design/assigned-pages-figma`, based on `main` at `cdd8eb0`.
+The initial design iteration (`design/assigned-pages-figma`) was merged in PR #42.
+The motion follow-up starts from `main` at `4123834`.
 
 PR #41 was closed without merging and its source branch was deleted. This preview
 rebuilds the assigned pages against the current Figma sections:
@@ -29,8 +30,23 @@ Comendador's photograph. Other portrait crops follow their Figma cards.
   The old shared sample certifications and invented directory names were removed.
 - Alumni names, jobs and graduate statistics remain the existing design samples;
   they need content approval before publication.
-- Planning's narrative-report button is disabled and marked “Coming soon” until
-  an approved document URL is supplied. No report URL was guessed.
+- The team's report-link updates supply Teaching & Learning and Planning narrative
+  links through the shared report list. Teaching's placeholder URL from a later
+  merge is replaced with its existing shared link.
+
+## Motion restoration
+
+The follow-up restores hero entrances, card and image hover feedback, tab/year
+and alumni changes, Planning tooltips and faculty dialog entrances. The four
+organization cards loop continuously and pause on desktop hover.
+Reduced-motion mode uses a static grid with no duplicate cards
+or entrance/hover transforms. The newer navbar, report controls and student
+achievements gallery remain in place.
+
+Review snapshots:
+[curriculum](docs/previews/assigned-motion/teaching-curriculum.jpg),
+[Planning rankings and tooltip](docs/previews/assigned-motion/planning-rankings.jpg),
+[faculty cards](docs/previews/assigned-motion/faculty-cards.jpg).
 
 ## Local review
 
