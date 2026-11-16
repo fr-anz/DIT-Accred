@@ -22,9 +22,10 @@
 	import '$lib/styles/accreditation-pages.css';
 	import '$lib/styles/assigned-page-motion.css';
 	import { narrativeReports } from '$lib/data/reportLinks';
+	import { alumniList } from '$lib/data/alumni';
 	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
-	/** @type {HTMLDivElement | undefined} */
+	/** @type {HTMLDialogElement | undefined} */
 	let alumniDialog = $state();
 	/** @type {HTMLElement | null} */
 	let lastAlumniFocus = null;
@@ -40,104 +41,21 @@
 	let activeYear = $state(1); // Year selector for interactive explorer
 	/** @type {number | null} */
 	let selectedAlumIndex = $state(null); // Index of alum for detailed modal
-	/** Slideshow: which page of 3 we're on (0 = first 3, 1 = second 3) */
-	let slidePage = $state(0);
 	const narrativeReport = narrativeReports.find(
 		(report) => report.title === 'Teaching and Learning'
 	);
 	/** @type {CourseYear[]} */
 	const courseYears = [1, 2, 3, 4];
 
-	// Alumni profiles - 6 total, shown 3 per slide
-	const alumniList = [
-		{
-			name: 'Dahyun Dela Cruz',
-			shortName: 'Dahyun',
-			role: 'IT Global Entrepreneur',
-			batch: 'Batch 2018 - 2022',
-			honors: 'Magna Cumlaude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/figma/alumni-dahyun.png',
-			badgeColor: '#7C3AED',
-			badgeLetter: 'F',
-			testimonialVideoUrl: ''
-		},
-		{
-			name: 'Sehun Domingo',
-			shortName: 'Sehun',
-			role: 'Data Analyst at Google',
-			batch: 'Batch 2018 - 2022',
-			honors: 'Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/figma/alumni-sehun.png',
-			badgeColor: '#2563EB',
-			badgeLetter: 'A',
-			testimonialVideoUrl: ''
-		},
-		{
-			name: 'Irene Joy Reyes',
-			shortName: 'Irene',
-			role: 'Data Scientist at Microsoft',
-			batch: 'Batch 2018 - 2022',
-			honors: 'Summa Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/figma/alumni-irene.png',
-			badgeColor: '#EC4899',
-			badgeLetter: 'S',
-			testimonialVideoUrl: ''
-		},
-		{
-			name: 'Hoshi Batumbakal',
-			shortName: 'Hoshi',
-			role: 'CTO at Start-up Inc.',
-			batch: 'Batch 2017 - 2021',
-			honors: 'Cum Laude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/alum-hoshi.png',
-			badgeColor: '#10B981',
-			badgeLetter: 'C',
-			testimonialVideoUrl: ''
-		},
-		{
-			name: 'Jaemin Suarez',
-			shortName: 'Jaemin',
-			role: 'Project Manager at Azure',
-			batch: 'Batch 2016 - 2020',
-			honors: 'Magna Cumlaude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/alum-jaemin.png',
-			badgeColor: '#F59E0B',
-			badgeLetter: 'M',
-			testimonialVideoUrl: ''
-		},
-		{
-			name: 'Winter Mendoza',
-			shortName: 'Winter',
-			role: 'Professor at UPD',
-			batch: 'Batch 2018 - 2022',
-			honors: 'Magna Cumlaude',
-			degree: 'Bachelor of Science in Information Technology',
-			img: '/teaching-learning/alum-winter.png',
-			badgeColor: '#EF4444',
-			badgeLetter: 'N',
-			testimonialVideoUrl: ''
-		}
-	];
-
-	// Total slide pages: one page per 3 alumni
-	const totalSlidePages = Math.ceil(alumniList.length / 3);
-
-	/** Returns the 3 alumni visible on the current slide page */
-	function visibleAlumni() {
-		return alumniList.slice(slidePage * 3, slidePage * 3 + 3);
-	}
+	// Mobile carousel: one alum per slide (CSS switches to a single column at ≤540px)
+	let mobileIndex = $state(0);
 
 	function prevSlide() {
-		slidePage = (slidePage - 1 + totalSlidePages) % totalSlidePages;
+		mobileIndex = Math.max(0, mobileIndex - 1);
 	}
 
 	function nextSlide() {
-		slidePage = (slidePage + 1) % totalSlidePages;
+		mobileIndex = Math.min(alumniList.length - 1, mobileIndex + 1);
 	}
 
 	// Interactive explorer course data
@@ -167,44 +85,21 @@
 
 	// Close alumni details modal
 	function closeModal() {
+		alumniDialog?.close();
 		selectedAlumIndex = null;
 		lastAlumniFocus?.focus();
 	}
 
 	/**
-	 * Open modal with the correct global index from the visible slice
-	 * @param {number} localIndex
+	 * Open modal for the alum at the given global index
+	 * @param {number} index
 	 */
-	async function openAlumModal(localIndex) {
+	async function openAlumModal(index) {
 		lastAlumniFocus = /** @type {HTMLElement | null} */ (document.activeElement);
-		selectedAlumIndex = slidePage * 3 + localIndex;
+		selectedAlumIndex = index;
 		await tick();
+		alumniDialog?.showModal();
 		alumniDialog?.focus();
-	}
-	/** @param {KeyboardEvent} event */
-	function alumniKeys(event) {
-		if (selectedAlumIndex === null) return;
-		if (event.key === 'Escape') closeModal();
-		if (event.key === 'Tab') {
-			const controls = /** @type {HTMLElement[]} */ ([
-				...(alumniDialog?.querySelectorAll('button, a[href], video[controls]') ?? [])
-			]);
-			const first = controls[0],
-				last = controls[controls.length - 1];
-			if (
-				event.shiftKey &&
-				(document.activeElement === first || document.activeElement === alumniDialog)
-			) {
-				event.preventDefault();
-				last?.focus();
-			} else if (
-				!event.shiftKey &&
-				(document.activeElement === last || document.activeElement === alumniDialog)
-			) {
-				event.preventDefault();
-				first?.focus();
-			}
-		}
 	}
 	$effect(() => {
 		if (selectedAlumIndex === null) return;
@@ -248,7 +143,6 @@
 	/>
 </svelte:head>
 
-<svelte:window onkeydown={alumniKeys} />
 <main class="assigned_page teaching_page">
 	<!-- ─────────────────────────────────────────────
   HERO SECTION
@@ -739,25 +633,25 @@
 			<!-- Slideshow wrapper -->
 			<div class="alumni_slideshow_wrapper">
 				<div class="alumni_slideshow">
-					<!-- Prev button -->
-					<button class="slide_nav_btn slide_prev" onclick={prevSlide} aria-label="Previous alumni">
+					<!-- Prev button (mobile only) -->
+					<button
+						class="slide_nav_btn slide_prev"
+						onclick={prevSlide}
+						disabled={mobileIndex === 0}
+						aria-label="Previous alumni"
+					>
 						<ChevronLeft size={24} strokeWidth={2.5} />
 					</button>
 
-					<!-- 3 alumni cards -->
+					<!-- Alumni cards: 3-up on desktop, one per slide on mobile -->
 					<div class="alumni_cards_container">
-						{#each visibleAlumni() as alum, i (alum.name)}
-							<button type="button" class="alumni_portrait_card" onclick={() => openAlumModal(i)}>
-								<div class="portrait_image_wrapper">
-									<img src={alum.img} alt={alum.name} class="portrait_img" />
-									<div class="portrait_play_overlay">
-										<div class="play_icon_circle">
-											<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"
-												><polygon points="5,3 19,12 5,21" /></svg
-											>
-										</div>
-									</div>
-								</div>
+						{#each alumniList as alum, i (alum.name)}
+							<button
+								type="button"
+								class="alumni_portrait_card"
+								class:slide_hidden={i !== mobileIndex}
+								onclick={() => openAlumModal(i)}
+							>
 								<div class="portrait_info">
 									<h4 class="alum_name">{alum.name}</h4>
 									<span class="alum_role_tag">{alum.role}</span>
@@ -766,20 +660,26 @@
 						{/each}
 					</div>
 
-					<!-- Next button -->
-					<button class="slide_nav_btn slide_next" onclick={nextSlide} aria-label="Next alumni">
+					<!-- Next button (mobile only) -->
+					<button
+						class="slide_nav_btn slide_next"
+						onclick={nextSlide}
+						disabled={mobileIndex === alumniList.length - 1}
+						aria-label="Next alumni"
+					>
 						<ChevronRight size={24} strokeWidth={2.5} />
 					</button>
 				</div>
 
-				<!-- Page dot indicators -->
+				<!-- Slide dot indicators (mobile only) -->
 				<div class="carousel_indicators">
-					{#each Array.from({ length: totalSlidePages }, (_, index) => index) as p (p)}
+					{#each alumniList as alum, p (alum.name)}
 						<button
 							class="dot_indicator"
-							class:active={slidePage === p}
-							onclick={() => (slidePage = p)}
-							aria-label="Go to slide {p + 1}"
+							class:active={mobileIndex === p}
+							onclick={() => (mobileIndex = p)}
+							aria-label="Show {alum.name}"
+							aria-current={mobileIndex === p}
 						></button>
 					{/each}
 				</div>
@@ -869,7 +769,12 @@
   ALUMNI DETAILS OVERLAY MODAL
 ───────────────────────────────────────────── -->
 	{#if selectedAlumIndex !== null}
-		<div class="modal_overlay">
+		<dialog
+			class="modal_overlay"
+			bind:this={alumniDialog}
+			aria-labelledby="alumni-dialog-title"
+			oncancel={closeModal}
+		>
 			<button
 				type="button"
 				class="modal_backdrop"
@@ -877,14 +782,7 @@
 				aria-label="Close alumni profile"
 				tabindex="-1"
 			></button>
-			<div
-				class="modal_content"
-				bind:this={alumniDialog}
-				role="dialog"
-				aria-modal="true"
-				aria-labelledby="alumni-dialog-title"
-				tabindex="-1"
-			>
+			<div class="modal_content">
 				<button class="close_modal_btn" onclick={closeModal} aria-label="Close modal">
 					<X size={24} />
 				</button>
@@ -893,105 +791,40 @@
 					<!-- Left Panel: Profile Detail (Figma-aligned) -->
 					<div class="modal_profile_panel">
 						<div class="modal_profile_card">
-							<!-- Circular photo with ring border -->
-							<div class="detail_image_wrapper">
-								<img
-									src={alumniList[selectedAlumIndex].img}
-									alt={alumniList[selectedAlumIndex].name}
-									class="detail_img"
-								/>
-							</div>
-
 							<div class="detail_info_block">
 								<h3 class="detail_alum_name" id="alumni-dialog-title">
 									{alumniList[selectedAlumIndex].name}
 								</h3>
 								<p class="detail_alum_role">{alumniList[selectedAlumIndex].role}</p>
-
-								<!-- Decorative social icon row -->
-								<div class="detail_social_row" aria-label="Social links">
-									<span class="social_icon_btn" aria-label="Facebook">
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
-											><path
-												d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-											/></svg
-										>
-									</span>
-									<span class="social_icon_btn" aria-label="Instagram">
-										<svg
-											width="14"
-											height="14"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-											><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path
-												d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-											/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg
-										>
-									</span>
-									<span class="social_icon_btn" aria-label="LinkedIn">
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
-											><path
-												d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
-											/><rect x="2" y="9" width="4" height="12" /><circle
-												cx="4"
-												cy="4"
-												r="2"
-											/></svg
-										>
-									</span>
-									<span class="social_icon_btn" aria-label="GitHub">
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
-											><path
-												d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-											/></svg
-										>
-									</span>
-								</div>
+								<p class="detail_alum_company">{alumniList[selectedAlumIndex].company}</p>
+								{#if alumniList[selectedAlumIndex].additionalRole}
+									<p class="detail_alum_company">{alumniList[selectedAlumIndex].additionalRole}</p>
+								{/if}
 
 								<div class="detail_meta_row">
-									<span class="detail_batch_tag">{alumniList[selectedAlumIndex].batch}</span>
-									<span class="detail_honors_tag">{alumniList[selectedAlumIndex].honors}</span>
+									<span class="detail_batch_tag">
+										BSIT Class of {alumniList[selectedAlumIndex].classYear}
+									</span>
 								</div>
-
-								<p class="detail_degree_title"><em>{alumniList[selectedAlumIndex].degree}</em></p>
 							</div>
 						</div>
 					</div>
 
 					<!-- Right Panel: Testimonial Video (Figma-aligned) -->
 					<div class="modal_video_panel">
-						<p class="video_panel_title">TESTIMONIAL VIDEO</p>
 						<div class="testimonial_video_wrapper">
-							{#if alumniList[selectedAlumIndex].testimonialVideoUrl}
-								<video
-									src={alumniList[selectedAlumIndex].testimonialVideoUrl}
-									controls
-									class="testimonial_video"
-									poster={alumniList[selectedAlumIndex].img}
-								>
-									<track kind="captions" />
-									Your browser does not support the video tag.
-								</video>
-							{:else}
-								<!-- Placeholder: dark maroon gradient area with glowing play button -->
-								<div class="video_placeholder">
-									<div class="video_placeholder_inner">
-										<div class="video_play_btn">
-											<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"
-												><polygon points="5,3 19,12 5,21" /></svg
-											>
-										</div>
-										<p class="video_placeholder_text">Testimonial video coming soon</p>
-									</div>
-								</div>
-							{/if}
+							<iframe
+								src={alumniList[selectedAlumIndex].videoEmbedUrl}
+								class="testimonial_video"
+								title="Testimonial video from {alumniList[selectedAlumIndex].name}"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+								allowfullscreen
+							></iframe>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</dialog>
 	{/if}
 </main>
 
@@ -1538,25 +1371,11 @@
 		font: inherit;
 		text-align: left;
 		position: relative;
-		border-radius: 25px;
 		aspect-ratio: 460 / 600;
+		border-radius: 25px;
 		background: linear-gradient(103.84deg, #8e1518, #1e1e1e);
 		cursor: pointer;
 		overflow: hidden;
-	}
-	.portrait_image_wrapper {
-		position: absolute;
-		inset: 0;
-	}
-	.portrait_img {
-		position: absolute;
-		left: -6%;
-		top: 3.8%;
-		width: 112.4%;
-		max-width: none;
-		height: 86.8%;
-		object-fit: contain;
-		object-position: center bottom;
 	}
 	.portrait_info {
 		position: absolute;
@@ -1571,9 +1390,6 @@
 	.alum_role_tag {
 		color: var(--c-gold-light);
 		font: italic 500 clamp(13px, 1.25vw, 24px)/1.3 var(--font-body);
-	}
-	.portrait_play_overlay {
-		display: none;
 	}
 	.slide_nav_btn {
 		position: absolute;
@@ -1590,8 +1406,8 @@
 		opacity: 0;
 		transition: opacity 0.2s;
 	}
-	.alumni_slideshow:hover .slide_nav_btn,
-	.slide_nav_btn:focus-visible {
+	.alumni_slideshow:hover .slide_nav_btn:not(:disabled),
+	.slide_nav_btn:focus-visible:not(:disabled) {
 		opacity: 1;
 	}
 	.slide_prev {
@@ -1600,11 +1416,22 @@
 	.slide_next {
 		right: -5px;
 	}
+	.slide_nav_btn:disabled {
+		opacity: 0.35;
+		cursor: default;
+	}
 	.carousel_indicators {
 		display: flex;
 		justify-content: center;
 		gap: 10px;
 		margin-top: 22px;
+	}
+	/* Desktop shows all three cards on a single page: hide carousel controls */
+	@media (min-width: 541px) {
+		.slide_nav_btn,
+		.carousel_indicators {
+			display: none;
+		}
 	}
 	.dot_indicator {
 		width: 7px;
@@ -1823,6 +1650,9 @@
 			grid-template-columns: 1fr;
 			width: 80%;
 		}
+		.alumni_portrait_card.slide_hidden {
+			display: none;
+		}
 		.alum_name {
 			font-size: 23px;
 		}
@@ -1850,11 +1680,19 @@
 		justify-content: center;
 		z-index: 1000;
 		padding: 1.5rem;
+		width: 100%;
+		height: 100%;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		border: 0;
+		box-sizing: border-box;
 		animation: overlayFadeIn 0.3s ease;
 	}
 
 	.modal_content {
 		animation: modalZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		overscroll-behavior: contain;
 	}
 
 	.close_modal_btn {
@@ -1917,25 +1755,6 @@
 		width: 100%;
 	}
 
-	.detail_image_wrapper {
-		position: relative;
-		width: 140px;
-		height: 140px;
-		border-radius: 50%;
-		box-shadow: 0 8px 24px rgba(92, 15, 22, 0.15);
-		border: 4px solid #fff;
-		margin-bottom: 1.25rem;
-		background: #f8f0e8;
-		overflow: hidden;
-	}
-
-	.detail_img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		border-radius: 50%;
-	}
-
 	.detail_info_block {
 		display: flex;
 		flex-direction: column;
@@ -1958,35 +1777,20 @@
 		color: var(--color-gold-dark);
 		font-weight: 700;
 		font-style: italic;
-		margin: 0 0 0.9rem 0;
+		margin: 0 0 0.15rem 0;
 	}
 
-	/* Decorative social icon buttons */
-	.detail_social_row {
-		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-	}
-
-	.social_icon_btn {
-		width: 30px;
-		height: 30px;
-		border-radius: 50%;
-		background: rgba(0, 0, 0, 0.07);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0.7rem;
-		font-weight: 900;
+	.detail_alum_company {
+		font-family: var(--font-body);
+		font-size: 0.85rem;
 		color: #444;
-		cursor: default;
-		transition: background 0.2s;
+		margin: 0;
 	}
 
 	.detail_meta_row {
 		display: flex;
 		gap: 0.4rem;
-		margin-bottom: 0.75rem;
+		margin: 0.9rem 0 0;
 		flex-wrap: wrap;
 		justify-content: center;
 	}
@@ -2001,100 +1805,39 @@
 		border-radius: 20px;
 	}
 
-	.detail_honors_tag {
-		background: rgba(207, 168, 58, 0.15);
-		color: var(--color-gold-dark);
-		font-family: var(--font-body);
-		font-size: 0.68rem;
-		font-weight: 700;
-		padding: 0.3rem 0.75rem;
-		border-radius: 20px;
-		border: 1px solid rgba(207, 168, 58, 0.25);
-	}
-
-	.detail_degree_title {
-		font-family: var(--font-body);
-		font-size: 0.75rem;
-		color: #666;
-		margin: 0;
-		line-height: 1.5;
-		max-width: 220px;
-		text-align: center;
-	}
-
 	/* ── Right Video Panel ── */
 	.modal_video_panel {
 		padding: 2.5rem 2rem;
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
 		background: #fff;
 		justify-content: center;
 	}
 
-	.video_panel_title {
-		font-family: var(--font-heading);
-		font-size: 0.8rem;
-		font-weight: 900;
-		color: #1a1a1a;
-		letter-spacing: 0.1em;
-		margin: 0;
-		text-transform: uppercase;
-	}
-
 	.testimonial_video_wrapper {
+		position: relative;
 		width: 100%;
-		border-radius: 16px;
+		flex: none;
+		min-width: 0;
 		overflow: hidden;
+		border-radius: 16px;
 		background: #0e0e0e;
 		aspect-ratio: 16 / 9;
 		box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
 	}
 
 	.testimonial_video {
+		position: absolute;
+		/* Drive's nested player has a 300px minimum height; crop its letterboxing. */
+		top: min(0px, calc((100% - 300px) / 2));
+		left: 0;
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		height: max(100%, 300px);
+		border: 0;
 		display: block;
 	}
 
-	/* Placeholder state (no video URL yet) */
-	.video_placeholder {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: linear-gradient(135deg, #3a0a0e 0%, #6b1a22 50%, #3a0800 100%);
-	}
-
-	.video_placeholder_inner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.video_play_btn {
-		width: 64px;
-		height: 64px;
-		border-radius: 50%;
-		background: rgba(207, 168, 58, 0.15);
-		border: 2px solid rgba(207, 168, 58, 0.45);
-		color: var(--color-gold);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: 0 0 28px rgba(207, 168, 58, 0.2);
-	}
-
-	.video_placeholder_text {
-		font-family: var(--font-body);
-		font-size: 0.78rem;
-		color: rgba(255, 255, 255, 0.5);
-		margin: 0;
-		font-style: italic;
-	}
 
 	@keyframes overlayFadeIn {
 		from {
