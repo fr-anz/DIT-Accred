@@ -599,23 +599,10 @@
 				</div>
 			</div>
 
-<<<<<<< HEAD
 				<div class="narrative-action-wrapper">
 					<a href="https://bit.ly/ITL4Area2" class="narrative-btn" target="_blank" rel="noopener noreferrer">
 						View Full Narrative Report
-=======
-			<div class="narrative-action-wrapper">
-				{#if narrativeReport}
-					<a
-						href={narrativeReport.href}
-						class="narrative-btn"
-						target="_blank"
-						rel="external noopener noreferrer"
-					>
-						Download Narrative Report
->>>>>>> origin/feature/community-fresh
 					</a>
-				{/if}
 			</div>
 		</div>
 	</section>
@@ -1011,12 +998,7 @@
 <Footer />
 
 <style>
-<<<<<<< HEAD
     .narrative-action-wrapper {
-=======
-	.narrative-action-wrapper {
-		margin-top: 0px;
->>>>>>> origin/feature/community-fresh
 		display: flex;
 		justify-content: center; 
 		width: 100%;

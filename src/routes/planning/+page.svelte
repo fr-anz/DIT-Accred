@@ -197,11 +197,7 @@
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-<<<<<<< HEAD
 						View Full Narrative Report
-=======
-						Download Narrative Report
->>>>>>> origin/feature/community-fresh
 					</a>
 				</div>
 			</div>
@@ -463,11 +459,7 @@
 <Footer />
 
 <style>
-<<<<<<< HEAD
     .narrative-action-wrapper {
-=======
-	.narrative-action-wrapper {
->>>>>>> origin/feature/community-fresh
 		display: flex;
 		justify-content: center; 
 		width: 100%;
