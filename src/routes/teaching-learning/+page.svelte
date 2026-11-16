@@ -1829,9 +1829,11 @@
 
 	.testimonial_video {
 		position: absolute;
-		inset: 0;
+		/* Drive's nested player has a 300px minimum height; crop its letterboxing. */
+		top: min(0px, calc((100% - 300px) / 2));
+		left: 0;
 		width: 100%;
-		height: 100%;
+		height: max(100%, 300px);
 		border: 0;
 		display: block;
 	}
