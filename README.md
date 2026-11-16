@@ -31,6 +31,12 @@ Each profile embeds its Google Drive video in a padded, rounded 16:9 frame.
 The player is vertically cropped to remove Drive's minimum-height letterboxing; this can clip controls on small screens.
 Keep Drive sharing public; playback depends on Google's player and access policy.
 
+## Homepage leadership panels
+
+The leadership panels on the homepage contain leader-specific messages: Dustin's chairperson message and Melvin's dean message are separate entries, each maintained in `src/lib/components/home/LeadershipSection.svelte`.
+Each card includes a persistent “Read message” cue, with hover and keyboard-focus feedback; the entire card opens its leader's message.
+The decorative binary background uses full-width lines alternating leftward and rightward movement; reduced-motion preferences keep it static.
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
