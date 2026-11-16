@@ -24,6 +24,12 @@ bun x sv@0.15.3 create --template minimal --types ts --add prettier eslint tailw
   Read this before styling anything.
 - [`GIT_GUIDELINES.md`](GIT_GUIDELINES.md) — branch naming, commit format, and the PR process.
 
+## Notable alumni media
+
+The Teaching & Learning profiles live in `src/lib/data/alumni.ts`.
+Each profile embeds its Google Drive video in a fitted `/preview` frame.
+Keep Drive sharing public; playback depends on Google's player and access policy.
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
