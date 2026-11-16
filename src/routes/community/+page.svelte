@@ -1,11 +1,18 @@
 <script>
+<<<<<<< Updated upstream
   import Footer from '$lib/components/footer.svelte';
   import { onMount } from 'svelte';
+=======
+	import { onMount } from 'svelte';
+	import Footer from '$lib/components/footer.svelte';
+>>>>>>> Stashed changes
 
-  let activeTab = $state(0);
-  let showGallery = $state(false);
-  let currentImageIndex = $state(0);
+	import ivote1 from '$lib/assets/community/ivote1.png';
+	import ivote2 from '$lib/assets/community/ivote2.png';
+	import ivote3 from '$lib/assets/community/ivote3.png';
+	import ivote4 from '$lib/assets/community/ivote4.png';
 
+<<<<<<< Updated upstream
   const profiles = [
     {
       tabLabel: 'DIGITAL LITERACY',
@@ -70,6 +77,60 @@
     }, 4000);
     return () => clearInterval(interval);
   });
+=======
+	let activeTab = $state(0);
+	let currentImageIndex = $state(0);
+	let showGallery = $state(false);
+
+	const profiles = [
+		{
+			tabLabel: 'DIGITAL LITERACY',
+			title: 'DIGITAL LITERACY AND ETHICAL TECHNOLOGY USE (RESPONSIBLE AI ONBOARDING)',
+			partner: 'PARTNER: INVESTMENT PROMOTION OFFICE - NEGOSYO CENTER OF MANDALUYONG CITY',
+			challenge:
+				'Responding directly to emerging corporate concerns regarding generative AI misuse, lack of data privacy, and missing digital ethics parameters.',
+			content:
+				'Facilitated a complete extension cycle—from needs tracking to structured assessment. Instruction pathways covered responsible AI principles (transparency, fairness, privacy, and human oversight) paired with hands-on labs in prompt engineering and foundational AI tools. Participant evaluation logs yielded high satisfaction ratings, confirming the instructional relevance.',
+			images: [ivote1, ivote2, ivote3, ivote4]
+		},
+		{
+			tabLabel: 'ECONOMIC EMPOWERMENT',
+			title: 'DIGITAL ECONOMIC EMPOWERMENT TRACK (E-COMMERCE AND DIGITAL MARKETING)',
+			partner: 'PARTNER: COOPERATIVE UNION OF MANDALUYONG CITY (CUMC)',
+			challenge:
+				'Improving productivity, widening market reach, and ensuring the business sustainability of small local distributors.',
+			content:
+				'Designed as a multi-part, structured seminar series that maps and assesses the current technological capabilities of local entrepreneurs. Training tracks explicitly bridge defined skill gaps and guide small business owners through actionable templates for corporate digital tool adoption.',
+			images: [ivote1, ivote2]
+		},
+		{
+			tabLabel: 'SOLUTION ENGINEERING',
+			title:
+				'HIGH-MATURITY SOLUTION ENGINEERING (CLARO M. RECTO HIGH SCHOOL EXAMINATION MANAGEMENT SYSTEM)',
+			partner: 'PARTNER: CLARO M. RECTO HIGH SCHOOL ADMINISTRATION',
+			challenge:
+				'Eliminating administrative inefficiencies regarding paper-based test preparation, grade logs, and data assessments.',
+			content:
+				'Scheduled for active deployment from 2026 through 2028, this initiative marks a high level of extension maturity by transforming core department research outputs into a deployable software platform. The project features a structured, multi-phase rollout covering software installation, user training, system enhancements, and long-term impact analysis. It embeds specialized Monitoring, Evaluation, Accountability, and Learning (MEAL) mechanisms to guarantee data security and continuous system optimization.',
+			images: [ivote3, ivote4]
+		}
+	];
+
+	const archiveFadeImages = [ivote1, ivote2, ivote3, ivote4];
+
+	const galleryImages = [ivote1, ivote2, ivote3, ivote4, ivote1, ivote2, ivote3, ivote4];
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			currentImageIndex = (currentImageIndex + 1) % archiveFadeImages.length;
+		}, 4000);
+		return () => clearInterval(interval);
+	});
+
+	function openGalleryDialog(node) {
+		node.showModal();
+	}
+>>>>>>> Stashed changes
 </script>
 
 <main>
@@ -95,6 +156,7 @@
         </p>
       </div>
 
+<<<<<<< Updated upstream
       <div class="agenda-panel panel-gold">
         <h3>EXPERIENTIAL LEARNING INTEGRATION</h3>
         <hr class="accent-line" />
@@ -113,9 +175,46 @@
           The department’s extension agenda operates as a strategic, needs-driven, and technology-enabled cycle. The program has systematically transitioned away from episodic awareness campaigns toward highly scalable, sustainable ICT interventions divided into three core pillars:
         </p>
       </div>
+=======
+<div class="framework-cards-grid">
+				<div class="pillar-card card-bg-1" style="--bg-image: url('{ivote1}');">
+					<span class="card-number">0 1</span>
+					<div class="card-content">
+						<h4>Awareness & Digital Ethics</h4>
+						<p>
+							Addressing emerging digital concerns, data privacy, and ethical technology adoption.
+						</p>
+					</div>
+				</div>
+
+				<div class="pillar-card card-bg-2" style="--bg-image: url('{ivote2}');">
+					<span class="card-number">0 2</span>
+					<div class="card-content">
+						<h4>Economic & Skills Empowerment Seminars</h4>
+						<p>
+							Assessing technological skill gaps of local distributors and micro-enterprises to
+							guide them toward digital adoption.
+						</p>
+					</div>
+				</div>
+
+				<div class="pillar-card card-bg-3" style="--bg-image: url('{ivote3}');">
+					<span class="card-number">0 3</span>
+					<div class="card-content">
+						<h4>Applied Technical Solution Deployment</h4>
+						<p>
+							Translating faculty research and student configurations into practical, deployable
+							systems that automate manual organizational workflows.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+>>>>>>> Stashed changes
 
       <div class="framework-cards-grid">
 
+<<<<<<< Updated upstream
         <div class="pillar-card card-bg-1">
           <span class="card-number">0 1</span>
           <div class="card-content">
@@ -123,6 +222,15 @@
             <p>Addressing emerging digital concerns, data privacy, and ethical technology adoption.</p>
           </div>
         </div>
+=======
+	<section id="technical-profiles" class="technical-profiles">
+		<header class="section-header">
+			<div class="icon-box">
+				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
+			</div>
+			<h2 class="t_eyebrow">TECHNICAL PROFILES</h2>
+		</header>
+>>>>>>> Stashed changes
 
         <div class="pillar-card card-bg-2">
           <span class="card-number">0 2</span>
@@ -164,6 +272,7 @@
       <h2>TECHNICAL PROFILES</h2>
     </header>
 
+<<<<<<< Updated upstream
     <hr class="header-divider" />
 
     <div class="tab-container">
@@ -202,6 +311,36 @@
               <p>{profiles[activeTab].content}</p>
             </div>
           </div>
+=======
+					<div class="content-right">
+						<div class="image-grid {profiles[activeTab].images.length === 4 ? 'grid-4' : profiles[activeTab].images.length === 2 ? 'grid-2' : 'grid-5'}">
+							{#each profiles[activeTab].images as img}
+								<div class="img-wrapper">
+									<img src={img} alt="Deployment Archive" />
+								</div>
+							{/each}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- BUTTON SECURELY PLACED HERE -->
+			<div class="narrative-action-wrapper">
+				<a href="https://bit.ly/ITL4Area3" class="narrative-btn" target="_blank" rel="noopener noreferrer">
+					View Full Narrative Report
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- PUP IVOTE++ SHOWCASE SECTION -->
+	<section id="ivote-showcase" class="ivote-showcase">
+		<div class="ivote-left">
+			<div class="ivote-header">
+				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ivote-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
+				<h2 class="t_eyebrow">PUP IVOTE++</h2>
+			</div>
+>>>>>>> Stashed changes
 
           <div class="content-right">
             <div class="image-grid {profiles[activeTab].images.length === 5 ? 'grid-5' : profiles[activeTab].images.length === 4 ? 'grid-4' : 'grid-2'}">
@@ -236,6 +375,7 @@
         The PUP iVOTE++ system is a secure, technology-enabled digital voting platform designed, configured, and deployed by the BSIT program. The system modernizes and secures the administrative election loops of large cooperative and institutional bodies, eliminating manual counting errors, accelerating transparency, and expanding democratic accessibility.
       </p>
 
+<<<<<<< Updated upstream
       <div class="ivote-cards-container">
         <div class="ivote-card">
           <div class="iv-card-bg" style="background-image: url('https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80');"></div>
@@ -285,6 +425,43 @@
       </div>
     </div>
   </section>
+=======
+			<div class="ivote-cards-container">
+				<div class="ivote-card">
+					<div class="iv-card-bg" style="background-image: url('{ivote1}');"></div>
+					<div class="iv-card-content">
+						<h5>HYBRID<br />OPERATIONS</h5>
+						<span>100% RELIABLE</span>
+						<p>Fully supports simultaneous secure on-site and online remote voting.</p>
+					</div>
+				</div>
+
+				<div class="ivote-card">
+					<div class="iv-card-bg" style="background-image: url('{ivote2}');"></div>
+					<div class="iv-card-content">
+						<h5>CROSS-BRANCH</h5>
+						<span>ALL ACCESS</span>
+						<p>
+							Enabled secure remote voting for across-campus members, establishing a blueprint for
+							inclusive digital governance.
+						</p>
+					</div>
+				</div>
+
+				<div class="ivote-card">
+					<div class="iv-card-bg" style="background-image: url('{ivote3}');"></div>
+					<div class="iv-card-content">
+						<h5>TECH-TRANSFER</h5>
+						<span>COMMUNITY LEAD</span>
+						<p>
+							Beyond installation, faculty and students completed training, code verification, and
+							orientation to build digital confidence and governance acceptance.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+>>>>>>> Stashed changes
 
   <!-- MULA SA'YO TEXT SECTION -->
  <section class="motto-text-section">
@@ -323,6 +500,85 @@
 
   <Footer />
 
+<<<<<<< Updated upstream
+=======
+	<!-- MULA SA'YO TEXT SECTION -->
+	<section class="motto-text-section">
+		<div class="motto-content">
+				<h1 class="motto-title" data-text="Mula sa'yo,&#10;para sa bayan" style="--motto-bg: url('{ivote1}');">
+					<span class="keep-together">Mula sa'yo,</span><br />
+					<span class="keep-together">para sa bayan</span>
+				</h1>
+			<p class="motto-subtitle">
+				Bridging <span class="text-yellow">technology and people</span> through open-source collaboration,
+				digital literacy outreach, and tech workshops.
+			</p>
+		</div>
+	</section>
+
+	{#if showGallery}
+		<dialog
+			class="gallery-modal-overlay"
+			aria-labelledby="gallery-title"
+			use:openGalleryDialog
+			onclose={() => (showGallery = false)}
+			onclick={(event) => {
+				if (event.target === event.currentTarget) event.currentTarget.close();
+			}}
+		>
+			<div class="gallery-modal-content">
+				<button
+					class="close-modal"
+					type="button"
+					aria-label="Close gallery"
+					onclick={(event) => event.currentTarget.closest('dialog')?.close()}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="32"
+						height="32"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"
+						></line></svg
+					>
+				</button>
+
+				<div class="gallery-header">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="26"
+						height="26"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="#6a1316"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path
+							d="M9 10h6"
+						/><path d="M9 14h6" /></svg
+					>
+					<h2 id="gallery-title" class="t_eyebrow">PUP IVOTE++ GALLERY</h2>
+				</div>
+
+				<div class="gallery-grid-container">
+					{#each galleryImages as img}
+						<div class="gallery-img-box">
+							<img src={img} alt="Gallery item" />
+						</div>
+					{/each}
+				</div>
+			</div>
+		</dialog>
+	{/if}
+
+	<Footer />
+>>>>>>> Stashed changes
 </main>
 
 <style>
@@ -532,9 +788,19 @@
     color: #f0f0f0;
   }
 
+<<<<<<< Updated upstream
   .card-bg-1 { background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80'); }
   .card-bg-2 { background-image: url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80'); }
   .card-bg-3 { background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80'); }
+=======
+	.card-bg-1,
+	.card-bg-2,
+	.card-bg-3 {
+		background-image: var(--bg-image);
+		background-size: cover;
+		background-position: center;
+	}
+>>>>>>> Stashed changes
 
   .verification-bar {
     background-color: #312b27; 
@@ -1144,6 +1410,7 @@
     object-fit: cover;
   }
 
+<<<<<<< Updated upstream
   /* --- RESPONSIVE ADJUSTMENTS --- */
   @media (max-width: 1024px) {
     .card-header-split, .card-content-split, .agenda-content-grid {
@@ -1173,3 +1440,218 @@
     .gallery-modal-content { padding: 24px; }
   }
 </style>
+=======
+	.motto-title {
+		position: relative;
+		font-family: 'Overpass', Arial, sans-serif;
+		font-size: clamp(3rem, 11vw, 9rem);
+		font-weight: 800;
+		line-height: 1.1;
+		letter-spacing: -0.02em;
+		margin: 0 0 24px 0;
+		display: inline-block;
+
+		/* 1. Base Layer: Yellow Gradient + 20% White Cover */
+		background:
+			linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+			linear-gradient(to bottom, #fac549 0%, #ca8106 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		color: transparent;
+		filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.15));
+	}
+
+	/* 2. Image Layer: 30% Opacity Overlay */
+	.motto-title::before {
+		content: attr(data-text);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		white-space: pre-line;
+		background-image: var(--motto-bg);
+		background-size: cover;
+		background-position: center;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		opacity: 0.3;
+		pointer-events: none;
+		z-index: 1;
+	}
+	.keep-together {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.motto-subtitle {
+		font-family: 'Inter', sans-serif;
+		font-size: 1.25rem;
+		font-style: italic;
+		color: #1a1515;
+		line-height: 1.5;
+		margin: 0;
+		max-width: 600px;
+	}
+
+	.text-yellow {
+		color: #c98e16;
+		font-weight: 600;
+	}
+
+	/* --- MODAL GALLERY STYLES --- */
+	.gallery-modal-overlay {
+		width: 100%;
+		height: 100%;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		border: none;
+		box-sizing: border-box;
+		color: inherit;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.85);
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 40px;
+		animation: fadeIn 0.2s ease-out;
+	}
+	.gallery-modal-overlay::backdrop {
+		background: transparent;
+	}
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	.gallery-modal-content {
+		background: radial-gradient(circle at center, #fcedeb 0%, #f4e8cf 100%);
+		padding: 40px;
+		border-radius: 16px;
+		max-width: 1100px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		position: relative;
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+	}
+	.close-modal {
+		position: absolute;
+		top: 24px;
+		right: 24px;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		color: #6a1316;
+		transition: transform 0.2s ease;
+	}
+	.close-modal:hover {
+		transform: scale(1.1);
+	}
+	.gallery-header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 40px;
+	}
+	.gallery-header :global(.t_eyebrow) {
+		display: inline-block;
+	}
+	.gallery-grid-container {
+		background-color: #2a1f1b;
+		border-radius: 16px;
+		padding: 24px;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 16px;
+		background-image:
+			linear-gradient(to right, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+			linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+		background-size: calc(25% - 4px) calc(50% - 8px);
+		background-position: 12px 12px;
+	}
+	.gallery-img-box {
+		width: 100%;
+		aspect-ratio: 1/1;
+		background-color: #1a1515;
+		padding: 8px;
+	}
+	.gallery-img-box img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* --- RESPONSIVE ADJUSTMENTS --- */
+	@media (max-width: 1024px) {
+		.card-header-split,
+		.card-content-split,
+		.agenda-content-grid {
+			grid-template-columns: 1fr;
+			gap: 32px;
+		}
+		.header-right {
+			justify-content: flex-start;
+		}
+		.tabs {
+			flex-wrap: wrap;
+		}
+
+		.image-grid {
+			position: relative;
+			height: 500px;
+		}
+		.grid-5 {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: auto;
+		}
+		.grid-5 .img-wrapper:nth-child(n) {
+			grid-column: auto;
+			grid-row: auto;
+		}
+		.grid-5 .img-wrapper:last-child {
+			grid-column: span 2;
+		}
+
+		.ivote-showcase {
+			grid-template-columns: 1fr;
+		}
+		.ivote-right {
+			min-height: 400px;
+		}
+		.ivote-cards-container {
+			grid-template-columns: 1fr;
+		}
+		.gallery-grid-container {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.gallery-modal-overlay {
+			padding: 16px;
+		}
+		.gallery-modal-content {
+			padding: 24px;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.hero-bg {
+			animation: hero-backdrop-in 1.2s ease-out;
+		}
+		.hero-title {
+			animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+	}
+</style>
+>>>>>>> Stashed changes
