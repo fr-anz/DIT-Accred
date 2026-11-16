@@ -783,11 +783,9 @@
 				tabindex="-1"
 			></button>
 			<div class="modal_content">
-				<div class="modal_toolbar">
-					<button class="close_modal_btn" onclick={closeModal} aria-label="Close modal">
-						<X size={24} />
-					</button>
-				</div>
+				<button class="close_modal_btn" onclick={closeModal} aria-label="Close modal">
+					<X size={24} />
+				</button>
 
 				<div class="modal_grid">
 					<!-- Left Panel: Profile Detail (Figma-aligned) -->
@@ -1697,14 +1695,10 @@
 		overscroll-behavior: contain;
 	}
 
-	.modal_toolbar {
-		display: flex;
-		justify-content: flex-end;
-		padding: 8px 12px;
-		background: var(--c-surface);
-	}
-
 	.close_modal_btn {
+		position: absolute;
+		top: 1.25rem;
+		right: 1.25rem;
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
@@ -1727,6 +1721,7 @@
 	.modal_grid {
 		display: grid;
 		grid-template-columns: 280px 1fr;
+		min-height: 460px;
 	}
 
 	@media (max-width: 760px) {
@@ -1812,7 +1807,7 @@
 
 	/* ── Right Video Panel ── */
 	.modal_video_panel {
-		padding: 16px;
+		padding: 2.5rem 2rem;
 		min-width: 0;
 		display: flex;
 		flex-direction: column;
@@ -1826,9 +1821,10 @@
 		flex: none;
 		min-width: 0;
 		overflow: hidden;
-		border-radius: 12px;
+		border-radius: 16px;
 		background: #0e0e0e;
 		aspect-ratio: 16 / 9;
+		box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
 	}
 
 	.testimonial_video {

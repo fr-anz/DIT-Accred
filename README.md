@@ -27,7 +27,7 @@ bun x sv@0.15.3 create --template minimal --types ts --add prettier eslint tailw
 ## Notable alumni media
 
 The Teaching & Learning profiles live in `src/lib/data/alumni.ts`.
-Each profile embeds its Google Drive video in a 16:9 frame below a separate close-button bar.
+Each profile embeds its Google Drive video in a padded, rounded 16:9 frame.
 Keep Drive sharing public; playback depends on Google's player and access policy.
 
 ## Developing
