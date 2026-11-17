@@ -24,7 +24,7 @@
 	import { narrativeReports } from '$lib/data/reportLinks';
 	import { alumniList } from '$lib/data/alumni';
 	import { resolve } from '$app/paths';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	/** @type {HTMLDialogElement | undefined} */
 	let alumniDialog = $state();
 	/** @type {HTMLElement | null} */
@@ -47,15 +47,73 @@
 	/** @type {CourseYear[]} */
 	const courseYears = [1, 2, 3, 4];
 
-	// Mobile carousel: one alum per slide (CSS switches to a single column at ≤540px)
-	let mobileIndex = $state(0);
+	// Three portraits on desktop, one on mobile; allow five seconds to read each position.
+	const alumniRotationDelay = 5000;
+	let alumniSlide = $state(0);
+	let alumniVisibleCount = $state(3);
+	let alumniHovered = $state(false);
+	let alumniFocused = $state(false);
+	let alumniReducedMotion = $state(false);
+	let alumniPageVisible = $state(true);
+	let alumniInView = $state(false);
+	/** @type {HTMLDivElement | undefined} */
+	let alumniCarousel = $state();
+	const lastAlumniSlide = $derived(Math.max(0, alumniList.length - alumniVisibleCount));
+	const alumniStops = $derived(Array.from({ length: lastAlumniSlide + 1 }, (_, i) => i));
+	const alumniRotating = $derived(
+		!alumniHovered &&
+			!alumniFocused &&
+			!alumniReducedMotion &&
+			alumniPageVisible &&
+			alumniInView &&
+			selectedAlumIndex === null &&
+			lastAlumniSlide > 0
+	);
+
+	onMount(() => {
+		const mobile = window.matchMedia('(max-width: 540px)');
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const syncPreferences = () => {
+			alumniVisibleCount = mobile.matches ? 1 : 3;
+			alumniReducedMotion = reducedMotion.matches;
+		};
+		const syncVisibility = () => (alumniPageVisible = !document.hidden);
+		syncPreferences();
+		syncVisibility();
+		mobile.addEventListener('change', syncPreferences);
+		reducedMotion.addEventListener('change', syncPreferences);
+		document.addEventListener('visibilitychange', syncVisibility);
+		const observer = new IntersectionObserver(([entry]) => (alumniInView = entry.isIntersecting), {
+			threshold: 0.2
+		});
+		if (alumniCarousel) observer.observe(alumniCarousel);
+		return () => {
+			observer.disconnect();
+			mobile.removeEventListener('change', syncPreferences);
+			reducedMotion.removeEventListener('change', syncPreferences);
+			document.removeEventListener('visibilitychange', syncVisibility);
+		};
+	});
+
+	$effect(() => {
+		if (alumniSlide > lastAlumniSlide) alumniSlide = lastAlumniSlide;
+	});
+
+	$effect(() => {
+		const currentSlide = alumniSlide;
+		if (!alumniRotating) return;
+		const timer = window.setTimeout(() => {
+			alumniSlide = currentSlide === lastAlumniSlide ? 0 : currentSlide + 1;
+		}, alumniRotationDelay);
+		return () => window.clearTimeout(timer);
+	});
 
 	function prevSlide() {
-		mobileIndex = Math.max(0, mobileIndex - 1);
+		alumniSlide = alumniSlide === 0 ? lastAlumniSlide : alumniSlide - 1;
 	}
 
 	function nextSlide() {
-		mobileIndex = Math.min(alumniList.length - 1, mobileIndex + 1);
+		alumniSlide = alumniSlide === lastAlumniSlide ? 0 : alumniSlide + 1;
 	}
 
 	// Interactive explorer course data
@@ -493,10 +551,15 @@
 				</div>
 			</div>
 
-				<div class="narrative-action-wrapper">
-					<a href="https://bit.ly/ITL4Area2" class="narrative-btn" target="_blank" rel="noopener noreferrer">
-						View Full Narrative Report
-					</a>
+			<div class="narrative-action-wrapper">
+				<a
+					href="https://bit.ly/ITL4Area2"
+					class="narrative-btn"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					View Full Narrative Report
+				</a>
 			</div>
 		</div>
 	</section>
@@ -631,58 +694,100 @@
 			<h2 class="notable_alumni_title">NOTABLE ALUMNI</h2>
 
 			<!-- Slideshow wrapper -->
-			<div class="alumni_slideshow_wrapper">
+			<div
+				class="alumni_slideshow_wrapper"
+				bind:this={alumniCarousel}
+				role="region"
+				aria-roledescription="carousel"
+				aria-label="Notable alumni"
+				onpointerenter={(event) => {
+					if (event.pointerType === 'mouse') alumniHovered = true;
+				}}
+				onpointerleave={() => (alumniHovered = false)}
+				onfocusin={() => (alumniFocused = true)}
+				onfocusout={(event) => {
+					alumniFocused =
+						event.relatedTarget instanceof Node &&
+						event.currentTarget.contains(event.relatedTarget);
+				}}
+			>
 				<div class="alumni_slideshow">
-					<!-- Prev button (mobile only) -->
 					<button
+						type="button"
 						class="slide_nav_btn slide_prev"
 						onclick={prevSlide}
-						disabled={mobileIndex === 0}
+						disabled={lastAlumniSlide === 0}
 						aria-label="Previous alumni"
 					>
 						<ChevronLeft size={24} strokeWidth={2.5} />
 					</button>
 
-					<!-- Alumni cards: 3-up on desktop, one per slide on mobile -->
-					<div class="alumni_cards_container">
-						{#each alumniList as alum, i (alum.name)}
-							<button
-								type="button"
-								class="alumni_portrait_card"
-								class:slide_hidden={i !== mobileIndex}
-								onclick={() => openAlumModal(i)}
-							>
-								<div class="portrait_info">
-									<h4 class="alum_name">{alum.name}</h4>
-									<span class="alum_role_tag">{alum.role}</span>
-								</div>
-							</button>
-						{/each}
+					<!-- Clip a single row: three portraits on desktop, one on mobile. -->
+					<div class="alumni_cards_viewport">
+						<div
+							class="alumni_cards_container"
+							style:transform="translateX(calc(-{alumniSlide} * (100% + var(--alumni-gap)) / var(--alumni-visible)))"
+						>
+							{#each alumniList as alum, i (alum.name)}
+								<button
+									type="button"
+									class="alumni_portrait_card"
+									inert={i < alumniSlide || i >= alumniSlide + alumniVisibleCount}
+									aria-hidden={i < alumniSlide || i >= alumniSlide + alumniVisibleCount}
+									onclick={() => openAlumModal(i)}
+								>
+									<img
+										class="alumni_portrait"
+										src={alum.imageUrl}
+										alt={alum.imageAlt}
+										style:object-position={alum.imagePosition ?? 'center top'}
+										loading="lazy"
+										decoding="async"
+										width="460"
+										height="600"
+									/>
+									<div class="portrait_info">
+										<h4 class="alum_name">{alum.name}</h4>
+										<span class="alum_role_tag">{alum.role}</span>
+									</div>
+								</button>
+							{/each}
+						</div>
 					</div>
 
-					<!-- Next button (mobile only) -->
 					<button
+						type="button"
 						class="slide_nav_btn slide_next"
 						onclick={nextSlide}
-						disabled={mobileIndex === alumniList.length - 1}
+						disabled={lastAlumniSlide === 0}
 						aria-label="Next alumni"
 					>
 						<ChevronRight size={24} strokeWidth={2.5} />
 					</button>
 				</div>
 
-				<!-- Slide dot indicators (mobile only) -->
-				<div class="carousel_indicators">
-					{#each alumniList as alum, p (alum.name)}
-						<button
-							class="dot_indicator"
-							class:active={mobileIndex === p}
-							onclick={() => (mobileIndex = p)}
-							aria-label="Show {alum.name}"
-							aria-current={mobileIndex === p}
-						></button>
-					{/each}
+				<div class="carousel_controls">
+					<div class="carousel_indicators">
+						{#each alumniStops as p (p)}
+							<button
+								type="button"
+								class="dot_indicator"
+								class:active={alumniSlide === p}
+								onclick={() => (alumniSlide = p)}
+								aria-label={alumniVisibleCount === 1
+									? `Show ${alumniList[p].name}`
+									: `Show alumni ${p + 1} to ${p + alumniVisibleCount}`}
+								aria-current={alumniSlide === p}
+							></button>
+						{/each}
+					</div>
 				</div>
+				<p class="sr-only" aria-live={alumniRotating ? 'off' : 'polite'} aria-atomic="true">
+					Showing alumni {alumniSlide + 1} to {Math.min(
+						alumniSlide + alumniVisibleCount,
+						alumniList.length
+					)} of {alumniList.length}
+				</p>
 			</div>
 		</div>
 
@@ -791,6 +896,15 @@
 					<!-- Left Panel: Profile Detail (Figma-aligned) -->
 					<div class="modal_profile_panel">
 						<div class="modal_profile_card">
+							<img
+								class="detail_alum_portrait"
+								src={alumniList[selectedAlumIndex].imageUrl}
+								alt={alumniList[selectedAlumIndex].imageAlt}
+								style:object-position={alumniList[selectedAlumIndex].imagePosition ?? 'center top'}
+								width="200"
+								height="200"
+								decoding="async"
+							/>
 							<div class="detail_info_block">
 								<h3 class="detail_alum_name" id="alumni-dialog-title">
 									{alumniList[selectedAlumIndex].name}
@@ -831,12 +945,12 @@
 <Footer />
 
 <style>
-    .narrative-action-wrapper {
+	.narrative-action-wrapper {
 		display: flex;
-		justify-content: center; 
+		justify-content: center;
 		width: 100%;
-		margin-top: 1.5rem; 
-		margin-bottom: 0;   
+		margin-top: 1.5rem;
+		margin-bottom: 0;
 	}
 
 	.narrative-btn {
@@ -1357,17 +1471,29 @@
 	.alumni_slideshow {
 		position: relative;
 	}
-	.alumni_cards_container {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: clamp(30px, 3.281vw, 63px);
+	.alumni_cards_viewport {
+		--alumni-visible: 3;
+		--alumni-gap: clamp(30px, 3.281vw, 63px);
 		width: 90%;
 		margin: auto;
+		padding: 10px;
+		overflow: hidden;
+	}
+	.alumni_cards_container {
+		display: flex;
+		gap: var(--alumni-gap);
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.alumni_cards_container {
+			transition: transform 250ms var(--motion-ease);
+		}
 	}
 	.alumni_portrait_card {
+		flex: 0 0 calc((100% - (var(--alumni-visible) - 1) * var(--alumni-gap)) / var(--alumni-visible));
+		min-width: 0;
 		border: 0;
 		padding: 0;
-		color: white;
+		color: var(--c-surface);
 		font: inherit;
 		text-align: left;
 		position: relative;
@@ -1377,11 +1503,18 @@
 		cursor: pointer;
 		overflow: hidden;
 	}
+	.alumni_portrait {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
 	.portrait_info {
 		position: absolute;
 		inset: auto 0 0;
 		padding: clamp(18px, 2.5vw, 48px);
-		background: linear-gradient(0deg, #0006, transparent);
+		background: linear-gradient(0deg, rgb(0 0 0 / 0.95), rgb(0 0 0 / 0.65) 65%, transparent);
 	}
 	.alum_name {
 		margin: 0 0 4px;
@@ -1398,12 +1531,12 @@
 		border-radius: 50%;
 		width: 42px;
 		height: 42px;
-		background: white;
+		background: var(--c-surface);
 		color: var(--c-maroon);
 		display: grid;
 		place-items: center;
 		cursor: pointer;
-		opacity: 0;
+		opacity: 1;
 		transition: opacity 0.2s;
 	}
 	.alumni_slideshow:hover .slide_nav_btn:not(:disabled),
@@ -1420,29 +1553,37 @@
 		opacity: 0.35;
 		cursor: default;
 	}
-	.carousel_indicators {
+	.carousel_controls {
 		display: flex;
+		align-items: center;
 		justify-content: center;
-		gap: 10px;
+		gap: 18px;
 		margin-top: 22px;
 	}
-	/* Desktop shows all three cards on a single page: hide carousel controls */
-	@media (min-width: 541px) {
-		.slide_nav_btn,
-		.carousel_indicators {
-			display: none;
-		}
+	.carousel_indicators {
+		display: flex;
+		align-items: center;
+		gap: 4px;
 	}
 	.dot_indicator {
-		width: 7px;
-		height: 7px;
+		display: grid;
+		place-items: center;
+		width: 28px;
+		height: 36px;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
-		background: #ddd;
+		border-radius: 8px;
+		background: transparent;
 		cursor: pointer;
 	}
-	.dot_indicator.active {
+	.dot_indicator::before {
+		content: '';
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: var(--c-shell);
+	}
+	.dot_indicator.active::before {
 		background: var(--c-gold-dark);
 	}
 	.tracer_grid {
@@ -1597,8 +1738,8 @@
 		.curriculum_right_panel {
 			gap: 28px;
 		}
-		.alumni_cards_container {
-			gap: 18px;
+		.alumni_cards_viewport {
+			--alumni-gap: 18px;
 		}
 		.portrait_info {
 			padding: 18px;
@@ -1646,12 +1787,9 @@
 		.org_desc {
 			font-size: 12px;
 		}
-		.alumni_cards_container {
-			grid-template-columns: 1fr;
+		.alumni_cards_viewport {
+			--alumni-visible: 1;
 			width: 80%;
-		}
-		.alumni_portrait_card.slide_hidden {
-			display: none;
 		}
 		.alum_name {
 			font-size: 23px;
@@ -1754,6 +1892,15 @@
 		text-align: center;
 		width: 100%;
 	}
+	.detail_alum_portrait {
+		width: min(100%, 200px);
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 16px;
+		margin-bottom: 1.25rem;
+		background: var(--c-surface);
+	}
 
 	.detail_info_block {
 		display: flex;
@@ -1837,7 +1984,6 @@
 		border: 0;
 		display: block;
 	}
-
 
 	@keyframes overlayFadeIn {
 		from {

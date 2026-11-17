@@ -27,6 +27,14 @@ bun x sv@0.15.3 create --template minimal --types ts --add prettier eslint tailw
 ## Notable alumni media
 
 The Teaching & Learning profiles live in `src/lib/data/alumni.ts`.
+Each profile's `imageUrl` loads its portrait directly from the public Cloudflare CDN at
+`https://cdn.theavenir.dev/images/Alumni/`; `imageAlt` describes the portrait in cards and dialogs.
+Use the optional `imagePosition` to align the crop when the subject is off-center.
+The carousel displays three alumni at a time on desktop and one on mobile, advancing every five
+seconds. It pauses while hovered, focused, off screen, in a hidden tab, or showing a profile dialog.
+Readers can navigate with arrows and dots; reduced motion disables automatic rotation.
+The bucket is `dit-documents`. Preserve object filename capitalization and extensions, and encode
+spaces as `%20` in image URLs. Displaying these public images requires no S3 credentials.
 Each profile embeds its Google Drive video in a padded, rounded 16:9 frame.
 The player is vertically cropped to remove Drive's minimum-height letterboxing; this can clip controls on small screens.
 Keep Drive sharing public; playback depends on Google's player and access policy.
