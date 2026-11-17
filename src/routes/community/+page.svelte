@@ -472,12 +472,17 @@
 		overflow: hidden;
 	}
 
+	/* Supplied community photo, cropped centre/cover like the other page
+	   heroes. Kept at 0.3 opacity over the light hero background so the
+	   black→maroon gradient .t_display title stays legible on mobile and
+	   desktop. */
 	.hero-bg {
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
+		background-image: url('/img/pages/Community.jpg');
 		background-size: cover;
 		background-position: center;
 		opacity: 0.3;
