@@ -8,10 +8,10 @@
 		KeyRound,
 		Maximize2,
 		Network
-	} from 'lucide-svelte';
+	} from '@lucide/svelte';
 	import { tick } from 'svelte';
-	import Footer from '$lib/components/footer.svelte';
-	import ditLogo from '$lib/assets/DIT Logo.svg';
+	import Footer from '#lib/components/footer.svelte';
+	import ditLogo from '#lib/assets/DIT Logo.svg';
 
 	const frameworkCards = [
 		{

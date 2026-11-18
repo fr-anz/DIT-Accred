@@ -1,12 +1,12 @@
 <script>
-	import Footer from '$lib/components/footer.svelte';
-	import AboutDepartmentSection from '$lib/components/home/AboutDepartmentSection.svelte';
-	import BentoIntroSection from '$lib/components/home/BentoIntroSection.svelte';
-	import HeroSection from '$lib/components/home/HeroSection.svelte';
-	import LeadershipSection from '$lib/components/home/LeadershipSection.svelte';
-	import ProblemStatementSection from '$lib/components/home/ProblemStatementSection.svelte';
-	import QuickLinksSection from '$lib/components/home/QuickLinksSection.svelte';
-	import WelcomeSection from '$lib/components/home/WelcomeSection.svelte';
+	import Footer from '#lib/components/footer.svelte';
+	import AboutDepartmentSection from '#lib/components/home/AboutDepartmentSection.svelte';
+	import BentoIntroSection from '#lib/components/home/BentoIntroSection.svelte';
+	import HeroSection from '#lib/components/home/HeroSection.svelte';
+	import LeadershipSection from '#lib/components/home/LeadershipSection.svelte';
+	import ProblemStatementSection from '#lib/components/home/ProblemStatementSection.svelte';
+	import QuickLinksSection from '#lib/components/home/QuickLinksSection.svelte';
+	import WelcomeSection from '#lib/components/home/WelcomeSection.svelte';
 </script>
 
 <HeroSection />

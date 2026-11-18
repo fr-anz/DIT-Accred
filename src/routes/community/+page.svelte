@@ -1,11 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	import Footer from '$lib/components/footer.svelte';
+	import Footer from '#lib/components/footer.svelte';
 
-	import ivote1 from '$lib/assets/community/ivote1.png';
-	import ivote2 from '$lib/assets/community/ivote2.png';
-	import ivote3 from '$lib/assets/community/ivote3.png';
-	import ivote4 from '$lib/assets/community/ivote4.png';
+	import ivote1 from '#lib/assets/community/ivote1.png';
+	import ivote2 from '#lib/assets/community/ivote2.png';
+	import ivote3 from '#lib/assets/community/ivote3.png';
+	import ivote4 from '#lib/assets/community/ivote4.png';
 
 	let activeTab = $state(0);
 	let currentImageIndex = $state(0);

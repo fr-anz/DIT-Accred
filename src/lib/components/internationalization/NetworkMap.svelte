@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { regionDots, regionGrid } from '$lib/data/regionDots';
-	import type { Partner } from '$lib/data/internationalization';
+	import { regionDots, regionGrid } from '#lib/data/regionDots.ts';
+	import type { Partner } from '#lib/data/internationalization.ts';
 
 	type Place = { lat: number; lon: number };
 

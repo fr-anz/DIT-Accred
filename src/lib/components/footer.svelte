@@ -1,5 +1,5 @@
 <script>
-	import ditLogo from '$lib/assets/DIT Logo.jpg';
+	import ditLogo from '#lib/assets/DIT Logo.jpg';
 </script>
 
 <footer class="footer_container">

@@ -1,7 +1,6 @@
 node_modules
 
 # Local agent instructions
-AGENTS.md
 agents.md
 
 # Kiro: share steering rules, keep everything else local

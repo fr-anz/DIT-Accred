@@ -1,7 +1,7 @@
-import binusLogo from '$lib/assets/internationalization/binus.png';
-import unpamLogo from '$lib/assets/internationalization/unpam.png';
-import umpsaLogo from '$lib/assets/internationalization/umpsa.png';
-import picabLogo from '$lib/assets/internationalization/pcab.png';
+import binusLogo from '#lib/assets/internationalization/binus.png';
+import unpamLogo from '#lib/assets/internationalization/unpam.png';
+import umpsaLogo from '#lib/assets/internationalization/umpsa.png';
+import picabLogo from '#lib/assets/internationalization/pcab.png';
 
 /* `lat`/`lon` place each partner on the network map. They are approximate
    campus locations; the map is illustrative, not a survey. */

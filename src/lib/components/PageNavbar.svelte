@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
-	import { ChevronDown, Menu, X } from 'lucide-svelte';
-	import ditLogo from '$lib/assets/DIT Logo.jpg';
-	import { navItems, type NavItem } from '$lib/data/navigation';
+	import { ChevronDown, Menu, X } from '@lucide/svelte';
+	import ditLogo from '#lib/assets/DIT Logo.jpg';
+	import { navItems, type NavItem } from '#lib/data/navigation.ts';
 
 	const homeItem = navItems[0];
 	const sectionItems = navItems.slice(1);
@@ -13,11 +13,12 @@
 	let openMobileHref = $state<string | null>(null);
 	let closeTimeout: ReturnType<typeof setTimeout> | null = null;
 
-	let activePath = $derived($page.url.pathname);
-	let activeTarget = $derived(`${$page.url.pathname}${$page.url.hash}`);
+	let activePath = $derived(page.url.pathname);
+	let activeTarget = $derived(`${page.url.pathname}${page.url.hash}`);
 
 	function resolveHref(href: string) {
-		return resolve(href as Parameters<typeof resolve>[0]);
+		const args = [href] as Parameters<typeof resolve>;
+		return resolve(...args);
 	}
 
 	function displayLabel(item: NavItem) {
