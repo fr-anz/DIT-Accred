@@ -10,10 +10,10 @@
 		Plane,
 		Share2,
 		CheckCircle2
-	} from 'lucide-svelte';
-	import Footer from '$lib/components/footer.svelte';
-	import '$lib/styles/accreditation-pages.css';
-	import '$lib/styles/assigned-page-motion.css';
+	} from '@lucide/svelte';
+	import Footer from '#lib/components/footer.svelte';
+	import '#lib/styles/accreditation-pages.css';
+	import '#lib/styles/assigned-page-motion.css';
 	let videoPlaying = $state(false);
 
 	/**

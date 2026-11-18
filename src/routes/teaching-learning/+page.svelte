@@ -33,12 +33,12 @@
 		Gavel,
 		RefreshCw,
 		GitFork
-	} from 'lucide-svelte';
-	import Footer from '$lib/components/footer.svelte';
-	import StudentAchievementsGallery from '$lib/components/StudentAchievementsGallery.svelte';
-	import '$lib/styles/accreditation-pages.css';
-	import '$lib/styles/assigned-page-motion.css';
-	import { alumniList } from '$lib/data/alumni';
+	} from '@lucide/svelte';
+	import Footer from '#lib/components/footer.svelte';
+	import StudentAchievementsGallery from '#lib/components/StudentAchievementsGallery.svelte';
+	import '#lib/styles/accreditation-pages.css';
+	import '#lib/styles/assigned-page-motion.css';
+	import { alumniList } from '#lib/data/alumni.ts';
 	import {
 		revisionSteps,
 		curriculumMinutes,
@@ -48,8 +48,8 @@
 		electiveTracks,
 		tracerStudy,
 		alumniCertificates
-	} from '$lib/data/teachingLearning';
-	import Button from '$lib/components/Button.svelte';
+	} from '#lib/data/teachingLearning.ts';
+	import Button from '#lib/components/Button.svelte';
 	import { resolve } from '$app/paths';
 	import { onMount, tick, untrack } from 'svelte';
 	/** @type {HTMLDialogElement | undefined} */
@@ -187,9 +187,9 @@
 	const termsByYear = courseYears.map((year) =>
 		curriculumTerms.map((term, index) => ({ term, index })).filter(({ term }) => term.year === year)
 	);
-	/** @param {import('$lib/data/teachingLearning').CurriculumTerm} term */
+	/** @param {import('#lib/data/teachingLearning.ts').CurriculumTerm} term */
 	const sumUnits = (term) => term.courses.reduce((total, course) => total + course.units, 0);
-	/** @param {import('$lib/data/teachingLearning').CurriculumTerm} term */
+	/** @param {import('#lib/data/teachingLearning.ts').CurriculumTerm} term */
 	const sumTuition = (term) => term.courses.reduce((total, course) => total + course.tuition, 0);
 	const termUnits = curriculumTerms.map(sumUnits);
 	const totalUnits = termUnits.reduce((total, units) => total + units, 0);
@@ -823,15 +823,16 @@
 								aria-pressed={activeYear === year}
 								onclick={() => selectYear(year)}
 							>
-								<span class="year_label">Year</span><span class="year_number">{year}</span
-								><ChevronRight size={18} aria-hidden="true" />
+								<span class="year_label">Year</span><span class="year_number">
+									{year}
+								</span><ChevronRight size={18} aria-hidden="true" />
 							</button>
 						{/each}
 					</div>
 					<div class="explorer_progress" aria-live="polite">
-						<span class="progress_value"
-							><strong>{unitsThroughTerm}</strong> / {totalUnits} units</span
-						>
+						<span class="progress_value">
+							<strong>{unitsThroughTerm}</strong> / {totalUnits} units
+						</span>
 						<span class="progress_caption">Units through this term</span>
 						<div class="term_meter" aria-hidden="true">
 							{#each termUnits as units, i (i)}
@@ -1085,9 +1086,9 @@
 					</figcaption>
 				</figure>
 				<div class="story_body">
-					<span class="story_kicker"
-						><Tv size={16} strokeWidth={2} aria-hidden="true" /> IT innovation</span
-					>
+					<span class="story_kicker">
+						<Tv size={16} strokeWidth={2} aria-hidden="true" /> IT innovation
+					</span>
 					<h3 class="story_title">SakayGo</h3>
 					<p class="story_byline">Patricia Mae Quitoriano · BSIT Class of 2024</p>
 					<p class="story_text">

@@ -16,11 +16,11 @@
 		Star,
 		TrendingUp,
 		Trophy
-	} from 'lucide-svelte';
+	} from '@lucide/svelte';
 	import { untrack } from 'svelte';
-	import Footer from '$lib/components/footer.svelte';
-	import NetworkMap from '$lib/components/internationalization/NetworkMap.svelte';
-	import { countUp, reveal } from '$lib/actions/motion';
+	import Footer from '#lib/components/footer.svelte';
+	import NetworkMap from '#lib/components/internationalization/NetworkMap.svelte';
+	import { countUp, reveal } from '#lib/actions/motion.ts';
 	import {
 		facultyConferences,
 		facultyResearchers,
@@ -31,9 +31,9 @@
 		studentPapers,
 		studentTrip,
 		wuriTimeline
-	} from '$lib/data/internationalization';
-	import { narrativeReports } from '$lib/data/reportLinks';
-	import '$lib/styles/accreditation-pages.css';
+	} from '#lib/data/internationalization.ts';
+	import { narrativeReports } from '#lib/data/reportLinks.ts';
+	import '#lib/styles/accreditation-pages.css';
 
 	const report = narrativeReports.find(({ title }) => title === 'International Linkages');
 	const umpsa = partners.find(({ id }) => id === 'umpsa');
@@ -303,9 +303,13 @@
 						<span class="ruler_ghost" style:--p={(280 - 271) / 40}><b>2024</b></span>
 						<span class="ruler_trail" style:--from={(280 - 271) / 40} style:--to={(280 - 250) / 40}
 						></span>
-						<span class="ruler_marker" style:--from={(280 - 271) / 40} style:--to={(280 - 250) / 40}
-							><b>2025</b></span
+						<span
+							class="ruler_marker"
+							style:--from={(280 - 271) / 40}
+							style:--to={(280 - 250) / 40}
 						>
+							<b>2025</b>
+						</span>
 					</div>
 				</div>
 			</div>

@@ -1,6 +1,6 @@
 <script>
-	import Card from '$lib/components/Card.svelte';
-	import { programObjectives } from '$lib/data/homeData';
+	import Card from '#lib/components/Card.svelte';
+	import { programObjectives } from '#lib/data/homeData.ts';
 </script>
 
 <section class="bento-section">

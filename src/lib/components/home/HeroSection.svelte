@@ -40,9 +40,9 @@
 		<h2 class="hero-title" aria-label="Excellence in Every Byte">
 			<span class="hero-line hero-line-top" aria-hidden="true">Excellence</span>
 			<span class="hero-line hero-line-mid" aria-hidden="true">in</span>
-			<span class="hero-line hero-line-bottom" aria-hidden="true"
-				>Every <span class="hero-word-gold">Byte</span></span
-			>
+			<span class="hero-line hero-line-bottom" aria-hidden="true">
+				Every <span class="hero-word-gold">Byte</span>
+			</span>
 		</h2>
 	</div>
 </header>

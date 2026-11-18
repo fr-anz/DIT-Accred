@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-bun x sv@0.15.3 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" mdsvex storybook --install bun DIT-Accred
+bun x sv@0.15.3 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" mdsvex --install bun DIT-Accred
 ```
 
 ## Project docs
@@ -47,14 +47,18 @@ The decorative binary background uses full-width lines alternating leftward and 
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Use the Node.js version in [`.nvmrc`](.nvmrc) and install dependencies from the npm lockfile.
 
 ```sh
+nvm install
+npm ci
 npm run dev
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
+
+With Bun 1.4 or newer, use `bun install --frozen-lockfile` followed by `bun run dev`.
 
 ## Building
 

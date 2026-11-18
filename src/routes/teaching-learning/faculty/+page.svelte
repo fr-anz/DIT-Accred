@@ -1,10 +1,10 @@
 <script>
 	import { onMount, tick } from 'svelte';
-	import { ArrowLeft, X } from 'lucide-svelte';
+	import { ArrowLeft, X } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
-	import Footer from '$lib/components/footer.svelte';
-	import '$lib/styles/accreditation-pages.css';
-	import '$lib/styles/assigned-page-motion.css';
+	import Footer from '#lib/components/footer.svelte';
+	import '#lib/styles/accreditation-pages.css';
+	import '#lib/styles/assigned-page-motion.css';
 
 	// Names, specializations and cutout crops from Figma 880:1597.
 	// The Domingo card repeats Comendador's photo in Figma; use the supplied faculty original instead.
@@ -139,9 +139,9 @@
 <main class="assigned_page faculty_page">
 	<header class="directory_header">
 		<div class="directory_header_inner">
-			<a class="back_link" href={resolve('/teaching-learning')}
-				><ArrowLeft size={18} />Teaching &amp; Learning</a
-			>
+			<a class="back_link" href={resolve('/teaching-learning')}>
+				<ArrowLeft size={18} />Teaching &amp; Learning
+			</a>
 			<p class="t_eyebrow directory_eyebrow">TEACHING &amp; LEARNING</p>
 			<h1 class="t_display directory_title">FACULTY</h1>
 			<p class="directory_intro">
@@ -198,11 +198,11 @@
 						alt={member.name}
 						loading="lazy"
 					/>
-					<span class="fp_overlay"
-						><span class="t_card_name fp_name">{member.name}</span><span class="fp_spec"
-							>{member.specialization}</span
-						></span
-					>
+					<span class="fp_overlay">
+						<span class="t_card_name fp_name">{member.name}</span><span class="fp_spec">
+							{member.specialization}
+						</span>
+					</span>
 				</button>
 			{/each}
 		</div>
@@ -229,9 +229,9 @@
 			tabindex="-1"
 			bind:this={modalEl}
 		>
-			<button class="fmodal_close" onclick={closeFaculty} aria-label="Close profile"
-				><X size={24} /></button
-			>
+			<button class="fmodal_close" onclick={closeFaculty} aria-label="Close profile">
+				<X size={24} />
+			</button>
 			<div class="fmodal_header">
 				<img class="fmodal_photo" src={photoUrl(selectedFaculty)} alt={selectedFaculty.name} />
 				<div>

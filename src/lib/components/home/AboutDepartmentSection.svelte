@@ -1,6 +1,6 @@
 <script>
-	import { Building2, GraduationCap, Info, Network, Users } from 'lucide-svelte';
-	import { aboutImages, departmentStats, ditGoals, missionVision } from '$lib/data/homeData';
+	import { Building2, GraduationCap, Info, Network, Users } from '@lucide/svelte';
+	import { aboutImages, departmentStats, ditGoals, missionVision } from '#lib/data/homeData.ts';
 	import QualityControlDiagram from './QualityControlDiagram.svelte';
 </script>
 

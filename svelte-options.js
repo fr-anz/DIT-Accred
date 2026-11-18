@@ -1,0 +1,13 @@
+import { mdsvex } from 'mdsvex';
+
+/** @satisfies {import('@sveltejs/kit/vite').Config} */
+const config = {
+	compilerOptions: {
+		// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
+		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
+	},
+	preprocess: [mdsvex({ extensions: ['.svx', '.md'] })],
+	extensions: ['.svelte', '.svx', '.md']
+};
+
+export default config;

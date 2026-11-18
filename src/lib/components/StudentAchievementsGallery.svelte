@@ -1,8 +1,8 @@
 <script>
-	import { ChevronLeft, ChevronRight, X } from 'lucide-svelte';
-	import Button from '$lib/components/Button.svelte';
-	import { studentAchievementPhotos } from '$lib/data/studentAchievements';
-	import { competitionHonors } from '$lib/data/teachingLearning';
+	import { ChevronLeft, ChevronRight, X } from '@lucide/svelte';
+	import Button from '#lib/components/Button.svelte';
+	import { studentAchievementPhotos } from '#lib/data/studentAchievements.ts';
+	import { competitionHonors } from '#lib/data/teachingLearning.ts';
 
 	/** @type {number | null} */
 	let selectedPhotoIndex = $state(null);
@@ -121,9 +121,9 @@
 				>
 					<ChevronLeft size={22} aria-hidden="true" />
 				</Button>
-				<span class="t_meta"
-					>{(selectedPhotoIndex ?? 0) + 1} / {studentAchievementPhotos.length}</span
-				>
+				<span class="t_meta">
+					{(selectedPhotoIndex ?? 0) + 1} / {studentAchievementPhotos.length}
+				</span>
 				<Button
 					size="sm"
 					aria-label="Next photo"
