@@ -1,7 +1,15 @@
 <script lang="ts">
 	import { ArrowUpRight, Check, RefreshCw } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/motion.ts';
-	import { isoCertifications, pdcaStages, type PdcaStage } from '#lib/data/qualityAssurance.ts';
+	import {
+		isoCertifications,
+		pdcaStages,
+		type EvidenceDoc,
+		type PdcaStage
+	} from '#lib/data/qualityAssurance.ts';
+	import EvidencePreview from './EvidencePreview.svelte';
+
+	let preview = $state<EvidenceDoc | null>(null);
 
 	const accents: Record<PdcaStage['id'], { fill: string; ink: string }> = {
 		plan: { fill: 'var(--c-maroon)', ink: 'var(--c-surface)' },
@@ -138,7 +146,7 @@
 						</ul>
 						{#if stage.plans}
 							<div class="stage_plans" id="development-plans">
-								<p class="plans_label">Development plans</p>
+								<p class="plans_label">Development plan</p>
 								<ul class="plans_list">
 									{#each stage.plans as plan (plan.unit)}
 										<li>
@@ -169,17 +177,18 @@
 								<ul class="stage_badges" aria-label="Certifications and accreditation">
 									{#each stage.evidence as item (item.src)}
 										<li>
-											<a
+											<button
 												class="badge"
-												href={item.src}
-												target="_blank"
-												rel="external noopener noreferrer"
+												type="button"
+												aria-haspopup="dialog"
+												aria-label="Preview {item.caption}"
+												onclick={() => (preview = item)}
 											>
 												<span class="badge_seal">
-													<img src={item.seal ?? item.src} alt={item.alt} loading="lazy" />
+													<img src={item.seal ?? item.src} alt="" loading="lazy" />
 												</span>
 												<span class="badge_tip" aria-hidden="true">{item.caption}</span>
-											</a>
+											</button>
 										</li>
 									{/each}
 								</ul>
@@ -222,20 +231,27 @@
 							{cert.standard}
 						</p>
 						<p class="iso_scope">{cert.scope}</p>
-						<span class="iso_seal">
-							<img
-								src={cert.seal}
-								alt="TÜV SÜD ISO {cert.standard} certification mark"
-								width="120"
-								height="120"
-								loading="lazy"
-							/>
-						</span>
+						<button
+							class="iso_seal"
+							type="button"
+							aria-haspopup="dialog"
+							aria-label="Preview the ISO {cert.standard}:{cert.year} certificate"
+							onclick={() =>
+								(preview = {
+									src: cert.certificate,
+									alt: `TÜV SÜD PSB Philippines ISO ${cert.standard}:${cert.year} certificate for the Polytechnic University of the Philippines`,
+									caption: `ISO ${cert.standard}:${cert.year} · TÜV SÜD`
+								})}
+						>
+							<img src={cert.seal} alt="" width="120" height="120" loading="lazy" />
+						</button>
 					</li>
 				{/each}
 			</ul>
 		</div>
 	</aside>
+
+	<EvidencePreview bind:item={preview} />
 </section>
 
 <style>
@@ -534,6 +550,9 @@
 	.badge {
 		position: relative;
 		display: block;
+		padding: 0;
+		border: 0;
+		cursor: zoom-in;
 		width: clamp(60px, 4.4vw, 82px);
 		aspect-ratio: 1;
 		border-radius: 50%;
@@ -824,6 +843,9 @@
 		color: var(--c-gold-dark);
 	}
 	.iso_seal {
+		padding: 0;
+		border: 0;
+		cursor: zoom-in;
 		grid-row: 1 / 3;
 		grid-column: 3;
 		align-self: center;
@@ -846,7 +868,12 @@
 		width: 70%;
 		height: auto;
 	}
-	.iso_item:hover .iso_seal {
+	.iso_seal:focus-visible {
+		outline: 3px solid var(--c-gold-dark);
+		outline-offset: 4px;
+	}
+	.iso_item:hover .iso_seal,
+	.iso_seal:focus-visible {
 		rotate: -8deg;
 		box-shadow:
 			0 0 0 3px var(--c-surface),

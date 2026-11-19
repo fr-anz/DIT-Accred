@@ -1,7 +1,6 @@
 <script>
 	import {
 		Globe,
-		Flag,
 		BadgeCheck,
 		Workflow,
 		PenLine,
@@ -14,9 +13,9 @@
 	import Footer from '#lib/components/footer.svelte';
 	import PdcaSection from '#lib/components/planning/PdcaSection.svelte';
 	import QaPlanSection from '#lib/components/planning/QaPlanSection.svelte';
+	import SupportSection from '#lib/components/planning/SupportSection.svelte';
 	import '#lib/styles/accreditation-pages.css';
 	import '#lib/styles/assigned-page-motion.css';
-	let videoPlaying = $state(false);
 
 	/**
 	 * @typedef {1 | 2 | 4 | 17} SdgId
@@ -91,150 +90,17 @@
 		</div>
 		<hr class="section_divider" />
 
-		<div class="benchmarking_grid">
-			<div class="benchmarking_text">
-				<p>
-					The Bachelor of Science in Information Technology (BSIT) program benefits directly from
-					active engagement in internationally recognized higher education ranking systems and
-					regional quality networks. These external validations ensure the curriculum remains
-					comparable with global computing education standards.
-				</p>
-			</div>
-			<div class="aaccup_card">
-				<BadgeCheck size={42} strokeWidth={1.5} class="aaccup_icon" />
-				<p class="aaccup_level">LEVEL IV</p>
-				<p class="aaccup_status_label">AACCUP STATUS</p>
-				<hr class="aaccup_divider" />
-				<p class="aaccup_sub">On-going Application</p>
-			</div>
-		</div>
+		<p class="benchmarking_text">
+			The Bachelor of Science in Information Technology (BSIT) program benefits directly from active
+			engagement in internationally recognized higher education ranking systems and regional quality
+			networks. These external validations ensure the curriculum remains comparable with global
+			computing education standards.
+		</p>
 	</section>
 
 	<QaPlanSection />
 
-	<!-- ─────────────────────────────────────────────
-  SECTION 2: UNIVERSITY SUPPORT FUNCTIONS
-───────────────────────────────────────────── -->
-	<section class="content_section" id="university-support">
-		<div class="section_label">
-			<Flag size={26} strokeWidth={1.5} class="section_icon maroon" />
-			<span class="t_eyebrow">UNIVERSITY SUPPORT FUNCTIONS</span>
-		</div>
-		<hr class="section_divider" />
-
-		<!-- Video embed -->
-		<div class="video_wrapper">
-			<div class="video_screen">
-				{#if videoPlaying}
-					<iframe
-						src="https://www.youtube.com/embed/Lp_x4dWvLs4?autoplay=1"
-						title="University Support Functions Video"
-						class="video_iframe"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						allowfullscreen
-					></iframe>
-				{:else}
-					<button
-						class="video_preview"
-						type="button"
-						aria-label="Play University Support Functions video"
-						onclick={() => (videoPlaying = true)}
-					>
-						<img
-							src="/planning/figma/video-preview.jpg"
-							alt="University development and infrastructure"
-							loading="lazy"
-						/>
-						<span class="play_button"
-							><svg
-								width="30"
-								height="30"
-								viewBox="0 0 24 24"
-								fill="currentColor"
-								aria-hidden="true"><path d="M8 4v16l13-8z" /></svg
-							></span
-						>
-					</button>
-				{/if}
-			</div>
-		</div>
-
-		<!-- Two-column support content -->
-		<div class="support_grid">
-			<!-- Left column -->
-			<div class="support_left">
-				<!-- Strategic Priority card -->
-				<div class="priority_card">
-					<h3 class="priority_card_title">STRATEGIC PRIORITY</h3>
-					<ul class="priority_list">
-						<li class="priority_item">
-							<span class="priority_num">01</span>
-							<span class="priority_text"
-								>Academic Program Development &amp; Internationalization</span
-							>
-						</li>
-						<li class="priority_item">
-							<span class="priority_num">02</span>
-							<span class="priority_text">Human Resource Development</span>
-						</li>
-						<li class="priority_item last">
-							<span class="priority_num">03</span>
-							<span class="priority_text">Institutional-Level Quality Assurance</span>
-						</li>
-					</ul>
-				</div>
-
-				<!-- Core Functions card -->
-				<div class="core_functions_card">
-					<h3 class="core_functions_title">CORE FUNCTIONS</h3>
-					<div class="functions_grid">
-						<div class="function_pill">Higher Education Programs</div>
-						<div class="function_pill">Research Programs</div>
-						<div class="function_pill">Extension &amp; Tech Advisory</div>
-						<div class="function_pill">Customer Satisfaction</div>
-					</div>
-				</div>
-				<div class="narrative-action-wrapper">
-					<a
-						href="https://bit.ly/ITL4Area5"
-						class="narrative-btn"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						View Full Narrative Report
-					</a>
-				</div>
-			</div>
-
-			<!-- Right column: Support Feed -->
-			<div class="support_feed">
-				<div class="feed_header">
-					<Share2 size={16} strokeWidth={1.5} />
-					<h3 class="feed_title">UNIVERSITY SUPPORT FEED</h3>
-				</div>
-				<div class="feed_cards">
-					<div class="feed_card">
-						<h4 class="feed_card_title">Quality Assurance</h4>
-						<p class="feed_card_desc">
-							Training via QAC and UTLDO for syllabi development and accreditation monitoring.
-						</p>
-					</div>
-					<div class="feed_card">
-						<h4 class="feed_card_title">Research &amp; Faculty</h4>
-						<p class="feed_card_desc">
-							Incentives for research presentation and faculty development grants (FSD PHP 20,000).
-						</p>
-					</div>
-					<div class="feed_card">
-						<h4 class="feed_card_title">Infrastructure</h4>
-						<p class="feed_card_desc">
-							PUP SINTA and Document Tracking System (DTS) for efficient request management.
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+	<SupportSection />
 
 	<PdcaSection />
 
@@ -465,36 +331,6 @@
 <Footer />
 
 <style>
-    .narrative-action-wrapper {
-		display: flex;
-		justify-content: center; 
-		width: 100%;
-		margin-top: 1.5rem; 
-		margin-bottom: 0;   
-	}
-
-	.narrative-btn {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		max-width: 700px; /* Stretches it out to match the research button */
-		padding: 18px 32px; /* Increased height slightly for a larger click target */
-		border: 3px solid #941518;
-		border-radius: 12px;
-		background-color: transparent;
-		color: #941518;
-		font-family: var(--font-heading, 'Overpass', sans-serif);
-		font-size: 1.4rem;
-		font-weight: 700;
-		text-decoration: none;
-		transition: all 0.2s ease;
-	}
-
-	.narrative-btn:hover {
-		background-color: #941518;
-		color: #dfb75f;
-	}
 	.wuri_logo_crop {
 		position: relative;
 		width: 54%;
@@ -513,213 +349,13 @@
 	}
 	#strategic-benchmarking {
 		padding-top: clamp(65px, 5.36vw, 103px);
-		display: grid;
-		grid-template-columns: 1143fr 434fr;
-		column-gap: clamp(40px, 6.2vw, 119px);
-		align-items: start;
-	}
-	#strategic-benchmarking .section_label {
-		grid-column: 1;
 	}
 	#strategic-benchmarking .section_divider {
-		grid-column: 1;
 		margin-bottom: clamp(25px, 2.6vw, 50px);
 	}
-	.benchmarking_grid {
-		display: contents;
-	}
 	.benchmarking_text {
-		grid-column: 1;
-	}
-	.benchmarking_text p {
+		max-width: 80ch;
 		margin: 0;
-	}
-	.aaccup_card {
-		grid-column: 2;
-		grid-row: 1 / 4;
-		border-radius: 25px;
-		background: linear-gradient(104deg, #fac549, #ca8106);
-		text-align: center;
-		padding: clamp(25px, 2.6vw, 50px) 20px;
-	}
-	.aaccup_card :global(svg) {
-		color: white;
-		width: clamp(40px, 3.125vw, 60px);
-		height: clamp(40px, 3.125vw, 60px);
-		margin: 0 auto 16px;
-	}
-	.aaccup_level {
-		font-size: clamp(17px, 1.25vw, 24px);
-		font-weight: 700;
-		letter-spacing: 0.27em;
-		margin: 0 0 12px;
-	}
-	.aaccup_status_label {
-		color: var(--c-maroon);
-		font-size: clamp(17px, 1.25vw, 24px);
-		margin: 0;
-	}
-	.aaccup_divider {
-		border: 0;
-		border-top: 1px solid #222;
-		margin: 18px 0;
-	}
-	.aaccup_sub {
-		font-size: clamp(16px, 1.25vw, 24px);
-		font-style: italic;
-		margin: 0;
-	}
-	.video_wrapper {
-		width: 79.4%;
-		margin: 0 auto clamp(45px, 4.167vw, 80px);
-		padding: clamp(24px, 2.656vw, 51px);
-		border-radius: 25px;
-		background: var(--panel-maroon);
-	}
-	.video_screen {
-		aspect-ratio: 1241 / 590;
-		position: relative;
-		overflow: hidden;
-		border-radius: 10px;
-	}
-	.video_iframe {
-		width: 100%;
-		height: 100%;
-		border: 0;
-	}
-	.video_preview {
-		width: 100%;
-		height: 100%;
-		border: 0;
-		padding: 0;
-		cursor: pointer;
-		display: grid;
-		place-items: center;
-		background: #eee;
-	}
-	.video_preview img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-	.play_button {
-		position: relative;
-		width: clamp(50px, 4.167vw, 80px);
-		height: clamp(50px, 4.167vw, 80px);
-		display: grid;
-		place-items: center;
-		color: var(--c-maroon);
-		background: #fffc;
-		border-radius: 50%;
-		box-shadow: 0 4px 20px #0002;
-	}
-	.support_grid {
-		display: grid;
-		grid-template-columns: 872fr 772fr;
-		gap: clamp(26px, 2.344vw, 45px);
-	}
-	.support_left {
-		display: flex;
-		flex-direction: column;
-		gap: clamp(25px, 2.344vw, 45px);
-	}
-	.priority_card {
-		border: 2px solid var(--c-gold);
-		border-radius: 25px;
-		padding: clamp(28px, 3.073vw, 59px);
-		flex: 1;
-	}
-	.priority_card_title {
-		color: var(--c-maroon);
-		margin: 0 0 clamp(28px, 3.125vw, 60px);
-		font: 700 clamp(24px, 2.083vw, 40px)/1.25 var(--font-heading);
-		letter-spacing: 0.04em;
-	}
-	.priority_list {
-		padding: 0;
-		margin: 0;
-		list-style: none;
-	}
-	.priority_item {
-		display: flex;
-		gap: clamp(20px, 2.083vw, 40px);
-		align-items: center;
-		padding: clamp(20px, 1.667vw, 32px) 0;
-		border-bottom: 1px solid #ddd;
-	}
-	.priority_item:first-child {
-		padding-top: 0;
-	}
-	.priority_item.last {
-		border: 0;
-		padding-bottom: 0;
-	}
-	.priority_num {
-		color: var(--c-gold-dark);
-		font-size: clamp(20px, 1.458vw, 28px);
-		font-weight: 700;
-	}
-	.core_functions_card {
-		border-radius: 25px;
-		padding: clamp(28px, 2.76vw, 53px);
-		background: linear-gradient(105deg, #fac549, #ca8106);
-	}
-	.core_functions_title {
-		margin: 0 0 clamp(25px, 2.083vw, 40px);
-		color: #000;
-		font: 700 clamp(22px, 1.667vw, 32px)/1.3 var(--font-heading);
-	}
-	.functions_grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: clamp(16px, 1.354vw, 26px);
-	}
-	.function_pill {
-		padding: 18px 20px;
-		background: white;
-		border-left: 6px solid var(--c-maroon);
-		border-radius: 10px;
-		font-size: clamp(13px, 1.042vw, 20px);
-		color: var(--c-maroon);
-	}
-	.support_feed {
-		background: var(--panel-maroon);
-		padding: clamp(30px, 3.646vw, 70px);
-		border-radius: 25px;
-	}
-	.feed_header {
-		display: flex;
-		align-items: center;
-		gap: 15px;
-		color: var(--c-gold-light);
-		margin-bottom: clamp(32px, 3.125vw, 60px);
-	}
-	.feed_header :global(svg) {
-		display: none;
-	}
-	.feed_title {
-		margin: 0;
-		font: 700 clamp(21px, 1.667vw, 32px)/1.3 var(--font-heading);
-	}
-	.feed_cards {
-		display: grid;
-		gap: clamp(25px, 2.188vw, 42px);
-	}
-	.feed_card {
-		background: white;
-		border-radius: 10px;
-		padding: clamp(25px, 2.083vw, 40px);
-	}
-	.feed_card_title {
-		margin: 0 0 20px;
-		color: var(--c-gold-dark);
-		font: 700 clamp(20px, 1.458vw, 28px)/1.3 var(--font-heading);
-	}
-	.feed_card_desc {
-		margin: 0;
-		line-height: 1.3;
 	}
 	.process_cards_grid {
 		display: grid;
@@ -1046,27 +682,11 @@
 		.process_cards_grid {
 			grid-template-columns: 1fr 1fr;
 		}
-		.support_feed {
-			padding: 28px;
-		}
 	}
 	@media (max-width: 700px) {
 		.hero_title {
 			font-size: clamp(32px, 6.77vw, 48px);
 			padding: 0 15px;
-		}
-		#strategic-benchmarking {
-			display: block;
-		}
-		.aaccup_card {
-			margin-top: 30px;
-		}
-		.video_wrapper {
-			width: 100%;
-			padding: 20px;
-		}
-		.support_grid {
-			grid-template-columns: 1fr;
 		}
 		.photo_strip {
 			grid-template-columns: 1fr 1fr;
@@ -1084,9 +704,6 @@
 		.qs_cat_label {
 			font-size: 16px;
 		}
-		.priority_item {
-			font-size: 15px;
-		}
 	}
 	@media (max-width: 420px) {
 		.process_cards_grid {
@@ -1097,9 +714,6 @@
 		}
 		.process_card_title {
 			font-size: 17px;
-		}
-		.functions_grid {
-			grid-template-columns: 1fr;
 		}
 	}
 </style>

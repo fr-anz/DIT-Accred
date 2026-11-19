@@ -6,7 +6,9 @@ import {
 	Landmark,
 	Leaf,
 	Medal,
+	Microscope,
 	Network,
+	Server,
 	ShieldCheck,
 	TrendingUp,
 	Trophy
@@ -120,19 +122,26 @@ export const implementationCycle = [
 
 export type DevelopmentPlan = { unit: string; name: string; level: string; url: string };
 
-/* Plan document links are pending; a button stays inert until its url is filled in. */
+/* A plan without a url renders as an inert button until its link is filled in. */
 export const developmentPlans: DevelopmentPlan[] = [
-	{ unit: 'CCIS', name: 'College Development Plan', level: 'College', url: '' },
-	{ unit: 'DIT', name: 'DIT Development Plan', level: 'Department', url: '' }
+	{
+		unit: 'DIT',
+		name: 'DIT Development Plan',
+		level: 'Department',
+		url: 'https://drive.google.com/file/d/1Mw99kuVGl7rVMF7pmUu00s9Co5wv2QJb/view?usp=sharing'
+	}
 ];
+
+/* A document image opened in the evidence preview. */
+export type EvidenceDoc = { src: string; alt: string; caption: string };
 
 export type PdcaStage = {
 	id: 'plan' | 'do' | 'check' | 'act';
 	name: string;
 	question: string;
 	actions: string[];
-	/* `seal` is an optional logo crop shown in the round badge; the link opens `src`. */
-	evidence?: { src: string; alt: string; caption: string; seal?: string }[];
+	/* `seal` is an optional logo crop shown in the round badge; the badge previews `src`. */
+	evidence?: (EvidenceDoc & { seal?: string })[];
 	plans?: DevelopmentPlan[];
 };
 
@@ -172,14 +181,16 @@ export const pdcaStages: PdcaStage[] = [
 		],
 		evidence: [
 			{
-				src: '/planning/evidence/tuv-iso-9001.webp',
-				alt: 'TÜV SÜD ISO 9001 certification mark',
-				caption: 'ISO 9001 · TÜV SÜD'
+				src: '/planning/evidence/tuv-iso-9001-certificate.webp',
+				alt: 'TÜV SÜD PSB Philippines ISO 9001:2015 certificate for the Polytechnic University of the Philippines, valid until 2028-12-25',
+				caption: 'ISO 9001 · TÜV SÜD',
+				seal: '/planning/evidence/tuv-iso-9001.webp'
 			},
 			{
-				src: '/planning/evidence/tuv-iso-21001.webp',
-				alt: 'TÜV SÜD ISO 21001 certification mark',
-				caption: 'ISO 21001 · TÜV SÜD'
+				src: '/planning/evidence/tuv-iso-21001-certificate.webp',
+				alt: 'TÜV SÜD PSB Philippines ISO 21001:2018 certificate for the Polytechnic University of the Philippines, valid until 2028-12-25',
+				caption: 'ISO 21001 · TÜV SÜD',
+				seal: '/planning/evidence/tuv-iso-21001.webp'
 			},
 			{
 				src: '/planning/evidence/picab-accreditation-summary.webp',
@@ -207,12 +218,56 @@ export const isoCertifications = [
 		standard: '21001',
 		year: '2018',
 		scope: 'Educational Organization Management System',
-		seal: '/planning/evidence/tuv-iso-21001.webp'
+		seal: '/planning/evidence/tuv-iso-21001.webp',
+		certificate: '/planning/evidence/tuv-iso-21001-certificate.webp'
 	},
 	{
 		standard: '9001',
 		year: '2015',
 		scope: 'Quality Management System',
-		seal: '/planning/evidence/tuv-iso-9001.webp'
+		seal: '/planning/evidence/tuv-iso-9001.webp',
+		certificate: '/planning/evidence/tuv-iso-9001-certificate.webp'
 	}
 ];
+
+/* University Support Functions: the three priorities map to the three slabs of
+   the PUP pylon, left to right. */
+export const strategicPriorities = [
+	'Academic Program Development & Internationalization',
+	'Human Resource Development',
+	'Institutional-Level Quality Assurance'
+];
+
+export const coreFunctions = [
+	'Higher Education Programs',
+	'Research Programs',
+	'Extension & Tech Advisory',
+	'Customer Satisfaction'
+];
+
+export type SupportService = {
+	title: string;
+	description: string;
+	icon: Component;
+};
+
+export const supportServices: SupportService[] = [
+	{
+		title: 'Quality Assurance',
+		description: 'Training via QAC and UTLDO for syllabi development and accreditation monitoring.',
+		icon: ShieldCheck
+	},
+	{
+		title: 'Research & Faculty',
+		description:
+			'Incentives for research presentation and faculty development grants (FSD PHP 20,000).',
+		icon: Microscope
+	},
+	{
+		title: 'Infrastructure',
+		description: 'PUP SINTA and Document Tracking System (DTS) for efficient request management.',
+		icon: Server
+	}
+];
+
+export const narrativeReportUrl = 'https://bit.ly/ITL4Area5';
