@@ -76,7 +76,6 @@
 			.org_card,
 			.alumni_portrait_card,
 			.faculty_portrait_card,
-			.aaccup_card,
 			.process_card,
 			.ranking_card,
 			.photo_gallery_card
@@ -100,7 +99,7 @@
 	.assigned_page.teaching_page
 		:is(.enhancement_tab_btn, .explorer_tab_btn, .slide_nav_btn, .dot_indicator),
 	.assigned_page.faculty_page .fmodal_close,
-	.assigned_page.planning_page :is(.priority_item, .sdg_badge, .play_button) {
+	.assigned_page.planning_page .sdg_badge {
 		transition:
 			transform 0.25s var(--motion-ease),
 			background-color 0.25s ease,
@@ -134,7 +133,6 @@
 				.org_card,
 				.alumni_portrait_card,
 				.faculty_portrait_card,
-				.aaccup_card,
 				.process_card,
 				.ranking_card,
 				.photo_gallery_card
@@ -153,11 +151,7 @@
 		.assigned_page.planning_page .process_card:hover .process_icon {
 			transform: translateY(-3px) scale(1.1);
 		}
-		.assigned_page.planning_page .priority_item:hover {
-			transform: translateX(8px);
-		}
 		.assigned_page.planning_page .sdg_badge:hover,
-		.assigned_page.planning_page .video_preview:hover .play_button,
 		.assigned_page.faculty_page .fmodal_close:hover {
 			transform: scale(1.08);
 		}
