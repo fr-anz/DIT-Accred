@@ -1,355 +1,559 @@
-<script>
-	import Card from '#lib/components/Card.svelte';
+<script lang="ts">
+	import { onMount, tick } from 'svelte';
+	import ditSeal from '#lib/assets/dit-seal-gold.svg';
 	import { programObjectives } from '#lib/data/homeData.ts';
+
+	const FOUNDED = 1979;
+	const years = new Date().getFullYear() - FOUNDED;
+
+	const description =
+		'is a four-year degree program which focuses on the study of computer utilization and computer software to plan, install, customize, operate, manage, administer and maintain information technology infrastructure';
+	const words = description.split(' ');
+
+	/* Scroll timeline, as a fraction of the whole section (0 → 1). The scene
+	   pins at 0.2, once the section top reaches the viewport top. */
+	const T = {
+		rise: [0.04, 0.2],
+		titleOut: [0.23, 0.31],
+		move: [0.23, 0.33],
+		descIn: [0.3, 0.34],
+		words: [0.34, 0.5],
+		descOut: [0.53, 0.56],
+		legacyIn: [0.56, 0.59],
+		count: [0.58, 0.69],
+		legacyOut: [0.71, 0.74],
+		objIn: [0.74, 0.77],
+		pillars: [0.79, 0.86, 0.93]
+	};
+
+	/* Each pillar's slice of Pylon-nobg.svg, split along the seams between
+	   pillars. The image itself masks the outer silhouette. */
+	const pillars = [
+		'polygon(0 0, 33.6% 0, 33.6% 14%, 28.6% 100%, 0 100%)',
+		'polygon(33.6% 0, 57.1% 0, 57.1% 100%, 28.6% 100%, 33.6% 14%)',
+		'polygon(57.1% 0, 100% 0, 100% 100%, 57.1% 100%)'
+	];
+	const span = ([a, b]: number[]) => `--a:${a};--d:${b - a}`;
+	const window2 = (enter: number[], exit: number[]) =>
+		`${span(enter)};--xa:${exit[0]};--xd:${exit[1] - exit[0]}`;
+
+	let section: HTMLElement | undefined = $state();
+	let live = $state(false);
+	let count = $state(years);
+
+	onMount(() => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		let target = 0;
+		let current = 0;
+		let frame = 0;
+		const clamp = (v: number) => Math.min(Math.max(v, 0), 1);
+
+		const step = () => {
+			current += (target - current) * 0.16;
+			if (Math.abs(target - current) < 0.0004) current = target;
+			section?.style.setProperty('--p', current.toFixed(4));
+			const [a, b] = T.count;
+			count = Math.round(clamp((current - a) / (b - a)) * years);
+			frame = current === target ? 0 : requestAnimationFrame(step);
+		};
+		const measure = () => {
+			if (!section) return;
+			const rect = section.getBoundingClientRect();
+			target = clamp((window.innerHeight - rect.top) / rect.height);
+			if (!frame) frame = requestAnimationFrame(step);
+		};
+
+		live = true;
+		tick().then(() => {
+			measure();
+			current = target;
+			step();
+		});
+		window.addEventListener('scroll', measure, { passive: true });
+		window.addEventListener('resize', measure, { passive: true });
+		return () => {
+			window.removeEventListener('scroll', measure);
+			window.removeEventListener('resize', measure);
+			if (frame) cancelAnimationFrame(frame);
+		};
+	});
 </script>
 
-<section class="bento-section">
-	<div class="bento-grid">
-		<Card class="bsit-card" variant="maroon" size="md">
-			<h1 class="bsit-title">BSIT</h1>
-			<h2 class="bsit-subtitle">Bachelor of Science in Information Technology</h2>
-			<p class="bsit-desc">
-				The <strong>Bachelor of Science in Information Technology (BSIT)</strong> program is a four-year
-				degree program which focuses on the study of computer utilization and computer software to plan,
-				install, customize, operate, manage, administer and maintain information technology infrastructure
-			</p>
-			<img class="bsit-bg-img" src="/img/PYLON.jpg" alt="PUP Monument" />
-			<img class="bsit-pop-img" src="/img/Pylon-nobg.svg" alt="" aria-hidden="true" />
-		</Card>
+<section class="story" class:is-live={live} bind:this={section} aria-labelledby="bsit-title">
+	<div class="scene">
+		<div class="glow" aria-hidden="true"></div>
 
-		<Card class="years-card" variant="dark" size="md">
-			<div class="years-header">
-				<span class="number">47</span>
-				<span class="text">years</span>
-			</div>
-			<p class="years-desc">
-				of Department's existence.<br />Coding the <strong>PUP Spirit since 1979</strong>
-			</p>
-		</Card>
+		<header class="opening fx" style={window2([-1, 0], T.titleOut)}>
+			<h1 id="bsit-title" class="title">
+				<span class="title-lead">Bachelor of Science in</span>
+				<span class="title-word">Information</span>
+				<span class="title-word">Technology</span>
+			</h1>
+		</header>
 
-		<Card class="objectives-card" variant="gold" size="md">
-			<div class="obj-header">
-				<h2 class="obj-title">Program Educational Objectives</h2>
-				<p class="obj-intro">
-					Within 3-5 years of graduation, Bachelor of Science in Information Technology graduates
-					are expected to:
-				</p>
-			</div>
-			<div class="obj-grid">
-				{#each programObjectives as objective}
-					<Card class="obj-subcard" variant="maroon" size="sm">
-						<span class="obj-num">{objective.number}</span>
-						<h3 class="obj-heading">{objective.title}</h3>
-					</Card>
+		<div class="pylon-rig" style="{span(T.rise)};--ma:{T.move[0]};--md:{T.move[1] - T.move[0]}">
+			<img
+				class="seal fx"
+				src={ditSeal}
+				alt=""
+				aria-hidden="true"
+				style={window2([T.legacyIn[0] - 0.01, T.legacyIn[1] + 0.02], T.objIn)}
+			/>
+			<div class="pylon">
+				<img src="/img/Pylon-nobg.svg" alt="The PUP pylon and its three pillars" />
+				{#each pillars as shape, i (shape)}
+					<span
+						class="pillar-glow fx"
+						style:clip-path={shape}
+						style={span([T.pillars[i], T.pillars[i] + 0.025])}
+						aria-hidden="true"
+					></span>
 				{/each}
 			</div>
-		</Card>
+		</div>
+
+		<div class="panel panel-desc fx" style={window2(T.descIn, T.descOut)}>
+			<p class="manifesto">
+				<span class="lead">
+					The <strong>Bachelor of Science in Information Technology (BSIT)</strong> program
+				</span>
+				{#each words as word, i (i)}
+					<span
+						class="word"
+						style="--wa:{T.words[0] + (i / words.length) * (T.words[1] - T.words[0])}"
+					>
+						{`${word} `}
+					</span>
+				{/each}
+			</p>
+		</div>
+
+		<div class="panel panel-legacy fx" style={window2(T.legacyIn, T.legacyOut)}>
+			<p class="legacy-figure">
+				<span class="legacy-number">{count}</span>
+				<span class="legacy-unit">years</span>
+			</p>
+			<p class="legacy-text">
+				of Department's existence.<br />Coding the <strong>PUP Spirit since {FOUNDED}</strong>
+			</p>
+		</div>
+
+		<div class="panel panel-obj fx" style={span(T.objIn)}>
+			<h2 class="obj-title">Program Educational Objectives</h2>
+			<p class="obj-intro">
+				Within 3-5 years of graduation, Bachelor of Science in Information Technology graduates are
+				expected to:
+			</p>
+			<ol class="obj-list">
+				{#each programObjectives as objective, i (objective.number)}
+					<li class="obj fx" style={span([T.pillars[i], T.pillars[i] + 0.025])}>
+						<span class="obj-number">{objective.number}</span>
+						<h3 class="obj-name">{objective.title}</h3>
+					</li>
+				{/each}
+			</ol>
+		</div>
 	</div>
 </section>
 
 <style>
-	.bento-section {
-		padding: var(--section-space) var(--page-pad);
-		margin-bottom: var(--section-space);
-		display: flex;
-		justify-content: center;
-	}
-
-	.bento-grid {
-		display: grid;
-		grid-template-columns: repeat(12, 1fr);
-		gap: clamp(1rem, 2vw, 1.5rem);
-		max-width: var(--container-max);
-		width: 100%;
-	}
-
-	:global(.bsit-card),
-	:global(.years-card),
-	:global(.objectives-card) {
-		padding: 32px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		box-sizing: border-box;
-	}
-
-	:global(.bsit-card) {
-		grid-column: span 12;
+	.story {
+		--p: 1;
+		--gold: var(--c-gold-light);
 		position: relative;
-		overflow: hidden;
-		min-height: 410px;
-		isolation: isolate;
+		color: #fff;
+		background:
+			radial-gradient(ellipse 70% 55% at 50% 100%, rgba(148, 21, 24, 0.55), transparent 70%),
+			linear-gradient(180deg, #14030a 0%, #2a050b 45%, #3a070d 100%);
 	}
 
-	:global(.bsit-card)::before {
+	/* Film grain. */
+	.story::after {
 		content: '';
 		position: absolute;
 		inset: 0;
+		pointer-events: none;
+		opacity: 0.2;
+		mix-blend-mode: overlay;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+
+	/* Progress helpers. Each .fx element reads the section's --p against its
+	   own window: --a/--d for entering, --xa/--xd for leaving. */
+	.fx {
+		--a: -1;
+		--d: 1;
+		--xa: 2;
+		--xd: 1;
+		--in: clamp(0, (var(--p) - var(--a)) / var(--d), 1);
+		--out: clamp(0, (var(--p) - var(--xa)) / var(--xd), 1);
+		--vis: calc(var(--in) - var(--out));
+	}
+
+	/* ── Static layout: no JavaScript or reduced motion ── */
+
+	.scene {
+		position: relative;
 		z-index: 1;
-		background:
-			linear-gradient(
-				90deg,
-				rgba(148, 21, 24, 0.98) 0%,
-				rgba(148, 21, 24, 0.95) 30%,
-				rgba(148, 21, 24, 0.62) 58%,
-				rgba(148, 21, 24, 0.22) 100%
-			),
-			radial-gradient(circle at 36% 38%, rgba(250, 197, 73, 0.08), transparent 34%),
-			radial-gradient(circle at 86% 12%, rgba(42, 0, 44, 0.28), transparent 48%);
-		pointer-events: none;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(280px, 38%);
+		grid-template-areas:
+			'opening pylon'
+			'desc pylon'
+			'legacy pylon'
+			'obj pylon';
+		column-gap: 4vw;
+		row-gap: clamp(2rem, 5vw, 4rem);
+		max-width: var(--container-max);
+		margin-inline: auto;
+		padding: var(--section-space) var(--page-pad) 0;
+		overflow: hidden;
 	}
 
-	:global(.bsit-card)::after {
-		content: '';
+	.opening {
+		grid-area: opening;
+	}
+	.panel-desc {
+		grid-area: desc;
+	}
+	.panel-legacy {
+		grid-area: legacy;
+	}
+	.panel-obj {
+		grid-area: obj;
+		padding-bottom: var(--section-space);
+	}
+	.pylon-rig {
+		grid-area: pylon;
+		align-self: end;
+	}
+
+	.glow {
 		position: absolute;
-		inset: 0;
-		z-index: 2;
-		background:
-			linear-gradient(
-				90deg,
-				rgba(93, 3, 7, 0.98) 0%,
-				rgba(93, 3, 7, 0.86) 32%,
-				rgba(93, 3, 7, 0.38) 66%,
-				transparent 100%
-			),
-			linear-gradient(180deg, rgba(255, 0, 0, 0.02), rgba(20, 0, 0, 0.12));
-		mix-blend-mode: multiply;
+		inset: auto 0 0;
+		height: 70%;
+		background: radial-gradient(ellipse 40% 60% at 70% 100%, rgba(250, 197, 73, 0.14), transparent);
 		pointer-events: none;
 	}
 
-	:global(.years-card) {
-		grid-column: span 4;
-	}
-
-	:global(.objectives-card) {
-		grid-column: span 8;
-	}
-
-	.bsit-title {
-		font-size: clamp(3.75rem, 9vw, 6.75rem);
-		font-weight: 700;
-		letter-spacing: 0.12em;
+	.title {
 		margin: 0;
-		color: #ffffff;
-		line-height: 0.9;
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.035em;
 	}
 
-	.bsit-subtitle {
-		margin: 0.75rem 0 0 0;
-		font-size: clamp(1.2rem, 2vw, 1.6rem);
+	.title > span {
+		display: block;
+	}
+
+	.title-lead {
+		margin-bottom: 0.4em;
+		font-family: var(--font-heading);
+		font-size: clamp(1.25rem, 2.4vw, 2.25rem);
 		font-style: italic;
-		color: #d6c330;
 		font-weight: 600;
-		letter-spacing: 0.04em;
+		letter-spacing: 0.01em;
+		color: var(--gold);
 	}
 
-	.bsit-desc {
-		font-size: clamp(1rem, 1.35vw, 1.1rem);
-		text-align: left;
-		line-height: 1.24;
-		margin: clamp(3.5rem, 7vw, 4.25rem) 0 0 0;
-		max-width: 60ch;
-		color: #ffffff;
+	.title-word {
+		font-size: clamp(2.75rem, 7vw, 6.25rem);
+		line-height: 0.92;
 	}
 
-	.bsit-bg-img {
-		position: absolute;
-		right: -10%;
-		top: 0;
-		height: 100%;
-		width: 60%;
-		object-fit: cover;
-		object-position: center center;
-		z-index: 0;
-		pointer-events: none;
-		opacity: 1;
-		filter: saturate(1.75) contrast(1.28) brightness(0.98);
-		mix-blend-mode: luminosity;
-		-webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, #000 44%);
-		mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, #000 44%);
+	.manifesto {
+		margin: 0;
+		max-width: 26ch;
+		font-family: var(--font-heading);
+		font-size: clamp(1.4rem, 2.6vw, 2.6rem);
+		font-weight: 600;
+		line-height: 1.22;
+		letter-spacing: -0.005em;
+		text-wrap: pretty;
 	}
 
-	.bsit-pop-img {
-		position: absolute;
-		right: -10%;
-		top: 0;
-		z-index: 2;
-		width: 60%;
-		height: 110%;
-		object-fit: fill;
-		pointer-events: none;
-		opacity: 0;
-		transform: translate3d(0, 18px, 0);
-		transform-origin: 58% 100%;
-		transition:
-			opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
-			transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
-		will-change: transform, opacity;
+	.lead strong {
+		color: var(--gold);
+		font-weight: 700;
 	}
 
-	:global(.bsit-card:hover) .bsit-pop-img {
-		opacity: 1;
-		transform: translate3d(0, -8px, 0);
-	}
-
-	.bsit-title,
-	.bsit-subtitle,
-	.bsit-desc {
-		position: relative;
-		z-index: 3;
-	}
-
-	.years-header {
+	.legacy-figure {
+		margin: 0;
 		display: flex;
 		align-items: baseline;
-		gap: 0.75rem;
-		color: #fac549;
-		margin-bottom: 0.75rem;
+		gap: 0.15em;
+		line-height: 0.78;
 	}
 
-	.years-header .number {
-		font-size: clamp(2.5rem, 5vw, 5rem);
-		font-weight: 700;
-		line-height: 1;
+	.legacy-number {
+		font-family: var(--font-display);
+		font-size: clamp(8rem, 22vw, 20rem);
+		font-weight: 800;
+		letter-spacing: -0.05em;
+		font-variant-numeric: tabular-nums;
+		color: var(--gold);
+		background-image: var(--grad-gold);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
 	}
 
-	.years-header .text {
-		font-size: clamp(1.75rem, 4vw, 3rem);
+	.legacy-unit {
+		font-size: clamp(2rem, 4.5vw, 4rem);
 		font-style: italic;
+		color: var(--gold);
 	}
 
-	.years-desc {
-		font-size: clamp(0.95rem, 1.4vw, 1.125rem);
-		margin: 0;
-		line-height: 1.5;
+	.legacy-text {
+		margin: clamp(1.25rem, 2.5vw, 2rem) 0 0;
+		font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+		line-height: 1.45;
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	.legacy-text strong {
+		color: #fff;
 	}
 
 	.obj-title {
-		font-size: clamp(1.5rem, 2.5vw, 2rem);
+		margin: 0;
+		font-size: clamp(1.6rem, 3vw, 2.75rem);
 		font-weight: 700;
-		color: #000;
-		margin: 0 0 10px 0;
+		line-height: 1.1;
 		text-wrap: balance;
 	}
 
 	.obj-intro {
-		font-size: clamp(0.95rem, 1.4vw, 1.125rem);
-		color: #000;
-		margin: 0 0 1.5rem 0;
+		margin: 0.75rem 0 0;
+		max-width: 44ch;
+		font-size: clamp(0.95rem, 1.25vw, 1.1rem);
 		line-height: 1.55;
+		color: rgba(255, 255, 255, 0.7);
 	}
 
-	.obj-grid {
+	.obj-list {
+		margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+		padding: 0;
+		list-style: none;
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 1.25rem;
+		gap: clamp(0.75rem, 1.6vw, 1.25rem);
 	}
 
-	:global(.obj-subcard) {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: 1.25rem;
-		min-height: 140px;
+	.obj {
+		display: grid;
+		grid-template-columns: 3.2em 1fr;
+		align-items: baseline;
+		font-size: clamp(1.15rem, 2.1vw, 2rem);
 	}
 
-	.obj-num {
-		font-size: 16px;
-		opacity: 0.8;
+	.obj-number {
+		font-family: var(--font-display);
+		font-weight: 800;
+		color: var(--gold);
 	}
 
-	.obj-heading {
-		font-size: clamp(0.95rem, 1.4vw, 1.125rem);
-		font-weight: 700;
-		text-align: right;
+	.obj-name {
 		margin: 0;
-		line-height: 1.3;
-		overflow-wrap: anywhere;
+		font-size: inherit;
+		font-weight: 700;
+		line-height: 1.15;
 	}
 
-	@media (max-width: 1200px) {
-		:global(.bsit-card),
-		:global(.years-card),
-		:global(.objectives-card) {
-			grid-column: span 12;
-		}
-
-		.obj-grid {
-			grid-template-columns: 1fr;
-		}
+	/* The DIT seal rings the monument; its own pylon emblem sits right behind
+	   the real one. Gold-only artwork, so it has no backdrop to hide. */
+	.pylon-rig {
+		position: relative;
 	}
 
-	@media (max-width: 1024px) {
-		.bsit-bg-img {
-			opacity: 0.42;
-			width: 110%;
-			right: -8%;
-		}
-
-		.bsit-pop-img {
-			right: 9%;
-			bottom: 0;
-			width: min(34%, 310px);
-		}
-
-		:global(.bsit-card)::before {
-			background:
-				linear-gradient(
-					90deg,
-					rgba(148, 21, 24, 0.98) 0%,
-					rgba(148, 21, 24, 0.82) 48%,
-					rgba(148, 21, 24, 0.34) 100%
-				),
-				radial-gradient(circle at 72% 24%, rgba(40, 0, 50, 0.32), transparent 42%);
-		}
+	.seal {
+		position: absolute;
+		top: -16%;
+		left: -20%;
+		width: 140%;
+		max-width: none;
+		aspect-ratio: 1;
+		opacity: 0.32;
+		pointer-events: none;
+		user-select: none;
 	}
 
-	@media (max-width: 768px) {
-		.bento-section {
-			padding: 2rem 1rem;
+	.pylon {
+		position: relative;
+		container-type: inline-size;
+	}
+
+	.pylon img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 475.5 / 640.5;
+		filter: drop-shadow(-30px 0 50px rgba(0, 0, 0, 0.45));
+	}
+
+	.pillar-glow {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, #fac549 0%, #e9a52a 55%, #ca8106 100%);
+		mix-blend-mode: multiply;
+		opacity: 0.85;
+		pointer-events: none;
+		-webkit-mask: url('/img/Pylon-nobg.svg') center / 100% 100% no-repeat;
+		mask: url('/img/Pylon-nobg.svg') center / 100% 100% no-repeat;
+	}
+
+	/* ── Live: pinned, scroll-scrubbed scene ── */
+
+	.story.is-live {
+		--p: 0;
+		height: 520svh;
+	}
+
+	.is-live .scene {
+		position: sticky;
+		top: 0;
+		display: block;
+		height: 100svh;
+		max-width: none;
+		padding: 0;
+	}
+
+	.is-live .glow {
+		height: 100%;
+		background: radial-gradient(ellipse 45% 55% at 62% 100%, rgba(250, 197, 73, 0.16), transparent);
+	}
+
+	.is-live .scene {
+		--move-x: 21vw;
+		--rest: 40%;
+	}
+
+	/* Opening: the program name fills the frame and the pylon rises in front of it,
+	   then finishes rising as the name leaves. */
+	.is-live .opening {
+		position: absolute;
+		inset: 11svh 0 auto;
+		text-align: center;
+		opacity: calc(1 - var(--out));
+		translate: 0 calc(var(--out) * -10svh);
+		scale: calc(1 - var(--out) * 0.08);
+	}
+
+	.is-live .title-lead {
+		font-size: clamp(1.25rem, 2.6vw, 2.5rem);
+	}
+
+	.is-live .title-word {
+		font-size: min(12.5vw, 19svh);
+		line-height: 0.88;
+		letter-spacing: -0.045em;
+	}
+
+	.is-live .pylon-rig {
+		--rise: clamp(0, (var(--p) - var(--a)) / var(--d), 1);
+		--m: clamp(0, (var(--p) - var(--ma)) / var(--md), 1);
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		width: min(64svh, 72vw);
+		translate: calc(-50% + var(--m) * var(--move-x))
+			calc((1 - var(--rise)) * 75% + (1 - var(--m)) * var(--rest));
+		scale: calc(1 - var(--m) * 0.1);
+		transform-origin: 50% 100%;
+	}
+
+	.is-live .seal {
+		opacity: calc(var(--in) * (0.55 - var(--out) * 0.3));
+		scale: calc(0.86 + var(--in) * 0.14);
+		rotate: calc((var(--p) - 0.55) * 28deg);
+	}
+
+	.is-live .pillar-glow {
+		opacity: calc(var(--in) * 0.85);
+	}
+
+	.is-live .panel {
+		position: absolute;
+		top: 50%;
+		left: var(--page-pad);
+		width: min(46vw, 640px);
+		opacity: var(--vis);
+		translate: 0 calc(-50% + (1 - var(--in)) * 6svh + var(--out) * -6svh);
+		pointer-events: none;
+	}
+
+	.is-live .word {
+		--lit: clamp(0, (var(--p) - var(--wa)) / 0.012, 1);
+		opacity: calc(0.16 + var(--lit) * 0.84);
+	}
+
+	.is-live .panel-obj {
+		padding-bottom: 0;
+	}
+
+	.is-live .obj {
+		opacity: calc(0.22 + var(--in) * 0.78);
+		translate: calc((1 - var(--in)) * -1rem) 0;
+	}
+
+	.is-live .obj-number {
+		color: color-mix(in srgb, var(--gold) calc(var(--in) * 100%), rgba(255, 255, 255, 0.5));
+	}
+
+	/* ── Narrow / portrait ── */
+
+	@media (max-width: 860px) {
+		.scene {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas: 'opening' 'desc' 'legacy' 'obj' 'pylon';
 		}
 
-		.bsit-subtitle {
-			font-size: 16px;
+		.pylon-rig {
+			justify-self: center;
+			width: min(100%, 380px);
 		}
 
-		.years-header .text {
-			font-size: 28px;
+		.panel-obj {
+			padding-bottom: 0;
 		}
 
-		.years-desc {
-			font-size: 14px;
+		.is-live .scene {
+			--move-x: 0px;
+			--rest: 14%;
 		}
 
-		:global(.bsit-card),
-		:global(.years-card),
-		:global(.objectives-card) {
-			padding: 20px;
+		.is-live .opening {
+			inset: 14svh 0 auto;
 		}
 
-		.bsit-bg-img {
-			display: block;
-			opacity: 0.28;
+		.is-live .pylon-rig {
+			width: min(42svh, 78vw);
+			scale: calc(1 - var(--m) * 0.25);
 		}
 
-		.bsit-pop-img {
-			right: -4%;
-			bottom: 0;
-			width: 62%;
-			transform: translate3d(0, 0, 0);
+		.is-live .panel {
+			top: 11svh;
+			left: var(--page-pad);
+			right: var(--page-pad);
+			width: auto;
+			translate: 0 calc((1 - var(--in)) * 4svh + var(--out) * -4svh);
 		}
 
-		:global(.bsit-card:hover) .bsit-pop-img {
-			opacity: 1;
-			transform: translate3d(0, -8px, 0);
+		.is-live .manifesto {
+			font-size: clamp(1.25rem, 5.4vw, 1.75rem);
 		}
 
-		.bsit-title {
-			font-size: clamp(3rem, 18vw, 5rem);
+		.is-live .legacy-number {
+			font-size: min(40vw, 22svh);
 		}
 
-		.bsit-desc {
-			margin-top: 2.5rem;
+		.is-live .obj {
+			font-size: clamp(1rem, 4.6vw, 1.35rem);
+		}
+
+		.is-live .obj-list {
+			margin-top: 1.25rem;
 		}
 	}
 </style>
