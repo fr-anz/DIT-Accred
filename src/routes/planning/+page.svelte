@@ -12,6 +12,8 @@
 		CheckCircle2
 	} from '@lucide/svelte';
 	import Footer from '#lib/components/footer.svelte';
+	import PdcaSection from '#lib/components/planning/PdcaSection.svelte';
+	import QaPlanSection from '#lib/components/planning/QaPlanSection.svelte';
 	import '#lib/styles/accreditation-pages.css';
 	import '#lib/styles/assigned-page-motion.css';
 	let videoPlaying = $state(false);
@@ -64,7 +66,7 @@
 	<title>Planning & Quality Assurance | DIT-PUP</title>
 	<meta
 		name="description"
-		content="Explore DIT-PUP's Planning and Quality Assurance initiatives, including international benchmarking, AACCUP accreditation, and institutional rankings."
+		content="Explore DIT-PUP's Planning and Quality Assurance initiatives, including the 2025–2028 Quality Assurance Plan, the PDCA improvement cycle, AACCUP accreditation, and institutional rankings."
 	/>
 </svelte:head>
 
@@ -107,6 +109,8 @@
 			</div>
 		</div>
 	</section>
+
+	<QaPlanSection />
 
 	<!-- ─────────────────────────────────────────────
   SECTION 2: UNIVERSITY SUPPORT FUNCTIONS
@@ -231,6 +235,8 @@
 			</div>
 		</div>
 	</section>
+
+	<PdcaSection />
 
 	<!-- ─────────────────────────────────────────────
   SECTION 3: DEPARTMENT-LEVEL PROCESS
@@ -442,7 +448,7 @@
 				</div>
 
 				<!-- AUN-QA Network card -->
-				<div class="ranking_card aunqa_card">
+				<div class="ranking_card aunqa_card" id="aun-qa">
 					<div class="aunqa_header">
 						<Share2 size={18} strokeWidth={1.5} class="aunqa_icon" />
 						<h3 class="aunqa_title">AUN-QA Network</h3>
