@@ -118,13 +118,22 @@ export const implementationCycle = [
 	{ year: 2028, phase: 'Consolidate and sustain' }
 ];
 
+export type DevelopmentPlan = { unit: string; name: string; level: string; url: string };
+
+/* Plan document links are pending; a button stays inert until its url is filled in. */
+export const developmentPlans: DevelopmentPlan[] = [
+	{ unit: 'CCIS', name: 'College Development Plan', level: 'College', url: '' },
+	{ unit: 'DIT', name: 'DIT Development Plan', level: 'Department', url: '' }
+];
+
 export type PdcaStage = {
 	id: 'plan' | 'do' | 'check' | 'act';
 	name: string;
 	question: string;
 	actions: string[];
-	link?: { anchor: string; label: string };
-	evidence?: { src: string; alt: string; caption: string }[];
+	/* `seal` is an optional logo crop shown in the round badge; the link opens `src`. */
+	evidence?: { src: string; alt: string; caption: string; seal?: string }[];
+	plans?: DevelopmentPlan[];
 };
 
 export const pdcaStages: PdcaStage[] = [
@@ -149,7 +158,7 @@ export const pdcaStages: PdcaStage[] = [
 			'Conduct research and extension projects',
 			'Pursue international partnerships and mobility'
 		],
-		link: { anchor: 'dept-process', label: 'See the department process' }
+		plans: developmentPlans
 	},
 	{
 		id: 'check',
@@ -161,7 +170,6 @@ export const pdcaStages: PdcaStage[] = [
 			'Undergo internal audits and accreditation visits',
 			'Gather student and stakeholder feedback'
 		],
-		link: { anchor: 'development-plans', label: 'See the development plans' },
 		evidence: [
 			{
 				src: '/planning/evidence/tuv-iso-9001.webp',
@@ -176,7 +184,8 @@ export const pdcaStages: PdcaStage[] = [
 			{
 				src: '/planning/evidence/picab-accreditation-summary.webp',
 				alt: 'PICAB Summary of Accreditation Actions for the PUP Sta. Mesa BSCS and BSIT programs, 2025–2026 cycle',
-				caption: 'PICAB summary · 2025–26'
+				caption: 'PICAB summary · 2025–26',
+				seal: '/planning/evidence/picab-seal.webp'
 			}
 		]
 	},
@@ -193,7 +202,17 @@ export const pdcaStages: PdcaStage[] = [
 	}
 ];
 
-export const developmentPlans = [
-	{ unit: 'CCIS', name: 'College Development Plan', level: 'College' },
-	{ unit: 'DIT', name: 'DIT Development Plan', level: 'Department' }
+export const isoCertifications = [
+	{
+		standard: '21001',
+		year: '2018',
+		scope: 'Educational Organization Management System',
+		seal: '/planning/evidence/tuv-iso-21001.webp'
+	},
+	{
+		standard: '9001',
+		year: '2015',
+		scope: 'Quality Management System',
+		seal: '/planning/evidence/tuv-iso-9001.webp'
+	}
 ];

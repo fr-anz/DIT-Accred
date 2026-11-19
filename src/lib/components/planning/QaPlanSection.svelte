@@ -265,20 +265,6 @@
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
-	.intro_subtitle {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-		margin: 0 0 clamp(26px, 2.6vw, 50px);
-		color: var(--c-maroon);
-		font: italic 600 clamp(17px, 1.5vw, 29px) / 1.3 var(--font-display);
-	}
-	.intro_subtitle::before {
-		content: '';
-		flex: 0 0 clamp(32px, 3vw, 60px);
-		height: 2px;
-		background: var(--grad-gold);
-	}
 	.intro_lede {
 		max-width: 60ch;
 		margin: 0;
