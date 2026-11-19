@@ -1,688 +1,996 @@
-<script lang="ts">
-	import {
-		ArrowUpRight,
-		BadgeCheck,
-		CalendarDays,
-		ClipboardCheck,
-		FileSearch,
-		FlaskConical,
-		Globe,
-		GraduationCap,
-		Hourglass,
-		MapPin,
-		Mic,
-		Plane,
-		Presentation,
-		Star,
-		TrendingUp,
-		Trophy
-	} from '@lucide/svelte';
-	import { untrack } from 'svelte';
+<script>
+	import { onMount } from 'svelte';
 	import Footer from '#lib/components/footer.svelte';
-	import NetworkMap from '#lib/components/internationalization/NetworkMap.svelte';
-	import { countUp, reveal } from '#lib/actions/motion.ts';
-	import {
-		facultyConferences,
-		facultyResearchers,
-		floodTimeline,
-		home,
-		ifloodsenseTeam,
-		partners,
-		studentPapers,
-		studentTrip,
-		wuriTimeline
-	} from '#lib/data/internationalization.ts';
-	import { narrativeReports } from '#lib/data/reportLinks.ts';
-	import '#lib/styles/accreditation-pages.css';
 
-	const report = narrativeReports.find(({ title }) => title === 'International Linkages');
-	const umpsa = partners.find(({ id }) => id === 'umpsa');
+	import ivote1 from '#lib/assets/community/ivote1.png';
+	import ivote2 from '#lib/assets/community/ivote2.png';
+	import ivote3 from '#lib/assets/community/ivote3.png';
+	import ivote4 from '#lib/assets/community/ivote4.png';
+	import ivote5 from '#lib/assets/community/ivote5.png';
+	import ivote6 from '#lib/assets/community/ivote6.png';
+	import ivote7 from '#lib/assets/community/ivote7.png';
+	import ivote8 from '#lib/assets/community/ivote8.png';
+	import partnerLogos from '#lib/assets/community/partner-logos.png';
 
-	const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	let activeTab = $state(0);
+	let currentImageIndex = $state(0);
+	let showGallery = $state(false);
+	let statusFilter = $state('ALL');
 
-	/* ── WURI scroll story ──
-	   Chapters scroll past a pinned stage; the stage rank counts to the
-	   chapter nearest the middle of the viewport. */
-	const wuriEntries = wuriTimeline.flatMap(({ year, entries }) =>
-		entries.map((entry) => ({ ...entry, year }))
-	);
+	/**
+	 * Scroll-fade action matching the reference motion pattern:
+	 * marks elements pending, then fades & settles them when intersecting.
+	 * @param {HTMLElement} node
+	 * @param {{ threshold?: number }} [options]
+	 */
+	function reveal(node, options = {}) {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			return {};
+		}
+		node.classList.add('reveal-pending');
 
-	const rankParts = (rank: string | null) => {
-		const match = rank?.match(/^(\d+)(\D*)$/);
-		return match ? { value: Number(match[1]), suffix: match[2] } : null;
-	};
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						node.classList.add('is-revealed');
+						observer.unobserve(node);
+					}
+				}
+			},
+			{
+				threshold: options.threshold ?? 0.14,
+				rootMargin: '0px 0px -40px 0px'
+			}
+		);
 
-	let wuriIndex = $state(0);
-	const wuriActive = $derived(wuriEntries[wuriIndex]);
-	const wuriRank = $derived(rankParts(wuriActive.rank));
-	let shownRank = $state(rankParts(wuriEntries[0].rank)?.value ?? 0);
+		observer.observe(node);
 
-	function rankChapters(node: HTMLElement) {
-		let frame = 0;
-		const update = () => {
-			frame = 0;
-			const middle = window.innerHeight / 2;
-			let index = 0;
-			[...node.children].forEach((chapter, i) => {
-				if (chapter.getBoundingClientRect().top <= middle) index = i;
-			});
-			wuriIndex = index;
-		};
-		const schedule = () => {
-			if (!frame) frame = requestAnimationFrame(update);
-		};
-		update();
-		window.addEventListener('scroll', schedule, { passive: true });
-		window.addEventListener('resize', schedule);
 		return {
 			destroy() {
-				cancelAnimationFrame(frame);
-				window.removeEventListener('scroll', schedule);
-				window.removeEventListener('resize', schedule);
+				observer.disconnect();
 			}
 		};
 	}
 
-	$effect(() => {
-		const target = wuriRank?.value;
-		if (target === undefined) return;
-		const from = untrack(() => shownRank);
-		if (prefersReducedMotion() || from === target) {
-			shownRank = target;
-			return;
-		}
-		const start = performance.now();
-		let frame = requestAnimationFrame(function step(now) {
-			const t = Math.min(1, (now - start) / 700);
-			shownRank = Math.round(from + (target - from) * (1 - Math.pow(1 - t, 3)));
-			if (t < 1) frame = requestAnimationFrame(step);
-		});
-		return () => cancelAnimationFrame(frame);
-	});
+	/** @param {HTMLDialogElement} dialog */
+	function openGalleryDialog(dialog) {
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+		dialog.showModal();
 
-	function scrollToEntry(id: string) {
-		document.getElementById(`wuri-${id}`)?.scrollIntoView({
-			behavior: prefersReducedMotion() ? 'instant' : 'smooth',
-			block: 'center'
-		});
+		return {
+			destroy() {
+				document.body.style.overflow = previousOverflow;
+			}
+		};
 	}
 
-	/* ── Partners ── */
-	let selectedPartner = $state(partners[0].id);
-
-	/* ── Flood timeline: the last dated stop is where the solid river ends ── */
-	const lastDoneStop = floodTimeline.findLastIndex((stop) => stop.datetime);
-
-	/* ── Faculty ── */
-	const tallestYear = Math.max(
-		...facultyConferences.map((y) => y.events.length + (y.award ? 1 : 0))
-	);
-	const conferenceCount = facultyConferences.reduce((sum, y) => sum + y.events.length, 0);
-
-	const facultyRoles = [
+	const communityChapters = [
 		{
-			title: 'Technical committee',
-			note: 'Shaping the programs of international conferences.',
-			Icon: ClipboardCheck
+			number: '01',
+			era: '2018',
+			title: 'Philippine Heart Center Multi-Purpose Cooperative',
+			partner: 'PHC MPC Members & Officers',
+			summary:
+				'BSIT faculty and student technical teams configured, tested, and deployed iVOTE++ on-site for the 2018 PHC Multi-Purpose Cooperative election—replacing manual ballot counting with verified digital tallying.',
+			image: ivote5,
+			caption:
+				'Figure 38. Implementation of iVOTE++ during the election of Philippine Heart Center Multi-Purpose Cooperative in 2018'
 		},
 		{
-			title: 'Paper reviewer',
-			note: 'Reviewing papers submitted to international conferences.',
-			Icon: FileSearch
+			number: '02',
+			era: '2019 · NOVOTEL',
+			title: 'NuSEPHC & PACSSM General Elections',
+			partner:
+				'Nursing Service Employees of PHC & Philippine Association of Central Services and Sterilization Management',
+			summary:
+				'Scaled iVOTE++ operations at Novotel for two major healthcare professional assemblies, complete with student-manned on-site registration booths, voter verification desks, and real-time election support.',
+			image: ivote7,
+			caption:
+				'Implementation of iVOTE++ during the 2019 elections of NuSEPHC and PACSSM at Novotel'
 		},
-		{ title: 'Session chair', note: 'Chairing a session at ICFET 2026.', Icon: Mic }
+		{
+			number: '03',
+			era: 'INSTITUTIONAL',
+			title: 'PUP Multi-Purpose Cooperative & PUP Provident Fund',
+			partner: 'PUP MPC & PUP Provident Fund Members across Campuses',
+			summary:
+				'Expanded iVOTE++ to support simultaneous on-site and remote online voting, enabling members across different PUP branches outside the Main Campus to participate securely alongside hands-on voter orientation.',
+			image: ivote1,
+			caption:
+				'Implementation of iVOTE++ during the elections of PUP Provident Fund and PUP Multi-Purpose Cooperative'
+		},
+		{
+			number: '04',
+			era: '2022–2025',
+			title: 'Mandaluyong City, CUMC & Responsible AI Literacy',
+			partner: 'CUMC • DTI Negosyo Center Mandaluyong • MIPO',
+			summary:
+				'Formalized via a Memorandum of Agreement with CUMC and extended on August 19, 2025 with DTI Negosyo Center Mandaluyong and MIPO—delivering presentation software training, an ongoing e-commerce seminar series, and Responsible AI prompt engineering workshops.',
+			image: ivote2,
+			caption: 'CCIS Extension Project in cooperation with DTI Negosyo Center Mandaluyong & CUMC'
+		},
+		{
+			number: '05',
+			era: '2026–2028',
+			title: 'Claro M. Recto High School Examination Management System',
+			partner: 'Claro M. Recto High School Faculty & Students',
+			summary:
+				'Transitions department research into a multi-year production platform automating test preparation, grade logging, and academic assessments—governed by Monitoring, Evaluation, Accountability, and Learning (MEAL) protocols.',
+			image: ivote4,
+			caption:
+				'Multi-phase software rollout, user training, and continuous system optimization (2026–2028)'
+		}
 	];
 
-	/* ── Photos ── */
-	type Photo = { src: string; alt: string; caption: string; width: number; height: number };
-
-	const photos = {
-		binusSigning: {
-			src: '/internationalization/binus-signing.webp',
-			alt: 'Representatives signing the agreement for IICTC 2022',
-			caption: 'PUP and BINUS sign the agreement to co-host IICTC 2022',
-			width: 450,
-			height: 450
+	const profiles = [
+		{
+			tabLabel: 'DIGITAL LITERACY',
+			title: 'DIGITAL LITERACY AND ETHICAL TECHNOLOGY USE (RESPONSIBLE AI ONBOARDING)',
+			partner:
+				'PARTNER: INVESTMENT PROMOTION OFFICE – NEGOSYO CENTER OF MANDALUYONG CITY (AUGUST 19, 2025)',
+			challenge:
+				'Responding directly to emerging corporate concerns regarding generative AI misuse, lack of data privacy, and missing digital ethics parameters among local entrepreneurs and MSMEs.',
+			content:
+				'Conducted on August 19, 2025 in cooperation with the City Government of Mandaluyong, DTI Negosyo Center Mandaluyong, and Mandaluyong Investment Promotion Office (MIPO). Facilitated a complete extension cycle from planning to assessment—covering responsible AI principles (transparency, fairness, privacy, and human oversight) plus hands-on prompt engineering labs, backed by evaluation tools, attendance records, photo documentation, and certificates of recognition with high participant satisfaction ratings.',
+			showPartnerStrip: true,
+			photos: [
+				{
+					src: ivote1,
+					caption: 'Facilitator & participant briefing during the digital literacy extension session'
+				},
+				{
+					src: ivote3,
+					caption: 'Hands-on computer lab guidance and digital ethics walkthrough'
+				}
+			]
 		},
-		binusAgreement: {
-			src: '/internationalization/binus-agreement.webp',
-			alt: 'Representatives holding the signed agreement',
-			caption: 'The signed PUP and BINUS agreement',
-			width: 450,
-			height: 448
+		{
+			tabLabel: 'ECONOMIC EMPOWERMENT',
+			title:
+				'DIGITAL ECONOMIC EMPOWERMENT TRACK (E-COMMERCE, DIGITAL MARKETING & PRESENTATION LITERACY)',
+			partner:
+				'PARTNER: COOPERATIVE UNION OF MANDALUYONG CITY (CUMC) — FORMAL MOA PARTNERSHIP',
+			challenge:
+				'Improving productivity, widening market reach, and ensuring the business sustainability of small local distributors, cooperative officers, and micro and small enterprise (MSE) owners.',
+			content:
+				'Anchored on a formal Memorandum of Agreement between PUP (represented by VP for Research, Extension, Planning and Development Dr. Anna Ruby P. Gapasin) and CUMC (represented by Chairperson Mr. Ernesto E. Victorino, witnessed by CCIS Dean Dr. Benilda Eleonor V. Comendador and EMO Chief Dr. Henry R. Prudente). Combines completed Computer Literacy on Presentation Software with the ongoing E-Commerce Awareness, Skills, and Readiness Seminar Series that maps skill gaps and builds actionable digital marketing plans.',
+			showPartnerStrip: true,
+			photos: [
+				{
+					src: ivote2,
+					caption: 'One-on-one technical guidance during enterprise digital readiness training'
+				},
+				{
+					src: ivote6,
+					caption: 'Collaborative orientation and systems walkthrough with cooperative members'
+				}
+			]
 		},
-		meeting: {
-			src: '/internationalization/ifloodsense-meeting.webp',
-			alt: 'PUP and UMPSA researchers gathered on a video call',
-			caption: 'IfloodSense proposal meeting with UMPSA, July 28, 2026',
-			width: 448,
-			height: 201
-		},
-		demo: {
-			src: '/internationalization/flood-alert-demo.webp',
-			alt: 'A flood-alert map demonstrated on a phone during the meeting',
-			caption: 'The flood-alert map demonstrated during the meeting',
-			width: 257,
-			height: 142
-		},
-		icfet: {
-			src: '/internationalization/icfet-2026.webp',
-			alt: 'A faculty member presenting research at ICFET 2026',
-			caption: 'Research presentation at ICFET 2026',
-			width: 912,
-			height: 409
-		},
-		jeju: {
-			src: '/internationalization/wcse-2025-jeju.webp',
-			alt: 'PUP BSIT student presenters and their CCIS advisers at WCSE 2025',
-			caption: 'PUP BSIT presenters and CCIS advisers at WCSE 2025 in Jeju Island',
-			width: 723,
-			height: 407
-		},
-		risk: {
-			src: '/internationalization/wcse-risk-classifier.webp',
-			alt: 'Presenters pictured in front of the slide for Risk Statement Classifier Using BERT and DistilBERT',
-			caption: 'Risk Statement Classifier Using BERT and DistilBERT',
-			width: 450,
-			height: 255
-		},
-		yolo: {
-			src: '/internationalization/wcse-object-detection.webp',
-			alt: 'Presenters pictured in front of the slide for the YOLO object detection paper',
-			caption: 'Object Detection in Computer Laboratory Setting Utilizing YOLO Model',
-			width: 450,
-			height: 256
+		{
+			tabLabel: 'SOLUTION ENGINEERING',
+			title:
+				'HIGH-MATURITY SOLUTION ENGINEERING (CLARO M. RECTO HIGH SCHOOL EXAMINATION MANAGEMENT SYSTEM)',
+			partner: 'PARTNER: CLARO M. RECTO HIGH SCHOOL ADMINISTRATION (2026–2028)',
+			challenge:
+				'Eliminating administrative inefficiencies regarding paper-based test preparation, grade logs, and data assessments for faculty members and students.',
+			content:
+				'Scheduled for active deployment from 2026 through 2028, this initiative marks a high level of extension maturity by transforming core department research outputs into a deployable software platform. The project features a structured, multi-phase rollout covering software installation, user training, system enhancements, and long-term impact analysis with embedded MEAL mechanisms.',
+			showPartnerStrip: false,
+			photos: [
+				{
+					src: ivote4,
+					caption: 'System walk-through and hands-on workflow testing for end users'
+				},
+				{
+					src: ivote8,
+					caption: 'Field coordination and deployment support team documentation'
+				}
+			]
 		}
-	} satisfies Record<string, Photo>;
+	];
 
-	/* Papers with a presentation photo show it as a hover preview. */
-	const paperPhotos: Record<string, Photo> = {
-		'Risk Statement Classifier Using BERT and DistilBERT': photos.risk,
-		'Object Detection in Computer Laboratory Setting Utilizing YOLO Model': photos.yolo
-	};
+	const initiatives = [
+		{
+			no: 1,
+			name: 'Computer Literacy on Presentation Software for Cooperative Union of Mandaluyong City',
+			partner: 'Cooperative Union of Mandaluyong City (CUMC)',
+			beneficiaries:
+				'Micro and small enterprise owners of Mandaluyong; Cooperative officers and staff; Local entrepreneurs affiliated with the cooperative',
+			status: 'Completed',
+			docUrl: 'https://tinyurl.com/3d8yr5k7',
+			docLabel: 'View Doc'
+		},
+		{
+			no: 2,
+			name: 'Computer Literacy on the Responsible Use of Artificial Intelligence',
+			partner: 'Investment Promotion Office – Negosyo Center, City of Mandaluyong',
+			beneficiaries: 'Members of the Negosyo Center',
+			status: 'Completed',
+			docUrl: 'https://tinyurl.com/2jhstwr3',
+			docLabel: 'View Doc'
+		},
+		{
+			no: 3,
+			name:
+				'Empowering Micro and Small Enterprises of Mandaluyong in the Digital Age: E-Commerce Awareness, Skills, and Readiness Seminar Series',
+			partner: 'Cooperative Union of Mandaluyong City (CUMC)',
+			beneficiaries:
+				'Micro and small enterprise owners of Mandaluyong; Cooperative officers and staff; Local entrepreneurs affiliated with the cooperative',
+			status: 'Ongoing',
+			docUrl: 'https://tinyurl.com/mrym5bzt',
+			docLabel: 'View Doc'
+		},
+		{
+			no: 4,
+			name: 'Examination Management System',
+			partner: 'Claro M. Recto High School',
+			beneficiaries: 'Faculty Members; Students',
+			status: 'Ongoing',
+			docUrl: 'https://tinyurl.com/3dh6m6ah',
+			docLabel: 'View Doc'
+		},
+		{
+			no: 5,
+			name: 'Implementation of iVOTE++ in PUP Provident Fund Election',
+			partner: 'PUP Provident Fund',
+			beneficiaries: 'Provident Fund Members and Officers',
+			status: 'Completed',
+			docUrl: 'https://tinyurl.com/f963p9d7',
+			docLabel: 'View Doc'
+		},
+		{
+			no: 6,
+			name: 'Implementation of iVOTE++ in PUP Multi-Purpose Cooperative Election',
+			partner: 'PUP Multi-Purpose Cooperative',
+			beneficiaries: 'PUP MPC Members and Officers',
+			status: 'Completed',
+			docUrl: 'https://tinyurl.com/f963p9d7',
+			docLabel: 'View Doc'
+		},
+		{
+			no: 7,
+			name:
+				'Implementation of iVOTE++ in Philippine Heart Center Multi-Purpose Cooperative Election',
+			partner: 'Philippine Heart Center Multi-Purpose Cooperative (2018)',
+			beneficiaries: 'PHC MPC Members and Officers',
+			status: 'Completed',
+			docUrl: '',
+			docLabel: 'Figure 38 Archive'
+		},
+		{
+			no: 8,
+			name:
+				'Implementation of iVOTE++ in Nursing Service Employees of the Philippine Heart Center Election',
+			partner: 'Nursing Service Employees of the Philippine Heart Center (2019, Novotel)',
+			beneficiaries: 'NuSEPHC Members and Officers',
+			status: 'Completed',
+			docUrl: '',
+			docLabel: 'Novotel 2019 Archive'
+		},
+		{
+			no: 9,
+			name:
+				'Implementation of iVOTE++ in Philippine Association of Central Services and Sterilization Management Election',
+			partner:
+				'Philippine Association of Central Services and Sterilization Management (2019, Novotel)',
+			beneficiaries: 'PACSSM Members and Officers',
+			status: 'Completed',
+			docUrl: '',
+			docLabel: 'Novotel 2019 Archive'
+		}
+	];
+
+	const filteredInitiatives = $derived(
+		statusFilter === 'ALL'
+			? initiatives
+			: initiatives.filter((item) => item.status.toUpperCase() === statusFilter)
+	);
+
+	const archiveSlides = [
+		{
+			src: ivote1,
+			caption: 'PUP Provident Fund General Assembly & Election'
+		},
+		{
+			src: ivote2,
+			caption: 'On-Site Voter Orientation & System Verification (PUP)'
+		},
+		{
+			src: ivote3,
+			caption: 'PUP Multi-Purpose Cooperative Hybrid Election Session'
+		},
+		{
+			src: ivote4,
+			caption: 'Student Technical Facilitator Assisting Cooperative Voter'
+		},
+		{
+			src: ivote5,
+			caption: '2018 Philippine Heart Center Multi-Purpose Cooperative Election Team'
+		},
+		{
+			src: ivote6,
+			caption: '2018 PHC Multi-Purpose Cooperative Live Voting Operations'
+		},
+		{
+			src: ivote7,
+			caption: '2019 NuSEPHC Election Deployment at Novotel'
+		},
+		{
+			src: ivote8,
+			caption: '2019 PACSSM On-Site Registration & Voting Operations at Novotel'
+		}
+	];
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			currentImageIndex = (currentImageIndex + 1) % archiveSlides.length;
+		}, 4000);
+		return () => clearInterval(interval);
+	});
 </script>
 
-<svelte:head>
-	<title>Internationalization | DIT-PUP</title>
-	<meta
-		name="description"
-		content="Explore PUP BSIT’s international accreditation, university partnerships, and faculty and student research across borders."
-	/>
-</svelte:head>
-
-{#snippet sectionHeading(id: string, title: string, Icon: typeof Globe)}
-	<div class="section_label">
-		<Icon size={26} strokeWidth={1.5} class="section_icon" aria-hidden="true" />
-		<h2 {id} class="t_eyebrow">{title}</h2>
-	</div>
-	<hr class="section_divider" />
-{/snippet}
-
-{#snippet photoButton(photo: Photo, className = '')}
-	<span class="photo_button {className}">
-		<img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" />
-	</span>
-{/snippet}
-
-<main class="assigned_page intl_page">
-	<section class="hero-section">
+<main class="community_page">
+	<!-- ─────────────────────────────────────────────
+  HERO SECTION (ORIGINAL — UNCHANGED)
+───────────────────────────────────────────── -->
+	<section class="community-hero">
 		<div class="hero-bg"></div>
-		<h1 class="t_display hero-title">INTERNATIONALIZATION</h1>
+		<h1 class="t_display hero-title">COMMUNITY</h1>
 	</section>
 
-	<!-- ══ 1. Recognition: photo cover, pathway and a ruled scoreboard ══ -->
-	<section id="recognition" class="content_section" aria-labelledby="recognition-title">
-		{@render sectionHeading(
-			'recognition-title',
-			'International Recognition & Quality Assurance',
-			BadgeCheck
-		)}
+	<!-- ─────────────────────────────────────────────
+  STRATEGIC AGENDA & OPEN SCOREBOARD BELOW
+───────────────────────────────────────────── -->
+	<section id="community-extension-agenda" class="strategic-agenda">
+		<header class="agenda-header">
+			<div class="accent-square"></div>
+			<h2 class="t_eyebrow">COMMUNITY EXTENSION POLICY AND STRATEGIC AGENDA</h2>
+		</header>
 
-		<figure class="cover" use:reveal>
-			<div class="seal" aria-hidden="true">
-				<svg viewBox="0 0 120 120">
-					<defs>
-						<path id="seal-ring" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0" />
-					</defs>
-					<text textLength="268" lengthAdjust="spacing">
-						<textPath href="#seal-ring">PICAB-CAC CERTIFIED JULY 2026</textPath>
-					</text>
-				</svg>
-				<span><BadgeCheck size={34} strokeWidth={1.6} /></span>
-			</div>
-			<img
-				src="/teaching-learning/area2/picab-visit.jpg"
-				alt="PUP faculty and staff with the computing accreditation team during the PICAB visit"
-				width="1400"
-				height="596"
-				loading="lazy"
-			/>
-			<figcaption class="cover_copy">
-				<h3 class="cover_title">PUP’s first international program accreditation</h3>
+		<div class="agenda-content-grid">
+			<div class="agenda-panel panel-red" use:reveal style:--d="0">
+				<h3>SOCIAL STANCE &amp; SERVICE ORIENTATION</h3>
+				<hr class="accent-line" />
 				<p>
-					In <time datetime="2026-07">July 2026</time>, PICAB-CAC certified BSIT and BSCS.
+					The Bachelor of Science in Information Technology (BSIT) program demonstrates a sustained
+					and well-documented commitment to community development. Through technology-driven
+					extension initiatives, the department applies its information technology expertise to
+					promote digital inclusion, capacity building, and organizational modernization across
+					local government units, cooperatives, public schools, and community-based organizations.
 				</p>
-			</figcaption>
-		</figure>
+			</div>
 
-		<ol class="pathway" aria-label="From program to international accord" use:reveal>
-			<li style:--d="0">
-				<strong>BSIT</strong>
-				<span>PUP’s Bachelor of Science in Information Technology</span>
-			</li>
-			<li style:--d="1">
-				<strong>PICAB-CAC</strong>
-				<span>Certified the program in July 2026</span>
-			</li>
-			<li style:--d="2">
-				<strong>Seoul Accord</strong>
-				<span>PICAB is a provisional signatory</span>
-			</li>
-		</ol>
+			<div class="agenda-panel panel-gold" use:reveal style:--d="1">
+				<h3>EXPERIENTIAL LEARNING INTEGRATION</h3>
+				<hr class="accent-line" />
+				<p>
+					Extension projects consistently exhibit strong faculty leadership, interdisciplinary
+					collaboration, and active student involvement—linking community service with academic
+					expertise and instructional objectives. Faculty members serve as project leaders,
+					trainers, system developers, and evaluators, while IT students participate as
+					facilitators, moderators, and technical assistants.
+				</p>
+			</div>
+		</div>
 
-		<div class="scoreboard">
-			<div class="score" use:reveal style:--d="0">
-				<p class="score_value">
-					<span use:countUp={{ from: 271, to: 250, duration: 1800 }}>250</span><small>of 400</small>
-				</p>
-				<h3 class="score_title">WURI 2025 global ranking</h3>
-				<p class="score_note">
-					<TrendingUp size={16} aria-hidden="true" /> Up 21 places from 271st in 2024
-				</p>
-				<div class="ruler" role="img" aria-label="Ranked 271st in 2024 and 250th in 2025">
-					<div class="ruler_track">
-						{#each Array.from({ length: 9 }, (_, i) => 280 - i * 5) as tickValue (tickValue)}
-							<span
-								class="ruler_tick"
-								class:major={tickValue % 10 === 0}
-								style:--p={(280 - tickValue) / 40}
-							>
-								{#if tickValue % 10 === 0}<em>{tickValue}</em>{/if}
-							</span>
-						{/each}
-						<span class="ruler_ghost" style:--p={(280 - 271) / 40}><b>2024</b></span>
-						<span class="ruler_trail" style:--from={(280 - 271) / 40} style:--to={(280 - 250) / 40}
-						></span>
-						<span
-							class="ruler_marker"
-							style:--from={(280 - 271) / 40}
-							style:--to={(280 - 250) / 40}
-						>
-							<b>2025</b>
-						</span>
+		<!-- OPEN EDITORIAL SCOREBOARD BELOW THE TWO COLUMNS -->
+		<div class="editorial-scoreboard-band" use:reveal>
+			<div class="scoreboard_grid">
+				<div class="score_col" style:--d="0">
+					<p class="score_num">9<small>initiatives</small></p>
+					<h3 class="score_label">Documented Extension Portfolio</h3>
+					<p class="score_sub">2018–2028 span across LGUs, cooperatives, and schools</p>
+				</div>
+
+				<div class="score_col" style:--d="1">
+					<p class="score_num">7<small>of 9 done</small></p>
+					<h3 class="score_label">Implementation Progress</h3>
+					<div class="progress_rule" aria-hidden="true">
+						<div class="progress_fill" style="width: 77.78%;"></div>
 					</div>
+					<p class="score_sub">7 completed · 2 active (2026–2028)</p>
+				</div>
+
+				<div class="score_col" style:--d="2">
+					<p class="score_num">5<small>elections</small></p>
+					<h3 class="score_label">iVOTE++ Digital Governance</h3>
+					<p class="score_sub">PHC • Novotel (NuSEPHC &amp; PACSSM) • PUP MPC &amp; Provident</p>
 				</div>
 			</div>
 
-			<div class="score qs_score" use:reveal style:--d="1">
-				<p class="score_value">3<small>Stars</small></p>
-				<h3 class="score_title">QS Stars 2025</h3>
-				<p class="score_note">Computer and Information Systems</p>
-				<p class="qs_stars" aria-hidden="true">
-					{#each [0, 1, 2, 3, 4] as star (star)}
-						<span class:lit={star < 3} style:--s={star}><Star size={30} strokeWidth={1.4} /></span>
-					{/each}
-				</p>
-			</div>
-
-			<div class="score" use:reveal style:--d="2">
-				<p class="score_value">
-					<span use:countUp={{ to: 15 }}>15</span><small>th</small>
-				</p>
-				<h3 class="score_title">EduRank 2025</h3>
-				<p class="score_note">Computer Science in the Philippines</p>
-			</div>
-		</div>
-
-		<p class="score_footnote" use:reveal>
-			PUP also takes part in the <strong>THE Impact Rankings</strong> and in
-			<strong>AUN-QA</strong> regional quality assurance.
-		</p>
-	</section>
-
-	<!-- ══ 2. WURI: pinned rank, scrolling chapters ══ -->
-	<section id="wuri-innovation" class="content_section" aria-labelledby="innovation-title">
-		{@render sectionHeading('innovation-title', 'WURI Innovation Entries', TrendingUp)}
-
-		<div class="rank_story">
-			<div class="rank_stage">
-				<div class="rank_now" aria-hidden="true">
-					{#if wuriRank}
-						<p class="rank_value">{shownRank}<sup>{wuriRank.suffix}</sup></p>
-						<p class="rank_caption">Global rank in its category, WURI {wuriActive.year}</p>
-					{:else}
-						<p class="rank_value rank_pending"><Hourglass strokeWidth={1.1} /></p>
-						<p class="rank_caption">Endorsed to WURI {wuriActive.year}, awaiting results</p>
-					{/if}
-				</div>
-
-				<ol class="rank_ladder" style:--active={wuriIndex} style:--count={wuriEntries.length}>
-					<span class="ladder_marker" aria-hidden="true"></span>
-					{#each wuriEntries as entry, i (entry.id)}
-						<li>
-							<button
-								type="button"
-								class:current={i === wuriIndex}
-								aria-current={i === wuriIndex ? 'step' : undefined}
-								onclick={() => scrollToEntry(entry.id)}
-							>
-								<span class="ladder_year">{entry.year}</span>
-								<span class="ladder_name">{entry.project}</span>
-								<span class="ladder_rank">{entry.rank ?? 'Pending'}</span>
-							</button>
-						</li>
-					{/each}
-				</ol>
-			</div>
-
-			<ol class="rank_chapters" use:rankChapters>
-				{#each wuriEntries as entry, i (entry.id)}
-					<li class="rank_chapter" class:active={i === wuriIndex} id="wuri-{entry.id}">
-						<p class="chapter_rank">
-							{#if entry.rank}{entry.rank} globally{:else}Awaiting results{/if}
-						</p>
-						<h3 class="chapter_title">{entry.project}</h3>
-						<p class="chapter_category">{entry.category}, WURI {entry.year}</p>
-						<p class="chapter_desc">{entry.description}</p>
-						{#if entry.featured}
-							<p class="chapter_flag">
-								<Star size={16} aria-hidden="true" /> DIT’s first WURI ranking
-							</p>
-						{/if}
-					</li>
-				{/each}
-			</ol>
-		</div>
-	</section>
-
-	<!-- ══ 3. Partners: map spread with a typographic index ══ -->
-	<section id="partners" class="content_section" aria-labelledby="partners-title">
-		{@render sectionHeading('partners-title', 'Partner Institutions', Globe)}
-
-		<div class="network" use:reveal={{ threshold: 0.2 }}>
-			<div class="network_map_wrap">
-				<NetworkMap {partners} {home} trip={studentTrip} bind:selected={selectedPartner} />
-			</div>
-
-			<div class="network_index">
-				<h3 class="block_title">Four institutions in three countries</h3>
-				<ol class="partner_index">
-					{#each partners as partner (partner.id)}
-						{@const open = selectedPartner === partner.id}
-						<li class:open>
-							<button
-								type="button"
-								aria-expanded={open}
-								aria-controls="partner-{partner.id}"
-								onclick={() => (selectedPartner = partner.id)}
-							>
-								<span class="partner_short" aria-hidden="true">{partner.short}</span>
-								<span class="partner_meta">
-									<span class="partner_name">{partner.name}</span>
-									<span class="partner_place">
-										<MapPin size={14} aria-hidden="true" />
-										{partner.place}, {partner.country}
-									</span>
-								</span>
-								<span class="partner_logo"><img src={partner.logo} alt="" loading="lazy" /></span>
-							</button>
-							<div class="partner_detail" id="partner-{partner.id}" inert={!open}>
-								<div>
-									<p>{partner.description}</p>
-									{#if partner.id === 'binus'}
-										<div class="partner_photos">
-											{@render photoButton(photos.binusSigning)}
-											{@render photoButton(photos.binusAgreement)}
-										</div>
-									{/if}
-								</div>
-							</div>
-						</li>
-					{/each}
-				</ol>
-			</div>
-		</div>
-	</section>
-
-	<!-- ══ 4. Joint research: feature story and a river timeline ══ -->
-	<section id="joint-research" class="content_section" aria-labelledby="research-title">
-		{@render sectionHeading('research-title', 'Joint Research with UMPSA', FlaskConical)}
-
-		<article class="feature_story">
-			<figure class="story_collage" use:reveal>
-				{@render photoButton(photos.meeting, 'collage_main')}
-				{@render photoButton(photos.demo, 'collage_inset')}
-				<figcaption>Proposal meeting with UMPSA, July 28, 2026</figcaption>
-			</figure>
-			<div class="story_body" use:reveal style:--d="1">
-				<h3 class="story_title">IfloodSense</h3>
-				<p class="story_lead">
-					An international research project building on FloodDetectWaze, PUP’s flood-alert app.
-				</p>
-				<p class="story_text">
-					Three BSIT students are developing the project with UMPSA. Prof. Ma. Leonila Amata also
-					contributes to UMPSA’s study on probabilistic flood-risk classification.
-				</p>
-				{#if umpsa}
-					<p class="story_partner">
-						<span class="story_partner_logo"><img src={umpsa.logo} alt="" loading="lazy" /></span>
-						In partnership with {umpsa.name}
-					</p>
-				{/if}
-				<ul class="people" aria-label="IfloodSense team">
-					{#each ifloodsenseTeam as member (member.name)}
-						<li>
-							<span class="people_name">{member.name}</span>
-							<span class="people_role">{member.role}</span>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		</article>
-
-		<h3 class="block_title" use:reveal>From Floodwatcher to IfloodSense</h3>
-		<div class="river" use:reveal={{ threshold: 0.3 }} style:--stops={floodTimeline.length}>
-			<svg class="river_line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
-				<path
-					class="river_done"
-					d="M0 60 L100 60 C166 10 233 10 300 60 C366 110 433 110 500 60 C566 10 633 10 700 60"
-					pathLength="1"
-				/>
-				<path
-					class="river_flow"
-					d="M0 60 L100 60 C166 10 233 10 300 60 C366 110 433 110 500 60 C566 10 633 10 700 60"
-					pathLength="1"
-				/>
-				<path class="river_next" d="M700 60 C766 110 833 110 900 60 L1000 60" />
-			</svg>
-			<ol class="river_stops">
-				{#each floodTimeline as stop, i (stop.title)}
-					<li
-						class:below={i % 2 === 1}
-						class:next={!stop.datetime}
-						class:current={i === lastDoneStop}
-						style:--i={i}
-					>
-						<span class="stop_dot" aria-hidden="true"></span>
-						<div class="stop_text">
-							{#if stop.datetime}
-								<time datetime={stop.datetime}>{stop.date}</time>
-							{:else}
-								<span class="stop_date">{stop.date}</span>
-							{/if}
-							<h4>{stop.title}</h4>
-							<p>{stop.detail}</p>
-						</div>
-					</li>
-				{/each}
-			</ol>
-		</div>
-	</section>
-
-	<!-- ══ 5. Faculty: banner, roles strip, credits and conference skyline ══ -->
-	<section id="faculty-engagement" class="content_section" aria-labelledby="faculty-title">
-		{@render sectionHeading('faculty-title', 'International Faculty Engagement', Presentation)}
-
-		<figure class="banner" use:reveal>
-			{@render photoButton(photos.icfet, 'banner_photo')}
-			<figcaption>Research presentation at ICFET 2026</figcaption>
-		</figure>
-
-		<ul class="role_strip" aria-label="Conference roles" use:reveal>
-			{#each facultyRoles as role, i (role.title)}
-				<li style:--d={i}>
-					<role.Icon size={30} strokeWidth={1.4} aria-hidden="true" />
-					<h3>{role.title}</h3>
-					<p>{role.note}</p>
+			<ol class="moa_strip" aria-label="Institutional partnership milestones">
+				<li style:--d="0">
+					<strong>CUMC MOA</strong>
+					<span>Formal partnership with Cooperative Union of Mandaluyong City</span>
 				</li>
-			{/each}
-		</ul>
+				<li style:--d="1">
+					<strong>Mandaluyong · DTI · MIPO</strong>
+					<span>Digital literacy, e-commerce &amp; Responsible AI onboarding</span>
+				</li>
+				<li style:--d="2">
+					<strong>MEAL Rollout</strong>
+					<span>Multi-year examination system deployment (2026–2028)</span>
+				</li>
+			</ol>
+		</div>
 
-		<div class="faculty_split">
-			<div class="credits" use:reveal>
-				<h3 class="block_title">Faculty with international research</h3>
-				<ul>
-					{#each facultyResearchers as researcher, i (researcher)}
-						<li style:--d={i}>
-							<span class="credit_name">{researcher}</span>
-						</li>
-					{/each}
-				</ul>
-			</div>
-
-			<div class="conferences" use:reveal={{ threshold: 0.3 }}>
-				<h3 class="block_title">Conference participation</h3>
-				<p class="conference_total">
-					<span use:countUp={{ to: conferenceCount }}>{conferenceCount}</span>
-					<small>international conferences from 2023 to 2026</small>
+		<div class="maturity-framework">
+			<div class="framework-header" use:reveal>
+				<h2 class="t_eyebrow">EVOLUTION OF EXTENSION MATURITY FRAMEWORK</h2>
+				<hr class="framework-divider" />
+				<p class="framework-description">
+					The department’s extension agenda operates as a strategic, needs-driven, and
+					technology-enabled cycle. The program has systematically transitioned away from episodic
+					awareness campaigns toward highly scalable, sustainable ICT interventions divided into
+					three core pillars—each backed by needs assessments, attendance logs, evaluation tools,
+					and certificates of recognition:
 				</p>
-				<ol class="skyline" style:--rows={tallestYear} aria-label="Conferences by year">
-					{#each facultyConferences as year, col (year.year)}
-						<li>
-							<ul class="skyline_stack">
-								{#each year.events as event, row (event)}
-									<li style:--d={col * 2 + row}>{event}</li>
-								{/each}
-								{#if year.award}
-									<li class="award_chip" style:--d={col * 2}>
-										<Trophy size={14} aria-hidden="true" />
-										{year.award}
-									</li>
-								{/if}
-							</ul>
-							<span class="skyline_year">{year.year}</span>
-						</li>
-					{/each}
-				</ol>
-				<blockquote class="award_note">
-					<Trophy size={28} strokeWidth={1.5} aria-hidden="true" />
-					<p>
-						<strong>2nd Best Research Paper</strong> at ICHESMET 2022 for the Credit Assessment and Recommendation
-						System (CARS).
-					</p>
-				</blockquote>
 			</div>
-		</div>
-	</section>
 
-	<!-- ══ 6. Students: conference pass, photos and proceedings index ══ -->
-	<section id="student-research" class="content_section" aria-labelledby="student-title">
-		{@render sectionHeading('student-title', 'Student Research Abroad', GraduationCap)}
-
-		<article class="pass" use:reveal>
-			<div class="pass_main">
-				<div class="pass_route" aria-hidden="true">
-					<div>
-						<span class="pass_code">MNL</span>
-						<span class="pass_city">PUP Manila</span>
-					</div>
-					<span class="pass_flight">
-						<span class="pass_line"></span>
-						<Plane size={26} strokeWidth={1.6} />
-					</span>
-					<div>
-						<span class="pass_code">CJU</span>
-						<span class="pass_city">Jeju Island</span>
-					</div>
-				</div>
-				<h3 class="pass_title">{studentTrip.event}</h3>
-				<p class="pass_event">{studentTrip.eventName}</p>
-				<dl class="pass_fields">
-					<div>
-						<dt><CalendarDays size={16} aria-hidden="true" /> Dates</dt>
-						<dd>{studentTrip.dates}</dd>
-					</div>
-					<div>
-						<dt><MapPin size={16} aria-hidden="true" /> Venue</dt>
-						<dd>{studentTrip.place}</dd>
-					</div>
-				</dl>
-			</div>
-			<div class="pass_stub">
-				<span class="pass_stub_value">{studentPapers.length}</span>
-				<span class="pass_stub_label">papers presented by BSIT students</span>
-				<span class="barcode" aria-hidden="true"></span>
-			</div>
-		</article>
-
-		<div class="dispatch_photos" use:reveal>
-			{@render photoButton(photos.jeju, 'dispatch_main')}
-			{@render photoButton(photos.risk)}
-			{@render photoButton(photos.yolo)}
-		</div>
-
-		<h3 class="block_title proceedings_title" use:reveal>Research presented</h3>
-		<ol class="proceedings">
-			{#each studentPapers as paper, i (paper.title)}
-				{@const peek = paperPhotos[paper.title]}
-				<li use:reveal style:--d={i}>
-					<span class="proc_number" aria-hidden="true">0{i + 1}</span>
-					<div class="proc_body">
-						<h4>{paper.title}</h4>
+			<div class="framework-cards-grid">
+				<div class="pillar-card card-bg-1" style="--bg-image: url('{ivote1}'); --d: 0;" use:reveal>
+					<span class="card-number">0 1</span>
+					<div class="card-content">
+						<h4>Awareness &amp; Digital Ethics</h4>
 						<p>
-							<strong>{paper.authors}</strong>
-							<span class="proc_adviser">Adviser: {paper.adviser}</span>
+							Addressing emerging digital concerns, data privacy, and ethical technology adoption
+							through responsible AI literacy and prompt engineering workshops.
+						</p>
+						<div class="maturity-meter">
+							<span class="meter-label">Pillar 1 • Foundation &amp; Ethics</span>
+							<div class="meter-track"><div class="meter-fill fill-1"></div></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="pillar-card card-bg-2" style="--bg-image: url('{ivote2}'); --d: 1;" use:reveal>
+					<span class="card-number">0 2</span>
+					<div class="card-content">
+						<h4>Economic &amp; Skills Empowerment Seminars</h4>
+						<p>
+							Assessing technological skill gaps of local distributors, cooperative officers, and
+							MSE owners to guide them toward presentation, e-commerce, and digital marketing
+							adoption.
+						</p>
+						<div class="maturity-meter">
+							<span class="meter-label">Pillar 2 • MSME &amp; Cooperative Growth</span>
+							<div class="meter-track"><div class="meter-fill fill-2"></div></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="pillar-card card-bg-3" style="--bg-image: url('{ivote3}'); --d: 2;" use:reveal>
+					<span class="card-number">0 3</span>
+					<div class="card-content">
+						<h4>Applied Technical Solution Deployment</h4>
+						<p>
+							Translating faculty research and student configurations into practical, deployable
+							systems—including iVOTE++ and the Claro M. Recto High School Examination Management
+							System.
+						</p>
+						<div class="maturity-meter">
+							<span class="meter-label">Pillar 3 • Production Systems &amp; MEAL</span>
+							<div class="meter-track"><div class="meter-fill fill-3"></div></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="verification-bar">
+			<div class="verification-item">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="badge-icon"
+					><path
+						d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.76 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+					/><path d="m9 12 2 2 4-4" /></svg
+				>
+				<span>DATA VERIFICATION: STRATEGIC PLAN &amp; MOAs</span>
+			</div>
+			<div class="verification-item">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="badge-icon"
+					><path
+						d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.76 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+					/><path d="m9 12 2 2 4-4" /></svg
+				>
+				<span>VERIFICATION: INTEGRATION &amp; PROCEEDINGS LOGS</span>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  EDITORIAL ALTERNATING + SCROLL FADE:
+  CHRONICLES OF EXTENSION & FIELD DEPLOYMENT
+───────────────────────────────────────────── -->
+	<section id="community-story" class="editorial-chronicles">
+		<div class="editorial-section-head" use:reveal>
+			<div class="section-header">
+				<div class="icon-box">
+					<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+				</div>
+				<h2 class="t_eyebrow">CHRONICLES OF EXTENSION &amp; FIELD DEPLOYMENT</h2>
+			</div>
+			<hr class="header-divider" />
+		</div>
+
+		<div class="editorial-stream">
+			{#each communityChapters as chap, i}
+				<article
+					class="editorial-row {i % 2 === 1 ? 'is-reversed' : ''}"
+					use:reveal={{ threshold: 0.16 }}
+				>
+					<div class="editorial-photo-bleed">
+						<img src={chap.image} alt={chap.caption} />
+					</div>
+
+					<div class="editorial-copy-pane">
+						<span class="editorial-index">{chap.number} — {chap.era}</span>
+						<h3 class="editorial-heading">{chap.title}</h3>
+						<p class="editorial-partner">{chap.partner}</p>
+						<p class="editorial-body">{chap.summary}</p>
+						<p class="editorial-note">{chap.caption}</p>
+					</div>
+				</article>
+			{/each}
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  TECHNICAL PROFILES SECTION & INITIATIVES REGISTER
+───────────────────────────────────────────── -->
+	<section id="technical-profiles" class="technical-profiles">
+		<header class="section-header" use:reveal>
+			<div class="icon-box">
+				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
+			</div>
+			<h2 class="t_eyebrow">TECHNICAL PROFILES</h2>
+		</header>
+
+		<hr class="header-divider" />
+
+		<div class="tab-container">
+			<div class="tabs" role="tablist" aria-label="Technical Profiles">
+				{#each profiles as profile, index}
+					<button
+						role="tab"
+						aria-selected={activeTab === index}
+						class="tab-btn {activeTab === index ? 'active' : ''}"
+						onclick={() => (activeTab = index)}
+					>
+						{profile.tabLabel}
+					</button>
+				{/each}
+			</div>
+
+			{#key activeTab}
+				<div class="profile-card animate-panel">
+					<div class="card-header-split">
+						<div class="header-left">
+							<div class="badge">FEATURED</div>
+							<h3 class="profile-title">{profiles[activeTab].title}</h3>
+							<p class="partner-text">{profiles[activeTab].partner}</p>
+						</div>
+
+						<div class="header-right">
+							<h4 class="archives-title">DEPLOYMENT ARCHIVES</h4>
+						</div>
+					</div>
+
+					<div class="card-content-split">
+						<div class="content-left">
+							<div class="info-box">
+								<h4>STRATEGIC CHALLENGE</h4>
+								<p>{profiles[activeTab].challenge}</p>
+							</div>
+
+							<div class="info-box">
+								<h4>TECHNICAL CONTENT</h4>
+								<p>{profiles[activeTab].content}</p>
+							</div>
+
+							{#if profiles[activeTab].showPartnerStrip}
+								<div class="partner-emblem-box">
+									<span class="emblem-label">COOPERATING LGU &amp; INSTITUTIONAL PARTNERS</span>
+									<img
+										src={partnerLogos}
+										alt="City of Mandaluyong, Negosyo Center Mandaluyong City, and Mandaluyong Investment Promotion Office (MIPO) logos"
+									/>
+								</div>
+							{/if}
+						</div>
+
+						<div class="content-right">
+							<div class="horizontal-photo-stack">
+								{#each profiles[activeTab].photos as photo}
+									<figure class="horizontal-photo-card">
+										<img src={photo.src} alt={photo.caption} />
+										<figcaption>{photo.caption}</figcaption>
+									</figure>
+								{/each}
+							</div>
+						</div>
+					</div>
+				</div>
+			{/key}
+
+			<!-- COMPLETED & ONGOING INITIATIVES TABLE -->
+			<div class="initiatives-ledger" use:reveal>
+				<div class="ledger-header">
+					<div>
+						<span class="ledger-kicker">VERIFIABLE EVIDENCE MATRIX</span>
+						<h3 class="ledger-heading">COMPLETED AND ONGOING INITIATIVES IN COMMUNITY DEVELOPMENT</h3>
+						<p class="ledger-desc">
+							Tabulated summary of documented extension proposals, partner communities, target
+							beneficiaries, implementation status, and supporting documentation.
 						</p>
 					</div>
-					<span class="proc_model">{paper.model}</span>
-					{#if peek}
-						<img
-							class="proc_peek"
-							src={peek.src}
-							alt=""
-							width={peek.width}
-							height={peek.height}
-							loading="lazy"
-						/>
-					{/if}
-				</li>
-			{/each}
-		</ol>
 
-		{#if report}
-			<a
-				class="report-button"
-				href={report.href}
-				target="_blank"
-				rel="external noopener noreferrer"
-			>
-				View Full Narrative Report <ArrowUpRight size={19} aria-hidden="true" />
-			</a>
-		{/if}
+					<div class="filter-pills" role="group" aria-label="Filter projects by status">
+						<button
+							type="button"
+							class="filter-pill {statusFilter === 'ALL' ? 'active' : ''}"
+							onclick={() => (statusFilter = 'ALL')}
+						>
+							All ({initiatives.length})
+						</button>
+						<button
+							type="button"
+							class="filter-pill {statusFilter === 'COMPLETED' ? 'active' : ''}"
+							onclick={() => (statusFilter = 'COMPLETED')}
+						>
+							Completed (7)
+						</button>
+						<button
+							type="button"
+							class="filter-pill {statusFilter === 'ONGOING' ? 'active' : ''}"
+							onclick={() => (statusFilter = 'ONGOING')}
+						>
+							Ongoing (2)
+						</button>
+					</div>
+				</div>
+
+				<div class="table-scroll">
+					<table class="initiatives-table">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>Name of Project</th>
+								<th>Partner Community / Organization</th>
+								<th>Target Beneficiaries</th>
+								<th>Status</th>
+								<th>Supporting Document/s</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each filteredInitiatives as row (row.no)}
+								<tr class="ledger-row">
+									<td class="row-num">{row.no}</td>
+									<td class="row-title"><strong>{row.name}</strong></td>
+									<td>{row.partner}</td>
+									<td>{row.beneficiaries}</td>
+									<td>
+										<span
+											class="status-badge {row.status === 'Ongoing' ? 'ongoing' : 'completed'}"
+										>
+											{row.status}
+										</span>
+									</td>
+									<td class="row-doc">
+										{#if row.docUrl}
+											<a
+												href={row.docUrl}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="doc-anchor"
+											>
+												{row.docLabel} ↗
+											</a>
+										{:else}
+											<span class="doc-archive-tag">{row.docLabel}</span>
+										{/if}
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="narrative-action-wrapper" use:reveal>
+				<a
+					href="https://bit.ly/ITL4Area3"
+					class="narrative-btn"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					View Full Narrative Report
+				</a>
+			</div>
+		</div>
 	</section>
+
+	<!-- ─────────────────────────────────────────────
+  PUP IVOTE++ SHOWCASE SECTION
+───────────────────────────────────────────── -->
+	<section id="ivote-showcase" class="ivote-showcase">
+		<div class="ivote-left">
+			<div class="ivote-header">
+				<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ivote-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="M9 10h6" /><path d="M9 14h6" /></svg>
+				<h2 class="t_eyebrow">PUP IVOTE++</h2>
+			</div>
+
+			<h3 class="ivote-sub">
+				High-Impact Special Deployment<br />Showcase: The PUP iVOTE++ System
+			</h3>
+
+			<div class="ivote-divider">
+				<h4>SYSTEM OVERVIEW &amp; ARCHITECTURAL PURPOSE</h4>
+				<hr />
+			</div>
+
+			<p class="ivote-desc">
+				The PUP iVOTE++ system is a secure, technology-enabled digital voting platform designed,
+				configured, and deployed by BSIT students and faculty members in partnership with the
+				Philippine Heart Center (Multi-Purpose Cooperative &amp; Nursing Service Employees),
+				Philippine Association of Central Services and Sterilization Management (PACSSM), PUP
+				Multi-Purpose Cooperative, and the PUP Provident Fund—modernizing administrative elections
+				with hybrid on-site and online participation.
+			</p>
+
+			<div class="ivote-cards-container">
+				<div class="ivote-card" use:reveal style:--d="0">
+					<div class="iv-card-bg" style="background-image: url('{ivote5}');"></div>
+					<div class="iv-card-content">
+						<h5>HYBRID<br />OPERATIONS</h5>
+						<span>100% RELIABLE</span>
+						<p>Fully supports simultaneous secure on-site and online remote voting.</p>
+					</div>
+				</div>
+
+				<div class="ivote-card" use:reveal style:--d="1">
+					<div class="iv-card-bg" style="background-image: url('{ivote7}');"></div>
+					<div class="iv-card-content">
+						<h5>CROSS-BRANCH</h5>
+						<span>ALL ACCESS</span>
+						<p>
+							Enabled secure remote voting for across-campus members, establishing a blueprint for
+							inclusive digital governance.
+						</p>
+					</div>
+				</div>
+
+				<div class="ivote-card" use:reveal style:--d="2">
+					<div class="iv-card-bg" style="background-image: url('{ivote2}');"></div>
+					<div class="iv-card-content">
+						<h5>TECH-TRANSFER</h5>
+						<span>COMMUNITY LEAD</span>
+						<p>
+							Beyond installation, faculty and students completed training, code verification, and
+							orientation to build digital confidence and governance acceptance.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ivote-right">
+			<div class="archive-fade-container">
+				{#each archiveSlides as slide, idx}
+					<div
+						class="fade-slide {currentImageIndex === idx ? 'active' : ''}"
+						style="background-image: url('{slide.src}');"
+					></div>
+				{/each}
+				<div class="fade-scrim"></div>
+
+				<button class="gallery-link" onclick={() => (showGallery = true)}>VIEW FULL GALLERY</button>
+
+				<div class="fade-archive-text">
+					<h2 class="archive-title-large">PUP IVOTE++</h2>
+					<p class="archive-subtitle">{archiveSlides[currentImageIndex].caption}</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  MULA SA'YO TEXT SECTION
+───────────────────────────────────────────── -->
+	<section class="motto-text-section" use:reveal>
+		<div class="motto-content">
+			<h1
+				class="motto-title"
+				data-text="Mula sa'yo,&#10;para sa bayan"
+				style="--motto-bg: url('{ivote1}');"
+			>
+				<span class="keep-together">Mula sa'yo,</span><br />
+				<span class="keep-together">para sa bayan</span>
+			</h1>
+			<p class="motto-subtitle">
+				Bridging <span class="text-yellow">technology and people</span> through open-source collaboration,
+				digital literacy outreach, and tech workshops.
+			</p>
+		</div>
+	</section>
+
+	<!-- ─────────────────────────────────────────────
+  PUP IVOTE++ GALLERY MODAL (ALL 8 PHOTOS)
+───────────────────────────────────────────── -->
+	{#if showGallery}
+		<dialog
+			class="gallery-modal-overlay"
+			aria-labelledby="gallery-title"
+			use:openGalleryDialog
+			onclose={() => (showGallery = false)}
+			onclick={(event) => {
+				if (event.target === event.currentTarget) event.currentTarget.close();
+			}}
+		>
+			<div class="gallery-modal-content">
+				<button
+					class="close-modal"
+					type="button"
+					aria-label="Close gallery"
+					onclick={(event) => event.currentTarget.closest('dialog')?.close()}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="32"
+						height="32"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"
+						></line></svg
+					>
+				</button>
+
+				<div class="gallery-header">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="26"
+						height="26"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="#6a1316"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path
+							d="M9 10h6"
+						/><path d="M9 14h6" /></svg
+					>
+					<h2 id="gallery-title" class="t_eyebrow">PUP IVOTE++ DEPLOYMENT GALLERY</h2>
+				</div>
+
+				<div class="gallery-grid-container">
+					{#each archiveSlides as slide}
+						<figure class="gallery-img-box">
+							<img src={slide.src} alt={slide.caption} />
+							<figcaption>{slide.caption}</figcaption>
+						</figure>
+					{/each}
+				</div>
+			</div>
+		</dialog>
+	{/if}
 
 	<Footer />
 </main>
 
 <style>
-	main {
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
+	@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Overpass:wght@600;700;800;900&display=swap');
+
+	.community_page {
+		--ease: cubic-bezier(0.16, 1, 0.3, 1);
+		--rule: rgba(184, 121, 16, 0.28);
+		--muted: #574b44;
 	}
 
-	/* ── HERO SECTION (unchanged) ── */
-	.hero-section {
+	/* Scroll-fade motion matching the reference pattern */
+	@media (prefers-reduced-motion: no-preference) {
+		.community_page :global(.reveal-pending) {
+			opacity: 0;
+			translate: 0 28px;
+			transition:
+				opacity 0.85s ease,
+				translate 1s var(--ease);
+			transition-delay: calc(var(--d, 0) * 110ms);
+		}
+
+		.community_page :global(.reveal-pending.is-revealed) {
+			opacity: 1;
+			translate: 0 0;
+		}
+	}
+
+	/* --- KEYFRAMES & MOTION --- */
+	@keyframes panelReveal {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes barFill {
+		from {
+			transform: scaleX(0);
+		}
+		to {
+			transform: scaleX(1);
+		}
+	}
+
+	.animate-panel {
+		animation: panelReveal 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.ledger-row {
+		animation: panelReveal 0.25s ease-out both;
+	}
+
+	.narrative-action-wrapper {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		margin-top: 2rem;
+		margin-bottom: 0;
+	}
+
+	.narrative-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		max-width: 700px;
+		padding: 18px 32px;
+		border: 3px solid #941518;
+		border-radius: 12px;
+		background-color: transparent;
+		color: #941518;
+		font-family: var(--font-heading, 'Overpass', sans-serif);
+		font-size: 1.4rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+
+	.narrative-btn:hover {
+		background-color: #941518;
+		color: #dfb75f;
+	}
+
+	/* --- HERO SECTION (ORIGINAL — UNTOUCHED) --- */
+	.community-hero {
 		position: relative;
 		width: 100%;
 		height: 100dvh;
@@ -699,26 +1007,1306 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-image: url('/img/pages/internationalization-hero.jpg');
+		background-image: url('/img/pages/Community.jpg');
 		background-size: cover;
 		background-position: center;
 		opacity: 0.3;
 		z-index: 0;
 	}
 
-	/* Font, weight, tracking and the black→maroon gradient come from the global
-     .t_display role.
-
-     Size is overridden because this is the longest title on the site and one
-     unbreakable word. The role's 150px cap is too wide, and the old 4rem lower
-     bound overflowed badly on mobile: at 390px the title measured 872px. This
-     clamp keeps it inside the viewport from 390px up to 1920px. */
 	.hero-title {
 		position: relative;
 		z-index: 1;
-		font-size: clamp(1.5rem, 6.6vw, 128px);
+	}
+
+	/* --- STRATEGIC AGENDA --- */
+	.strategic-agenda {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	.agenda-header {
+		background: linear-gradient(to right, #420607 0%, #000000 80%);
+		padding: 24px 5%;
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.accent-square {
+		width: 20px;
+		height: 20px;
+		background-color: #ef9b08;
+		flex-shrink: 0;
+	}
+
+	.agenda-header :global(.t_eyebrow) {
+		display: inline-block;
+	}
+
+	.agenda-content-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		width: 100%;
+	}
+
+	.agenda-panel {
+		padding: 60px 10%;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.agenda-panel h3 {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.15rem;
+		font-weight: 800;
+		letter-spacing: 0.05em;
+		margin: 0;
+	}
+
+	.accent-line {
+		border: none;
+		height: 1px;
+		width: 100%;
+		background-color: rgba(255, 255, 255, 0.4);
+		margin: 0;
+	}
+
+	.agenda-panel p {
+		font-family: 'Inter', sans-serif;
+		font-size: 1rem;
+		line-height: 1.65;
+		margin: 0;
+	}
+
+	.panel-red {
+		background-color: #941518;
+		color: #ffffff;
+	}
+
+	.panel-gold {
+		background-color: #f8b209;
+		color: #ffffff;
+	}
+
+	/* --- OPEN EDITORIAL SCOREBOARD BELOW TWO COLUMNS --- */
+	.editorial-scoreboard-band {
+		background-color: #faf6ef;
+		padding: 48px 10%;
+		border-bottom: 1px solid #e6dcc8;
+	}
+
+	.scoreboard_grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		border-block: 1.5px solid #420607;
+	}
+
+	.score_col {
+		padding: clamp(24px, 2.6vw, 44px) clamp(18px, 2.4vw, 44px);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 10px;
+	}
+
+	.score_col:first-child {
+		padding-inline-start: 0;
+	}
+
+	.score_col + .score_col {
+		border-inline-start: 1px solid var(--rule);
+	}
+
+	.score_num {
+		display: flex;
+		align-items: baseline;
+		gap: 10px;
+		margin: 0;
+		font-family: 'Overpass', sans-serif;
+		font-size: clamp(3.2rem, 5.4vw, 5.6rem);
+		font-weight: 900;
+		line-height: 0.9;
+		letter-spacing: -0.04em;
+		font-variant-numeric: tabular-nums;
+		color: #941518;
+	}
+
+	.score_num small {
+		font-family: 'Overpass', sans-serif;
+		font-size: clamp(0.95rem, 1.15vw, 1.25rem);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: #b87910;
+	}
+
+	.score_label {
+		margin: 4px 0 0 0;
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.05rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: #1a1515;
+	}
+
+	.score_sub {
+		margin: 0;
+		font-family: 'Inter', sans-serif;
+		font-size: 0.92rem;
+		line-height: 1.5;
+		color: var(--muted);
+	}
+
+	.progress_rule {
+		width: 100%;
+		height: 6px;
+		background: rgba(148, 21, 24, 0.14);
+		border-radius: 999px;
+		overflow: hidden;
+		margin-block: 4px;
+	}
+
+	.progress_fill {
+		height: 100%;
+		background: linear-gradient(90deg, #941518, #ef9b08);
+		border-radius: 999px;
+	}
+
+	.moa_strip {
+		list-style: none;
+		margin: 28px 0 0 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 24px;
+	}
+
+	.moa_strip li {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding-inline-start: 16px;
+		border-inline-start: 3px solid #d49814;
+	}
+
+	.moa_strip strong {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: #6a1316;
+	}
+
+	.moa_strip span {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.9rem;
+		line-height: 1.45;
+		color: var(--muted);
+	}
+
+	/* --- MATURITY FRAMEWORK --- */
+	.maturity-framework {
+		background: linear-gradient(135deg, #fcedeb 0%, #f4e8cf 100%);
+		padding: 60px 10%;
+		color: #1a1515;
+	}
+
+	.framework-header :global(.t_eyebrow) {
+		display: inline-block;
+		margin: 0 0 16px 0;
+	}
+
+	.framework-divider {
+		border: none;
+		height: 1px;
+		background-color: rgba(0, 0, 0, 0.3);
+		margin: 0 0 24px 0;
+	}
+
+	.framework-description {
+		font-family: 'Inter', sans-serif;
+		font-size: 1.05rem;
+		line-height: 1.6;
+		max-width: 900px;
+		margin-bottom: 40px;
+	}
+
+	.framework-cards-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+	}
+
+	.pillar-card {
+		position: relative;
+		border-radius: 16px;
+		padding: 24px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		min-height: 360px;
+		color: #ffffff;
+		background-color: #6a1316;
+		background-image: var(--bg-image);
+		background-size: cover;
+		background-position: center;
+		overflow: hidden;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.pillar-card:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 16px 32px rgba(106, 19, 22, 0.24);
+	}
+
+	.pillar-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to bottom,
+			rgba(106, 19, 22, 0.4) 0%,
+			rgba(32, 12, 13, 0.95) 100%
+		);
+		z-index: 1;
+	}
+
+	.card-number {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		align-self: flex-end;
+		position: relative;
+		z-index: 2;
+		color: #fac549;
+	}
+
+	.card-content {
+		position: relative;
+		z-index: 2;
+	}
+
+	.card-content h4 {
+		font-family: 'Overpass', sans-serif;
+		color: #ef9b08;
+		font-size: 1.15rem;
+		font-weight: 800;
+		margin: 0 0 12px 0;
+		line-height: 1.4;
+	}
+
+	.card-content p {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.94rem;
+		line-height: 1.6;
+		margin: 0 0 16px 0;
+		color: #f0f0f0;
+	}
+
+	.maturity-meter {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.meter-label {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: #f8d477;
+	}
+
+	.meter-track {
+		width: 100%;
+		height: 6px;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 999px;
+		overflow: hidden;
+	}
+
+	.meter-fill {
+		height: 100%;
+		background: linear-gradient(90deg, #fac549, #ef9b08);
+		transform-origin: left;
+		animation: barFill 1s ease-out both;
+	}
+
+	.fill-1 {
+		width: 74%;
+	}
+	.fill-2 {
+		width: 86%;
+	}
+	.fill-3 {
+		width: 96%;
+	}
+
+	.verification-bar {
+		background-color: #312b27;
+		padding: 24px 10%;
+		display: flex;
+		align-items: center;
+		gap: 60px;
+	}
+
+	.verification-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: #ffffff;
+		font-family: 'Inter', sans-serif;
+		font-weight: 700;
+		font-size: 0.95rem;
+		letter-spacing: 0.05em;
+	}
+
+	.badge-icon {
+		width: 24px;
+		height: 24px;
+		color: #fac549;
+	}
+
+	/* --- EDITORIAL ALTERNATING CHRONICLES --- */
+	.editorial-chronicles {
+		width: 100%;
+		background-color: #ffffff;
+		padding-top: 80px;
+	}
+
+	.editorial-section-head {
+		padding: 0 10%;
+	}
+
+	.editorial-stream {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.editorial-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		width: 100%;
+		min-height: 540px;
+		background-color: #faf6ef;
+		border-bottom: 1px solid #e7ddd0;
+		overflow: hidden;
+	}
+
+	.editorial-row:nth-child(even) {
+		background-color: #fffdfa;
+	}
+
+	/* Alternate position: row 2, 4 -> text on left, full image on right */
+	.editorial-row.is-reversed .editorial-photo-bleed {
+		order: 2;
+	}
+
+	.editorial-row.is-reversed .editorial-copy-pane {
+		order: 1;
+	}
+
+	.editorial-photo-bleed {
+		width: 100%;
+		height: 100%;
+		min-height: 460px;
+		overflow: hidden;
+	}
+
+	.editorial-photo-bleed img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 20%;
+		border-radius: 0;
+		transition: scale 1.2s var(--ease);
+	}
+
+	.editorial-row:hover .editorial-photo-bleed img {
+		scale: 1.04;
+	}
+
+	.editorial-copy-pane {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 56px 8%;
+	}
+
+	.editorial-index {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.95rem;
+		font-weight: 800;
+		letter-spacing: 0.16em;
+		color: #b87910;
+		margin-bottom: 10px;
+	}
+
+	.editorial-heading {
+		font-family: 'Overpass', sans-serif;
+		font-size: clamp(1.5rem, 2.3vw, 2.2rem);
+		font-weight: 900;
+		line-height: 1.18;
+		color: #6a1316;
+		margin: 0 0 10px 0;
+	}
+
+	.editorial-partner {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.92rem;
+		font-style: italic;
+		font-weight: 600;
+		color: #5c4b3b;
+		margin: 0 0 18px 0;
+	}
+
+	.editorial-body {
+		font-family: 'Inter', sans-serif;
+		font-size: 1rem;
+		line-height: 1.7;
+		color: #262020;
+		margin: 0 0 18px 0;
+	}
+
+	.editorial-note {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.82rem;
+		font-style: italic;
+		color: #6e6259;
+		margin: 0;
+	}
+
+	/* --- TECHNICAL PROFILES SECTION --- */
+	.technical-profiles {
+		padding: 80px 10%;
+		background-color: #ffffff;
+		width: 100%;
+		margin-bottom: 40px;
+	}
+	.section-header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 24px;
+	}
+	.icon-box {
+		color: #941518;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.section-header :global(.t_eyebrow) {
+		display: inline-block;
+	}
+	.header-divider {
+		border: none;
+		height: 1px;
+		background-color: #d1d1d1;
+		margin-bottom: 40px;
+	}
+	.tab-container {
+		display: flex;
+		flex-direction: column;
+	}
+	.tabs {
+		display: flex;
+		gap: 4px;
+		padding-left: 0;
+		position: relative;
+		z-index: 10;
+	}
+	.tab-btn {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.95rem;
+		font-weight: 500;
+		letter-spacing: 0.05em;
+		color: #ffffff;
+		background-color: #b87910;
+		border: none;
+		border-top: 3px solid transparent;
+		padding: 16px 24px;
+		border-radius: 8px 8px 0 0;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	.tab-btn:hover {
+		background-color: #9c660c;
+	}
+	.tab-btn.active {
+		background-color: #6a1316;
+		font-weight: 800;
+		border-top: 3px solid #ef9b08;
+		position: relative;
+		z-index: 2;
+	}
+	.profile-card {
+		background: linear-gradient(135deg, #6a1316 0%, #201a1a 100%);
+		border-radius: 0 12px 12px 12px;
+		padding: 48px;
+		color: #ffffff;
+		position: relative;
+		z-index: 1;
+		margin-top: -1px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+	}
+	.card-header-split {
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		gap: 48px;
+		margin-bottom: 36px;
+	}
+	.header-left {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.header-right {
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-start;
+	}
+	.badge {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		color: #ef9b08;
+		border: 1px solid #ef9b08;
+		padding: 6px 12px;
+		border-radius: 4px;
+		margin-bottom: 20px;
+	}
+	.profile-title {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.35rem;
+		font-weight: 800;
+		line-height: 1.4;
+		letter-spacing: 0.05em;
+		margin: 0 0 12px 0;
+	}
+	.partner-text {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.95rem;
+		font-style: italic;
+		color: #d1d1d1;
+		margin: 0;
+	}
+	.archives-title {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1rem;
+		font-weight: 700;
+		letter-spacing: 0.15em;
+		margin: 0;
+		color: #e5e5e5;
+	}
+
+	.card-content-split {
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		gap: 48px;
+		align-items: start;
+	}
+	.content-left {
+		display: flex;
+		flex-direction: column;
+	}
+	.content-right {
+		position: relative;
+		width: 100%;
+	}
+	.info-box {
+		background-color: #ffffff;
+		color: #1a1515;
+		padding: 24px 32px;
+		border-left: 8px solid #d49814;
+		margin-bottom: 24px;
+		border-radius: 0 8px 8px 0;
+		width: 100%;
+	}
+	.info-box:last-child {
+		margin-bottom: 0;
+	}
+	.info-box h4 {
+		font-family: 'Overpass', sans-serif;
+		color: #d49814;
+		font-size: 1.1rem;
+		font-weight: 800;
+		letter-spacing: 0.1em;
+		margin: 0 0 14px 0;
+	}
+	.info-box p {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.95rem;
+		line-height: 1.65;
+		margin: 0;
+	}
+
+	.partner-emblem-box {
+		background: #ffffff;
+		border-radius: 10px;
+		padding: 16px 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+	}
+
+	.emblem-label {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.72rem;
+		font-weight: 800;
+		letter-spacing: 0.12em;
+		color: #6a1316;
+	}
+
+	.partner-emblem-box img {
+		max-width: 100%;
+		max-height: 82px;
+		width: auto;
+		object-fit: contain;
+	}
+
+	.horizontal-photo-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		width: 100%;
+	}
+
+	.horizontal-photo-card {
+		margin: 0;
+		background: #2b1a1b;
+		border: 1px solid rgba(250, 197, 73, 0.25);
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	.horizontal-photo-card img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		object-position: center 20%;
+		opacity: 0.95;
+		transition: transform 0.35s ease, opacity 0.3s ease;
+	}
+
+	.horizontal-photo-card:hover img {
+		opacity: 1;
+		transform: scale(1.02);
+	}
+
+	.horizontal-photo-card figcaption {
+		padding: 10px 14px;
+		font-family: 'Inter', sans-serif;
+		font-size: 0.82rem;
+		color: #ede3d8;
+		background: rgba(20, 14, 14, 0.75);
+	}
+
+	/* --- INITIATIVES REGISTER TABLE --- */
+	.initiatives-ledger {
+		margin-top: 48px;
+		background: #faf6ef;
+		border: 1px solid #e4d6bb;
+		border-radius: 16px;
+		padding: 32px;
+	}
+
+	.ledger-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 20px;
+		flex-wrap: wrap;
+		margin-bottom: 24px;
+	}
+
+	.ledger-kicker {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.78rem;
+		font-weight: 800;
+		letter-spacing: 0.14em;
+		color: #941518;
+	}
+
+	.ledger-heading {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.35rem;
+		font-weight: 800;
+		color: #1a1515;
+		margin: 4px 0 8px 0;
+	}
+
+	.ledger-desc {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.92rem;
+		color: #4f443d;
+		margin: 0;
+		max-width: 720px;
+	}
+
+	.filter-pills {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.filter-pill {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.85rem;
+		font-weight: 700;
+		padding: 8px 14px;
+		border-radius: 8px;
+		border: 1.5px solid #941518;
+		background: #ffffff;
+		color: #941518;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.filter-pill.active,
+	.filter-pill:hover {
+		background: #941518;
+		color: #fac549;
+	}
+
+	.table-scroll {
+		width: 100%;
+		overflow-x: auto;
+		border-radius: 12px;
+		background: #ffffff;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+	}
+
+	.initiatives-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-family: 'Inter', sans-serif;
+		font-size: 0.88rem;
+		text-align: left;
+	}
+
+	.initiatives-table thead {
+		background: #201a1a;
+		color: #fac549;
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.8rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.initiatives-table th,
+	.initiatives-table td {
+		padding: 14px 16px;
+		border-bottom: 1px solid #ece4d4;
+		vertical-align: top;
+	}
+
+	.initiatives-table tbody tr:hover {
+		background: #fff9ec;
+	}
+
+	.row-num {
+		font-family: 'Overpass', sans-serif;
+		font-weight: 800;
+		color: #941518;
+	}
+
+	.status-badge {
+		display: inline-block;
+		padding: 4px 10px;
+		border-radius: 999px;
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.76rem;
+		font-weight: 800;
+		letter-spacing: 0.05em;
+		white-space: nowrap;
+	}
+
+	.status-badge.completed {
+		background: #e6f4ea;
+		color: #137333;
+	}
+
+	.status-badge.ongoing {
+		background: #fef3c7;
+		color: #92400e;
+	}
+
+	.doc-anchor {
+		color: #941518;
+		font-weight: 700;
+		text-decoration: underline;
+		white-space: nowrap;
+	}
+
+	.doc-anchor:hover {
+		color: #b87910;
+	}
+
+	.doc-archive-tag {
+		color: #6e645e;
+		font-style: italic;
+		font-size: 0.82rem;
+	}
+
+	/* --- PUP IVOTE++ SHOWCASE SECTION --- */
+	.ivote-showcase {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr;
+		width: 100%;
+		min-height: 80vh;
+	}
+	.ivote-left {
+		background: linear-gradient(to right, #451516 0%, #1a1614 64%, #392e1f 100%);
+		padding: 80px 10%;
+		color: #ffffff;
+	}
+	.ivote-header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 24px;
+	}
+	.ivote-icon {
+		color: #fac549;
+	}
+	.ivote-header :global(.t_eyebrow) {
+		display: inline-block;
+	}
+	.ivote-sub {
+		font-family: 'Inter', sans-serif;
+		font-size: 1.35rem;
+		font-weight: 400;
+		line-height: 1.4;
+		margin: 0 0 48px 0;
+	}
+	.ivote-divider h4 {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.1rem;
+		font-weight: 800;
+		margin: 0 0 16px 0;
+		color: #ffffff;
+	}
+	.ivote-divider hr {
+		border: none;
+		height: 1px;
+		background-color: #5e5e5e;
+		margin-bottom: 24px;
+	}
+	.ivote-desc {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.95rem;
+		line-height: 1.6;
+		color: #d1d1d1;
+		margin-bottom: 40px;
+	}
+	.ivote-cards-container {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 16px;
+	}
+
+	.ivote-card {
+		position: relative;
+		background: linear-gradient(to bottom, #fac549 0%, #ca8106 100%);
+		border-radius: 12px;
+		display: flex;
+		flex-direction: column;
+		min-height: 280px;
+		overflow: hidden;
+		transition: transform 0.25s ease;
+	}
+	.ivote-card:hover {
+		transform: translateY(-4px);
+	}
+	.iv-card-bg {
+		position: absolute;
+		inset: 0;
+		background-size: cover;
+		background-position: center;
+		opacity: 0.3;
+		z-index: 0;
+	}
+	.iv-card-bg::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+	.iv-card-content {
+		position: relative;
+		z-index: 1;
+		padding: 32px 24px;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+	.iv-card-content h5 {
+		font-family: 'Overpass', sans-serif;
+		font-size: 1.35rem;
+		font-weight: 800;
+		color: #941518;
+		margin: 0 0 8px 0;
+		line-height: 1.2;
+		letter-spacing: 0.05em;
+	}
+	.iv-card-content span {
+		display: block;
+		font-family: 'Inter', sans-serif;
+		font-size: 1rem;
+		font-style: italic;
+		color: #4a3821;
+		margin-bottom: 24px;
+	}
+	.iv-card-content p {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.95rem;
+		line-height: 1.5;
+		color: #000000;
+		margin: auto 0 0 0;
+	}
+
+	.ivote-right {
+		position: relative;
+		width: 100%;
+		min-height: 500px;
+		overflow: hidden;
+		background-color: #3b0e10;
+	}
+	.archive-fade-container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+	.fade-slide {
+		position: absolute;
+		inset: 0;
+		background-size: cover;
+		background-position: center;
+		opacity: 0;
+		transition: opacity 1.2s ease-in-out, transform 6s ease-out;
+		z-index: 1;
+	}
+	.fade-slide.active {
+		opacity: 1;
+		transform: scale(1.03);
+		z-index: 2;
+	}
+	.fade-scrim {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to top,
+			rgba(35, 8, 9, 0.94) 0%,
+			rgba(148, 21, 24, 0.22) 50%,
+			rgba(20, 10, 10, 0.55) 100%
+		);
+		z-index: 3;
+		pointer-events: none;
+	}
+	.gallery-link {
+		position: absolute;
+		top: 36px;
+		right: 40px;
+		z-index: 10;
+		font-family: 'Overpass', sans-serif;
+		color: #ffffff;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		font-size: 0.9rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-decoration: underline;
+		transition: color 0.2s ease;
+	}
+	.gallery-link:hover {
+		color: #fac549;
+	}
+	.fade-archive-text {
+		position: absolute;
+		bottom: 50px;
+		left: 40px;
+		right: 40px;
+		z-index: 10;
+	}
+	.archive-title-large {
+		font-family: 'Overpass', sans-serif;
+		font-size: 2.2rem;
+		font-weight: 900;
+		color: #fac549;
+		letter-spacing: 0.08em;
+		margin: 0 0 6px 0;
+	}
+	.archive-subtitle {
+		font-family: 'Overpass', sans-serif;
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #ffffff;
+		letter-spacing: 0.08em;
+		margin: 0;
+	}
+
+	/* --- MULA SA'YO TEXT SECTION --- */
+	.motto-text-section {
+		width: 100%;
+		background-color: #ffffff;
+		padding-top: 120px;
+		padding-bottom: 120px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.motto-content {
 		text-align: center;
+		width: 100%;
+		max-width: 1400px;
 		padding: 0 5%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.motto-title {
+		position: relative;
+		font-family: 'Overpass', Arial, sans-serif;
+		font-size: clamp(3rem, 11vw, 9rem);
+		font-weight: 800;
+		line-height: 1.1;
+		letter-spacing: -0.02em;
+		margin: 0 0 24px 0;
+		display: inline-block;
+		background:
+			linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+			linear-gradient(to bottom, #fac549 0%, #ca8106 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		color: transparent;
+		filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.15));
+	}
+
+	.motto-title::before {
+		content: attr(data-text);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		white-space: pre-line;
+		background-image: var(--motto-bg);
+		background-size: cover;
+		background-position: center;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		opacity: 0.3;
+		pointer-events: none;
+		z-index: 1;
+	}
+	.keep-together {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.motto-subtitle {
+		font-family: 'Inter', sans-serif;
+		font-size: 1.25rem;
+		font-style: italic;
+		color: #1a1515;
+		line-height: 1.5;
+		margin: 0;
+		max-width: 600px;
+	}
+
+	.text-yellow {
+		color: #c98e16;
+		font-weight: 600;
+	}
+
+	/* --- MODAL GALLERY STYLES --- */
+	.gallery-modal-overlay {
+		width: 100%;
+		height: 100%;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		border: none;
+		box-sizing: border-box;
+		color: inherit;
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.85);
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 40px;
+		animation: fadeIn 0.2s ease-out;
+	}
+	.gallery-modal-overlay::backdrop {
+		background: transparent;
+	}
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	.gallery-modal-content {
+		background: radial-gradient(circle at center, #fcedeb 0%, #f4e8cf 100%);
+		padding: 40px;
+		border-radius: 16px;
+		max-width: 1200px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		position: relative;
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+	}
+	.close-modal {
+		position: absolute;
+		top: 24px;
+		right: 24px;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		color: #6a1316;
+		transition: transform 0.2s ease;
+	}
+	.close-modal:hover {
+		transform: scale(1.1);
+	}
+	.gallery-header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 32px;
+	}
+	.gallery-header :global(.t_eyebrow) {
+		display: inline-block;
+	}
+	.gallery-grid-container {
+		background-color: #2a1f1b;
+		border-radius: 16px;
+		padding: 24px;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 16px;
+	}
+	.gallery-img-box {
+		margin: 0;
+		width: 100%;
+		background-color: #1a1515;
+		padding: 8px;
+		border-radius: 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.gallery-img-box img {
+		width: 100%;
+		aspect-ratio: 4/3;
+		object-fit: cover;
+		border-radius: 4px;
+	}
+	.gallery-img-box figcaption {
+		font-family: 'Inter', sans-serif;
+		font-size: 0.76rem;
+		line-height: 1.35;
+		color: #e8dfd5;
+	}
+
+	/* --- RESPONSIVE ADJUSTMENTS --- */
+	@media (max-width: 1024px) {
+		.card-header-split,
+		.card-content-split,
+		.agenda-content-grid,
+		.scoreboard_grid,
+		.moa_strip,
+		.framework-cards-grid,
+		.editorial-row {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+		.scoreboard_grid {
+			border-block: 0;
+		}
+		.score_col,
+		.score_col:first-child {
+			padding-inline: 0;
+			border-block-start: 1px solid var(--rule);
+		}
+		.score_col + .score_col {
+			border-inline-start: 0;
+		}
+		.moa_strip {
+			gap: 18px;
+			margin-top: 24px;
+		}
+		.editorial-row.is-reversed .editorial-photo-bleed,
+		.editorial-row.is-reversed .editorial-copy-pane {
+			order: unset;
+		}
+		.editorial-photo-bleed {
+			min-height: 280px;
+			aspect-ratio: 16 / 10;
+		}
+		.editorial-copy-pane {
+			padding: 36px 7%;
+		}
+		.agenda-content-grid,
+		.framework-cards-grid,
+		.card-header-split,
+		.card-content-split {
+			gap: 32px;
+		}
+		.header-right {
+			justify-content: flex-start;
+		}
+		.tabs {
+			flex-wrap: wrap;
+		}
+		.verification-bar {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 20px;
+		}
+		.ivote-showcase {
+			grid-template-columns: 1fr;
+		}
+		.ivote-right {
+			min-height: 400px;
+		}
+		.ivote-cards-container {
+			grid-template-columns: 1fr;
+		}
+		.gallery-grid-container {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.gallery-modal-overlay {
+			padding: 16px;
+		}
+		.gallery-modal-content {
+			padding: 24px;
+		}
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
@@ -730,1982 +2318,14 @@
 		}
 	}
 
-	/* ══════════════════════════════════════════════════════════════
-	   Page tokens. Section shells, headings and dividers come from
-	   accreditation-pages.css; these only style section content.
-	   ══════════════════════════════════════════════════════════════ */
-	.intl_page {
-		--ease: cubic-bezier(0.16, 1, 0.3, 1);
-		--motion-ease: var(--ease);
-		--rule: color-mix(in srgb, var(--c-gold-dark) 28%, var(--c-shell));
-		--muted: color-mix(in srgb, var(--c-ink) 70%, var(--c-surface));
-		--gap: clamp(20px, 3vw, 56px);
-		--inset: clamp(22px, 3.4vw, 64px);
-		--radius: 25px;
-	}
-
-	/* Scroll reveal. Elements are only hidden after hydration (see motion.ts). */
-	@media (prefers-reduced-motion: no-preference) {
-		.intl_page :global(.reveal-pending) {
-			opacity: 0;
-			translate: 0 32px;
-			transition:
-				opacity 0.9s ease,
-				translate 1.1s var(--ease);
-			transition-delay: calc(var(--d, 0) * 90ms);
-		}
-
-		.intl_page :global(.reveal-pending.is-revealed) {
-			opacity: 1;
-			translate: 0 0;
-		}
-	}
-
-	/* Block headings: Overpass, maroon, uppercase (cf. Teaching & Learning .story_heading). */
-	.block_title {
-		margin-block-end: clamp(18px, 1.6vw, 30px);
-		color: var(--c-maroon);
-		font: 700 clamp(19px, 1.875vw, 36px) / 1.25 var(--font-heading);
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-	}
-
-	/* ══════════════════════════════════════════════════════════════
-	   1. Recognition
-	   ══════════════════════════════════════════════════════════════ */
-	.cover {
-		position: relative;
-		overflow: hidden;
-		aspect-ratio: 1400 / 596;
-		min-height: 420px;
-		border-radius: var(--radius);
-		isolation: isolate;
-	}
-
-	.cover > img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: 53% 40%;
-		transition: scale 1.8s var(--ease);
-	}
-
-	.cover::after {
-		position: absolute;
-		z-index: 0;
-		inset: 0;
-		background:
-			linear-gradient(to top, rgb(43 8 10 / 0.92) 0%, rgb(92 15 22 / 0.55) 38%, transparent 70%),
-			linear-gradient(to right, rgb(43 8 10 / 0.55), transparent 55%);
-		content: '';
-	}
-
-	.cover_copy {
-		position: absolute;
-		z-index: 1;
-		inset-inline-start: var(--inset);
-		inset-block-end: var(--inset);
-		max-width: min(760px, 70%);
-		color: #fff;
-	}
-
-	.cover_title {
-		font: 700 clamp(30px, 4.2vw, 80px) / 1 var(--font-display);
-		letter-spacing: -0.015em;
-		text-wrap: balance;
-	}
-
-	.cover_copy p {
-		margin-block-start: 16px;
-		color: rgb(255 255 255 / 0.88);
-		font-size: var(--fs-md);
-	}
-
-	.seal {
-		position: absolute;
-		z-index: 1;
-		inset-block-start: var(--inset);
-		inset-inline-end: var(--inset);
-		display: grid;
-		place-items: center;
-		width: clamp(90px, 9vw, 160px);
-		aspect-ratio: 1;
-		color: var(--c-maroon-deep);
-		background: var(--grad-gold);
-		border-radius: 50%;
-		box-shadow:
-			0 0 0 6px rgb(255 255 255 / 0.2),
-			0 18px 40px rgb(0 0 0 / 0.35);
-	}
-
-	.seal svg {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-	}
-
-	.seal text {
-		fill: var(--c-maroon-deep);
-		font: 700 9.4px var(--font-body);
-	}
-
-	.seal > span {
-		display: grid;
-		place-items: center;
-		width: 46%;
-		aspect-ratio: 1;
-		background: rgb(255 255 255 / 0.4);
-		border-radius: 50%;
-	}
-
-	/* Pathway: three stops joined by a gold rule that draws left to right. */
-	.pathway {
-		position: relative;
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: var(--gap);
-		margin-block: clamp(36px, 4vw, 72px);
-		padding-block-start: 30px;
-	}
-
-	.pathway::before {
-		position: absolute;
-		inset-block-start: 6px;
-		inset-inline: 0 0;
-		height: 2px;
-		background: linear-gradient(90deg, var(--c-gold-dark), var(--c-gold-light) 70%, transparent);
-		transform-origin: left;
-		content: '';
-	}
-
-	.pathway li {
-		position: relative;
-		display: grid;
-		gap: 6px;
-	}
-
-	.pathway li::before {
-		position: absolute;
-		inset-block-start: -31px;
-		inset-inline-start: 0;
-		width: 14px;
-		height: 14px;
-		background: var(--c-surface);
-		border: 3px solid var(--c-gold-dark);
-		border-radius: 50%;
-		content: '';
-	}
-
-	.pathway li:last-child::before {
-		background: var(--c-maroon);
-		border-color: var(--c-maroon);
-		box-shadow: 0 0 0 6px rgb(148 21 24 / 0.14);
-	}
-
-	.pathway strong {
-		color: var(--c-maroon);
-		font: 700 clamp(26px, 2.7vw, 52px) / 1 var(--font-display);
-		letter-spacing: -0.01em;
-	}
-
-	.pathway span {
-		max-width: 28ch;
-		color: var(--muted);
-	}
-
-	/* Scoreboard: open columns divided by gold rules, no boxes. */
-	.scoreboard {
-		display: grid;
-		grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
-		border-block: 1.5px solid var(--c-maroon-deep);
-	}
-
-	.score {
-		padding: clamp(28px, 3vw, 56px) clamp(18px, 2.4vw, 48px);
-	}
-
-	.score:first-child {
-		padding-inline-start: 0;
-	}
-
-	.score + .score {
-		border-inline-start: 1px solid var(--rule);
-	}
-
-	.score_value {
-		display: flex;
-		align-items: baseline;
-		gap: 10px;
-		font: 800 clamp(72px, 8.4vw, 168px) / 0.85 var(--font-display);
-		letter-spacing: -0.05em;
-		font-variant-numeric: tabular-nums;
-		background: var(--grad-title);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.score_value small {
-		color: var(--c-maroon);
-		font: 700 clamp(16px, 1.4vw, 26px) / 1 var(--font-heading);
-		letter-spacing: 0.02em;
-		-webkit-text-fill-color: var(--c-maroon);
-	}
-
-	.score_title {
-		margin-block: clamp(18px, 1.8vw, 30px) 6px;
-		color: var(--c-maroon);
-		font: 700 clamp(17px, 1.46vw, 28px) / 1.2 var(--font-heading);
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-	}
-
-	.score_note {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		color: var(--muted);
-	}
-
-	.score_note :global(svg) {
-		color: #1d7f4e;
-	}
-
-	.score_footnote {
-		max-width: 70ch;
-		margin-block-start: clamp(18px, 1.8vw, 30px);
-		color: var(--muted);
-		font-size: var(--fs-md);
-	}
-
-	.score_footnote strong {
-		color: var(--c-maroon-deep);
-	}
-
-	/* Zoomed ruler from 280th (left) to 240th (right): moving right is climbing. */
-	.ruler {
-		max-width: 460px;
-		margin-block-start: 22px;
-		padding-block: 30px 24px;
-	}
-
-	.ruler_track {
-		position: relative;
-		height: 2px;
-		background: var(--rule);
-	}
-
-	.ruler_tick {
-		position: absolute;
-		inset-block-start: -4px;
-		left: calc(var(--p) * 100%);
-		width: 1px;
-		height: 10px;
-		background: color-mix(in srgb, var(--c-ink) 30%, transparent);
-	}
-
-	.ruler_tick.major {
-		inset-block-start: -7px;
-		height: 16px;
-	}
-
-	.ruler_tick em {
-		position: absolute;
-		inset-block-start: 20px;
-		left: 50%;
-		color: var(--muted);
-		font-size: 0.75em;
-		font-style: normal;
-		translate: -50% 0;
-	}
-
-	.ruler_ghost,
-	.ruler_marker {
-		position: absolute;
-		inset-block-start: 50%;
-		width: 14px;
-		height: 14px;
-		border-radius: 50%;
-		translate: -50% -50%;
-	}
-
-	.ruler_ghost {
-		left: calc(var(--p) * 100%);
-		border: 2px dashed color-mix(in srgb, var(--c-ink) 40%, transparent);
-		background: var(--c-surface);
-	}
-
-	.ruler_marker {
-		left: calc(var(--to) * 100%);
-		background: var(--c-maroon);
-		box-shadow: 0 0 0 5px rgb(148 21 24 / 0.16);
-	}
-
-	.ruler_ghost b,
-	.ruler_marker b {
-		position: absolute;
-		inset-block-end: calc(100% + 8px);
-		left: 50%;
-		font-size: 0.72em;
-		letter-spacing: 0.04em;
-		translate: -50% 0;
-	}
-
-	.ruler_ghost b {
-		color: var(--muted);
-	}
-
-	.ruler_marker b {
-		color: var(--c-maroon);
-	}
-
-	.ruler_trail {
-		position: absolute;
-		inset-block: -1px;
-		left: calc(var(--from) * 100%);
-		width: calc((var(--to) - var(--from)) * 100%);
-		background: linear-gradient(90deg, transparent, var(--c-maroon));
-		border-radius: 2px;
-		transform-origin: left;
-	}
-
-	.qs_stars {
-		display: flex;
-		gap: 6px;
-		margin-block-start: 22px;
-		color: var(--rule);
-	}
-
-	.qs_stars .lit {
-		color: var(--c-gold-dark);
-	}
-
-	.qs_stars .lit :global(svg) {
-		fill: var(--c-gold-light);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.seal svg {
-			animation: spin 26s linear infinite;
-		}
-
-		.cover:global(.reveal-pending) > img {
-			scale: 1.14;
-		}
-
-		.cover:global(.is-revealed) > img {
-			scale: 1;
-		}
-
-		.cover:global(.reveal-pending) .cover_copy > * {
-			opacity: 0;
-			translate: 0 24px;
-			transition:
-				opacity 0.8s ease 0.35s,
-				translate 1s var(--ease) 0.35s;
-		}
-
-		.cover:global(.reveal-pending) .cover_copy p {
-			transition-delay: 0.5s;
-		}
-
-		.cover:global(.is-revealed) .cover_copy > * {
-			opacity: 1;
-			translate: 0 0;
-		}
-
-		.cover:global(.reveal-pending) .seal {
-			scale: 0.4;
-			rotate: -90deg;
-			opacity: 0;
-			transition:
-				scale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s,
-				rotate 0.9s var(--ease) 0.6s,
-				opacity 0.4s ease 0.6s;
-		}
-
-		.cover:global(.is-revealed) .seal {
-			scale: 1;
-			rotate: 0deg;
-			opacity: 1;
-		}
-
-		.pathway:global(.reveal-pending)::before {
-			scale: 0 1;
-			transition: scale 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s;
-		}
-
-		.pathway:global(.is-revealed)::before {
-			scale: 1 1;
-		}
-
-		.pathway:global(.reveal-pending) li {
-			opacity: 0;
-			translate: 0 16px;
-			transition:
-				opacity 0.6s ease,
-				translate 0.8s var(--ease);
-			transition-delay: calc(0.4s + var(--d) * 0.45s);
-		}
-
-		.pathway:global(.is-revealed) li {
-			opacity: 1;
-			translate: 0 0;
-		}
-
-		.score:global(.reveal-pending) .ruler_marker {
-			left: calc(var(--from) * 100%);
-			transition: left 1.8s cubic-bezier(0.65, 0, 0.35, 1) 0.4s;
-		}
-
-		.score:global(.is-revealed) .ruler_marker {
-			left: calc(var(--to) * 100%);
-		}
-
-		.score:global(.reveal-pending) .ruler_trail {
-			scale: 0 1;
-			transition: scale 1.8s cubic-bezier(0.65, 0, 0.35, 1) 0.4s;
-		}
-
-		.score:global(.is-revealed) .ruler_trail {
-			scale: 1 1;
-		}
-
-		.qs_score:global(.reveal-pending) .lit {
-			scale: 0;
-			rotate: -72deg;
-			transition:
-				scale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-				rotate 0.6s var(--ease);
-			transition-delay: calc(0.5s + var(--s) * 0.16s);
-		}
-
-		.qs_score:global(.is-revealed) .lit {
-			scale: 1;
-			rotate: 0deg;
-		}
-	}
-
-	/* ══════════════════════════════════════════════════════════════
-	   2. WURI scroll story
-	   ══════════════════════════════════════════════════════════════ */
-	.rank_story {
-		display: grid;
-		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-		gap: clamp(32px, 5.2vw, 100px);
-	}
-
-	.rank_stage {
-		position: sticky;
-		top: 14vh;
-		align-self: start;
-		display: grid;
-		gap: clamp(24px, 3vw, 52px);
-	}
-
-	.rank_now {
-		position: relative;
-		isolation: isolate;
-	}
-
-	.rank_value {
-		display: flex;
-		align-items: flex-start;
-		min-height: 0.85em;
-		font: 800 var(--fs-stat) / 0.85 var(--font-display);
-		font-size: clamp(110px, 15vw, 290px);
-		letter-spacing: -0.06em;
-		font-variant-numeric: tabular-nums;
-		background: var(--grad-title);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.rank_value sup {
-		margin-block-start: 0.06em;
-		margin-inline-start: 0.04em;
-		font-size: 0.26em;
-		letter-spacing: 0;
-		line-height: 1;
-		-webkit-text-fill-color: var(--c-gold-dark);
-	}
-
-	.rank_pending {
-		color: var(--c-gold-dark);
-		-webkit-text-fill-color: currentColor;
-	}
-
-	.rank_pending :global(svg) {
-		width: 0.8em;
-		height: 0.8em;
-	}
-
-	.rank_caption {
-		margin-block-start: 14px;
-		color: var(--muted);
-		font-size: var(--fs-md);
-	}
-
-	.rank_ladder {
-		position: relative;
-		display: grid;
-		border-block-start: 1px solid var(--rule);
-	}
-
-	.rank_ladder li {
-		border-block-end: 1px solid var(--rule);
-	}
-
-	.ladder_marker {
-		position: absolute;
-		inset-block-start: 0;
-		inset-inline-start: 0;
-		width: 3px;
-		height: calc(100% / var(--count));
-		background: var(--grad-gold);
-		translate: 0 calc(var(--active) * 100%);
-		transition: translate 0.5s var(--ease);
-	}
-
-	.rank_ladder button {
-		display: grid;
-		grid-template-columns: 3.4em minmax(0, 1fr) auto;
-		align-items: center;
-		gap: 12px;
-		width: 100%;
-		padding: clamp(12px, 1.2vw, 20px) 4px clamp(12px, 1.2vw, 20px) 18px;
-		color: var(--muted);
-		text-align: start;
-		background: none;
-		border: 0;
-		cursor: pointer;
-		font: inherit;
-		transition: color 0.3s ease;
-	}
-
-	.rank_ladder button.current,
-	.rank_ladder button:hover {
-		color: var(--c-maroon-deep);
-	}
-
-	.ladder_year {
-		color: var(--c-gold-dark);
-		font-weight: 700;
-	}
-
-	.ladder_name {
-		font: 700 clamp(15px, 1.15vw, 22px) / 1.2 var(--font-heading);
-	}
-
-	.ladder_rank {
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.rank_chapter {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		min-height: 72vh;
-		padding-inline-start: clamp(20px, 1.9vw, 36px);
-		border-inline-start: 2px solid var(--c-shell);
-		opacity: 0.28;
-		transition:
-			opacity 0.5s ease,
-			border-color 0.5s ease;
-	}
-
-	.rank_chapter.active {
-		opacity: 1;
-		border-inline-start-color: var(--c-gold);
-	}
-
-	/* The stage shows the rank on wide screens; chapters carry it for screen
-	   readers and for narrow layouts where the stage does not pin. */
-	.chapter_rank {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		clip-path: inset(50%);
-		white-space: nowrap;
-	}
-
-	.chapter_title {
-		color: var(--c-maroon);
-		font: 700 clamp(34px, 3.4vw, 66px) / 1.02 var(--font-display);
-		letter-spacing: -0.01em;
-		text-wrap: balance;
-	}
-
-	.chapter_category {
-		margin-block: 14px 18px;
-		color: var(--c-gold-dark);
-		font-weight: 700;
-	}
-
-	.chapter_desc {
-		max-width: 46ch;
-		font-size: var(--fs-lg);
-		line-height: 1.5;
-	}
-
-	.chapter_flag {
-		display: inline-flex;
-		align-self: flex-start;
-		align-items: center;
-		gap: 8px;
-		margin-block-start: 22px;
-		padding: 8px 16px;
-		color: var(--c-maroon-deep);
-		background: var(--grad-gold);
-		border-radius: 999px;
-		font-weight: 700;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.rank_pending :global(svg) {
-			animation: hourglass 2.4s var(--ease) infinite;
-		}
-	}
-
-	/* ══════════════════════════════════════════════════════════════
-	   3. Partners
-	   ══════════════════════════════════════════════════════════════ */
-	/* Map and index sit directly on the page; the map fades at its edges. */
-	.network {
-		display: grid;
-		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-		gap: clamp(28px, 4vw, 80px);
-		align-items: center;
-	}
-
-	.network_map_wrap {
-		width: 100%;
-		max-width: 620px;
-		justify-self: center;
-	}
-
-	/* Rows share one grid through subgrid, so every short name gets the width
-	   of the widest one and the full names line up. */
-	.partner_index {
-		display: grid;
-		grid-template-columns: auto minmax(0, 1fr) auto;
-		column-gap: clamp(16px, 2vw, 36px);
-		border-block-start: 1.5px solid var(--c-maroon-deep);
-	}
-
-	.partner_index > li {
-		display: grid;
-		grid-column: 1 / -1;
-		grid-template-columns: subgrid;
-		border-block-end: 1px solid var(--rule);
-	}
-
-	.partner_index > li > button {
-		display: grid;
-		grid-column: 1 / -1;
-		grid-template-columns: subgrid;
-		align-items: center;
-		padding-block: clamp(14px, 1.5vw, 26px);
-		color: inherit;
-		text-align: start;
-		background: none;
-		border: 0;
-		cursor: pointer;
-		font: inherit;
-	}
-
-	.partner_index > li > button:focus-visible {
-		outline-offset: 2px;
-	}
-
-	/* Outline names. Montserrat builds glyphs from overlapping contours, so a
-	   plain text-stroke draws seams inside M, P and A. Painting the stroke
-	   first and a page-coloured fill over it leaves only the outer edge; the
-	   stroke is doubled because the fill covers its inner half. */
-	.partner_short {
-		color: var(--c-surface);
-		font: 800 clamp(34px, 4vw, 78px) / 0.9 var(--font-display);
-		letter-spacing: -0.01em;
-		-webkit-text-stroke: 3px var(--c-gold);
-		paint-order: stroke fill;
-		transition:
-			color 0.4s ease,
-			-webkit-text-stroke-color 0.4s ease,
-			translate 0.4s var(--ease);
-	}
-
-	.open .partner_short {
-		color: var(--c-gold-light);
-		-webkit-text-stroke-color: var(--c-gold-light);
-	}
-
-	@media (hover: hover) {
-		.partner_index > li > button:hover .partner_short {
-			translate: 6px 0;
-		}
-
-		.partner_index > li:not(.open) > button:hover .partner_short {
-			-webkit-text-stroke-color: var(--c-gold-dark);
-		}
-	}
-
-	.partner_meta {
-		display: grid;
-		gap: 4px;
-	}
-
-	.partner_name {
-		color: var(--c-maroon-deep);
-		font: 700 clamp(15px, 1.15vw, 22px) / 1.25 var(--font-heading);
-		letter-spacing: 0.02em;
-	}
-
-	.partner_place {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
-		color: var(--muted);
-		font-size: 0.9em;
-	}
-
-	.partner_place :global(svg) {
-		color: var(--c-gold-dark);
-	}
-
-	.partner_logo {
-		display: grid;
-		place-items: center;
-		width: clamp(40px, 3.4vw, 60px);
-		aspect-ratio: 1;
-		padding: 6px;
-		background: #fff;
-		border: 1px solid var(--rule);
-		border-radius: 50%;
-		filter: grayscale(1);
-		opacity: 0.6;
-		transition:
-			opacity 0.4s ease,
-			filter 0.4s ease;
-	}
-
-	.open .partner_logo {
-		filter: none;
-		opacity: 1;
-	}
-
-	.partner_logo img {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-
-	.partner_detail {
-		display: grid;
-		grid-column: 2 / -1;
-		grid-template-rows: 0fr;
-		transition: grid-template-rows 0.5s var(--ease);
-	}
-
-	.open .partner_detail {
-		grid-template-rows: 1fr;
-	}
-
-	.partner_detail > div {
-		min-height: 0;
-		overflow: hidden;
-	}
-
-	.partner_detail p {
-		max-width: 52ch;
-		padding-block-end: clamp(16px, 1.6vw, 26px);
-		color: var(--muted);
-		font-size: var(--fs-md);
-		line-height: 1.5;
-	}
-
-	.partner_photos {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 10px;
-		max-width: 520px;
-		padding-block-end: clamp(16px, 1.6vw, 26px);
-	}
-
-	.partner_photos :global(.photo_button) {
-		height: auto;
-		aspect-ratio: 4 / 3;
-		border-radius: 14px;
-	}
-
-	/* ══════════════════════════════════════════════════════════════
-	   4. Joint research
-	   ══════════════════════════════════════════════════════════════ */
-	.feature_story {
-		display: grid;
-		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-		gap: clamp(32px, 4.4vw, 84px);
-		align-items: center;
-		margin-block-end: clamp(56px, 6vw, 120px);
-	}
-
-	.story_collage {
-		position: relative;
-		padding-block-end: 16%;
-	}
-
-	.story_collage :global(.collage_main) {
-		width: 90%;
-		aspect-ratio: 448 / 201;
-		border-radius: var(--radius);
-	}
-
-	.story_collage :global(.collage_inset) {
-		position: absolute;
-		inset-inline-end: 0;
-		inset-block-end: 4%;
-		width: 44%;
-		aspect-ratio: 257 / 142;
-		border: 6px solid var(--c-surface);
-		border-radius: 18px;
-		box-shadow: 0 24px 50px -12px rgb(26 22 20 / 0.45);
-		rotate: 3deg;
-		transition: rotate 0.6s var(--ease);
-	}
-
-	@media (hover: hover) {
-		.story_collage :global(.collage_inset:hover) {
-			rotate: 0deg;
-		}
-	}
-
-	.story_collage figcaption {
-		max-width: 50%;
-		margin-block-start: 14px;
-		color: var(--muted);
-		font-size: 0.9em;
-	}
-
-	.story_title {
-		font: 700 clamp(44px, 4.6vw, 90px) / 1 var(--font-display);
-		letter-spacing: -0.02em;
-		background: var(--grad-title);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.story_lead {
-		margin-block: 18px 14px;
-		color: var(--c-maroon-deep);
-		font: 700 clamp(19px, 1.6vw, 30px) / 1.3 var(--font-heading);
-		letter-spacing: 0.01em;
-	}
-
-	.story_text {
-		color: var(--muted);
-		font-size: var(--fs-md);
-		line-height: 1.55;
-	}
-
-	.story_partner {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		margin-block: 22px;
-		padding-block: 14px;
-		color: var(--c-maroon-deep);
-		border-block: 1px solid var(--rule);
-		font-weight: 700;
-	}
-
-	.story_partner_logo {
-		display: grid;
-		place-items: center;
-		width: 46px;
-		height: 46px;
-		flex: 0 0 auto;
-		padding: 6px;
-		border: 1px solid var(--rule);
-		border-radius: 50%;
-	}
-
-	.story_partner_logo img {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-
-	.people {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 16px 20px;
-	}
-
-	.people li {
-		display: grid;
-		align-content: start;
-		gap: 2px;
-		padding-inline-start: 14px;
-		border-inline-start: 2px solid var(--c-gold);
-	}
-
-	.people_name {
-		color: var(--c-ink);
-		font-weight: 700;
-		line-height: 1.25;
-	}
-
-	.people_role {
-		color: var(--muted);
-		font-size: 0.86em;
-	}
-
-	/* River timeline: five stops on a wave; the last leg is still ahead. */
-	.river {
-		--slot: clamp(150px, 12vw, 200px);
-		--band: 120px;
-		position: relative;
-	}
-
-	.river_line {
-		position: absolute;
-		inset-block-start: var(--slot);
-		inset-inline: 0;
-		width: 100%;
-		height: var(--band);
-		overflow: visible;
-	}
-
-	.river_line path {
-		fill: none;
-		stroke-linecap: round;
-		vector-effect: non-scaling-stroke;
-	}
-
-	.river_done {
-		stroke: var(--c-maroon);
-		stroke-width: 4;
-	}
-
-	.river_flow {
-		stroke: var(--c-gold-light);
-		stroke-width: 4;
-		stroke-dasharray: 0.06 0.94;
-		opacity: 0;
-	}
-
-	.river_next {
-		stroke: var(--c-maroon);
-		stroke-width: 3;
-		stroke-dasharray: 2 9;
-		opacity: 0.55;
-	}
-
-	.river_stops {
-		position: relative;
-		display: grid;
-		grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
-	}
-
-	.river_stops li {
-		display: grid;
-		grid-template-rows: var(--slot) var(--band) var(--slot);
-		justify-items: center;
-	}
-
-	.stop_dot {
-		grid-row: 2;
-		align-self: center;
-		width: 22px;
-		height: 22px;
-		background: var(--c-surface);
-		border: 4px solid var(--c-maroon);
-		border-radius: 50%;
-	}
-
-	.current .stop_dot {
-		background: var(--c-maroon);
-		box-shadow: 0 0 0 8px rgb(148 21 24 / 0.15);
-	}
-
-	.next .stop_dot {
-		border-style: dashed;
-		border-color: var(--c-gold-dark);
-	}
-
-	.stop_text {
-		grid-row: 1;
-		align-self: end;
-		max-width: 22ch;
-		padding-block-end: 12px;
-		padding-inline: 8px;
-		text-align: center;
-	}
-
-	.below .stop_text {
-		grid-row: 3;
-		align-self: start;
-		padding-block: 12px 0;
-	}
-
-	.stop_text :is(time, .stop_date) {
-		color: var(--c-gold-dark);
-		font-weight: 700;
-	}
-
-	.stop_text h4 {
-		margin-block: 4px 6px;
-		color: var(--c-maroon);
-		font: 700 clamp(17px, 1.4vw, 26px) / 1.15 var(--font-heading);
-		letter-spacing: 0.01em;
-	}
-
-	.stop_text p {
-		color: var(--muted);
-		font-size: 0.88em;
-		line-height: 1.45;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.story_collage:global(.reveal-pending) :global(.collage_inset) {
-			translate: 20% 20%;
-			rotate: 14deg;
-			transition:
-				translate 1.1s var(--ease) 0.4s,
-				rotate 1.1s var(--ease) 0.4s;
-		}
-
-		.story_collage:global(.is-revealed) :global(.collage_inset) {
-			translate: 0 0;
-			rotate: 3deg;
-		}
-
-		.river:global(.reveal-pending) .river_done {
-			stroke-dasharray: 1;
-			stroke-dashoffset: 1;
-			transition: stroke-dashoffset 2.2s cubic-bezier(0.65, 0, 0.35, 1) 0.2s;
-		}
-
-		.river:global(.is-revealed) .river_done {
-			stroke-dashoffset: 0;
-		}
-
-		.river:global(.is-revealed) .river_flow {
-			opacity: 1;
-			animation: flow 3.2s linear 2.4s infinite;
-		}
-
-		.river:global(.reveal-pending) .river_next {
-			opacity: 0;
-			transition: opacity 0.8s ease 2.2s;
-		}
-
-		.river:global(.is-revealed) .river_next {
-			opacity: 0.55;
-		}
-
-		.river:global(.reveal-pending) li > * {
-			opacity: 0;
-			translate: 0 14px;
-			transition:
-				opacity 0.6s ease,
-				translate 0.7s var(--ease);
-			transition-delay: calc(0.4s + var(--i) * 0.42s);
-		}
-
-		.river:global(.reveal-pending) .stop_dot {
-			scale: 0;
-			translate: 0 0;
-			transition:
-				opacity 0.3s ease,
-				scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-			transition-delay: calc(0.3s + var(--i) * 0.42s);
-		}
-
-		.river:global(.is-revealed) li > * {
-			opacity: 1;
-			translate: 0 0;
-			scale: 1;
-		}
-
-		.current .stop_dot {
-			animation: pulse-ring 2.4s ease-out infinite;
-		}
-	}
-
-	/* ══════════════════════════════════════════════════════════════
-	   5. Faculty
-	   ══════════════════════════════════════════════════════════════ */
-	.banner {
-		position: relative;
-	}
-
-	.banner :global(.banner_photo) {
-		aspect-ratio: 21 / 8;
-		border-radius: var(--radius);
-	}
-
-	.banner :global(.banner_photo img) {
-		object-position: center 35%;
-	}
-
-	.banner figcaption {
-		position: absolute;
-		inset-inline-start: var(--inset);
-		inset-block-end: var(--inset);
-		padding: 8px 16px;
-		color: #fff;
-		background: rgb(26 22 20 / 0.6);
-		border-radius: 999px;
-		backdrop-filter: blur(6px);
-		pointer-events: none;
-	}
-
-	.role_strip {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		margin-block: clamp(28px, 3vw, 56px) clamp(56px, 6vw, 120px);
-	}
-
-	.role_strip li {
-		display: grid;
-		align-content: start;
-		gap: 8px;
-		padding-inline: clamp(18px, 2.4vw, 48px);
-	}
-
-	.role_strip li:first-child {
-		padding-inline-start: 0;
-	}
-
-	.role_strip li + li {
-		border-inline-start: 1px solid var(--rule);
-	}
-
-	.role_strip :global(svg) {
-		margin-block-end: 6px;
-		color: var(--c-gold-dark);
-	}
-
-	.role_strip h3 {
-		color: var(--c-maroon);
-		font: 700 clamp(19px, 1.7vw, 32px) / 1.15 var(--font-heading);
-		letter-spacing: 0.02em;
-	}
-
-	.role_strip p {
-		color: var(--muted);
-	}
-
-	.faculty_split {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-		gap: clamp(32px, 5vw, 100px);
-		align-items: start;
-	}
-
-	.credits li {
-		display: flex;
-		align-items: center;
-		gap: clamp(14px, 1.6vw, 26px);
-		padding-block: clamp(12px, 1.3vw, 22px);
-		border-block-start: 1px solid var(--rule);
-	}
-
-	.credits li:last-child {
-		border-block-end: 1px solid var(--rule);
-	}
-
-	.credit_name {
-		color: var(--c-maroon-deep);
-		font: 700 clamp(18px, 1.7vw, 32px) / 1.15 var(--font-heading);
-		letter-spacing: 0.01em;
-		transition: translate 0.35s var(--ease);
-	}
-
-	@media (hover: hover) {
-		.credits li:hover .credit_name {
-			translate: 6px 0;
-		}
-	}
-
-	.conference_total {
-		display: flex;
-		align-items: flex-end;
-		gap: 16px;
-		margin-block-end: clamp(20px, 2vw, 36px);
-		font: 800 clamp(96px, 9vw, 180px) / 0.8 var(--font-display);
-		letter-spacing: -0.06em;
-		background: var(--grad-title);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.conference_total small {
-		max-width: 15ch;
-		padding-block-end: 0.12em;
-		color: var(--muted);
-		font: 600 clamp(15px, 1.1vw, 20px) / 1.35 var(--font-body);
-		letter-spacing: 0;
-		-webkit-text-fill-color: var(--muted);
-	}
-
-	.skyline {
-		--chip: clamp(30px, 2.5vw, 44px);
-		display: grid;
-		grid-template-columns: repeat(5, minmax(0, 1fr));
-		gap: clamp(8px, 1vw, 16px);
-		align-items: end;
-		min-height: calc(var(--rows) * (var(--chip) + 6px) + 40px);
-		border-block-end: 2px solid var(--c-maroon-deep);
-	}
-
-	.skyline > li {
-		display: grid;
-		gap: 8px;
-		align-content: end;
-		height: 100%;
-	}
-
-	.skyline_stack {
-		display: flex;
-		flex-direction: column-reverse;
-		gap: 6px;
-	}
-
-	.skyline_stack li {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 5px;
-		height: var(--chip);
-		padding-inline: 6px;
-		overflow: hidden;
-		color: #fff;
-		background: linear-gradient(135deg, var(--c-maroon), var(--c-maroon-deep));
-		border-radius: 8px;
-		font-size: clamp(0.66rem, 0.8vw, 0.92rem);
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		white-space: nowrap;
-		transition:
-			translate 0.3s var(--ease),
-			filter 0.3s ease;
-	}
-
-	.skyline_stack .award_chip {
-		color: var(--c-maroon-deep);
-		background: var(--grad-gold);
-	}
-
-	.skyline_year {
-		padding-block: 10px 12px;
-		color: var(--c-maroon);
-		font: 800 clamp(0.9rem, 1.1vw, 1.3rem) / 1 var(--font-heading);
-		text-align: center;
-	}
-
-	@media (hover: hover) {
-		.skyline_stack li:hover {
-			translate: 0 -3px;
-			filter: brightness(1.15);
-		}
-	}
-
-	.award_note {
-		display: flex;
-		align-items: flex-start;
-		gap: 16px;
-		margin-block-start: clamp(22px, 2.2vw, 40px);
-		padding-inline-start: 18px;
-		border-inline-start: 3px solid var(--c-gold);
-		font-size: var(--fs-md);
-		line-height: 1.5;
-	}
-
-	.award_note :global(svg) {
-		flex: 0 0 auto;
-		color: var(--c-gold-dark);
-	}
-
-	.award_note strong {
-		color: var(--c-maroon);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.role_strip:global(.reveal-pending) li {
-			opacity: 0;
-			translate: 0 20px;
-			transition:
-				opacity 0.6s ease,
-				translate 0.8s var(--ease);
-			transition-delay: calc(0.15s + var(--d) * 0.15s);
-		}
-
-		.role_strip:global(.is-revealed) li {
-			opacity: 1;
-			translate: 0 0;
-		}
-
-		.credits:global(.reveal-pending) li {
-			opacity: 0;
-			translate: -24px 0;
-			transition:
-				opacity 0.6s ease,
-				translate 0.8s var(--ease);
-			transition-delay: calc(0.15s + var(--d) * 0.09s);
-		}
-
-		.credits:global(.is-revealed) li {
-			opacity: 1;
-			translate: 0 0;
-		}
-
-		.conferences:global(.reveal-pending) .skyline_stack li {
-			opacity: 0;
-			translate: 0 24px;
-			transition:
-				opacity 0.5s ease,
-				translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-			transition-delay: calc(0.4s + var(--d) * 0.08s);
-		}
-
-		.conferences:global(.is-revealed) .skyline_stack li {
-			opacity: 1;
-			translate: 0 0;
-		}
-	}
-
-	/* ══════════════════════════════════════════════════════════════
-	   6. Students
-	   ══════════════════════════════════════════════════════════════ */
-	.pass {
-		--stub: clamp(150px, 17vw, 300px);
-		--notch: clamp(12px, 1.2vw, 20px);
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) var(--stub);
-		overflow: hidden;
-		color: #fff;
-		background: var(--panel-maroon);
-		border-radius: var(--radius);
-		box-shadow: 0 40px 80px -40px rgb(92 15 22 / 0.6);
-		/* Notches where the stub tears off. */
-		mask:
-			radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100%
-				51% no-repeat,
-			radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000)
-				bottom / 100% 51% no-repeat;
-	}
-
-	.pass_main {
-		padding: var(--inset);
-	}
-
-	.pass_route {
-		display: grid;
-		grid-template-columns: auto minmax(60px, 1fr) auto;
-		align-items: center;
-		gap: clamp(14px, 2vw, 40px);
-	}
-
-	.pass_route > div {
-		display: grid;
-	}
-
-	.pass_route > div:last-child {
-		text-align: end;
-	}
-
-	.pass_code {
-		font: 900 clamp(3rem, 6.4vw, 7.6rem) / 0.9 var(--font-heading);
-		letter-spacing: -0.04em;
-	}
-
-	.pass_city {
-		color: rgb(255 255 255 / 0.72);
-		font-size: 0.95em;
-	}
-
-	.pass_flight {
-		position: relative;
-		display: grid;
-		place-items: center;
-		color: var(--c-gold-light);
-	}
-
-	.pass_line {
-		position: absolute;
-		inset-inline: 0;
-		top: 50%;
-		border-block-start: 2px dashed rgb(250 197 73 / 0.5);
-	}
-
-	.pass_flight :global(svg) {
-		position: relative;
-		box-sizing: content-box;
-		padding: 6px;
-		background: #5c1d1e;
-		border-radius: 50%;
-		rotate: 45deg;
-	}
-
-	.pass_title {
-		margin-block: clamp(22px, 2.4vw, 40px) 6px;
-		color: var(--c-gold-light);
-		font: 700 clamp(28px, 2.9vw, 56px) / 1 var(--font-display);
-		letter-spacing: -0.01em;
-	}
-
-	.pass_event {
-		color: rgb(255 255 255 / 0.9);
-		font-size: var(--fs-md);
-	}
-
-	.pass_fields {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 14px clamp(28px, 4vw, 72px);
-		margin-block-start: clamp(18px, 1.8vw, 30px);
-		padding-block-start: clamp(16px, 1.6vw, 26px);
-		border-block-start: 1px solid rgb(255 255 255 / 0.16);
-	}
-
-	.pass_fields dt {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		color: rgb(255 255 255 / 0.65);
-		font-size: 0.88em;
-	}
-
-	.pass_fields dt :global(svg) {
-		color: var(--c-gold-light);
-	}
-
-	.pass_fields dd {
-		margin-block-start: 4px;
-		font-weight: 700;
-	}
-
-	.pass_stub {
-		display: grid;
-		align-content: center;
-		justify-items: center;
-		gap: 8px;
-		padding: var(--inset) 18px;
-		color: var(--c-maroon-deep);
-		text-align: center;
-		background: var(--grad-gold);
-		border-inline-start: 2px dashed rgb(92 15 22 / 0.35);
-	}
-
-	.pass_stub_value {
-		font: 900 clamp(4rem, 7vw, 8rem) / 0.85 var(--font-heading);
-		letter-spacing: -0.05em;
-	}
-
-	.pass_stub_label {
-		max-width: 14ch;
-		font-weight: 700;
-		line-height: 1.3;
-	}
-
-	.barcode {
-		width: 80%;
-		height: 36px;
-		margin-block-start: 10px;
-		background: repeating-linear-gradient(
-			90deg,
-			var(--c-maroon-deep) 0 2px,
-			transparent 2px 4px,
-			var(--c-maroon-deep) 4px 7px,
-			transparent 7px 8px,
-			var(--c-maroon-deep) 8px 9px,
-			transparent 9px 12px
-		);
-		opacity: 0.8;
-	}
-
-	.dispatch_photos {
-		display: grid;
-		grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
-		grid-template-rows: repeat(2, minmax(0, 1fr));
-		gap: clamp(8px, 0.8vw, 14px);
-		aspect-ratio: 2.7;
-		margin-block-start: clamp(14px, 1.4vw, 24px);
-	}
-
-	.dispatch_photos :global(.photo_button) {
-		border-radius: 15px;
-	}
-
-	.dispatch_photos :global(.dispatch_main) {
-		grid-row: 1 / -1;
-	}
-
-	.proceedings_title {
-		margin-block-start: clamp(48px, 5vw, 100px);
-	}
-
-	/* Proceedings index: numbered rows; rows with a photo preview it on hover. */
-	.proceedings {
-		border-block-start: 1.5px solid var(--c-maroon-deep);
-	}
-
-	.proceedings > li {
-		position: relative;
-		display: grid;
-		grid-template-columns: clamp(64px, 7vw, 130px) minmax(0, 1fr) auto;
-		align-items: center;
-		gap: clamp(16px, 2.4vw, 48px);
-		padding-block: clamp(20px, 2.2vw, 40px);
-		border-block-end: 1px solid var(--rule);
-		isolation: isolate;
-	}
-
-	.proceedings > li::before {
-		position: absolute;
-		z-index: -1;
-		inset: 0 calc(var(--page-gutter) * -0.4);
-		background: linear-gradient(90deg, rgb(250 197 73 / 0.16), transparent 70%);
-		border-radius: 14px;
-		opacity: 0;
-		transition: opacity 0.4s ease;
-		content: '';
-	}
-
-	/* Outline numerals: stroke painted under a page-coloured fill so the
-	   overlapping glyph contours don't show (same fix as .partner_short). */
-	.proc_number {
-		color: var(--c-surface);
-		font: 800 clamp(44px, 5vw, 96px) / 0.9 var(--font-display);
-		letter-spacing: 0.02em;
-		font-variant-numeric: tabular-nums;
-		-webkit-text-stroke: 3px var(--c-gold);
-		paint-order: stroke fill;
-		transition:
-			color 0.4s ease,
-			-webkit-text-stroke-color 0.4s ease;
-	}
-
-	.proc_body h4 {
-		max-width: 40ch;
-		color: var(--c-maroon);
-		font: 700 clamp(19px, 1.7vw, 32px) / 1.2 var(--font-heading);
-		letter-spacing: 0.01em;
-		text-wrap: pretty;
-	}
-
-	.proc_body p {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px 18px;
-		margin-block-start: 10px;
-	}
-
-	.proc_adviser {
-		color: var(--muted);
-		font-style: italic;
-	}
-
-	.proc_model {
-		padding: 6px 14px;
-		color: var(--c-maroon);
-		border: 1px solid var(--rule);
-		border-radius: 999px;
-		font-size: 0.85em;
-		font-weight: 700;
-		white-space: nowrap;
-	}
-
-	.proc_peek {
-		position: absolute;
-		z-index: 2;
-		inset-block-start: 50%;
-		inset-inline-end: 14%;
-		width: clamp(180px, 16vw, 300px);
-		height: auto;
-		border: 5px solid var(--c-surface);
-		border-radius: 14px;
-		box-shadow: 0 24px 50px -12px rgb(26 22 20 / 0.45);
-		opacity: 0;
-		translate: 0 -40%;
-		rotate: 4deg;
-		pointer-events: none;
-		transition:
-			opacity 0.35s ease,
-			translate 0.5s var(--ease),
-			rotate 0.5s var(--ease);
-	}
-
-	@media (hover: hover) {
-		.proceedings > li:hover::before {
-			opacity: 1;
-		}
-
-		.proceedings > li:hover .proc_number {
-			color: var(--c-gold-light);
-			-webkit-text-stroke-color: var(--c-gold-light);
-		}
-
-		.proceedings > li:hover .proc_peek {
-			opacity: 1;
-			translate: 0 -50%;
-			rotate: -3deg;
-		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.pass:global(.reveal-pending) .pass_flight :global(svg) {
-			translate: -200% 0;
-			opacity: 0;
-			transition:
-				translate 1.4s var(--ease) 0.4s,
-				opacity 0.6s ease 0.4s;
-		}
-
-		.pass:global(.is-revealed) .pass_flight :global(svg) {
-			translate: 0 0;
-			opacity: 1;
-		}
-
-		.pass:global(.reveal-pending) .pass_stub {
-			translate: 30% 0;
-			rotate: 4deg;
-			transition:
-				translate 1s var(--ease) 0.3s,
-				rotate 1s var(--ease) 0.3s;
-		}
-
-		.pass:global(.is-revealed) .pass_stub {
-			translate: 0 0;
-			rotate: 0deg;
-		}
-	}
-
-	.report-button {
-		display: inline-flex;
-		min-height: 44px;
-		align-items: center;
-		gap: 10px;
-		margin-block-start: clamp(28px, 3vw, 48px);
-		padding: 12px 20px;
-		font-weight: 700;
-	}
-
-	/* ══ Shared photo frame ══ */
-	.photo_button {
-		position: relative;
-		display: block;
-		width: 100%;
-		height: 100%;
-		padding: 0;
-		overflow: hidden;
-		background: var(--c-shell);
-		border: 0;
-	}
-
-	.photo_button img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: scale 0.7s var(--ease);
-	}
-
-	.photo_button::after {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to top, rgb(0 0 0 / 0.3), transparent 50%);
-		opacity: 0;
-		transition: opacity 0.4s ease;
-		content: '';
-	}
-
-	@media (hover: hover) {
-		.photo_button:hover img {
-			scale: 1.05;
-		}
-
-		.photo_button:hover::after {
-			opacity: 1;
-		}
-	}
-
-	/* ══ Keyframes ══ */
-	@keyframes spin {
-		to {
-			rotate: 360deg;
-		}
-	}
-
-	@keyframes hourglass {
-		0%,
-		40% {
-			rotate: 0deg;
-		}
-		60%,
-		100% {
-			rotate: 180deg;
-		}
-	}
-
-	@keyframes flow {
-		from {
-			stroke-dashoffset: 1;
-		}
-		to {
-			stroke-dashoffset: 0;
-		}
-	}
-
-	@keyframes pulse-ring {
-		0% {
-			box-shadow: 0 0 0 0 rgb(148 21 24 / 0.35);
-		}
-		100% {
-			box-shadow: 0 0 0 16px rgb(148 21 24 / 0);
-		}
-	}
-
-	/* ══ Responsive ══ */
-	@media (max-width: 960px) {
-		.network,
-		.faculty_split,
-		.feature_story {
-			grid-template-columns: minmax(0, 1fr);
-		}
-
-		.network_map_wrap {
-			max-width: 520px;
-		}
-
-		/* The rank stage stops pinning; each chapter shows its own rank. */
-		.rank_story {
-			grid-template-columns: minmax(0, 1fr);
-		}
-
-		.rank_stage {
-			display: none;
-		}
-
-		.rank_chapter {
-			min-height: 0;
-			padding-block: 24px;
-			opacity: 1;
-			border-inline-start-color: var(--c-gold);
-		}
-
-		.chapter_rank {
-			position: static;
-			width: auto;
-			height: auto;
-			overflow: visible;
-			clip-path: none;
-			margin-block-end: 8px;
-			font: 800 clamp(36px, 9vw, 64px) / 1 var(--font-display);
-			letter-spacing: -0.04em;
-			white-space: normal;
-			background: var(--grad-title);
-			-webkit-background-clip: text;
-			background-clip: text;
-			-webkit-text-fill-color: transparent;
-		}
-
-		/* River turns vertical. */
-		.river_line {
-			display: none;
-		}
-
-		.river_stops {
-			grid-template-columns: minmax(0, 1fr);
-			padding-inline-start: 10px;
-			border-inline-start: 3px solid var(--c-maroon);
-		}
-
-		.river_stops li {
-			grid-template-columns: auto minmax(0, 1fr);
-			grid-template-rows: auto;
-			justify-items: start;
-			column-gap: 16px;
-			margin-inline-start: -23px;
-			padding-block: 12px;
-		}
-
-		.river_stops li.next {
-			border-inline-start: 0;
-		}
-
-		.stop_dot,
-		.stop_text,
-		.below .stop_text {
-			grid-row: 1;
-			align-self: start;
-		}
-
-		.stop_dot {
-			margin-block-start: 2px;
-		}
-
-		.stop_text,
-		.below .stop_text {
-			max-width: none;
-			padding: 0;
-			text-align: start;
-		}
-	}
-
-	@media (max-width: 700px) {
-		.cover {
-			aspect-ratio: 4 / 5;
-			min-height: 0;
-		}
-
-		.cover_copy {
-			max-width: none;
-			inset-inline-end: var(--inset);
-		}
-
-		.seal {
-			width: 80px;
-		}
-
-		.pathway,
-		.scoreboard,
-		.role_strip {
-			grid-template-columns: minmax(0, 1fr);
-		}
-
-		.pathway {
-			padding-block-start: 0;
-			padding-inline-start: 30px;
-		}
-
-		.pathway::before {
-			inset-block: 6px 0;
-			inset-inline: 6px auto;
-			width: 2px;
-			height: auto;
-			background: linear-gradient(var(--c-gold-dark), var(--c-gold-light) 70%, transparent);
-			transform-origin: top;
-		}
-
-		.pathway li::before {
-			inset-block-start: 4px;
-			inset-inline-start: -30px;
-		}
-
-		.score,
-		.score:first-child {
-			padding-inline: 0;
-		}
-
-		.score + .score {
-			border-inline-start: 0;
-			border-block-start: 1px solid var(--rule);
-		}
-
-		.role_strip li,
-		.role_strip li:first-child {
-			padding: 18px 0;
-		}
-
-		.role_strip li + li {
-			border-inline-start: 0;
-			border-block-start: 1px solid var(--rule);
-		}
-
-		.partner_index {
-			grid-template-columns: minmax(0, 1fr) auto;
-		}
-
-		.partner_short {
-			grid-column: 1 / -1;
-			margin-block-end: 8px;
-		}
-
-		.partner_detail {
-			grid-column: 1 / -1;
-		}
-
-		.people {
-			grid-template-columns: minmax(0, 1fr);
-		}
-
-		.banner :global(.banner_photo) {
-			aspect-ratio: 16 / 9;
-		}
-
-		.banner figcaption {
-			position: static;
-			margin-block-start: 10px;
-			padding: 0;
-			color: var(--muted);
-			background: none;
-		}
-
-		.proceedings > li {
-			grid-template-columns: auto minmax(0, 1fr);
-		}
-
-		.proc_model {
-			grid-column: 2;
-			justify-self: start;
-		}
-
-		.proc_peek {
-			display: none;
-		}
-
-		.pass {
-			grid-template-columns: minmax(0, 1fr);
-			mask: none;
-		}
-
-		.pass_stub {
-			grid-template-columns: auto 1fr;
-			justify-items: start;
-			align-items: center;
-			column-gap: 16px;
-			padding: 18px var(--inset);
-			text-align: start;
-			border-inline-start: 0;
-			border-block-start: 2px dashed rgb(92 15 22 / 0.35);
-		}
-
-		.barcode {
-			display: none;
-		}
-
-		.dispatch_photos {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			grid-template-rows: auto;
-			aspect-ratio: auto;
-		}
-
-		.dispatch_photos :global(.photo_button) {
-			aspect-ratio: 16 / 9;
-		}
-
-		.dispatch_photos :global(.dispatch_main) {
-			grid-area: 1 / 1 / 2 / -1;
-		}
-
-		.skyline_stack li {
-			padding-inline: 3px;
-			font-size: 0.6rem;
-			letter-spacing: 0;
-		}
-
-		.skyline_stack .award_chip :global(svg) {
-			display: none;
+	@media (prefers-reduced-motion: reduce) {
+		.animate-panel,
+		.ledger-row,
+		.editorial-photo-bleed img,
+		.meter-fill,
+		.fade-slide {
+			animation: none !important;
+			transition: none !important;
 		}
 	}
 </style>
