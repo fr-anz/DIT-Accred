@@ -1,14 +1,14 @@
 <script lang="ts">
 	import './layout.css';
-	import '$lib/styles/report-buttons.css';
-	import { page } from '$app/stores';
-	import favicon from '$lib/assets/favicon.svg';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import PageNavbar from '$lib/components/PageNavbar.svelte';
+	import '#lib/styles/report-buttons.css';
+	import { page } from '$app/state';
+	import favicon from '#lib/assets/favicon.svg';
+	import Navbar from '#lib/components/Navbar.svelte';
+	import PageNavbar from '#lib/components/PageNavbar.svelte';
 
 	let { children } = $props();
 
-	let isHome = $derived($page.url.pathname === '/');
+	let isHome = $derived(page.url.pathname === '/');
 </script>
 
 {#if isHome}

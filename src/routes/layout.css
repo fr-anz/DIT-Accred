@@ -57,9 +57,11 @@
 	--lh-body: 1.43; /* 40px on 28px copy */
 }
 
+/* clip (not hidden) so body never becomes a scroll container: position: sticky
+   elements such as the Teaching & Learning scroll story stay pinned to the viewport. */
 html,
 body {
-	overflow-x: hidden;
+	overflow-x: clip;
 }
 
 /* ─────────────────────────────────────────────

@@ -1,88 +1,67 @@
-import researchPhoto from '$lib/assets/nav-images/research.jpeg';
-import partnershipPhoto from '$lib/assets/nav-images/internationalization.JPG';
-import campusPhoto from '$lib/assets/nav-images/compliance.jpeg';
+// Updated department posters in the Winners CDN folder. Local crops contain
+// only the team photograph; the viewer opens the complete original poster.
+export interface AchievementPhoto {
+	/** Full congratulations poster, shown in the enlarged view. */
+	src: string;
+	/** Team photograph extracted from the updated, high-resolution poster. */
+	photo: string;
+	width: number;
+	height: number;
+	alt: string;
+	team: string;
+	result: string;
+	event: string;
+}
 
-// Existing student event and department photos preview the gallery layout.
-// Replace these with the award archive when its photos and descriptions are available.
-export const studentAchievementPhotos = [
+export const studentAchievementPhotos: AchievementPhoto[] = [
 	{
-		src: '/teaching-learning/org-ibits.jpg',
-		alt: 'IBITS student organization members together at a campus event',
-		position: '65% 48%'
+		src: 'https://cdn.theavenir.dev/images/Winners/pldt.jpg',
+		photo: 'https://cdn.theavenir.dev/images/Winners/pldt.jpg',
+		width: 1090,
+		height: 720,
+		team: 'Lord of the Pings',
+		result: 'Champion',
+		event: 'PLDT AI in 30 Hours Hackathon',
+		alt: 'Lord of the Pings receiving the champion award at the PLDT AI in 30 Hours Hackathon'
 	},
 	{
-		src: '/teaching-learning/org-jpcs.jpg',
-		alt: 'A student speaker addressing a campus event from the PUP lectern',
-		position: '60% 35%'
+		src: 'https://cdn.theavenir.dev/images/Winners/Appsolutely.jpg',
+		photo: '/teaching-learning/area2/photo-appsolutely.jpg',
+		width: 1403,
+		height: 600,
+		team: 'Team Appsolutely',
+		result: 'First Place',
+		event: 'Future Builders: From Ideas to Impact, ICS x IBM Bobathon',
+		alt: 'Team Appsolutely (Donita Salonga, Viviene Tricia Rabano, Ayen Mejorada, Troy Lazaro and Justin Carl Encio), First Place at Future Builders: From Ideas to Impact, ICS x IBM Bobathon'
 	},
 	{
-		src: '/teaching-learning/org-awscc.jpg',
-		alt: 'Students gathered in the campus gymnasium',
-		position: '50% 45%'
+		src: 'https://cdn.theavenir.dev/images/Winners/agrikalinga.jpg',
+		photo: '/teaching-learning/area2/photo-agrikalinga.jpg',
+		width: 1403,
+		height: 600,
+		team: 'Agrikalinga',
+		result: '1st Runner Up',
+		event: 'The Innovation Lab 2026',
+		alt: 'Team Agrikalinga (Gianne Crizzle A. Dasco, Roi Aldrich S. Santos and Matthew Aiman L. Lopez), 1st Runner Up at The Innovation Lab 2026'
 	},
 	{
-		src: '/teaching-learning/org-gdgoc.jpg',
-		alt: 'A student representative presenting at the PUP lectern',
-		position: '65% 35%'
+		src: 'https://cdn.theavenir.dev/images/Winners/kickstart.jpg',
+		photo: '/teaching-learning/area2/photo-kickstart.jpg',
+		width: 1403,
+		height: 600,
+		team: 'Kickstart PH',
+		result: '2nd Place, Health and Well-being',
+		event: 'HABI 4.0 Design Thinking Workshop',
+		alt: 'Team Kickstart PH (Lawrence L. Panes, Dave Aillerr C. Rivas and Fahad A. Hadji Esmael), 2nd Place in Health and Well-being and Top 6 overall at the HABI 4.0 Design Thinking Workshop'
 	},
 	{
-		src: '/teaching-learning/org-ark.jpg',
-		alt: 'A student publication representative speaking at a campus event',
-		position: '65% 40%'
-	},
-	{
-		src: '/teaching-learning/org-pupmsc.jpg',
-		alt: 'A student speaker sharing her presentation with the campus community',
-		position: '65% 35%'
-	},
-	{
-		src: '/teaching-learning/org-tpg.jpg',
-		alt: 'Student event organizers and photographers beside the gymnasium stage',
-		position: '65% 50%'
-	},
-	{
-		src: '/teaching-learning/org-jbecp.jpg',
-		alt: 'Students attending a campus gathering in the gymnasium',
-		position: '45% 50%'
-	},
-	{
-		src: '/teaching-learning/org-cncp.jpg',
-		alt: 'A speaker addressing students at a full campus assembly',
-		position: '45% 50%'
-	},
-	{
-		src: '/planning/photo-strip-1.jpg',
-		alt: 'Department members working together in a computer laboratory',
-		position: '50% 50%'
-	},
-	{
-		src: '/planning/photo-strip-2.jpg',
-		alt: 'An industry presentation in a department computer laboratory',
-		position: '65% 50%'
-	},
-	{
-		src: '/planning/photo-strip-3.jpg',
-		alt: 'Department group visiting a community in Palawan',
-		position: '50% 50%'
-	},
-	{
-		src: '/planning/photo-strip-4.jpg',
-		alt: 'Department members collaborating around a meeting table',
-		position: '50% 45%'
-	},
-	{
-		src: researchPhoto,
-		alt: 'Students presenting their work in a department computer laboratory',
-		position: '55% 45%'
-	},
-	{
-		src: partnershipPhoto,
-		alt: 'Department members and industry colleagues at a partnership gathering',
-		position: '50% 50%'
-	},
-	{
-		src: campusPhoto,
-		alt: 'Department colleagues gathered together on the PUP campus',
-		position: '50% 50%'
+		src: 'https://cdn.theavenir.dev/images/Winners/Egovibes.jpg',
+		photo: '/teaching-learning/area2/photo-egovibes.jpg',
+		width: 1400,
+		height: 599,
+		team: 'eGovibes',
+		result: 'Top 10 Finalist',
+		event: 'eGovHackathon 2026',
+		alt: 'Team eGovibes (Justin A. Jose, Mark Kenneth Galario, VJ Evangelista, Denise Jane Karim and Antonio Rene Casison), Top 10 Finalist at eGovHackathon 2026'
 	}
 ];

@@ -1,8 +1,8 @@
 <script>
-  import Footer from '$lib/components/footer.svelte';
-  import cablesSvg from '$lib/assets/Cables.svg';
-  import Button from '$lib/components/Button.svelte';
-  import { complianceReports, narrativeReports } from '$lib/data/reportLinks';
+  import Footer from '#lib/components/footer.svelte';
+  import cablesSvg from '#lib/assets/Cables.svg';
+  import Button from '#lib/components/Button.svelte';
+  import { complianceReports, narrativeReports } from '#lib/data/reportLinks.ts';
 
   // Svelte 5 Runes
   let scrollY = $state(0);

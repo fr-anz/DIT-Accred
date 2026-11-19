@@ -1,5 +1,5 @@
 <script>
-	import { sections } from '$lib/data/homeData';
+	import { sections } from '#lib/data/homeData.ts';
 </script>
 
 <section class="quick-links">

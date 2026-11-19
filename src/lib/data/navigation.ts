@@ -53,7 +53,24 @@ export const navItems: NavItem[] = [
 			{ label: 'PUP iVote++ System', href: '/community#ivote-showcase' }
 		]
 	},
-	{ href: '/internationalization', label: 'Internationalization' },
+	{
+		href: '/internationalization',
+		label: 'Internationalization',
+		subItems: [
+			{
+				label: 'International Recognition & Quality Assurance',
+				href: '/internationalization#recognition'
+			},
+			{ label: 'WURI Innovation Entries', href: '/internationalization#wuri-innovation' },
+			{ label: 'Partner Institutions', href: '/internationalization#partners' },
+			{ label: 'Joint Research with UMPSA', href: '/internationalization#joint-research' },
+			{
+				label: 'International Faculty Engagement',
+				href: '/internationalization#faculty-engagement'
+			},
+			{ label: 'Student Research Abroad', href: '/internationalization#student-research' }
+		]
+	},
 	{
 		href: '/planning',
 		label: 'Planning and Quality Assurance',

@@ -40,6 +40,23 @@
 		closing: 'Mula Sa’Yo, Para sa BAYAN'
 	};
 
+	const dustinContent = {
+		paragraphs: [
+			'We code the future, one milestone at a time.',
+			'Welcome to the Bachelor of Science in Information Technology program of the Polytechnic University of the Philippines – College of Computer and Information Sciences!',
+			'Our BSIT program has come a long way. From its early beginnings in computer education to achieving AACCUP Level IV Accredited Status and PICAB accreditation, every milestone tells a story of hard work, dedication, and people who believe in what we do.',
+			'Of course, the journey does not end with recognition. Technology keeps changing, and so must we. We continue to learn, improve, and find better ways to equip our students with the knowledge and skills they need to thrive in a constantly evolving industry.',
+			'I take this opportunity to thank our faculty members, administrative personnel, students, alumni, industry partners, and stakeholders. Behind every achievement are people who give their time, share their expertise, and go the extra mile. This journey would not be the same without you.',
+			'As we look ahead, may we continue to challenge ourselves, celebrate our progress, and never lose sight of why we do what we do: to provide meaningful education and prepare future IT professionals who can make a difference.',
+			"Here's to what we have achieved, what we continue to build, and everything that lies ahead!"
+		],
+		highlights: {
+			program: 'Bachelor of Science in Information Technology',
+			bsit: 'BSIT program'
+		},
+		closing: "Together, let's keep making every byte count."
+	};
+
 	/** @type {string | null} */
 	let activeLeader = $state(null);
 
@@ -75,7 +92,6 @@
 		'1001100110011001100110011001100110011001100110011001100110011001100110011001100110011001'
 	];
 
-	const binaryLayerB = binaryLayerA.slice().reverse();
 	const panelCloseDuration = 220;
 
 	/**
@@ -117,22 +133,11 @@
 </script>
 
 <section class="leadership-section" aria-label="Leadership">
-	<!-- Binary background flowing downward -->
+	<!-- Full-width binary rows alternate left and right. -->
 	<div class="binary-bg" aria-hidden="true">
 		<div class="binary-layer">
 			{#each binaryLayerA as row}
-				<span class="binary-row">{row}</span>
-			{/each}
-			{#each binaryLayerA as row}
-				<span class="binary-row">{row}</span>
-			{/each}
-		</div>
-		<div class="binary-layer">
-			{#each binaryLayerB as row}
-				<span class="binary-row">{row}</span>
-			{/each}
-			{#each binaryLayerB as row}
-				<span class="binary-row">{row}</span>
+				<div class="binary-row"><span>{row}</span><span>{row}</span></div>
 			{/each}
 		</div>
 	</div>
@@ -173,26 +178,44 @@
 			</div>
 
 			<div class="expanded-copy">
-				<h2>{detailContent.heading}</h2>
-				<p>
-					{detailContent.paragraphs[0].split(detailContent.highlights.program)[0]}
-					<span class="highlight-red">{detailContent.highlights.program}</span>
-					{detailContent.paragraphs[0].split(detailContent.highlights.program)[1]}
-				</p>
-				<p>{detailContent.paragraphs[1]}</p>
-				<p>
-					{detailContent.paragraphs[2].split(detailContent.highlights.bayan)[0]}
-					<span class="highlight-red">{detailContent.highlights.bayan}</span>
-					{detailContent.paragraphs[2]
-						.split(detailContent.highlights.bayan)[1]
-						.split(detailContent.highlights.innovators)[0]}
-					<span class="highlight-red">{detailContent.highlights.innovators}</span>
-					{detailContent.paragraphs[2].split(detailContent.highlights.innovators)[1]}
-				</p>
-				<p>{detailContent.paragraphs[3]}</p>
-				<p class="closing-line">
-					<span class="highlight-gold">{detailContent.closing}</span>
-				</p>
+				{#if displayedLeaderData.id === 'dustin'}
+					<p>{dustinContent.paragraphs[0]}</p>
+					<p>
+						{dustinContent.paragraphs[1].split(dustinContent.highlights.program)[0]}
+						<span class="highlight-red">{dustinContent.highlights.program}</span>
+						{dustinContent.paragraphs[1].split(dustinContent.highlights.program)[1]}
+					</p>
+					<p>
+						{dustinContent.paragraphs[2].split(dustinContent.highlights.bsit)[0]}
+						<span class="highlight-red">{dustinContent.highlights.bsit}</span>
+						{dustinContent.paragraphs[2].split(dustinContent.highlights.bsit)[1]}
+					</p>
+					<p>{dustinContent.paragraphs[3]}</p>
+					<p>{dustinContent.paragraphs[4]}</p>
+					<p>{dustinContent.paragraphs[5]}</p>
+					<p>{dustinContent.paragraphs[6]}</p>
+					<p class="closing-line">{dustinContent.closing}</p>
+				{:else}
+					<p>
+						{detailContent.paragraphs[0].split(detailContent.highlights.program)[0]}
+						<span class="highlight-red">{detailContent.highlights.program}</span>
+						{detailContent.paragraphs[0].split(detailContent.highlights.program)[1]}
+					</p>
+					<p>{detailContent.paragraphs[1]}</p>
+					<p>
+						{detailContent.paragraphs[2].split(detailContent.highlights.bayan)[0]}
+						<span class="highlight-red">{detailContent.highlights.bayan}</span>
+						{detailContent.paragraphs[2]
+							.split(detailContent.highlights.bayan)[1]
+							.split(detailContent.highlights.innovators)[0]}
+						<span class="highlight-red">{detailContent.highlights.innovators}</span>
+						{detailContent.paragraphs[2].split(detailContent.highlights.innovators)[1]}
+					</p>
+					<p>{detailContent.paragraphs[3]}</p>
+					<p class="closing-line">
+						<span class="highlight-gold">{detailContent.closing}</span>
+					</p>
+				{/if}
 			</div>
 		</div>
 	{:else if !isClosing}
@@ -204,13 +227,16 @@
 					class:align-right={leader.align === 'right'}
 					style="--card-position: {leader.position}; --role-max-width: {leader.roleMaxWidth}"
 					onclick={() => openLeader(leader.id, 'keyboard')}
-					aria-label="{leader.name}, {leader.role}"
+					aria-label="Read message from {leader.name}, {leader.role}"
 				>
 					<div class="card-bg" style="background-image: url({leader.img})"></div>
 					<div class="card-gradient"></div>
 					<div class="card-info">
 						<h3>{leader.name}</h3>
 						<p>{leader.role}</p>
+						<span class="card-action" aria-hidden="true">
+							Read message
+						</span>
 					</div>
 				</button>
 			{/each}
@@ -256,7 +282,7 @@
 		z-index: 0;
 	}
 
-	/* Binary background -- downward flowing layers */
+	/* Binary background -- alternating full-width streams */
 	.binary-bg {
 		position: absolute;
 		inset: 0;
@@ -267,23 +293,23 @@
 
 	.binary-layer {
 		position: absolute;
-		left: 0;
-		right: 0;
+		top: 0;
+		bottom: 0;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
-		animation: drift-down linear infinite;
+		justify-content: space-around;
+		overflow: hidden;
 	}
 
-	.binary-layer:nth-child(1) {
-		animation-duration: 34s;
-	}
-
-	.binary-layer:nth-child(2) {
-		animation-duration: 28s;
-		opacity: 0.5;
+	.binary-layer {
+		left: 0;
 	}
 
 	.binary-row {
+		display: flex;
+		width: max-content;
+		flex-shrink: 0;
 		white-space: nowrap;
 		font-family: 'Courier New', Courier, monospace;
 		font-size: clamp(2.6rem, 5vw, 5.2rem);
@@ -293,16 +319,26 @@
 		line-height: 1.1;
 	}
 
-	.binary-layer:nth-child(2) .binary-row {
+	.binary-row:nth-child(even) {
 		color: rgba(200, 155, 55, 0.14);
 	}
 
-	@keyframes drift-down {
+	@media (prefers-reduced-motion: no-preference) {
+		.binary-row {
+			animation: drift-horizontal 34s linear infinite;
+		}
+
+		.binary-row:nth-child(even) {
+			animation-direction: reverse;
+		}
+	}
+
+	@keyframes drift-horizontal {
 		from {
-			transform: translateY(-50%);
+			transform: translateX(0);
 		}
 		to {
-			transform: translateY(0);
+			transform: translateX(-50%);
 		}
 	}
 
@@ -407,6 +443,7 @@
 		left: 0;
 		right: 0;
 		padding: clamp(1.25rem, 2.5vw, 2rem);
+		text-align: left;
 		z-index: 2;
 	}
 
@@ -427,6 +464,33 @@
 		margin: 0;
 		line-height: 1.15;
 		max-width: var(--role-max-width, none);
+	}
+
+	.card-action {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-top: 1.25rem;
+		padding-bottom: 0.25rem;
+		border-bottom: 1px solid rgba(250, 197, 73, 0.45);
+		color: #fac549;
+		font-family: 'Inter', sans-serif;
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+	}
+
+
+	.leader-card:focus-visible .card-action {
+		color: #ffffff;
+		border-bottom-color: #fac549;
+	}
+
+	@media (hover: hover) {
+		.leader-card:hover .card-action {
+			color: #ffffff;
+			border-bottom-color: #fac549;
+		}
 	}
 
 	/* Right-aligned variant */
@@ -564,15 +628,6 @@
 		justify-content: center;
 	}
 
-	.expanded-copy h2 {
-		font-family: 'Overpass', sans-serif;
-		font-weight: 700;
-		color: #941518;
-		font-size: clamp(2rem, 3.4vw, 2.35rem);
-		margin: 0 0 clamp(1.5rem, 3vw, 2rem) 0;
-		line-height: 1.15;
-	}
-
 	.expanded-copy p {
 		font-family: 'Inter', sans-serif;
 		color: #000000;
@@ -604,9 +659,6 @@
 
 	/* Reduced motion */
 	@media (prefers-reduced-motion: reduce) {
-		.binary-layer {
-			animation: none;
-		}
 
 		.leader-card,
 		.leader-card:hover,
@@ -706,10 +758,6 @@
 
 		.card-info {
 			padding: 1rem 1.25rem;
-		}
-
-		.expanded-copy h2 {
-			font-size: clamp(1.5rem, 6vw, 2rem);
 		}
 
 		.expanded-copy p {

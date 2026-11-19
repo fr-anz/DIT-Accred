@@ -1,11 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	import Footer from '$lib/components/footer.svelte';
+	import Footer from '#lib/components/footer.svelte';
 
-	import ivote1 from '$lib/assets/community/ivote1.png';
-	import ivote2 from '$lib/assets/community/ivote2.png';
-	import ivote3 from '$lib/assets/community/ivote3.png';
-	import ivote4 from '$lib/assets/community/ivote4.png';
+	import ivote1 from '#lib/assets/community/ivote1.png';
+	import ivote2 from '#lib/assets/community/ivote2.png';
+	import ivote3 from '#lib/assets/community/ivote3.png';
+	import ivote4 from '#lib/assets/community/ivote4.png';
 
 	let activeTab = $state(0);
 	let currentImageIndex = $state(0);
@@ -472,12 +472,17 @@
 		overflow: hidden;
 	}
 
+	/* Supplied community photo, cropped centre/cover like the other page
+	   heroes. Kept at 0.3 opacity over the light hero background so the
+	   black→maroon gradient .t_display title stays legible on mobile and
+	   desktop. */
 	.hero-bg {
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
+		background-image: url('/img/pages/Community.jpg');
 		background-size: cover;
 		background-position: center;
 		opacity: 0.3;

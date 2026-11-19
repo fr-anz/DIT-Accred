@@ -1,21 +1,21 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
 	import { onMount, tick } from 'svelte';
-	import ditLogo from '$lib/assets/DIT Logo.jpg';
-	import { Menu, X, ArrowRight } from 'lucide-svelte';
-	import { navItems as baseNavItems } from '$lib/data/navigation';
+	import ditLogo from '#lib/assets/DIT Logo.jpg';
+	import { Menu, X, ArrowRight } from '@lucide/svelte';
+	import { navItems as baseNavItems } from '#lib/data/navigation.ts';
 
-	import researchImg from '$lib/assets/nav-images/research.jpeg';
-	import teachingImg from '$lib/assets/nav-images/teaching-learning.jpg';
-	import communityImg from '$lib/assets/nav-images/community.JPG';
-	import intlImg from '$lib/assets/nav-images/internationalization.JPG';
-	import planningImg from '$lib/assets/nav-images/planning.jpeg';
-	import complianceImg from '$lib/assets/nav-images/compliance.jpeg';
+	import researchImg from '#lib/assets/nav-images/research.jpeg';
+	import teachingImg from '#lib/assets/nav-images/teaching-learning.jpg';
+	import communityImg from '#lib/assets/nav-images/community.JPG';
+	import intlImg from '#lib/assets/nav-images/internationalization.JPG';
+	import planningImg from '#lib/assets/nav-images/planning.jpeg';
+	import complianceImg from '#lib/assets/nav-images/compliance.jpeg';
 
 	/**
-	 * @typedef {import('$lib/data/navigation').NavItem & { image: string | null }} HomeNavItem
+	 * @typedef {import('#lib/data/navigation.ts').NavItem & { image: string | null }} HomeNavItem
 	 */
 
 	/** @type {number | null} */
@@ -95,8 +95,8 @@
 		return resolve(/** @type {any} */ (href));
 	}
 
-	let activePath = $derived($page.url.pathname);
-	let activeTarget = $derived(`${$page.url.pathname}${$page.url.hash}`);
+	let activePath = $derived(page.url.pathname);
+	let activeTarget = $derived(`${page.url.pathname}${page.url.hash}`);
 	let activeImage = $derived(activeIndex !== null ? (navItems[activeIndex]?.image ?? null) : null);
 
 	/** @param {HomeNavItem} item */
