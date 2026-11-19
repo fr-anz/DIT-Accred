@@ -76,41 +76,58 @@ export const aboutImages = [
 
 export const missionVision = [
   {
-    title: "MISSION",
-    prefix: "The ",
-    strong: "Department of Information Technology",
-    suffix:
-      " is committed to providing exceptional ICT education, conducting groundbreaking research, and driving innovation within the University, establishing ourselves as a recognized leader in the field.",
+    title: "VISION",
+    prefix: "A Leading ",
+    strong: "Comprehensive Polytechnic University",
+    suffix: " in Asia",
   },
   {
-    title: "VISION",
-    prefix: "A leading academic department, recognized for its exceptional ",
-    strong: "ICT education, research, and innovation",
-    suffix: ".",
+    title: "MISSION",
+    prefix: "Advance an inclusive, equitable, and globally relevant ",
+    strong: "polytechnic education",
+    suffix: " towards national development.",
   },
 ];
 
 export const departmentStats = [
   {
-    icon: "users",
-    value: "2000+",
-    label: "students enrolled in all year levels",
+    id: "students",
+    count: 2000,
+    suffix: "+",
+    label: "students enrolled across all year levels",
   },
   {
-    icon: "graduation",
-    value: "30",
+    id: "faculty",
+    count: 30,
+    suffix: "",
     label: "faculty members in the department",
   },
   {
-    icon: "building",
-    value: "100+",
+    id: "industry",
+    count: 100,
+    suffix: "+",
     label: "industry partnerships worldwide",
   },
   {
-    icon: "network",
-    value: "10",
-    label: "student organizations (academic and tech)",
+    id: "organizations",
+    count: 10,
+    suffix: "",
+    label: "student organizations, academic and tech",
   },
+];
+
+export const qsCategories = [
+  { stars: 5, label: "Employability" },
+  { stars: 5, label: "Online Learning" },
+  { stars: 5, label: "Academic Dev." },
+  { stars: 4, label: "Facilities" },
+];
+
+export const impactSdgs = [
+  { id: 1, label: "No Poverty", color: "var(--c-gold-light)" },
+  { id: 2, label: "Zero Hunger", color: "var(--c-gold-dark)" },
+  { id: 4, label: "Quality Education", color: "var(--c-maroon)" },
+  { id: 17, label: "Partnerships for the Goals", color: "var(--c-maroon-deep)" },
 ];
 
 export const ditGoals = [

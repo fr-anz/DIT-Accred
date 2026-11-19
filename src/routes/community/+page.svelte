@@ -236,7 +236,6 @@
 			title: 'CUMC & LGU Anchors',
 			desc: 'Formalized partnerships with CUMC and City of Mandaluyong / DTI Negosyo Center & MIPO',
 			linkNote: 'Feeds 9 documented initiatives across LGUs, cooperatives, schools & orgs',
-			metricStat: '9 INITIATIVES',
 			metricCaption: '2018–2028 documented extension portfolio across partner communities'
 		},
 		{
@@ -244,7 +243,6 @@
 			title: 'Digital & AI Readiness',
 			desc: 'Presentation literacy, e-commerce skill mapping, and Responsible AI prompt engineering',
 			linkNote: 'Drives 7 completed deliveries and 2 active multi-year tracks (77.8% done)',
-			metricStat: '7 OF 9 DONE',
 			metricCaption: '77.8% completion milestone across workshops, seminars, and deployments'
 		},
 		{
@@ -252,12 +250,9 @@
 			title: 'iVOTE++ & MEAL Rollout',
 			desc: 'Production election deployments and 2026–2028 examination system with MEAL governance',
 			linkNote: 'Scales into 5 live iVOTE++ elections from PHC & Novotel to PUP branches',
-			metricStat: '5 ELECTIONS',
 			metricCaption: 'PHC MPC • NuSEPHC & PACSSM (Novotel) • PUP MPC & Provident Fund'
 		}
 	];
-
-	const activeStageData = $derived(infographicStages[activeInfographicStage]);
 
 	const communityChapters = [
 		{
@@ -597,14 +592,6 @@
 			use:scrubInfographics
 			style="--scrub: {infographicProgress};"
 		>
-			<div class="info_stage_bar" use:reveal>
-				<div class="stage_readout">
-					<span class="stage_kicker">SCROLL-SYNCED IMPACT STAGE · {activeStageData.code}</span>
-					<strong class="stage_stat">{activeStageData.metricStat}</strong>
-				</div>
-				<p class="stage_bridge">{activeStageData.linkNote}</p>
-			</div>
-
 			<div class="pathway_wrap">
 				<div class="pathway_scrub_rail" aria-hidden="true">
 					<div class="pathway_scrub_fill" style="width: {Math.round(infographicProgress * 100)}%;"></div>
@@ -1483,55 +1470,6 @@
 		background-color: #ffffff;
 		padding: clamp(56px, 6vw, 96px) 10%;
 		border-bottom: 1px solid #e5dfd5;
-	}
-
-	.info_stage_bar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 20px;
-		flex-wrap: wrap;
-		padding: 14px 20px;
-		margin-bottom: 24px;
-		border-radius: 10px;
-		background-color: #faf6ef;
-		border: 1px solid #e5dfd5;
-		border-left: 4px solid #6a1316;
-	}
-
-	.stage_readout {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		flex-wrap: wrap;
-	}
-
-	.stage_kicker {
-		font-family: 'Overpass', sans-serif;
-		font-size: 0.74rem;
-		font-weight: 800;
-		letter-spacing: 0.14em;
-		color: #b87910;
-		text-transform: uppercase;
-	}
-
-	.stage_stat {
-		padding: 4px 11px;
-		border-radius: 6px;
-		background-color: #6a1316;
-		color: #ffffff;
-		font-family: 'Overpass', sans-serif;
-		font-size: 0.82rem;
-		font-weight: 800;
-		letter-spacing: 0.08em;
-	}
-
-	.stage_bridge {
-		margin: 0;
-		font-family: 'Inter', sans-serif;
-		font-size: 0.9rem;
-		font-weight: 500;
-		color: #3d332e;
 	}
 
 	.pathway_wrap {

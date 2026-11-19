@@ -283,30 +283,33 @@
 		<div class="scoreboard">
 			<div class="score" use:reveal style:--d="0">
 				<p class="score_value">
-					<span use:countUp={{ from: 271, to: 250, duration: 1800 }}>250</span><small>of 400</small>
+					<span use:countUp={{ from: 271, to: 186, duration: 1800 }}>186</span><small>of 400</small>
 				</p>
 				<h3 class="score_title">WURI 2025 global ranking</h3>
 				<p class="score_note">
-					<TrendingUp size={16} aria-hidden="true" /> Up 21 places from 271st in 2024
+					<TrendingUp size={16} aria-hidden="true" /> Up 85 places from 271st in 2024
 				</p>
-				<div class="ruler" role="img" aria-label="Ranked 271st in 2024 and 250th in 2025">
+				<div class="ruler" role="img" aria-label="Ranked 271st in 2024 and 186th in 2025">
 					<div class="ruler_track">
-						{#each Array.from({ length: 9 }, (_, i) => 280 - i * 5) as tickValue (tickValue)}
+						{#each Array.from({ length: 11 }, (_, i) => 280 - i * 10) as tickValue (tickValue)}
 							<span
 								class="ruler_tick"
-								class:major={tickValue % 10 === 0}
-								style:--p={(280 - tickValue) / 40}
+								class:major={tickValue % 20 === 0}
+								style:--p={(280 - tickValue) / 100}
 							>
-								{#if tickValue % 10 === 0}<em>{tickValue}</em>{/if}
+								{#if tickValue % 20 === 0}<em>{tickValue}</em>{/if}
 							</span>
 						{/each}
-						<span class="ruler_ghost" style:--p={(280 - 271) / 40}><b>2024</b></span>
-						<span class="ruler_trail" style:--from={(280 - 271) / 40} style:--to={(280 - 250) / 40}
+						<span class="ruler_ghost" style:--p={(280 - 271) / 100}><b>2024</b></span>
+						<span
+							class="ruler_trail"
+							style:--from={(280 - 271) / 100}
+							style:--to={(280 - 186) / 100}
 						></span>
 						<span
 							class="ruler_marker"
-							style:--from={(280 - 271) / 40}
-							style:--to={(280 - 250) / 40}
+							style:--from={(280 - 271) / 100}
+							style:--to={(280 - 186) / 100}
 						>
 							<b>2025</b>
 						</span>
@@ -985,7 +988,7 @@
 		color: var(--c-maroon-deep);
 	}
 
-	/* Zoomed ruler from 280th (left) to 240th (right): moving right is climbing. */
+	/* Zoomed ruler from 280th (left) to 180th (right): moving right is climbing. */
 	.ruler {
 		max-width: 460px;
 		margin-block-start: 22px;
