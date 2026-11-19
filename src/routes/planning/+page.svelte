@@ -232,7 +232,7 @@
 					</div>
 					<div class="wuri_world_rank">
 						<span class="wuri_rank_label">World Rank:</span>
-						<span class="wuri_rank_num">271st</span>
+						<span class="wuri_rank_num">186th</span>
 					</div>
 				</div>
 				<p class="wuri_desc">Innovative Universities globally among 1,072 institutions.</p>
