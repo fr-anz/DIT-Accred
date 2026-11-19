@@ -1,7 +1,46 @@
 <script>
-	import { Building2, GraduationCap, Info, Network, Users } from '@lucide/svelte';
-	import { aboutImages, departmentStats, ditGoals, missionVision } from '#lib/data/homeData.ts';
-	import QualityControlDiagram from './QualityControlDiagram.svelte';
+	import { Info } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/motion.ts';
+	import { aboutImages, missionVision } from '#lib/data/homeData.ts';
+	import HighlightsBento from './HighlightsBento.svelte';
+
+	/* Split each statement into words so they can rise in one after another. */
+	const statements = missionVision.map((item) => {
+		let index = 0;
+		const words = [
+			{ text: item.prefix, strong: false },
+			{ text: item.strong, strong: true },
+			{ text: item.suffix, strong: false }
+		].flatMap(({ text, strong }) =>
+			text
+				.split(/\s+/)
+				.filter(Boolean)
+				.map((word) => ({ word, strong, index: index++ }))
+		);
+		return { ...item, words };
+	});
+
+	/** Tilts the photo layers toward the pointer. */
+	function parallax(/** @type {HTMLElement} */ node) {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return {};
+		const move = (/** @type {PointerEvent} */ event) => {
+			const box = node.getBoundingClientRect();
+			node.style.setProperty('--px', String((event.clientX - box.left) / box.width - 0.5));
+			node.style.setProperty('--py', String((event.clientY - box.top) / box.height - 0.5));
+		};
+		const leave = () => {
+			node.style.setProperty('--px', '0');
+			node.style.setProperty('--py', '0');
+		};
+		node.addEventListener('pointermove', move);
+		node.addEventListener('pointerleave', leave);
+		return {
+			destroy() {
+				node.removeEventListener('pointermove', move);
+				node.removeEventListener('pointerleave', leave);
+			}
+		};
+	}
 </script>
 
 <section class="about-section">
@@ -12,14 +51,17 @@
 	<div class="header-line"></div>
 
 	<div class="intro-container">
-		<div class="intro-image-collage" aria-label="Department activities">
-			{#each aboutImages as image}
-				<img src={image.src} alt={image.alt} />
+		<div class="collage" use:parallax use:reveal aria-label="Department activities" role="group">
+			<span class="collage_dots" aria-hidden="true"></span>
+			{#each aboutImages as image, i (image.src)}
+				<figure class="collage_photo photo_{i + 1}">
+					<img src={image.src} alt={image.alt} loading="lazy" />
+				</figure>
 			{/each}
 		</div>
 
 		<div class="intro-text">
-			<p>
+			<p class="lead" use:reveal style:--d="1">
 				The <strong>Bachelor of Science in Information Technology</strong> program provides an engaging
 				environment for learners passionate about building modern digital solutions. The program allows
 				creative and critical thinkers to transform complex technological concepts into practical, in-demand
@@ -28,37 +70,35 @@
 			</p>
 
 			<div class="mv-container">
-				{#each missionVision as item}
-					<div class="mv-card">
-						<h3>{item.title}</h3>
-						<p>{item.prefix}<strong>{item.strong}</strong>{item.suffix}</p>
-					</div>
+				{#each statements as item, i (item.title)}
+					<article
+						class="mv-card"
+						class:is-vision={item.title === 'VISION'}
+						use:reveal
+						style:--d={i + 2}
+					>
+						<h3 class="t_eyebrow">{item.title}</h3>
+						<p class="mv_statement">
+							<span class="sr-only">{item.prefix}<strong>{item.strong}</strong>{item.suffix}</span>
+							<span aria-hidden="true">
+								{#each item.words as w (w.index)}
+									<span class="word" class:is-strong={w.strong} style:--w={w.index}>{w.word}</span>
+								{/each}
+							</span>
+						</p>
+					</article>
 				{/each}
 			</div>
 		</div>
 	</div>
 
-	<div class="stats-banner">
-		{#each departmentStats as stat}
-			<div class="stat-card">
-				{#if stat.icon === 'graduation'}
-					<Users size={48} color="#941518" />
-				{:else if stat.icon === 'users'}
-					<GraduationCap size={48} color="#941518" />
-				{:else if stat.icon === 'building'}
-					<Building2 size={48} color="#941518" />
-				{:else}
-					<Network size={48} color="#941518" />
-				{/if}
-				<span class="stat-number">{stat.value}</span>
-				<span class="stat-label">{stat.label}</span>
-			</div>
-		{/each}
-	</div>
+	<HighlightsBento />
 </section>
 
 <style>
 	.about-section {
+		--out: cubic-bezier(0.22, 1, 0.36, 1);
+		--spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 		width: 100%;
 		max-width: var(--container-max);
 		margin: 0 auto var(--section-space) auto;
@@ -96,151 +136,310 @@
 
 	.intro-container {
 		display: grid;
-		grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
-		gap: clamp(1.75rem, 3.5vw, 3rem);
-		align-items: start;
+		grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.1fr);
+		gap: clamp(2rem, 4.5vw, 4.5rem);
+		align-items: center;
 		margin-bottom: clamp(3rem, 6vw, 5rem);
 	}
 
-	.intro-image-collage {
+	/* ── Photo collage ───────────────────────────── */
+	.collage {
+		--px: 0;
+		--py: 0;
+		position: relative;
 		width: 100%;
-		max-width: 634px;
-		aspect-ratio: 634 / 854;
-		border-radius: 15px;
-		overflow: hidden;
-		display: grid;
-		grid-template-rows: 1fr 1fr 1fr;
-		background: #6d1012;
+		max-width: 560px;
+		aspect-ratio: 5 / 6;
+		justify-self: center;
 	}
 
-	.intro-image-collage img {
+	.collage_photo {
+		position: absolute;
+		margin: 0;
+		overflow: hidden;
+		border-radius: 16px;
+		background: var(--c-maroon-deep);
+		box-shadow: 0 24px 48px -28px rgb(60 10 12 / 0.55);
+		transition:
+			translate 0.6s var(--out),
+			rotate 0.6s var(--out),
+			scale 0.6s var(--out);
+	}
+
+	.collage_photo img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		filter: sepia(0.15) saturate(0.9) brightness(0.85);
+		filter: saturate(0.92);
+		transition:
+			scale 1.2s var(--out),
+			filter 0.6s ease;
 	}
 
+	.collage:hover .collage_photo img {
+		scale: 1.05;
+		filter: saturate(1.05);
+	}
+
+	.photo_1 {
+		top: 0;
+		left: 0;
+		width: 80%;
+		height: 62%;
+		translate: calc(var(--px) * -10px) calc(var(--py) * -10px);
+	}
+
+	.photo_2 {
+		right: 0;
+		bottom: 6%;
+		width: 66%;
+		height: 46%;
+		border: 6px solid var(--c-surface);
+		rotate: 2.5deg;
+		translate: calc(var(--px) * 16px) calc(var(--py) * 16px);
+		z-index: 2;
+	}
+
+	.photo_3 {
+		left: 4%;
+		bottom: 0;
+		width: 36%;
+		aspect-ratio: 1;
+		border: 5px solid var(--c-surface);
+		rotate: -5deg;
+		translate: calc(var(--px) * 24px) calc(var(--py) * 24px);
+		z-index: 3;
+	}
+
+	.collage:hover .photo_2 {
+		rotate: 0deg;
+	}
+
+	.collage:hover .photo_3 {
+		rotate: -1deg;
+		scale: 1.04;
+	}
+
+	.collage_dots {
+		position: absolute;
+		top: -4%;
+		right: 2%;
+		width: 34%;
+		height: 30%;
+		background: radial-gradient(var(--c-gold-light) 1.6px, transparent 1.8px) 0 0 / 14px 14px;
+		opacity: 0.9;
+		translate: calc(var(--px) * 6px) calc(var(--py) * 6px);
+		transition: translate 0.6s var(--out);
+	}
+
+	/* ── Lead copy ───────────────────────────────── */
 	.intro-text {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-end;
+		gap: clamp(1.5rem, 3vw, 2.5rem);
 	}
 
-	.intro-text p {
-		color: #000000;
-		font-size: clamp(0.95rem, 1.35vw, 1.12rem);
-		line-height: 1.55;
-		font-weight: 400;
+	.lead {
+		position: relative;
+		margin: 0;
+		padding-left: clamp(1rem, 2vw, 1.5rem);
+		color: var(--c-ink);
+		font-size: clamp(0.95rem, 1.3vw, 1.12rem);
+		line-height: 1.65;
 		text-align: justify;
-		margin: clamp(0.5rem, 2vw, 2rem) 0 0 0;
-		max-width: 68ch;
 	}
 
+	.lead::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.35em;
+		bottom: 0.35em;
+		width: 3px;
+		border-radius: 3px;
+		background: linear-gradient(var(--c-maroon), var(--c-gold-light));
+	}
+
+	.lead strong {
+		color: var(--c-maroon);
+	}
+
+	/* ── Vision and mission ──────────────────────── */
 	.mv-container {
 		display: grid;
-		grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-		gap: clamp(1rem, 2.5vw, 2rem);
-		margin-top: clamp(1.5rem, 3vw, 2.5rem);
-		width: 100%;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(0.9rem, 2vw, 1.5rem);
 	}
 
 	.mv-card {
-		background: #ffffff;
-		border: 1px #941518 solid;
-		border-radius: 15px;
-		box-shadow:
-			4px 4px 4px rgba(207, 168, 58, 0.5),
-			inset -4px 4px 4px rgba(148, 21, 24, 0.5),
-			-4px 4px 4px rgba(109, 23, 25, 0.5);
-		padding: clamp(1.5rem, 3vw, 2.75rem);
-		box-sizing: border-box;
-		min-height: clamp(190px, 22vw, 286px);
+		--ink: var(--c-ink);
+		--accent: var(--c-maroon);
+		position: relative;
 		display: flex;
 		flex-direction: column;
-		justify-content: flex-start;
-	}
-
-	.mv-card h3 {
-		font-family: 'Overpass', sans-serif;
-		font-size: clamp(1.9rem, 3.1vw, 3rem);
-		font-weight: 700;
-		margin: 0 0 clamp(1.75rem, 3vw, 3rem) 0;
-		line-height: 1;
-		text-align: left;
-		letter-spacing: 0.02em;
-		overflow-wrap: anywhere;
-	}
-
-	.mv-card:nth-child(1) h3 {
-		color: #fac549;
-	}
-
-	.mv-card:nth-child(2) h3 {
-		color: #f8c246;
-		font-size: clamp(1.8rem, 2.55vw, 2.55rem);
-	}
-
-	.mv-card p {
-		color: #000000;
-		font-size: clamp(0.78rem, 1.05vw, 1rem);
-		line-height: 1.25;
-		font-weight: 400;
-		margin: 0;
-		text-align: left;
-	}
-
-	.stats-banner {
-		background: linear-gradient(137deg, #fac549 0%, #ca8106 100%);
-		border-radius: clamp(1rem, 3vw, 2.2rem);
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
+		justify-content: space-between;
 		gap: clamp(1.5rem, 3vw, 2.5rem);
-		align-items: center;
-		padding: clamp(1.5rem, 4vw, 3.75rem) clamp(1rem, 3vw, 2.5rem);
-		margin-bottom: clamp(3rem, 7vw, 6.25rem);
+		min-height: clamp(220px, 21vw, 290px);
+		padding: clamp(1.25rem, 2.4vw, 2rem);
+		border-radius: 18px;
+		background: #faf6ef;
+		border: 1.5px solid color-mix(in srgb, var(--c-gold-dark) 35%, transparent);
+		color: var(--ink);
+		overflow: hidden;
+		isolation: isolate;
+		transition:
+			translate 0.45s var(--out),
+			box-shadow 0.45s ease;
 	}
 
-	.stat-card {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		width: 100%;
-		max-width: 280px;
-		margin: 0 auto;
+	.mv-card.is-vision {
+		--ink: var(--c-surface);
+		--accent: var(--c-gold-light);
+		border: 0;
+		background:
+			radial-gradient(
+				110% 80% at 100% 0%,
+				color-mix(in srgb, var(--c-gold-light) 26%, transparent),
+				transparent 60%
+			),
+			linear-gradient(150deg, var(--c-maroon) 0%, var(--c-maroon-deep) 100%);
 	}
 
-	.stat-number {
-		font-family: 'Overpass', sans-serif;
-		color: #941518;
-		font-size: clamp(2.5rem, 5vw, 4.5rem);
-		font-weight: 700;
-		margin: 15px 0;
+	.mv-card:hover {
+		translate: 0 -5px;
+		box-shadow: 0 26px 40px -28px rgb(60 10 12 / 0.7);
 	}
 
-	.stat-label {
-		color: #000000;
-		font-size: clamp(0.72rem, 1.35vw, 1.15rem);
-		line-height: 1.3;
+	/* Light sweep across the card on hover. */
+	.mv-card::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		pointer-events: none;
+		background: linear-gradient(
+			105deg,
+			transparent 35%,
+			rgb(255 255 255 / 0.28) 50%,
+			transparent 65%
+		);
+		translate: -110% 0;
+	}
+
+	.mv-card:hover::after {
+		translate: 110% 0;
+		transition: translate 0.9s var(--out);
+	}
+
+	.mv_statement {
+		margin: 0;
+		font: 700 clamp(1.2rem, 1.95vw, 1.75rem) / 1.22 var(--font-heading);
+		letter-spacing: 0.005em;
+		color: var(--ink);
 		text-wrap: balance;
 	}
 
-	@media (max-width: 1400px) {
-		.intro-text {
-			align-items: center;
+	.mv_statement .word {
+		display: inline-block;
+		margin-right: 0.25em;
+	}
+
+	.mv_statement .is-strong {
+		color: var(--accent);
+	}
+
+	.mv-card.is-vision .mv_statement .is-strong {
+		background: var(--grad-gold);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	/* ── Motion ──────────────────────────────────── */
+	@media (prefers-reduced-motion: no-preference) {
+		.intro-container :global(.reveal-pending) {
+			opacity: 0;
+			translate: 0 28px;
+			transition:
+				opacity 0.8s ease,
+				translate 1s var(--out);
+			transition-delay: calc(var(--d, 0) * 110ms);
 		}
 
-		.intro-text p {
-			text-align: justify;
-			max-width: 100%;
-			margin: 0;
+		.intro-container :global(.reveal-pending.is-revealed) {
+			opacity: 1;
+			translate: 0 0;
+		}
+
+		.collage:global(.reveal-pending) .collage_photo {
+			opacity: 0;
+			scale: 0.92;
+		}
+
+		.collage:global(.reveal-pending) .photo_2 {
+			transition-delay: 0.2s;
+		}
+
+		.collage:global(.reveal-pending) .photo_3 {
+			transition-delay: 0.4s;
+		}
+
+		.collage:global(.reveal-pending.is-revealed) .collage_photo {
+			opacity: 1;
+			scale: 1;
+		}
+
+		.collage:global(.reveal-pending) .collage_photo {
+			transition:
+				opacity 0.8s ease,
+				scale 1s var(--out);
+		}
+
+		.mv-card:global(.reveal-pending) .word {
+			opacity: 0;
+			translate: 0 0.5em;
+			filter: blur(4px);
+			transition:
+				opacity 0.5s ease,
+				translate 0.6s var(--out),
+				filter 0.5s ease;
+			transition-delay: calc(400ms + var(--w) * 45ms);
+		}
+
+		.mv-card:global(.reveal-pending.is-revealed) .word {
+			opacity: 1;
+			translate: 0 0;
+			filter: blur(0);
 		}
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.about-section :global(*),
+		.about-section :global(*::before),
+		.about-section :global(*::after) {
+			transition: none !important;
+		}
+
+		.mv-card:hover {
+			translate: none;
+		}
+	}
+
+	/* ── Layouts ─────────────────────────────────── */
 	@media (max-width: 1024px) {
 		:global(.qc-visualizer) {
 			max-width: 720px;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.intro-container {
+			grid-template-columns: 1fr;
+		}
+
+		.collage {
+			max-width: 480px;
 		}
 	}
 
@@ -253,82 +452,18 @@
 			gap: 10px;
 		}
 
-		.intro-container {
-			grid-template-columns: 1fr;
-			gap: 1.5rem;
-		}
-
-		.intro-image-collage {
-			max-width: 420px;
-			margin: 0 auto;
-			aspect-ratio: 4 / 3;
-		}
-
-		.intro-text {
-			align-items: stretch;
-		}
-
-		.intro-text p {
-			text-align: justify;
+		.lead {
 			font-size: clamp(0.92rem, 2.8vw, 1.05rem);
-			line-height: 1.55;
-			max-width: 62ch;
-			margin: 0 auto;
-		}
-
-		.mv-container {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			max-width: 460px;
-			margin-inline: auto;
-		}
-
-		.mv-card {
-			min-height: 180px;
-			padding: 1rem;
-		}
-
-		.mv-card h3 {
-			font-size: clamp(1.45rem, 4vw, 2rem);
-			margin-bottom: 0.75rem;
-		}
-
-		.mv-card p {
-			font-size: clamp(0.68rem, 2vw, 0.82rem);
-			line-height: 1.4;
-		}
-
-		.stats-banner {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 0.75rem;
-			padding: 1.5rem 1rem;
-		}
-
-		.stat-number {
-			font-size: clamp(1.7rem, 6vw, 2.8rem);
-		}
-
-		.stat-label {
-			font-size: clamp(0.72rem, 2vw, 0.85rem);
 		}
 	}
 
-	@media (max-width: 480px) {
-		.intro-image-collage {
-			max-width: 100%;
-		}
-
+	@media (max-width: 560px) {
 		.mv-container {
 			grid-template-columns: 1fr;
-			max-width: 100%;
 		}
 
-		.mv-card p {
-			font-size: 0.78rem;
-		}
-
-		.stats-banner {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			border-radius: 12px;
+		.mv-card {
+			min-height: 200px;
 		}
 	}
 </style>
