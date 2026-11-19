@@ -1,5 +1,5 @@
 <script>
-	import { scatteredImages } from '$lib/data/homeData';
+	import { scatteredImages } from '#lib/data/homeData.ts';
 
 	/**
 	 * @param {{

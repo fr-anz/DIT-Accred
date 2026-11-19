@@ -145,12 +145,12 @@ docs: update API setup instructions
 
 Before requesting a review, ensure:
 
-* Code compiles successfully.
-* Existing functionality remains unaffected.
-* New functionality has been tested.
-* No unnecessary files are included.
-* Merge conflicts are resolved.
-* Documentation is updated when applicable.
+- Code compiles successfully.
+- Existing functionality remains unaffected.
+- New functionality has been tested.
+- No unnecessary files are included.
+- Merge conflicts are resolved.
+- Documentation is updated when applicable.
 
 ---
 
@@ -162,9 +162,9 @@ Briefly describe the purpose of the changes.
 
 ### Changes Made
 
-* Added ...
-* Updated ...
-* Fixed ...
+- Added ...
+- Updated ...
+- Fixed ...
 
 ### Testing
 
@@ -184,12 +184,12 @@ Any information reviewers should know.
 
 Reviewers should verify:
 
-* Code quality and readability.
-* Consistency with project standards.
-* Correct functionality.
-* Security considerations.
-* Performance implications.
-* Proper documentation.
+- Code quality and readability.
+- Consistency with project standards.
+- Correct functionality.
+- Security considerations.
+- Performance implications.
+- Proper documentation.
 
 Feedback should be constructive, specific, and actionable.
 
@@ -199,10 +199,10 @@ Feedback should be constructive, specific, and actionable.
 
 A Pull Request may be merged only when:
 
-* Required approvals have been received.
-* All required checks have passed.
-* No unresolved review comments remain.
-* The branch is up to date with `main`.
+- Required approvals have been received.
+- All required checks have passed.
+- No unresolved review comments remain.
+- The branch is up to date with `main`.
 
 Preferred merge method:
 
@@ -218,12 +218,12 @@ This keeps commit history clean and easier to maintain.
 
 Enable the following GitHub branch protection settings:
 
-* Require a pull request before merging
-* Require approvals
-* Dismiss stale approvals when new commits are pushed
-* Require status checks to pass before merging
-* Restrict direct pushes to protected branches
-* Prevent bypassing branch protection rules
+- Require a pull request before merging
+- Require approvals
+- Dismiss stale approvals when new commits are pushed
+- Require status checks to pass before merging
+- Restrict direct pushes to protected branches
+- Prevent bypassing branch protection rules
 
 ---
 

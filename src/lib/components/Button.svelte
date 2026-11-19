@@ -31,19 +31,19 @@
 	@reference "tailwindcss";
 
 	.btn {
-		@apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer border-none no-underline;
+		@apply inline-flex cursor-pointer items-center justify-center gap-2 border-none font-semibold no-underline transition-all duration-200;
 	}
 
 	.btn-sm {
-		@apply px-4 py-2 text-sm rounded-lg;
+		@apply rounded-lg px-4 py-2 text-sm;
 	}
 
 	.btn-md {
-		@apply px-6 py-3 text-base rounded-xl;
+		@apply rounded-xl px-6 py-3 text-base;
 	}
 
 	.btn-lg {
-		@apply px-8 py-4 text-lg rounded-xl;
+		@apply rounded-xl px-8 py-4 text-lg;
 	}
 
 	.btn-primary {
@@ -53,7 +53,7 @@
 		@apply bg-[#661618];
 	}
 	.btn-primary.btn-outline {
-		@apply border-2 border-[#801B1E] text-[#801B1E] bg-transparent;
+		@apply border-2 border-[#801B1E] bg-transparent text-[#801B1E];
 	}
 	.btn-primary.btn-outline:hover {
 		@apply bg-[#801B1E] text-white;
@@ -66,7 +66,7 @@
 		@apply bg-[#C49A35];
 	}
 	.btn-secondary.btn-outline {
-		@apply border-2 border-[#D4A843] text-[#D4A843] bg-transparent;
+		@apply border-2 border-[#D4A843] bg-transparent text-[#D4A843];
 	}
 	.btn-secondary.btn-outline:hover {
 		@apply bg-[#D4A843] text-[#1A1A1A];
@@ -79,7 +79,7 @@
 		@apply bg-[#1A1A1A];
 	}
 	.btn-dark.btn-outline {
-		@apply border-2 border-[#2D2D2D] text-[#2D2D2D] bg-transparent;
+		@apply border-2 border-[#2D2D2D] bg-transparent text-[#2D2D2D];
 	}
 	.btn-dark.btn-outline:hover {
 		@apply bg-[#2D2D2D] text-white;
@@ -92,7 +92,7 @@
 		@apply bg-[#C49A35];
 	}
 	.btn-gold.btn-outline {
-		@apply border-2 border-[#D4A843] text-[#D4A843] bg-transparent;
+		@apply border-2 border-[#D4A843] bg-transparent text-[#D4A843];
 	}
 	.btn-gold.btn-outline:hover {
 		@apply bg-[#D4A843] text-[#1A1A1A];
