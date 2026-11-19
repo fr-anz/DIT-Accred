@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { ArrowRight, ArrowUpRight, MoveRight, Target } from '@lucide/svelte';
+	import { ArrowRight, ArrowUpRight, MoveRight } from '@lucide/svelte';
 	import { implementationCycle, qaInitiatives } from '#lib/data/qualityAssurance.ts';
 
 	const currentYear = new Date().getFullYear();
@@ -22,7 +22,7 @@
 
 	$effect(() => {
 		const media = window.matchMedia(
-			'(min-width: 1000px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)'
+			'(min-width: 1000px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)'
 		);
 		let distance = 0;
 		let roadLeft = 0;
@@ -106,14 +106,10 @@
 
 		<div bind:this={track} class="journey_track" style:translate={pinned ? `${-shift}px 0` : null}>
 			<header class="journey_intro">
-				<div class="section_label">
-					<Target size={26} strokeWidth={1.5} class="section_icon maroon" />
-					<span class="t_eyebrow">Planning &amp; Quality Assurance</span>
-				</div>
 				<h2 class="intro_title" id="qa-plan-title">
 					Quality Assurance Plan <span>2025–2028</span>
 				</h2>
-				<p class="intro_subtitle">Transforming Quality Standards into Lasting Impact</p>
+
 				<p class="intro_lede">
 					<strong>A system-wide commitment to quality.</strong> The University's Quality Assurance Plan
 					is a coordinated roadmap for strengthening institutional systems, academic programs, accreditation,
@@ -127,10 +123,7 @@
 
 			<div bind:this={road} class="journey_road" style:--fill="{fill}px">
 				<span class="road_traveler" aria-hidden="true"></span>
-				<div class="road_sign">
-					<p class="sign_kicker">{count} stops</p>
-					<h3 class="sign_title">The initiatives</h3>
-				</div>
+				<div class="road_sign" aria-hidden="true"></div>
 
 				<ol class="stations">
 					{#each qaInitiatives as item, i (item.no)}
@@ -234,7 +227,7 @@
 	.qa_journey {
 		--paper: #fbf3e4;
 		--rail: #ecdcb6;
-		--road-y: 56%;
+		--road-y: 50%;
 		position: relative;
 		color: var(--c-ink);
 		background:
@@ -258,7 +251,7 @@
 		padding: clamp(60px, 6vw, 120px) var(--page-gutter) clamp(30px, 3vw, 60px);
 	}
 	.intro_title {
-		margin: clamp(10px, 1vw, 20px) 0 clamp(14px, 1.3vw, 24px);
+		margin: 0 0 clamp(14px, 1.3vw, 24px);
 		color: var(--c-maroon);
 		font: 800 clamp(40px, 5.2vw, 100px) / 0.98 var(--font-display);
 		letter-spacing: -0.01em;
@@ -614,7 +607,9 @@
 	}
 
 	.is-pinned .journey_road {
-		display: flex;
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-rows: minmax(0, 1fr);
 		align-items: stretch;
 		max-width: none;
 		margin: 0;
@@ -638,14 +633,15 @@
 	}
 	.is-pinned .road_sign {
 		display: flex;
-		flex: 0 0 clamp(300px, 22vw, 420px);
+		width: clamp(300px, 22vw, 420px);
 		flex-direction: column;
 		justify-content: flex-end;
 		height: var(--road-y);
-		padding: 0 40px 40px 0;
+		padding: 0 clamp(48px, 4vw, 80px) 40px 0;
 	}
 	.is-pinned .stations + .road_sign {
-		flex-basis: clamp(380px, 28vw, 520px);
+		width: clamp(380px, 28vw, 520px);
+		padding-right: 40px;
 		padding-left: clamp(90px, 7vw, 140px);
 	}
 	.road_traveler {
@@ -666,16 +662,21 @@
 			0 0 0 5px #94151826,
 			0 0 24px 6px #fac54966;
 	}
-	.is-pinned .stations,
-	.is-pinned .gates {
-		display: flex;
+	.is-pinned .stations {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: clamp(250px, 18vw, 330px);
+		grid-auto-rows: minmax(0, 1fr);
 		gap: 0;
 	}
-	.is-pinned .station {
-		flex: 0 0 clamp(250px, 18vw, 330px);
+	.is-pinned .gates {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: clamp(280px, 20vw, 380px);
+		grid-auto-rows: minmax(0, 1fr);
+		gap: 0;
 	}
 	.is-pinned .gate {
-		flex: 0 0 clamp(280px, 20vw, 380px);
 		padding: 0;
 	}
 	.is-pinned .road_node {
@@ -686,12 +687,12 @@
 	.is-pinned .station_card {
 		position: absolute;
 		left: 50%;
-		bottom: calc(100% - var(--road-y) + 44px);
+		bottom: calc(100% - var(--road-y) + 32px);
 		width: clamp(300px, 23vw, 420px);
 		translate: -50% 0;
 	}
 	.is-pinned .station.down .station_card {
-		top: calc(var(--road-y) + 44px);
+		top: calc(var(--road-y) + 32px);
 		bottom: auto;
 	}
 	.is-pinned .station_card::after {
@@ -700,7 +701,7 @@
 		left: 50%;
 		top: 100%;
 		width: 2px;
-		height: 44px;
+		height: 32px;
 		margin-left: -1px;
 		background: repeating-linear-gradient(var(--c-gold) 0 4px, transparent 4px 8px);
 	}
