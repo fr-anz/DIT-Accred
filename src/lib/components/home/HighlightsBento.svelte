@@ -1,14 +1,5 @@
 <script>
-	import {
-		ArrowUpRight,
-		Building2,
-		Lightbulb,
-		Network,
-		ShieldCheck,
-		Star,
-		Users
-	} from '@lucide/svelte';
-	import { resolve } from '$app/paths';
+	import { Building2, Lightbulb, Network, ShieldCheck, Star, Users } from '@lucide/svelte';
 	import { countUp, reveal } from '#lib/actions/motion.ts';
 	import { departmentStats, impactSdgs, qsCategories } from '#lib/data/homeData.ts';
 	import { partners, wuriTimeline } from '#lib/data/internationalization.ts';
@@ -50,10 +41,6 @@
 	</span>
 {/snippet}
 
-{#snippet arrow()}
-	<ArrowUpRight class="tile_arrow" size={18} aria-hidden="true" />
-{/snippet}
-
 <section class="highlights" aria-labelledby="highlights-title">
 	<header class="highlights_head" use:reveal>
 		<h3 id="highlights-title" class="head_title">
@@ -62,15 +49,8 @@
 	</header>
 
 	<div class="bento" use:spotlight>
-		<a
-			class="tile tone_gold area_qs"
-			href={resolve('/planning#rankings')}
-			use:reveal
-			style:--d="0"
-			aria-label="QS Stars: 3-star overall rating. See verified rankings."
-		>
-			{@render arrow()}
-			<img src="/planning/figma/qs-stars.png" alt="" class="qs_logo" />
+		<div class="tile tone_gold area_qs" use:reveal style:--d="0">
+			<img src="/planning/figma/qs-stars.png" alt="QS Stars" class="qs_logo" />
 			<span class="qs_system">Rating System<sup>™</sup></span>
 			<span class="qs_stars" aria-hidden="true">
 				{#each [0, 1, 2] as i (i)}
@@ -97,15 +77,9 @@
 					</li>
 				{/each}
 			</ul>
-		</a>
+		</div>
 
-		<a
-			class="tile tone_maroon area_aaccup"
-			href={resolve('/planning#strategic-benchmarking')}
-			use:reveal
-			style:--d="1"
-		>
-			{@render arrow()}
+		<div class="tile tone_maroon area_aaccup" use:reveal style:--d="1">
 			<img src="/img/AACCUP.jpg" alt="" class="seal" />
 			<span class="tile_small">AACCUP</span>
 			<strong class="tile_title">Level IV</strong>
@@ -115,20 +89,14 @@
 				{/each}
 			</span>
 			<span class="tile_small">BSIT program accreditation</span>
-		</a>
+		</div>
 
-		<a
-			class="tile tone_navy area_picab"
-			href={resolve('/teaching-learning#program-compliance')}
-			use:reveal
-			style:--d="2"
-		>
-			{@render arrow()}
+		<div class="tile tone_navy area_picab" use:reveal style:--d="2">
 			<img src="/teaching-learning/area2/picab-logo.png" alt="" class="seal" />
 			<span class="tile_small">First PUP program with</span>
 			<strong class="tile_title">International Accreditation</strong>
 			<span class="tile_small">PICAB, July 2026</span>
-		</a>
+		</div>
 
 		<div class="tile tone_gold area_faculty" use:reveal style:--d="3">
 			<Users size={34} strokeWidth={1.5} class="tile_icon" aria-hidden="true" />
@@ -156,13 +124,7 @@
 			<span class="students_note" aria-hidden="true">Each dot is 40 students</span>
 		</div>
 
-		<a
-			class="tile tone_maroon area_impact"
-			href={resolve('/planning#rankings')}
-			use:reveal
-			style:--d="3"
-		>
-			{@render arrow()}
+		<div class="tile tone_maroon area_impact" use:reveal style:--d="3">
 			<ShieldCheck size={34} strokeWidth={1.5} class="tile_icon" aria-hidden="true" />
 			<span class="tile_kicker">THE Impact Rankings</span>
 			<span class="tile_number">1501+</span>
@@ -175,15 +137,9 @@
 					</li>
 				{/each}
 			</ul>
-		</a>
+		</div>
 
-		<a
-			class="tile tone_navy area_wuri"
-			href={resolve('/planning#rankings')}
-			use:reveal
-			style:--d="4"
-		>
-			{@render arrow()}
+		<div class="tile tone_navy area_wuri" use:reveal style:--d="4">
 			<span class="wuri_logo">
 				<img
 					src="/planning/figma/wuri.png"
@@ -200,15 +156,9 @@
 					<span class="wuri_pin">Top {wuriPercentile}%</span>
 				</span>
 			</span>
-		</a>
+		</div>
 
-		<a
-			class="tile tone_navy area_entries"
-			href={resolve('/internationalization#wuri-innovation')}
-			use:reveal
-			style:--d="5"
-		>
-			{@render arrow()}
+		<div class="tile tone_navy area_entries" use:reveal style:--d="5">
 			<span class="entries_head">
 				<Lightbulb size={22} strokeWidth={1.75} class="tile_icon" aria-hidden="true" />
 				<span class="tile_kicker">DIT innovations ranked in WURI</span>
@@ -222,15 +172,9 @@
 					</li>
 				{/each}
 			</ol>
-		</a>
+		</div>
 
-		<a
-			class="tile tone_gold area_partners"
-			href={resolve('/internationalization#partners')}
-			use:reveal
-			style:--d="6"
-		>
-			{@render arrow()}
+		<div class="tile tone_gold area_partners" use:reveal style:--d="6">
 			<span class="partner_logos" aria-hidden="true">
 				{#each partnerSchools as partner (partner.id)}
 					<img src={partner.logo} alt="" />
@@ -240,7 +184,7 @@
 			<span class="tile_label">
 				partner universities in {partnerCountries.join(' and ')}
 			</span>
-		</a>
+		</div>
 
 		<div class="tile tone_maroon area_orgs" use:reveal style:--d="7">
 			<Network size={34} strokeWidth={1.5} class="tile_icon" aria-hidden="true" />
@@ -408,36 +352,6 @@
 			opacity: 1;
 			scale: 1;
 		}
-	}
-
-	a.tile:hover,
-	a.tile:focus-visible {
-		border-color: var(--tone);
-		translate: 0 -4px;
-		box-shadow: 0 18px 30px -22px color-mix(in srgb, var(--tone) 90%, transparent);
-	}
-
-	a.tile:focus-visible {
-		outline: 2px solid var(--tone);
-		outline-offset: 3px;
-	}
-
-	.tile :global(.tile_arrow) {
-		position: absolute;
-		top: 0.7rem;
-		right: 0.7rem;
-		color: var(--tone);
-		opacity: 0;
-		translate: -5px 5px;
-		transition:
-			opacity 0.25s ease,
-			translate 0.35s var(--out);
-	}
-
-	a.tile:hover :global(.tile_arrow),
-	a.tile:focus-visible :global(.tile_arrow) {
-		opacity: 1;
-		translate: 0 0;
 	}
 
 	.tile :global(.tile_icon) {
@@ -943,11 +857,6 @@
 		.tile::after,
 		.tile :global(*) {
 			transition: none !important;
-		}
-
-		a.tile:hover,
-		a.tile:focus-visible {
-			translate: none;
 		}
 	}
 
