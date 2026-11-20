@@ -85,7 +85,7 @@ export const wuriTimeline: { year: string; entries: WuriEntry[] }[] = [
 				project: 'Floodwatcher',
 				category: 'Generative AI Application',
 				rank: '21st',
-				description: 'A BSCS project that forecasts water levels in the Marikina River.'
+				description: 'A CCIS project that forecasts water levels in the Marikina River.'
 			}
 		]
 	},
@@ -133,7 +133,7 @@ export const floodTimeline = [
 		datetime: '2024',
 		title: 'Floodwatcher',
 		detail:
-			'A BSCS project that forecasts water levels in the Marikina River. Ranked 21st in WURI 2024.'
+			'A CCIS project that forecasts water levels in the Marikina River. Ranked 21st in WURI 2024.'
 	},
 	{
 		date: '2025',
