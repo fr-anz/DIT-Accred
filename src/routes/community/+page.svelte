@@ -598,7 +598,7 @@
 				</div>
 
 				<ol class="pathway_line" aria-label="Community extension progression" use:reveal>
-					{#each infographicStages as stage, idx}
+					{#each infographicStages as stage, idx (stage.code)}
 						<li class:is-stage-active={activeInfographicStage === idx} style:--d={idx}>
 							<button
 								type="button"
@@ -655,7 +655,7 @@
 
 					<div class="mini_ruler" role="img" aria-label="7 out of 9 extension initiatives completed">
 						<div class="mini_ruler_track">
-							{#each [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as tick}
+							{#each [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as tick (tick)}
 								<span class="mini_tick" class:done={tick <= 7} style="--pos: {tick / 9}">
 									<em>{tick}</em>
 								</span>
@@ -816,7 +816,7 @@
 		</div>
 
 		<div class="chronicle_list">
-			{#each communityChapters as chap, i}
+			{#each communityChapters as chap, i (chap.number)}
 				<article
 					class="chronicle_card {i % 2 === 1 ? 'is-reversed' : ''}"
 					use:reveal={{ threshold: 0.14 }}
@@ -928,7 +928,7 @@
 
 		<div class="tab-container" use:reveal>
 			<div class="tabs" role="tablist" aria-label="Technical Profiles">
-				{#each profiles as profile, index}
+				{#each profiles as profile, index (profile.tabLabel)}
 					<button
 						type="button"
 						role="tab"
@@ -980,7 +980,7 @@
 
 						<div class="content-right">
 							<div class="horizontal-photo-stack">
-								{#each profiles[activeTab].photos as photo}
+								{#each profiles[activeTab].photos as photo (photo.src)}
 									<div class="horizontal-photo-card">
 										<img src={photo.src} alt={photo.alt} loading="lazy" />
 									</div>
@@ -1061,7 +1061,7 @@
 										<a
 											href={row.docUrl}
 											target="_blank"
-											rel="noopener noreferrer"
+											rel="external noopener noreferrer"
 											class="doc-anchor"
 										>
 											{row.docLabel} ↗
@@ -1167,7 +1167,7 @@
 
 		<div class="ivote-right" use:reveal={{ threshold: 0.12 }}>
 			<div class="archive-fade-container">
-				{#each archiveSlides as slide, idx}
+				{#each archiveSlides as slide, idx (slide.src)}
 					<div
 						class="fade-slide {currentImageIndex === idx ? 'active' : ''}"
 						style="background-image: url('{slide.src}');"
@@ -1257,7 +1257,7 @@
 				</div>
 
 				<div class="gallery-grid-container">
-					{#each archiveSlides as slide}
+					{#each archiveSlides as slide (slide.src)}
 						<figure class="gallery-img-box">
 							<img src={slide.src} alt={slide.caption} />
 							<figcaption>{slide.caption}</figcaption>

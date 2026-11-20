@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	import ditLogo from '#lib/assets/DIT Logo.jpg';
 </script>
 
@@ -81,16 +82,16 @@
 			<h3 class="column_title">Portfolio</h3>
 			<ul class="links_list">
 				<li>
-					<a href="/compliance" class="footer_link">Compliance Report</a>
+					<a href={resolve('/compliance')} class="footer_link">Compliance Report</a>
 				</li>
 				<li>
-					<a href="/compliance#narrative" class="footer_link">Narrative Report</a>
+					<a href={resolve('/compliance#narrative')} class="footer_link">Narrative Report</a>
 				</li>
 				<li>
-					<a href="/teaching-learning#curriculum-architecture" class="footer_link">Curriculum</a>
+					<a href={resolve('/teaching-learning#curriculum-architecture')} class="footer_link">Curriculum</a>
 				</li>
 				<li>
-					<a href="/teaching-learning/faculty" class="footer_link">Faculty Directory</a>
+					<a href={resolve('/teaching-learning/faculty')} class="footer_link">Faculty Directory</a>
 				</li>
 			</ul>
 		</div>
@@ -100,16 +101,16 @@
 			<h3 class="column_title">Pillars</h3>
 			<ul class="links_list">
 				<li>
-					<a href="/teaching-learning" class="footer_link">Teaching & Learning</a>
+					<a href={resolve('/teaching-learning')} class="footer_link">Teaching & Learning</a>
 				</li>
 				<li>
-					<a href="/research" class="footer_link">Research</a>
+					<a href={resolve('/research')} class="footer_link">Research</a>
 				</li>
 				<li>
-					<a href="/community" class="footer_link">Extension</a>
+					<a href={resolve('/community')} class="footer_link">Extension</a>
 				</li>
 				<li>
-					<a href="/internationalization" class="footer_link">Internationalization</a>
+					<a href={resolve('/internationalization')} class="footer_link">Internationalization</a>
 				</li>
 			</ul>
 		</div>

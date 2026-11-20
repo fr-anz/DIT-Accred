@@ -136,7 +136,7 @@
 	<!-- Full-width binary rows alternate left and right. -->
 	<div class="binary-bg" aria-hidden="true">
 		<div class="binary-layer">
-			{#each binaryLayerA as row}
+			{#each binaryLayerA as row, i (i)}
 				<div class="binary-row"><span>{row}</span><span>{row}</span></div>
 			{/each}
 		</div>
@@ -221,7 +221,7 @@
 	{:else if !isClosing}
 		<!-- Profile cards (default state) -->
 		<div class="cards-container">
-			{#each leaders as leader}
+			{#each leaders as leader (leader.id)}
 				<button
 					class="leader-card"
 					class:align-right={leader.align === 'right'}
