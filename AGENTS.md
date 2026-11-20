@@ -6,3 +6,7 @@
 - Regenerate `package-lock.json` and `bun.lock` with their respective package managers whenever dependencies change. Verify `npm ci` and `bun install --frozen-lockfile` in separate clean install directories or one at a time. Use Bun 1.4 or newer for nested dependency overrides and remove the typography parser override once upstream depends on a patched release.
 - On the pinned Node.js version, run `npm audit`, `npm run check`, `npm run lint`, and `npm run build`. Smoke-test affected routes and interactions against `npm run preview` after a framework or runtime upgrade.
 - Fix regressions before completing an upgrade. Compare any failing checks against the baseline and report pre-existing failures, unresolved advisories, and checks you could not run.
+
+# Commits
+
+- Commits and PRs are authored by the user only. Do not add a `Co-Authored-By` trailer or a "Generated with" line to commit messages or PR descriptions.
