@@ -155,7 +155,8 @@ export const pdcaStages: PdcaStage[] = [
 			'Revise the curriculum per CHED memoranda',
 			'Prepare and update syllabi',
 			'Set department targets in the DIT Development Plan'
-		]
+		],
+		plans: developmentPlans
 	},
 	{
 		id: 'do',
@@ -166,8 +167,7 @@ export const pdcaStages: PdcaStage[] = [
 			'Run internships with industry partners under MOAs',
 			'Conduct research and extension projects',
 			'Pursue international partnerships and mobility'
-		],
-		plans: developmentPlans
+		]
 	},
 	{
 		id: 'check',

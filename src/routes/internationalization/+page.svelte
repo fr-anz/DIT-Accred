@@ -155,15 +155,15 @@
 			src: '/internationalization/ifloodsense-meeting.webp',
 			alt: 'PUP and UMPSA researchers gathered on a video call',
 			caption: 'IfloodSense proposal meeting with UMPSA, July 28, 2026',
-			width: 448,
-			height: 201
+			width: 1919,
+			height: 860
 		},
 		demo: {
 			src: '/internationalization/flood-alert-demo.webp',
-			alt: 'A flood-alert map demonstrated on a phone during the meeting',
-			caption: 'The flood-alert map demonstrated during the meeting',
-			width: 257,
-			height: 142
+			alt: 'FloodDetectWaze app showing a flood update near PUP Sta. Mesa',
+			caption: 'FloodDetectWaze flood update and vehicle picker',
+			width: 720,
+			height: 1600
 		},
 		icfet: {
 			src: '/internationalization/icfet-2026.webp',
@@ -1579,6 +1579,10 @@
 		box-shadow: 0 24px 50px -12px rgb(26 22 20 / 0.45);
 		rotate: 3deg;
 		transition: rotate 0.6s var(--ease);
+	}
+
+	.story_collage :global(.collage_inset img) {
+		object-position: top;
 	}
 
 	@media (hover: hover) {

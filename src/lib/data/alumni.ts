@@ -72,5 +72,16 @@ export const alumniList: Alumni[] = [
 		videoUrl:
 			'https://drive.google.com/file/d/1td4UB4KkjyzEJqkv_hHApQO_LNE-ZtfS/view?usp=share_link',
 		videoEmbedUrl: 'https://drive.google.com/file/d/1td4UB4KkjyzEJqkv_hHApQO_LNE-ZtfS/preview'
+	},
+	{
+		name: 'Glenn Arvin Tobillo',
+		classYear: 2007,
+		role: 'Senior Software Engineer',
+		company: 'Westpac',
+		imageUrl: '/teaching-learning/alumni/glenn-arvin-tobillo.webp',
+		imageAlt: 'Portrait of Glenn Arvin Tobillo',
+		additionalRole: '',
+		videoUrl: 'https://drive.google.com/file/d/1Z0Mg97j8j1sI3nIxRcqowpxUvTUyZrvo/view?usp=drivesdk',
+		videoEmbedUrl: 'https://drive.google.com/file/d/1Z0Mg97j8j1sI3nIxRcqowpxUvTUyZrvo/preview'
 	}
 ];
