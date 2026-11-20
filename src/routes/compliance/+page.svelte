@@ -56,7 +56,7 @@
   /** @type {HTMLElement[]} */
   let rowElements = $state([]);
   let activeArea = $derived.by(() => {
-    const currentScroll = scrollY; 
+    void scrollY;
     if (!timelineContainer || !innerHeight) return null;
     
     const screenMiddle = innerHeight / 2;
@@ -119,17 +119,17 @@
         <div class="progress-spine" style="height: {progressSpineHeight}%;"></div>
         <div class="ambient-scroll-light" style="top: {progress}%;"></div>
 
-        {#each complianceAreas as area, i}
+        {#each complianceAreas as area, i (area.id)}
           <div class="area-row {activeArea === area.id ? 'scroll-active' : ''}" bind:this={rowElements[i]}>
 
             <!-- LEFT SIDE -->
             <div class="area-half left-half">
               {#if area.side === 'left'}
-                <a class="area-card left-card" href={area.href} target="_blank" rel="noopener noreferrer">
+                <a class="area-card left-card" href={area.href} target="_blank" rel="external noopener noreferrer">
                   <div class="info-section">
                     <span class="area-label">Area {area.id}</span>
                     <div class="dots-grid">
-                      {#each Array(10) as _, j}
+                      {#each { length: 10 }, j (j)}
                         <div class="dot {j < area.id ? 'green' : 'red'}"></div>
                       {/each}
                     </div>
@@ -150,14 +150,14 @@
             <div class="area-half right-half">
               {#if area.side === 'right'}
                 <div class="wire wire-right"></div>
-                <a class="area-card right-card" href={area.href} target="_blank" rel="noopener noreferrer">
+                <a class="area-card right-card" href={area.href} target="_blank" rel="external noopener noreferrer">
                   <div class="port-column">
                     <div class="port-box"><div class="port"></div></div>
                   </div>
                   <div class="info-section">
                     <span class="area-label">Area {area.id}</span>
                     <div class="dots-grid">
-                      {#each Array(10) as _, j}
+                      {#each { length: 10 }, j (j)}
                         <div class="dot {j < area.id ? 'green' : 'red'}"></div>
                       {/each}
                     </div>

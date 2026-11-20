@@ -1,10 +1,14 @@
 <script>
+	import { resolve } from '$app/paths';
 	import { sections } from '#lib/data/homeData.ts';
+
+	/** @param {string} id */
+	const sectionHref = (id) => resolve(/** @type {import('$app/types').RouteId} */ (`/${id}`));
 </script>
 
 <section class="quick-links">
-	{#each sections as section}
-		<a href="/{section.id}" class="panel">
+	{#each sections as section (section.id)}
+		<a href={sectionHref(section.id)} class="panel">
 			<img
 				src={section.image}
 				alt={section.title}

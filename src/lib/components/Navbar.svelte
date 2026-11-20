@@ -203,7 +203,7 @@
 		transition:slideDownAndUp={{ duration: 300 }}
 	>
 		<div class="bg-images">
-			{#each navItems as item}
+			{#each navItems as item (item.href)}
 				{#if item.image}
 					<div
 						class="bg-image"

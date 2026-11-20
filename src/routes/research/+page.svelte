@@ -9,6 +9,7 @@
 		Maximize2,
 		Network
 	} from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
 	import Footer from '#lib/components/footer.svelte';
 	import ditLogo from '#lib/assets/DIT Logo.svg';
@@ -121,7 +122,6 @@
 	];
 
 	const metricCardCount = metricCards.length;
-	const incentiveTrackCount = incentiveTracks.length;
 	let activeIncentiveIndex = $state(incentiveTracks.length - 1);
 	let activeMetricIndex = $state(0);
 	let activePanelSlide = $state(0);
@@ -203,7 +203,7 @@
 
 		<div class="framework_shell">
 			<div class="framework_cards_row">
-				{#each frameworkCards as card}
+				{#each frameworkCards as card (card.title)}
 					{@const Icon = card.icon}
 					<div class="framework_card">
 						<Icon size={220} strokeWidth={1.1} class="framework_bg_icon" aria-hidden="true" />
@@ -215,7 +215,7 @@
 
 			<div class="framework_detail_split">
 				<nav class="incentive_nav" aria-label="Research development priority tracks">
-					{#each incentiveTracks as track, index}
+					{#each incentiveTracks as track, index (track.title)}
 						<button
 							class="incentive_row"
 							type="button"
@@ -241,7 +241,7 @@
 
 		<a
 			class="manual_link report-button"
-			href="/research"
+			href={resolve('/research')}
 			aria-label="Access full PUP Research and Development Manual"
 		>
 			<Download size={24} strokeWidth={1.8} />
@@ -292,7 +292,7 @@
 					<path d="M346 697.001L398 409.001" stroke="url(#hexStroke)" stroke-width="6" />
 				</svg>
 
-				{#each metricCards as card, i}
+				{#each metricCards as card, i (card.label)}
 					<button
 						type="button"
 						class="metric_card"
@@ -376,7 +376,7 @@
 
 					<div class="faculty_status">
 						<div class="faculty_status_title">FACULTY STATUS</div>
-						{#each facultyStatus as row}
+						{#each facultyStatus as row (row.label)}
 							<div class="status_row tone_{row.tone}">
 								<span class="status_dot" aria-hidden="true"></span>
 								<div class="status_text">
@@ -415,12 +415,12 @@
 					<text x="0" y="14" class="chart_axis_title">ARTICLES PER YEAR</text>
 					<rect x="550" y="5" width="11" height="11" rx="3" fill="#F7B94A" />
 					<text x="567" y="14.5" class="chart_legend_text">Articles</text>
-					{#each [0, 5, 10, 15, 20] as tick}
+					{#each [0, 5, 10, 15, 20] as tick (tick)}
 						{@const y = 246 - tick * 10.3}
 						<line x1="44" x2="684" y1={y} y2={y} class="grid_line" class:baseline={tick === 0} />
 						<text x="34" y={y + 4} text-anchor="end" class="chart_tick">{tick}</text>
 					{/each}
-					{#each indexationByYear as item, i}
+					{#each indexationByYear as item, i (item.year)}
 						{@const h = item.count * 10.3}
 						{@const x = 61.6 + i * 80}
 						<g>
@@ -467,7 +467,7 @@
 		</div>
 
 		<div class="faculty_repository" bind:this={facultyStripEl}>
-			{#each facultyResearchers as researcher, index}
+			{#each facultyResearchers as researcher, index (index)}
 				{@const isOpen = activeFacultyIndex === index}
 				<div
 					class="faculty_panel"
@@ -499,7 +499,7 @@
 						<strong class="faculty_page_name">{researcher.name}</strong>
 						<span class="faculty_page_role">{researcher.role}</span>
 						<ul class="faculty_publications">
-							{#each researcher.publications as publication}
+							{#each researcher.publications as publication, p (p)}
 								<li>{publication}</li>
 							{/each}
 						</ul>

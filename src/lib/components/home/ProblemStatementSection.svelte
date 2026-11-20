@@ -24,7 +24,7 @@
 
 <div class="section5-wrapper">
 	<section class="section-5">
-		{#each scatteredImages as image}
+		{#each scatteredImages as image, i (i)}
 			<img class="bg-rect" alt="" src={image.src} style={imageStyle(image)} />
 		{/each}
 

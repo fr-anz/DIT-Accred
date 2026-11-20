@@ -8,7 +8,7 @@
 
 <section class="welcome-container" aria-labelledby="welcome-heading">
 	<div class="logo-row" aria-label="Accreditation partner logos">
-		{#each logos as logo}
+		{#each logos as logo (logo.src)}
 			<img src={logo.src} alt={logo.alt} />
 		{/each}
 	</div>
