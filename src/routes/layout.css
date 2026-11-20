@@ -64,6 +64,12 @@ body {
 	overflow-x: clip;
 }
 
+/* Stop the elastic bounce past the footer, which showed the white page ground
+   under the skyline. */
+html {
+	overscroll-behavior-y: none;
+}
+
 /* ─────────────────────────────────────────────
    GLOBAL TEXT ROLES
    One class per text role in the design. Use these instead of re-declaring
