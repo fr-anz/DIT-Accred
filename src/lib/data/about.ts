@@ -48,7 +48,7 @@ export const quickFacts = [
 		description: 'Dedicated industry experts and academic PhDs.'
 	},
 	{
-		label: 'Longevity',
+		label: 'Partnerships',
 		value: '100+',
 		description: 'Industry partnerships established worldwide.'
 	},
