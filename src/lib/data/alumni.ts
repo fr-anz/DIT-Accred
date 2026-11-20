@@ -78,7 +78,7 @@ export const alumniList: Alumni[] = [
 		classYear: 2007,
 		role: 'Senior Software Engineer',
 		company: 'Westpac',
-		imageUrl: 'https://cdn.theavenir.dev/images/Alumni/8d695e9238a82785d8e9af98e45fcc32.jpeg',
+		imageUrl: '/teaching-learning/alumni/glenn-arvin-tobillo.webp',
 		imageAlt: 'Portrait of Glenn Arvin Tobillo',
 		additionalRole: '',
 		videoUrl: 'https://drive.google.com/file/d/1Z0Mg97j8j1sI3nIxRcqowpxUvTUyZrvo/view?usp=drivesdk',
