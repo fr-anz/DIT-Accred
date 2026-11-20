@@ -181,7 +181,7 @@ export const facultyResearchers = [
 	'Dr. Illuminada Vivien R. Domingo',
 	'Dr. Benilda Eleonor V. Comendador',
 	'Assoc. Prof. Rachel A. Nayre',
-	'Jennifer Mandigma',
+	'Jonnifer Mandigma',
 	'Ma. Leonila Amata'
 ];
 
