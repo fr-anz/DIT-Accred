@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	import { scatteredImages } from '#lib/data/homeData.ts';
 
 	/**
@@ -39,9 +40,7 @@
 			accessible technical education. Forty-six years later, that mission still holds.
 		</p>
 
-		<a href="https://www.pup.edu.ph" class="btn-pup" target="_blank" rel="noopener noreferrer">
-			Learn More About DIT
-		</a>
+		<a href={resolve('/about')} class="btn-pup">Learn More About DIT</a>
 	</section>
 </div>
 
