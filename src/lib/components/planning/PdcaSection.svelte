@@ -622,7 +622,7 @@
 		translate: 0 0;
 	}
 
-	/* Development plans inside the Do card: a ruled list of document links. */
+	/* Development plans inside the Plan card: a ruled list of document links. */
 	.stage_plans {
 		margin-top: auto;
 		padding-top: clamp(20px, 1.6vw, 30px);
