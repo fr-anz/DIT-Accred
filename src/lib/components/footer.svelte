@@ -1,380 +1,277 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
-	import ditLogo from '#lib/assets/DIT Logo.jpg';
+	import { ArrowUp } from '@lucide/svelte';
+	import ditSeal from '#lib/assets/dit-seal-gold.svg';
+	import { navItems } from '#lib/data/navigation.ts';
+	import DitherSkyline from './footer/DitherSkyline.svelte';
+
+	const email = 'dit@pup.edu.ph';
+	const year = new Date().getFullYear();
+
+	function resolveHref(href: string) {
+		const args = [href] as Parameters<typeof resolve>;
+		return resolve(...args);
+	}
+
+	function quickLabel(href: string, label: string) {
+		return href === '/planning' ? 'Planning & QA' : label;
+	}
+
+	function backToTop() {
+		const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		window.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' });
+	}
 </script>
 
-<footer class="footer_container">
-	<div class="footer_content">
-		<!-- Left: Brand logos and contact -->
-		<div class="brand_column">
-			<div class="logo_row">
-				<img class="brand_logo" src={ditLogo} alt="DIT Logo" />
-				<img class="brand_logo pup_logo" src="/img/PUP.png" alt="Polytechnic University of the Philippines logo" />
-			</div>
-
-			<div class="contact_info">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="18"
-					height="18"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.5"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="pin_icon"
-					><path
-						d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0z"
-					/><circle cx="12" cy="10" r="3" /></svg
-				>
-				<p class="address_text">
-					Room 508, South Wing, Main Building Polytechnic University of the Philippines<br />
-					Anonas st., Sta. Mesa, Manila
-				</p>
-			</div>
-
-			<div class="social_links">
-				<a
-					href="https://facebook.com"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="social_btn"
-					aria-label="Facebook"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="18"
-						height="18"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg
-					>
-				</a>
-				<a href="mailto:dit@pup.edu.ph" class="social_btn" aria-label="Email">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="18"
-						height="18"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><rect width="20" height="16" x="2" y="4" rx="2" /><path
-							d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
-						/></svg
-					>
-				</a>
-			</div>
+<footer class="site_footer">
+	<div class="footer_body">
+		<div class="footer_lead">
+			<img class="footer_seal" src={ditSeal} alt="" width="64" height="64" />
+			<p class="footer_kicker">Polytechnic University of the Philippines</p>
+			<p class="footer_title">Department of<br />Information Technology</p>
 		</div>
 
-		<!-- Center spacer: keeps the middle clear so the skyline stays open -->
-		<div class="spacer_column" aria-hidden="true"></div>
+		<div class="footer_info">
+			<section class="info_block" aria-labelledby="footer-visit">
+				<h2 id="footer-visit" class="info_label">Visit</h2>
+				<address class="info_text">
+					Room 508, South Wing<br />
+					PUP Main Building<br />
+					Anonas St., Sta. Mesa, Manila
+				</address>
+			</section>
 
-		<!-- Middle: Portfolio navigation directory -->
-		<div class="links_column">
-			<h3 class="column_title">Portfolio</h3>
-			<ul class="links_list">
-				<li>
-					<a href={resolve('/compliance')} class="footer_link">Compliance Report</a>
-				</li>
-				<li>
-					<a href={resolve('/compliance#narrative')} class="footer_link">Narrative Report</a>
-				</li>
-				<li>
-					<a href={resolve('/teaching-learning#curriculum-architecture')} class="footer_link">Curriculum</a>
-				</li>
-				<li>
-					<a href={resolve('/teaching-learning/faculty')} class="footer_link">Faculty Directory</a>
-				</li>
-			</ul>
+			<section class="info_block" aria-labelledby="footer-write">
+				<h2 id="footer-write" class="info_label">Write to us</h2>
+				<a class="info_email" href="mailto:{email}">{email}</a>
+			</section>
+
+			<nav class="info_block" aria-labelledby="footer-links">
+				<h2 id="footer-links" class="info_label">Quick links</h2>
+				<ul class="quick_links">
+					{#each navItems as item (item.href)}
+						<li>
+							<a class="quick_link" href={resolveHref(item.href)}>
+								{quickLabel(item.href, item.label)}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
 		</div>
 
-		<!-- Right: Pillars navigation directory -->
-		<div class="links_column">
-			<h3 class="column_title">Pillars</h3>
-			<ul class="links_list">
-				<li>
-					<a href={resolve('/teaching-learning')} class="footer_link">Teaching & Learning</a>
-				</li>
-				<li>
-					<a href={resolve('/research')} class="footer_link">Research</a>
-				</li>
-				<li>
-					<a href={resolve('/community')} class="footer_link">Extension</a>
-				</li>
-				<li>
-					<a href={resolve('/internationalization')} class="footer_link">Internationalization</a>
-				</li>
-			</ul>
+		<div class="footer_bar">
+			<p>© {year} Department of Information Technology, PUP Sta. Mesa</p>
+			<button class="to_top" type="button" onclick={backToTop}>
+				Back to top
+				<ArrowUp size={16} strokeWidth={1.75} aria-hidden="true" />
+			</button>
 		</div>
 	</div>
 
-	<!-- Dithered dot-art skyline: PUP Pylon (left) + Carillon Tower & Main Building (right) -->
-	<svg
-		class="footer_art"
-		viewBox="0 0 1440 300"
-		xmlns="http://www.w3.org/2000/svg"
-		aria-hidden="true"
-		focusable="false"
-	>
-		<defs>
-			<!-- binary dither tiles: 1 = gold glyph, 0 = gap -->
-			<pattern id="ditherFine" width="20" height="18" patternUnits="userSpaceOnUse">
-				<text
-					font-family="'Courier New', ui-monospace, monospace"
-					font-size="8"
-					font-weight="700"
-					fill="#cfa83a"
-				>
-					<tspan x="0" y="7">1010</tspan>
-					<tspan x="0" y="15">0100</tspan>
-				</text>
-			</pattern>
-			<pattern id="ditherDense" width="20" height="18" patternUnits="userSpaceOnUse">
-				<text
-					font-family="'Courier New', ui-monospace, monospace"
-					font-size="8"
-					font-weight="700"
-					fill="#cfa83a"
-				>
-					<tspan x="0" y="7">1111</tspan>
-					<tspan x="0" y="15">1011</tspan>
-				</text>
-			</pattern>
-		</defs>
-
-		<!-- striped dither sun -->
-		<circle cx="1245" cy="72" r="46" fill="url(#ditherFine)" />
-		<g fill="#5c0f16">
-			<rect x="1195" y="76" width="100" height="5" />
-			<rect x="1195" y="88" width="100" height="6" />
-			<rect x="1195" y="101" width="100" height="7" />
-		</g>
-
-		<!-- birds -->
-		<g stroke="#cfa83a" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.9">
-			<path d="M560 62 q7 -7 14 0 q7 -7 14 0" />
-			<path d="M622 40 q5 -5 10 0 q5 -5 10 0" />
-		</g>
-
-		<!-- back hills -->
-		<path
-			d="M0 300 L0 268 C 140 246, 260 254, 400 264 C 540 274, 640 250, 800 258 C 960 266, 1080 246, 1240 256 C 1340 262, 1400 258, 1440 260 L1440 300 Z"
-			fill="url(#ditherFine)"
-			opacity="0.4"
-		/>
-
-		<!-- front hills (ground) -->
-		<path
-			d="M0 300 L0 282 C 160 268, 320 276, 480 284 C 640 292, 760 272, 920 280 C 1080 288, 1240 272, 1440 280 L1440 300 Z"
-			fill="url(#ditherFine)"
-			opacity="0.85"
-		/>
-
-		<!-- PUP Pylon -->
-		<g>
-			<rect x="66" y="252" width="288" height="48" fill="url(#ditherDense)" />
-			<g fill="url(#ditherFine)">
-				<path d="M100 300 L100 82 L107 72 L151 72 L158 82 L158 300 Z" />
-				<path d="M172 300 L172 82 L179 72 L223 72 L230 82 L230 300 Z" />
-				<path d="M244 300 L244 82 L251 72 L295 72 L302 82 L302 300 Z" />
-			</g>
-			<!-- letters knocked out of the dither: maroon voids on each pillar -->
-			<g
-				fill="#5c0f16"
-				font-family="Georgia, 'Times New Roman', serif"
-				font-weight="700"
-				font-size="92"
-				text-anchor="middle"
-			>
-				<text x="129" y="214">P</text>
-				<text x="201" y="214">U</text>
-				<text x="273" y="214">P</text>
-			</g>
-		</g>
-
-		<!-- Carillon Tower in front of the Main Building -->
-		<g>
-			<!-- main building -->
-			<rect x="1020" y="152" width="316" height="148" fill="url(#ditherFine)" />
-			<!-- floor bands -->
-			<g fill="#5c0f16">
-				<rect x="1020" y="170" width="316" height="7" />
-				<rect x="1020" y="192" width="316" height="7" />
-				<rect x="1020" y="214" width="316" height="7" />
-				<rect x="1020" y="236" width="316" height="7" />
-				<rect x="1020" y="258" width="316" height="7" />
-			</g>
-			<!-- roof slab -->
-			<rect x="1008" y="140" width="340" height="12" fill="url(#ditherDense)" />
-			<!-- obelisk -->
-			<path d="M1046 300 L1051 66 L1060 50 L1076 50 L1085 66 L1090 300 Z" fill="url(#ditherDense)" />
-			<path d="M1060 50 L1068 30 L1076 50 Z" fill="url(#ditherDense)" />
-			<!-- platform steps -->
-			<g stroke="#cfa83a" stroke-width="3" stroke-linecap="round">
-				<line x1="1034" y1="276" x2="1102" y2="276" />
-				<line x1="1022" y1="286" x2="1114" y2="286" />
-				<line x1="1010" y1="296" x2="1126" y2="296" />
-			</g>
-			<!-- landscaping bushes -->
-			<g fill="url(#ditherDense)">
-				<ellipse cx="1000" cy="266" rx="26" ry="14" />
-				<ellipse cx="1368" cy="264" rx="32" ry="16" />
-				<ellipse cx="980" cy="280" rx="18" ry="10" />
-			</g>
-		</g>
-	</svg>
+	<DitherSkyline />
 </footer>
 
 <style>
-	.footer_container {
-		background-color: #5c0f16; /* Deep rich maroon */
-		color: #ffffff;
-		font-family: 'Inter', sans-serif;
-		width: 100%;
-		border-top: none;
+	.site_footer {
+		--footer-paper: #f6ecd6;
+		--footer-muted: rgb(246 236 214 / 0.72);
+		--footer-rule: rgb(246 236 214 / 0.14);
+		background: var(--c-maroon-deep);
+		color: var(--footer-paper);
+		font-family: var(--font-body);
 		overflow: hidden;
 	}
 
-	.footer_content {
-		max-width: 1200px;
+	.footer_body {
+		max-width: var(--container-max, 1280px);
 		margin: 0 auto;
-		padding: 4rem 2rem 0;
+		padding: clamp(3.5rem, 7vw, 6rem) var(--page-pad, clamp(1rem, 4vw, 4rem)) 0;
 		display: grid;
-		grid-template-columns: 2fr 1.5fr 1fr 1fr;
-		gap: 3rem;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+		gap: clamp(2.5rem, 5vw, 5rem);
 	}
 
-	@media (max-width: 768px) {
-		.footer_content {
-			grid-template-columns: 1fr;
-			gap: 2rem;
-			padding: 3rem 1.5rem 0;
-		}
-
-		.spacer_column {
-			display: none;
-		}
-	}
-
-	.brand_column {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-	}
-
-	.logo_row {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.brand_logo {
+	.footer_seal {
+		display: block;
 		width: 64px;
 		height: 64px;
-		border-radius: 50%;
-		background: #ffffff;
-		object-fit: cover;
+		margin-bottom: 1.5rem;
 	}
 
-	.pup_logo {
-		background: transparent;
-	}
-
-	.contact_info {
-		display: flex;
-		gap: 0.75rem;
-		align-items: flex-start;
-	}
-
-	.pin_icon {
-		color: #cfa83a; /* Accent gold */
-		flex-shrink: 0;
-		margin-top: 0.2rem;
-	}
-
-	.address_text {
-		font-size: 0.85rem;
-		line-height: 1.6;
-		color: rgba(255, 255, 255, 0.8);
+	.footer_kicker,
+	.info_label {
 		margin: 0;
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: var(--track-eyebrow);
+		text-transform: uppercase;
+		color: var(--c-gold);
 	}
 
-	.social_links {
-		display: flex;
-		gap: 0.75rem;
-		align-items: center;
+	.footer_title {
+		margin: 0.75rem 0 0;
+		font-family: var(--font-heading);
+		font-size: clamp(1.9rem, 3.4vw, 3.25rem);
+		font-weight: 700;
+		line-height: 1.04;
+		letter-spacing: -0.01em;
+		text-wrap: balance;
 	}
 
-	.social_btn {
+	.footer_info {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+		gap: clamp(1.75rem, 3vw, 3rem);
+		align-content: end;
+	}
+
+	.info_block {
 		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.9rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--footer-rule);
+	}
+
+	.info_text {
+		margin: 0;
+		font-style: normal;
+		font-size: 0.9rem;
+		line-height: 1.65;
+		color: var(--footer-muted);
+	}
+
+	.info_email {
+		font-family: var(--font-heading);
+		font-size: 1.15rem;
+		font-weight: 600;
+		color: var(--footer-paper);
+		text-decoration: none;
+		overflow-wrap: anywhere;
+		transition: color 160ms ease;
+	}
+
+	.info_email:hover {
+		color: var(--c-gold);
+	}
+
+	.to_top {
+		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		width: 34px;
-		height: 34px;
-		background: rgba(255, 255, 255, 0.08);
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		border-radius: 50%;
-		color: #ffffff;
-		transition: all 0.2s ease;
+		gap: 0.4rem;
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--footer-paper);
+		text-decoration: none;
 		cursor: pointer;
 	}
 
-	.social_btn:hover {
-		background: #cfa83a;
-		border-color: #cfa83a;
-		color: #5c0f16;
+	.quick_links {
+		display: grid;
+		gap: 0.55rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.quick_link {
+		font-size: 0.9rem;
+		color: var(--footer-muted);
+		text-decoration: none;
+		transition: color 160ms ease;
+	}
+
+	.quick_link:hover {
+		color: var(--footer-paper);
+	}
+
+	.footer_bar {
+		grid-column: 1 / -1;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1.25rem 0 clamp(1.5rem, 3vw, 2.5rem);
+		border-top: 1px solid var(--footer-rule);
+	}
+
+	.footer_bar p {
+		margin: 0;
+		font-size: 0.8rem;
+		color: var(--footer-muted);
+	}
+
+	.to_top {
+		padding: 0.55rem 0.95rem;
+		border: 1px solid var(--footer-rule);
+		border-radius: 999px;
+		transition:
+			border-color 160ms ease,
+			background-color 160ms ease,
+			color 160ms ease;
+	}
+
+	.to_top :global(svg) {
+		transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.to_top:hover {
+		border-color: var(--c-gold);
+		background: var(--c-gold);
+		color: var(--c-maroon-deep);
+	}
+
+	.to_top:hover :global(svg) {
 		transform: translateY(-2px);
 	}
 
-	.links_column {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
+	.to_top:active {
+		transform: scale(0.97);
 	}
 
-	.column_title {
-		font-family: 'Overpass', sans-serif;
-		font-size: 1.15rem;
-		font-weight: 700;
-		color: #fffefc;
-		margin: 0;
-		letter-spacing: 0.02em;
+	.site_footer :is(a, button):focus-visible {
+		outline: 2px solid var(--c-gold);
+		outline-offset: 4px;
+		border-radius: 4px;
 	}
 
-	.links_list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
+	.site_footer .to_top:focus-visible {
+		border-radius: 999px;
 	}
 
-	.footer_link {
-		color: rgba(255, 255, 255, 0.8);
-		text-decoration: none;
-		font-size: 0.88rem;
-		transition: color 0.2s ease;
-		display: inline-block;
+	@media (max-width: 1024px) {
+		.footer_body {
+			grid-template-columns: minmax(0, 1fr);
+		}
 	}
 
-	.footer_link:hover {
-		color: #cfa83a;
-		text-decoration: underline;
+	@media (max-width: 820px) {
+		.footer_info {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 	}
 
-	.footer_art {
-		display: block;
-		width: 100%;
-		height: auto;
-		margin-top: 1rem;
+	@media (max-width: 480px) {
+		.footer_info {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site_footer *,
+		.site_footer :global(svg) {
+			transition: none !important;
+		}
+
+		.to_top:active {
+			transform: none;
+		}
 	}
 </style>
