@@ -51,7 +51,7 @@ IfloodSense builds on FloodDetectWaze, PUP's flood-alert app. It was proposed to
 - Dr. Illuminada Vivien R. Domingo
 - Dr. Benilda Eleonor V. Comendador
 - Assoc. Prof. Rachel A. Nayre
-- Jennifer Mandigma
+- Jonnifer Mandigma
 - Ma. Leonila Amata
 
 ### Roles
