@@ -2,6 +2,20 @@
 
 export const campusPhotos = [1, 2, 3, 4, 5].map((n) => `/about/strip-${n}.webp`);
 
+export const chairpersons = [
+	{ name: 'Prof. Doris M. Gatan', file: 'doris-gatan' },
+	{ name: 'Zinia L. Guevara', file: 'zinia-guevara' },
+	{ name: 'Dr. Rosicar E. Escober', file: 'rosicar-escober' },
+	{ name: 'Prof. Rosita E. Canlas', file: 'rosita-canlas' },
+	{ name: 'Dr. Benilda Eleonor V. Comendador', file: 'benilda-comendador' },
+	{ name: 'Dr. Aleta C. Fabregas', file: 'aleta-fabregas' },
+	{ name: 'Dr. Angelito G. Pastrana', file: 'angelito-pastrana' },
+	{ name: 'Rachel A. Nayre', file: 'rachel-nayre' },
+	{ name: 'Marian G. Arada', file: 'marian-arada' },
+	{ name: 'Lydinar D. Dastas', file: 'lydinar-dastas' },
+	{ name: 'John Dustin D. Santos', file: 'john-dustin-santos' }
+].map(({ name, file }) => ({ name, src: `/about/chairpersons/${file}.webp` }));
+
 export const strategicGoals = [
 	{
 		title: 'Strengthen Academic Excellence',
@@ -72,57 +86,78 @@ export const milestones = [
 		year: '1969',
 		title: 'The Drive Begins',
 		description:
-			'Philippine College of Commerce era; established strategic linkages with NCC and UP Diliman for mainframe processing time.'
+			'Philippine College of Commerce era; established strategic linkages with NCC and UP Diliman for mainframe processing time.',
+		photo: { file: 'archive-gathering', alt: 'Group in formal attire at a department gathering' }
 	},
 	{
-		year: '1977',
+		year: '1979',
 		title: 'EDP/CDPM Unit',
 		description:
-			'Launch of the ladderized Bachelor in Computer Data Processing Management (BCDPM) program.'
+			'Launch of the ladderized Bachelor in Computer Data Processing Management (BCDPM) program.',
+		photo: { file: 'computer-lab', alt: 'Two men exchanging a document in an early computer lab' }
 	},
 	{
 		year: '1986',
 		title: 'CCMIT Elevation',
 		description:
-			'Elevated to full college status (CCMIT) by Pres. Prudente; Dr. Carague appointed as the first Dean.'
+			'Elevated to full college status (CCMIT) by Pres. Prudente; Dr. Carague appointed as the first Dean.',
+		photo: { file: 'archival-group', alt: 'Group posing for a department archive photograph' }
 	},
 	{
 		year: '1987',
 		title: 'BIT Degree Launch',
 		description:
-			'Introduction of the Mathematics-oriented BIT degree and Post-Baccalaureate Diploma programs.'
+			'Introduction of the Mathematics-oriented BIT degree and Post-Baccalaureate Diploma programs.',
+		photo: { file: 'pasko-1987', alt: 'Participants onstage beneath the Pasko ’87 banner' }
 	},
 	{
 		year: '1997 - 1998',
 		title: 'Strategic Realignment',
 		description:
-			'Restructured per CHED MO No. 60; BCDPM transitioned to BSIT, while BIT became BSCS.'
+			'Restructured per CHED MO No. 60; BCDPM transitioned to BSIT, while BIT became BSCS.',
+		photo: { file: 'archive-table', alt: 'Group seated together at a department gathering' }
 	},
 	{
 		year: '2000 - 2007',
 		title: 'Accreditation Milestones',
 		description:
-			'AACCUP Level 1 (2000), Level 2 (2003), and Level 2 Resurvey (2007); recognized as CODE-IT center.'
+			'AACCUP Level 1 (2000), Level 2 (2003), and Level 2 Resurvey (2007); recognized as CODE-IT center.',
+		photo: { file: 'academic-meeting', alt: 'Group gathered around a conference table' }
 	},
 	{
 		year: '2009',
 		title: 'Infrastructure Modernization',
 		description:
-			'Strategic transfer of computer laboratories to the 5th floor South Wing for expanded capacity.'
+			'Strategic transfer of computer laboratories to the 5th floor South Wing for expanded capacity.',
+		photo: { file: 'computer-workshop', alt: 'Participants working at computers in a training lab' }
 	},
 	{
 		year: '2012',
 		title: 'Transition to CCIS',
 		description:
-			'Renamed to College of Computer and Information Sciences to emphasize information relevance in the digital age.'
+			'Renamed to College of Computer and Information Sciences to emphasize information relevance in the digital age.',
+		photo: { file: 'technology-centre', alt: 'Group posing inside a technology center' }
+	},
+	{
+		year: '2015',
+		title: 'AACCUP Level III Accreditation',
+		description: 'The BSIT program earned Level III accreditation from AACCUP.',
+		photo: {
+			file: 'research-conference',
+			alt: 'Participants posing under a national research conference banner'
+		}
 	},
 	{
 		year: '2021',
 		title: 'Excellence Recognized',
 		description:
-			'Awarded Level IV Accredited Status, affirming commitment to quality and academic excellence.'
+			'Awarded Level IV Accredited Status, affirming commitment to quality and academic excellence.',
+		photo: { file: 'recognition-program', alt: 'Participants posing together onstage' }
 	}
-];
+].map(({ photo, ...milestone }) => ({
+	...milestone,
+	photo: { src: `/about/history/${photo.file}.webp`, alt: photo.alt }
+}));
 
 export const programObjectives = [
 	{

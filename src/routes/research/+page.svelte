@@ -11,8 +11,10 @@
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
+	import { reveal } from '#lib/actions/motion.ts';
 	import Footer from '#lib/components/footer.svelte';
 	import ditLogo from '#lib/assets/DIT Logo.svg';
+	import { facultyResearch, facultyResearchByYear } from '#lib/data/facultyResearch.ts';
 
 	const frameworkCards = [
 		{
@@ -57,14 +59,6 @@
 				'Placeholder details for partner institutions, collaborative research tracks, and exchange outputs.'
 		}
 	];
-
-	const facultyResearchers = Array.from({ length: 8 }, () => ({
-		name: 'Aguila, Fermin',
-		role: 'Full Time Faculty',
-		count: 1,
-		image: '/img/sir-melvin.jpg',
-		publications: ['Placeholder research publication for faculty repository.']
-	}));
 
 	const metricCards = [
 		{
@@ -121,6 +115,18 @@
 		}
 	];
 
+	const researchSeries = /** @type {const} */ ([
+		{ key: 'presentations', label: 'Presentations' },
+		{ key: 'publications', label: 'Publications' }
+	]);
+	const researchScale = Math.max(
+		...facultyResearchByYear.flatMap(({ presentations, publications }) => [
+			presentations,
+			publications
+		])
+	);
+	const researchUnits = Array.from({ length: researchScale }, (_, index) => index + 1);
+
 	const metricCardCount = metricCards.length;
 	let activeIncentiveIndex = $state(incentiveTracks.length - 1);
 	let activeMetricIndex = $state(0);
@@ -138,7 +144,7 @@
 
 	/** @param {number} direction */
 	const stepFaculty = (direction) => {
-		const total = facultyResearchers.length;
+		const total = facultyResearch.length;
 		activeFacultyIndex = (activeFacultyIndex + direction + total) % total;
 		focusFacultyPanel(activeFacultyIndex);
 	};
@@ -148,17 +154,42 @@
 	const focusFacultyPanel = async (index) => {
 		await tick();
 		const strip = facultyStripEl;
-		if (!strip) return;
+		if (!strip || activeFacultyIndex !== index) return;
 		const panel = strip.querySelector(`[data-faculty-index="${index}"]`);
 		if (!(panel instanceof HTMLElement)) return;
-		const target =
-			panel.offsetLeft - (strip.clientWidth - panel.offsetWidth) / 2;
-		strip.scrollTo({
-			left: Math.max(0, target),
-			behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-				? 'auto'
-				: 'smooth'
-		});
+
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const vertical = getComputedStyle(strip).flexDirection === 'column';
+		/** @param {ScrollBehavior} behavior */
+		const align = (behavior) => {
+			const card = panel.getBoundingClientRect();
+			const viewport = strip.getBoundingClientRect();
+
+			strip.scrollTo(
+				vertical
+					? { top: strip.scrollTop + card.top - viewport.top, behavior }
+					: {
+							left:
+								strip.scrollLeft + card.left - viewport.left - (viewport.width - card.width) / 2,
+							behavior
+						}
+			);
+		};
+
+		align(reducedMotion ? 'instant' : 'smooth');
+		if (reducedMotion) return;
+
+		const resizing = strip
+			.getAnimations({ subtree: true })
+			.filter(
+				(animation) =>
+					animation instanceof CSSTransition &&
+					['flex-grow', 'flex-basis'].includes(animation.transitionProperty)
+			);
+		if (resizing.length === 0) return;
+
+		await Promise.allSettled(resizing.map((animation) => animation.finished));
+		if (activeFacultyIndex === index) align('smooth');
 	};
 
 	/** @param {number} index */
@@ -195,7 +226,7 @@
 	</section>
 
 	<section class="content_section policy_section" id="policy">
-		<header class="section_header">
+		<header class="section_header reveal_surface" use:reveal>
 			<BookOpen size={26} strokeWidth={1.5} class="section_icon maroon" />
 			<h2 class="t_eyebrow">Research Development &amp; Policy Framework</h2>
 		</header>
@@ -205,7 +236,7 @@
 			<div class="framework_cards_row">
 				{#each frameworkCards as card (card.title)}
 					{@const Icon = card.icon}
-					<div class="framework_card">
+					<div class="framework_card reveal_surface" use:reveal>
 						<Icon size={220} strokeWidth={1.1} class="framework_bg_icon" aria-hidden="true" />
 						<h3>{card.title}</h3>
 						<p>{card.description}</p>
@@ -250,7 +281,7 @@
 	</section>
 
 	<section class="content_section productivity_section" id="productivity">
-		<header class="section_header">
+		<header class="section_header reveal_surface" use:reveal>
 			<KeyRound size={26} strokeWidth={1.5} class="section_icon maroon" />
 			<h2 class="t_eyebrow">Key Productivity Metrics &amp; Faculty Engagement</h2>
 		</header>
@@ -425,9 +456,9 @@
 						{@const x = 61.6 + i * 80}
 						<g>
 							<rect x={x + 10} y={246 - h} width="45" height={h} rx="10" fill="url(#barGrad)" />
-							<text x={x + 32.5} y={246 - h - 8} text-anchor="middle" class="bar_value"
-								>{item.count}</text
-							>
+							<text x={x + 32.5} y={246 - h - 8} text-anchor="middle" class="bar_value">
+								{item.count}
+							</text>
 							<text x={x + 32.5} y="268" text-anchor="middle" class="bar_year">{item.year}</text>
 						</g>
 					{/each}
@@ -438,7 +469,7 @@
 	</section>
 
 	<section class="content_section faculty_section" id="published-research">
-		<header class="section_header">
+		<header class="section_header reveal_surface" use:reveal>
 			<Network size={26} strokeWidth={1.5} class="section_icon maroon" />
 			<h2 class="t_eyebrow">Faculty Researcher and Research Repository</h2>
 		</header>
@@ -446,7 +477,7 @@
 
 		<div class="faculty_controls">
 			<span class="faculty_counter" aria-live="polite">
-				{activeFacultyIndex + 1} / {facultyResearchers.length}
+				{activeFacultyIndex + 1} / {facultyResearch.length}
 			</span>
 			<button
 				class="faculty_nav_button"
@@ -467,46 +498,93 @@
 		</div>
 
 		<div class="faculty_repository" bind:this={facultyStripEl}>
-			{#each facultyResearchers as researcher, index (index)}
+			{#each facultyResearch as researcher, index (researcher.name)}
 				{@const isOpen = activeFacultyIndex === index}
-				<div
-					class="faculty_panel"
-					class:is_open={isOpen}
-					data-faculty-index={index}
-				>
+				<div class="faculty_panel" class:is_open={isOpen} data-faculty-index={index}>
 					<button
 						class="faculty_portrait"
 						type="button"
+						aria-label={researcher.name}
 						aria-expanded={isOpen}
 						aria-controls="faculty-repository-{index}"
 						onclick={() => toggleFacultyCard(index)}
 					>
-						<img src={researcher.image} alt="{researcher.name}, {researcher.role}" />
+						{#if researcher.image}
+							<img src={researcher.image} alt="" loading="lazy" />
+						{:else}
+							<span class="faculty_portrait_symbol" aria-hidden="true">
+								<BookOpen strokeWidth={1} />
+							</span>
+						{/if}
 						<span class="faculty_portrait_gradient" aria-hidden="true"></span>
 						<span class="faculty_portrait_name" aria-hidden="true">{researcher.name}</span>
 						<span class="faculty_portrait_count" aria-hidden="true">
-							<strong>{researcher.count}</strong>
-							<span>Published<br />Studies</span>
+							<strong>{researcher.records.length}</strong>
+							<span>Research<br />{researcher.records.length === 1 ? 'Record' : 'Records'}</span>
 						</span>
 					</button>
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard users need to scroll the active research records.) -->
 					<div
 						class="faculty_page"
 						id="faculty-repository-{index}"
+						role="region"
 						aria-hidden={!isOpen}
-						aria-label="Published research by {researcher.name}"
+						aria-label="Research by {researcher.name}"
+						tabindex={isOpen ? 0 : undefined}
 					>
-						<span class="faculty_page_label">Published Research</span>
 						<strong class="faculty_page_name">{researcher.name}</strong>
-						<span class="faculty_page_role">{researcher.role}</span>
 						<ul class="faculty_publications">
-							{#each researcher.publications as publication, p (p)}
-								<li>{publication}</li>
+							{#each researcher.records as record (`${record.year}:${record.title}`)}
+								<li>
+									<span class="faculty_record_meta">
+										{record.year}{#if record.status}
+											· {record.status}{/if}
+									</span>
+									{record.title}
+								</li>
 							{/each}
 						</ul>
 					</div>
 				</div>
 			{/each}
 		</div>
+
+		<table class="research_totals" use:reveal={{ threshold: 0.1 }}>
+			<caption id="faculty-research-by-year">BSIT faculty research by year</caption>
+			<thead>
+				<tr>
+					<th scope="col">Year</th>
+					{#each researchSeries as series (series.key)}
+						<th scope="col" class:publications={series.key === 'publications'}>
+							<span class="research_series_label">
+								<span class="research_unit is_filled" aria-hidden="true"></span>
+								{series.label}
+							</span>
+						</th>
+					{/each}
+				</tr>
+			</thead>
+			<tbody>
+				{#each facultyResearchByYear as year, rowIndex (year.year)}
+					<tr style:--research-row={rowIndex}>
+						<th scope="row">{year.year}</th>
+						{#each researchSeries as series (series.key)}
+							{@const count = year[series.key]}
+							<td class:publications={series.key === 'publications'}>
+								<span class="research_measure">
+									<span class="research_units" aria-hidden="true">
+										{#each researchUnits as unit (unit)}
+											<span class="research_unit" class:is_filled={unit <= count}></span>
+										{/each}
+									</span>
+									<span class="research_value">{count}</span>
+								</span>
+							</td>
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
 	</section>
 
 	<Footer />
@@ -1301,6 +1379,7 @@
 
 	.faculty_panel.is_open {
 		flex-grow: 7.5;
+		min-width: min(100%, 26rem);
 		border-color: transparent;
 		background: linear-gradient(0deg, #ca8106, #fac549) border-box;
 	}
@@ -1340,14 +1419,22 @@
 		transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
+	.faculty_portrait_symbol {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		color: var(--c-gold-light);
+	}
+	.faculty_portrait_symbol :global(svg) {
+		width: min(55%, 100px);
+		height: auto;
+	}
+
 	.faculty_portrait_gradient {
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(
-			180deg,
-			rgba(148, 21, 24, 0.78) 0%,
-			rgba(33, 0, 0, 0.94) 100%
-		);
+		background: linear-gradient(180deg, rgba(148, 21, 24, 0.78) 0%, rgba(33, 0, 0, 0.94) 100%);
 		pointer-events: none;
 		transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 	}
@@ -1441,13 +1528,10 @@
 		pointer-events: auto;
 	}
 
-	.faculty_page_label {
-		font-family: var(--font-body);
-		font-size: 0.68rem;
-		font-weight: 700;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: #b8860b;
+	.faculty_portrait:focus-visible,
+	.faculty_page:focus-visible {
+		outline: 2px solid var(--c-gold-dark);
+		outline-offset: -4px;
 	}
 
 	.faculty_page_name {
@@ -1457,14 +1541,6 @@
 		line-height: 1.2;
 		color: var(--color-maroon);
 		margin-top: 0.5rem;
-	}
-
-	.faculty_page_role {
-		font-family: var(--font-body);
-		font-size: 0.92rem;
-		font-style: italic;
-		color: #4a4a4a;
-		margin-top: 0.15rem;
 	}
 
 	.faculty_publications {
@@ -1488,8 +1564,147 @@
 		border-bottom: none;
 	}
 
+	.faculty_record_meta {
+		display: block;
+		margin-bottom: 0.2rem;
+		color: var(--c-maroon);
+		font-weight: 700;
+	}
+
+	.research_totals {
+		--chart-gutter: clamp(0.5rem, 2.5vw, 1.75rem);
+		--chart-tint: color-mix(in srgb, var(--c-gold-light) 12%, var(--c-surface));
+		width: min(100%, 55rem);
+		margin: clamp(2rem, 4vw, 4rem) auto 0;
+		border: 1px solid var(--c-shell);
+		border-block-start: 0;
+		border-radius: 0 0 1.25rem 1.25rem;
+		border-collapse: separate;
+		border-spacing: 0;
+		table-layout: fixed;
+		color: var(--c-ink);
+		font-family: var(--font-body);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.research_totals caption {
+		scroll-margin-top: 7rem;
+		padding: clamp(1rem, 3vw, 1.75rem) var(--chart-gutter);
+		border: 1px solid var(--c-shell);
+		border-block-start: 3px solid var(--c-gold-dark);
+		border-block-end: 0;
+		border-radius: 1.25rem 1.25rem 0 0;
+		background: var(--chart-tint);
+		color: var(--c-maroon-deep);
+		font: 700 var(--fs-xl) / var(--lh-snug) var(--font-heading);
+		text-align: left;
+	}
+
+	.research_totals th,
+	.research_totals td {
+		padding: 0.75rem var(--chart-gutter);
+		border-block-start: 1px solid var(--c-shell);
+		text-align: left;
+	}
+
+	.research_totals thead th {
+		vertical-align: bottom;
+		background: var(--chart-tint);
+		font-size: clamp(0.75rem, 2.75vw, 0.95rem);
+	}
+
+	.research_totals thead th:first-child {
+		width: clamp(3.25rem, 15vw, 8rem);
+	}
+
+	.research_totals tbody th {
+		color: var(--c-maroon-deep);
+		font: 700 clamp(0.85rem, 2.75vw, 1.15rem) / 1 var(--font-heading);
+	}
+
+	.research_series_label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.research_series_label .research_unit {
+		flex: 0 0 0.75rem;
+	}
+
+	.research_measure {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 2ch;
+		align-items: center;
+		gap: clamp(0.25rem, 1.4vw, 0.85rem);
+	}
+
+	.research_units {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: minmax(0, 1fr);
+		gap: clamp(2px, 0.65vw, 6px);
+	}
+
+	.research_unit {
+		height: clamp(0.65rem, 1.5vw, 0.9rem);
+		border: 1px solid var(--c-shell);
+		border-radius: 2px;
+		transform-origin: left center;
+	}
+
+	.research_unit.is_filled {
+		border-color: var(--c-maroon);
+		background: var(--c-maroon);
+	}
+
+	.publications .research_unit {
+		border-radius: 999px;
+	}
+
+	.publications .research_unit.is_filled {
+		border-color: var(--c-gold-dark);
+		background: var(--c-gold-dark);
+	}
+
+	.research_value {
+		font-weight: 700;
+		text-align: right;
+	}
+
+	@media (max-width: 420px) {
+		.research_series_label {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.25rem;
+		}
+
+		.research_series_label .research_unit {
+			flex: none;
+			width: 0.75rem;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.research_unit.is_filled,
+		.publications .research_unit.is_filled {
+			forced-color-adjust: none;
+			border-color: CanvasText;
+			background: CanvasText;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
+		.incentive_row :global(svg),
+		.metrics_stage,
+		.metric_card,
+		.metric_control,
+		.panel_slide,
+		.donut_outer,
+		.donut_inner,
+		.faculty_nav_button,
 		.faculty_panel,
+		.faculty_portrait,
 		.faculty_portrait img,
 		.faculty_portrait_gradient,
 		.faculty_portrait_name,
@@ -1544,6 +1759,7 @@
 		.faculty_panel.is_open {
 			flex-basis: 36rem;
 			height: 36rem;
+			min-width: 100%;
 		}
 
 		.faculty_panel.is_open .faculty_portrait {
@@ -1559,6 +1775,7 @@
 			bottom: 0.9rem;
 			transform: none;
 			text-align: center;
+			white-space: normal;
 		}
 
 		.faculty_portrait_count {
@@ -1763,6 +1980,29 @@
 		}
 		.hero_content {
 			animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.reveal_surface:global(.reveal-pending.is-revealed) {
+			animation: research-surface-in 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.research_totals:global(.reveal-pending.is-revealed) .research_units .is_filled {
+			animation: research-unit-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+			animation-delay: calc(var(--research-row) * 35ms);
+		}
+	}
+
+	@keyframes research-surface-in {
+		from {
+			opacity: 0.75;
+			transform: translateY(8px);
+		}
+	}
+
+	@keyframes research-unit-in {
+		from {
+			opacity: 0.6;
+			transform: scaleX(0.7);
 		}
 	}
 </style>

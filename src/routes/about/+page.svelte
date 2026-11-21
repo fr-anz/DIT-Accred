@@ -1,10 +1,11 @@
 <script>
-	import { BadgeCheck, Info, LayoutDashboard } from '@lucide/svelte';
+	import { BadgeCheck, Info, LayoutDashboard, Users } from '@lucide/svelte';
 	import Footer from '#lib/components/footer.svelte';
 	import QualityControlDiagram from '#lib/components/home/QualityControlDiagram.svelte';
 	import {
 		campusPhotos,
 		certifications,
+		chairpersons,
 		milestones,
 		programObjectives,
 		quickFacts,
@@ -149,6 +150,7 @@
 
 	<section class="about_section legacy_section" aria-labelledby="legacy-title">
 		<h2 class="legacy_heading" id="legacy-title">Legacy of Innovation</h2>
+		<p class="archive_credit">Photographs from across the department’s history</p>
 
 		<ol class="timeline">
 			{#each milestones as milestone, i (milestone.year)}
@@ -159,12 +161,37 @@
 						<p class="milestone_desc">{milestone.description}</p>
 					</div>
 					<span class="milestone_dot" aria-hidden="true"></span>
-					<div class="milestone_frame" aria-hidden="true"></div>
+					<div class="milestone_frame">
+						<img
+							src={milestone.photo.src}
+							alt={milestone.photo.alt}
+							loading="lazy"
+							decoding="async"
+						/>
+					</div>
 				</li>
 			{/each}
 		</ol>
 
 		<p class="legacy_heading legacy_closing">Excellence Will Continue</p>
+	</section>
+
+	<section class="about_section chairpersons_section" aria-labelledby="chairpersons-title">
+		<div class="section_label">
+			<Users size={42} strokeWidth={1.75} class="section_icon" aria-hidden="true" />
+			<h2 class="t_eyebrow" id="chairpersons-title">CCIS-DIT Chairpersons</h2>
+		</div>
+		<hr class="section_divider" />
+		<ul class="chairpersons_gallery">
+			{#each chairpersons as chair (chair.src)}
+				<li class="chairperson">
+					<figure class="chairperson_frame">
+						<img src={chair.src} alt="" loading="lazy" decoding="async" />
+						<figcaption>{chair.name}</figcaption>
+					</figure>
+				</li>
+			{/each}
+		</ul>
 	</section>
 
 	<section class="about_section objectives_section" aria-labelledby="objectives-title">
@@ -559,6 +586,12 @@
 	.legacy_closing {
 		font-size: clamp(30px, 5vw, 96px);
 	}
+	.archive_credit {
+		margin-top: 0.75rem;
+		color: var(--c-maroon-deep);
+		font-size: clamp(0.875rem, 1.2vw, 1rem);
+		text-align: center;
+	}
 	.timeline {
 		--spine: 50px;
 		--col-gap: clamp(24px, 3.65vw, 70px);
@@ -566,7 +599,7 @@
 		display: grid;
 		gap: clamp(40px, 4.5vw, 86px);
 		max-width: 1323px;
-		margin: clamp(56px, 8.4vw, 162px) auto clamp(80px, 8.1vw, 156px);
+		margin: clamp(40px, 5.2vw, 100px) auto clamp(80px, 8.1vw, 156px);
 		padding-bottom: calc(var(--spine) + clamp(24px, 2vw, 40px));
 	}
 	.timeline::before,
@@ -611,22 +644,30 @@
 		border-radius: 50%;
 		background: linear-gradient(90deg, var(--c-gold-light), var(--c-gold-dark));
 	}
-	.milestone_frame {
-		grid-column: 3;
-		grid-row: 1;
-		aspect-ratio: 568 / 328;
-		border: 5px solid transparent;
-		border-radius: 10px;
-		background:
-			linear-gradient(#d9d9d9, #d9d9d9) padding-box,
-			linear-gradient(180deg, var(--c-maroon) 0%, #000 55%, var(--c-gold-dark) 100%) border-box;
-	}
 	.milestone_flip .milestone_text {
 		grid-column: 3;
 		text-align: left;
 	}
+	.milestone_frame {
+		grid-column: 3;
+		grid-row: 1;
+		min-width: 0;
+		aspect-ratio: 568 / 328;
+		overflow: hidden;
+		border: clamp(3px, 0.3vw, 5px) solid transparent;
+		border-radius: 10px;
+		background:
+			linear-gradient(var(--c-shell), var(--c-shell)) padding-box,
+			linear-gradient(180deg, var(--c-maroon), var(--c-ink) 55%, var(--c-gold-dark)) border-box;
+	}
 	.milestone_flip .milestone_frame {
 		grid-column: 1;
+	}
+	.milestone_frame img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 	.milestone_year {
 		color: var(--c-gold-light);
@@ -644,6 +685,65 @@
 		font: 400 clamp(15px, 1.25vw, 24px) / 1.21 var(--font-body);
 		text-align: justify;
 		text-align-last: left;
+	}
+
+	.chairpersons_section :global(.t_eyebrow) {
+		color: var(--c-maroon);
+		background-image: none;
+		-webkit-text-fill-color: currentColor;
+	}
+	.chairpersons_section {
+		padding-bottom: clamp(40px, 5vw, 96px);
+	}
+	.chairpersons_gallery {
+		--portrait-gap: clamp(12px, 2vw, 32px);
+		--portraits-per-row: 4;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--portrait-gap);
+	}
+	.chairperson {
+		flex: 0 0 calc((100% + var(--portrait-gap)) / var(--portraits-per-row) - var(--portrait-gap));
+		min-width: 0;
+	}
+	.chairperson_frame {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		margin: 0;
+		overflow: hidden;
+		border: 1px solid var(--c-maroon-deep);
+		border-radius: 16px;
+		background: var(--c-maroon-deep);
+	}
+	.chairperson_frame img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		object-position: center 12%;
+	}
+	.chairperson_frame figcaption {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		padding: clamp(10px, 1.35vw, 24px);
+		border-top: 2px solid var(--c-gold);
+		background: var(--c-maroon-deep);
+		color: var(--c-surface);
+		font: 700 clamp(0.9rem, 1.32vw, 1.35rem) / 1.3 var(--font-heading);
+		overflow-wrap: anywhere;
+	}
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.milestone_frame img,
+		.chairperson_frame img {
+			transition: transform 0.4s var(--motion-ease);
+		}
+		.milestone_frame:hover img,
+		.chairperson_frame:hover img {
+			transform: scale(1.035);
+		}
 	}
 
 	/* Program objectives */
@@ -776,12 +876,18 @@
 			grid-column: 2;
 			grid-row: 2;
 		}
+		.chairpersons_gallery {
+			--portraits-per-row: 3;
+		}
 	}
 
 	@media (max-width: 560px) {
 		.goals_grid,
 		.facts_grid {
 			grid-template-columns: 1fr;
+		}
+		.chairpersons_gallery {
+			--portraits-per-row: 2;
 		}
 		.facts_header {
 			flex-direction: column;

@@ -182,7 +182,9 @@ export const facultyResearchers = [
 	'Dr. Benilda Eleonor V. Comendador',
 	'Assoc. Prof. Rachel A. Nayre',
 	'Jonnifer Mandigma',
-	'Ma. Leonila Amata'
+	'Ma. Leonila Amata',
+	'Janelle Kyra A. Sagum',
+	'Jayson James M. Mayor'
 ];
 
 export const facultyRoles = ['Technical committee', 'Paper reviewer', 'Session chair, ICFET 2026'];
@@ -191,7 +193,7 @@ export const facultyConferences = [
 	{ year: '2022', events: [], award: 'ICHESMET' },
 	{ year: '2023', events: ['NLPIR'] },
 	{ year: '2024', events: ['AICCC'] },
-	{ year: '2025', events: ['ICCBDC', 'ICoAIMS', 'ITSRCIT', 'ICCSCI'] },
+	{ year: '2025', events: ['ICCBDC', 'ICoAIMS', 'ITSRCIT', 'ICCSCI', 'WCSE', 'ASSE'] },
 	{ year: '2026', events: ['ICCIP', 'ICFET'] }
 ] as { year: string; events: string[]; award?: string }[];
 

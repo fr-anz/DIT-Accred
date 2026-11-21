@@ -2715,4 +2715,11 @@
 			display: none;
 		}
 	}
+
+	@media (max-width: 360px) {
+		.skyline {
+			grid-template-columns: minmax(54px, 1fr) repeat(4, minmax(0, 1fr));
+			gap: 5px;
+		}
+	}
 </style>
