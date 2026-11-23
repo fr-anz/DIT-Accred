@@ -1,38 +1,36 @@
-import researchImg from "#lib/assets/nav-images/research.jpeg";
-import teachingImg from "#lib/assets/nav-images/teaching-learning.jpg";
-import communityImg from "#lib/assets/nav-images/community.JPG";
-import internationalizationImg from "#lib/assets/nav-images/internationalization.JPG";
-import planningImg from "#lib/assets/nav-images/planning.jpeg";
 import complianceImg from "#lib/assets/nav-images/compliance.jpeg";
+
+// Each pane uses the same photo as its page hero. Compliance has no hero
+// photo yet, so it keeps its navigation image.
 
 export const sections = [
   {
     id: "research",
-    image: researchImg,
+    image: "/img/pages/research-hero.jpg",
     title: "Research",
     subtitle: "Innovating the future.",
   },
   {
     id: "teaching-learning",
-    image: teachingImg,
+    image: "/img/pages/teaching-hero.jpg",
     title: "Teaching & Learning",
     subtitle: "Knowledge into practice.",
   },
   {
     id: "community",
-    image: communityImg,
+    image: "/img/pages/Community.jpg",
     title: "Community",
     subtitle: "Technology for everyone.",
   },
   {
     id: "internationalization",
-    image: internationalizationImg,
+    image: "/img/pages/internationalization-hero.jpg",
     title: "Internationalization",
     subtitle: "Interlinked global minds.",
   },
   {
     id: "planning",
-    image: planningImg,
+    image: "/img/pages/planning-hero.jpg",
     title: "Planning & Quality Assurance",
     subtitle: "Excellence by design.",
   },
