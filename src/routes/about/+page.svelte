@@ -29,7 +29,17 @@
 <!-- Geometry and type sampled from Figma frame 1287:1064. -->
 <main class="assigned_page about_page">
 	<section class="hero_section">
-		<div class="checkerboard_bg" aria-hidden="true"></div>
+		<div class="hero_backdrop" aria-hidden="true">
+			<img
+				src="/about/department-hero.webp"
+				srcset="/about/department-hero-960.webp 960w, /about/department-hero.webp 2048w"
+				sizes="100vw"
+				width="2048"
+				height="1638"
+				alt=""
+				fetchpriority="high"
+			/>
+		</div>
 		<div class="hero_content">
 			<p class="t_eyebrow hero_eyebrow">About the</p>
 			<h1 class="t_display hero_title">Department</h1>
@@ -231,11 +241,33 @@
 		margin: 0;
 	}
 
-	/* Hero: left-aligned title block on the shared page texture. */
+	/* Hero */
 	.about_page .hero_section {
 		place-items: center start;
 		height: auto;
 		min-height: min(100dvh, 55.05vw);
+	}
+	.hero_backdrop,
+	.hero_backdrop > img,
+	.hero_backdrop::after {
+		position: absolute;
+		inset: 0;
+	}
+	.hero_backdrop > img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 34%;
+	}
+	.hero_backdrop::after {
+		content: '';
+		background: linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--c-surface) 98%, transparent) 0%,
+			color-mix(in srgb, var(--c-surface) 91%, transparent) 38%,
+			color-mix(in srgb, var(--c-surface) 79%, transparent) 59%,
+			color-mix(in srgb, var(--c-surface) 12%, transparent) 100%
+		);
 	}
 	.about_page .hero_content {
 		width: auto;
@@ -245,6 +277,9 @@
 	}
 	.hero_eyebrow {
 		margin-bottom: clamp(8px, 1vw, 20px);
+		color: color-mix(in srgb, var(--c-gold-dark) 64%, var(--c-ink));
+		background-image: none;
+		-webkit-text-fill-color: currentColor;
 	}
 	.hero_title {
 		color: var(--c-maroon-deep);
@@ -826,6 +861,18 @@
 	}
 
 	@media (max-width: 768px) {
+		.hero_backdrop::after {
+			background: linear-gradient(
+				180deg,
+				color-mix(in srgb, var(--c-surface) 45%, transparent) 0%,
+				color-mix(in srgb, var(--c-surface) 90%, transparent) 30%,
+				color-mix(in srgb, var(--c-surface) 88%, transparent) 76%,
+				color-mix(in srgb, var(--c-surface) 62%, transparent) 100%
+			);
+		}
+		.hero_title {
+			font-size: clamp(1.625rem, 9vw, 3.75rem);
+		}
 		.campus_strip {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}

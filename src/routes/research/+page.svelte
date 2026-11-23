@@ -1,20 +1,22 @@
 <script>
 	import {
+		ArrowUpRight,
 		BookOpen,
 		Building2,
 		ChevronLeft,
 		ChevronRight,
-		Download,
 		KeyRound,
 		Maximize2,
 		Network
 	} from '@lucide/svelte';
-	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
 	import { countUp, reveal } from '#lib/actions/motion.ts';
 	import Footer from '#lib/components/footer.svelte';
 	import ditLogo from '#lib/assets/DIT Logo.svg';
 	import { facultyResearch, facultyResearchByYear } from '#lib/data/facultyResearch.ts';
+	import { narrativeReports } from '#lib/data/reportLinks.ts';
+
+	const researchReport = narrativeReports.find(({ section }) => section === '/research');
 
 	const frameworkCards = [
 		{
@@ -262,14 +264,18 @@
 			</div>
 		</div>
 
-		<a
-			class="manual_link report-button"
-			href={resolve('/research')}
-			aria-label="Access full PUP Research and Development Manual"
-		>
-			<Download size={24} strokeWidth={1.8} />
-			<span>Access Full PUP Research &amp; Development Manual</span>
-		</a>
+		{#if researchReport}
+			<a
+				class="narrative_link report-button"
+				href={researchReport.href}
+				target="_blank"
+				rel="external noopener noreferrer"
+			>
+				<ArrowUpRight size={24} strokeWidth={1.8} aria-hidden="true" />
+				<span>Access Full PUP Research &amp; Development Manual</span>
+				<span class="visually_hidden">(opens in a new tab)</span>
+			</a>
+		{/if}
 	</section>
 
 	<section class="content_section productivity_section" id="productivity">
@@ -781,7 +787,7 @@
 		color: #242424;
 	}
 
-	.manual_link {
+	.narrative_link {
 		width: min(100%, 855px);
 		min-height: 82px;
 		margin: 0 auto;
@@ -1828,7 +1834,7 @@
 			padding: 1.75rem 1.25rem;
 		}
 
-		.manual_link {
+		.narrative_link {
 			gap: 1rem;
 			font-size: 0.95rem;
 			text-align: left;

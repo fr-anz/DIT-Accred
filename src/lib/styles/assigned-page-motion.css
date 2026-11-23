@@ -31,7 +31,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	.assigned_page:is(.teaching_page, .planning_page, .about_page) .checkerboard_bg {
+	.assigned_page:is(.teaching_page, .planning_page) .checkerboard_bg,
+	.assigned_page.about_page .hero_backdrop {
 		animation: assigned-backdrop-in 1.2s ease-out;
 	}
 	.assigned_page:is(.teaching_page, .planning_page, .about_page) .hero_content,
