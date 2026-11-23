@@ -271,8 +271,8 @@
 				target="_blank"
 				rel="external noopener noreferrer"
 			>
-				<ArrowUpRight size={24} strokeWidth={1.8} aria-hidden="true" />
-				<span>Access Full PUP Research &amp; Development Manual</span>
+				<span>View Narrative Report</span>
+				<ArrowUpRight size={19} aria-hidden="true" />
 				<span class="visually_hidden">(opens in a new tab)</span>
 			</a>
 		{/if}
@@ -788,17 +788,12 @@
 	}
 
 	.narrative_link {
-		width: min(100%, 855px);
-		min-height: 82px;
-		margin: 0 auto;
-		padding: 1.2rem 2.25rem;
 		display: flex;
-		align-items: center;
+		width: min(100%, clamp(18rem, 28vw, 26rem));
+		min-height: clamp(3.25rem, 4.75vw, 4.25rem);
 		justify-content: center;
-		gap: 4rem;
-		font-family: var(--font-body);
-		font-size: clamp(1rem, 1.4vw, 1.55rem);
-		box-sizing: border-box;
+		margin-inline: auto;
+		font-size: clamp(1rem, 1.35vw, 1.25rem);
 	}
 
 	.productivity_section {
@@ -1832,13 +1827,6 @@
 
 		.incentive_detail {
 			padding: 1.75rem 1.25rem;
-		}
-
-		.narrative_link {
-			gap: 1rem;
-			font-size: 0.95rem;
-			text-align: left;
-			justify-content: flex-start;
 		}
 
 		.productivity_section {

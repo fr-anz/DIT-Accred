@@ -669,7 +669,8 @@
 				target="_blank"
 				rel="external noopener noreferrer"
 			>
-				View Full Narrative Report <ArrowUpRight size={19} aria-hidden="true" />
+				<span>View Full Narrative Report</span>
+				<ArrowUpRight size={19} aria-hidden="true" />
 			</a>
 		{/if}
 	</section>
@@ -2398,13 +2399,7 @@
 	}
 
 	.report-button {
-		display: inline-flex;
-		min-height: 44px;
-		align-items: center;
-		gap: 10px;
 		margin-block-start: clamp(28px, 3vw, 48px);
-		padding: 12px 20px;
-		font-weight: 700;
 	}
 
 	/* ══ Shared photo frame ══ */

@@ -1,5 +1,6 @@
 <script>
 	import {
+		ArrowUpRight,
 		ClipboardCheck,
 		BookOpen,
 		Users,
@@ -935,11 +936,12 @@
 		<div class="narrative-action-wrapper">
 			<a
 				href="https://bit.ly/ITL4Area2"
-				class="narrative-btn"
+				class="report-button"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				View Full Narrative Report
+				<span>View Full Narrative Report</span>
+				<ArrowUpRight size={19} aria-hidden="true" />
 			</a>
 		</div>
 	</section>
@@ -1413,28 +1415,6 @@
 		margin-bottom: 0;
 	}
 
-	.narrative-btn {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		max-width: 700px; /* Stretches it out to match the research button */
-		padding: 18px 32px; /* Increased height slightly for a larger click target */
-		border: 3px solid #941518;
-		border-radius: 12px;
-		background-color: transparent;
-		color: #941518;
-		font-family: var(--font-heading, 'Overpass', sans-serif);
-		font-size: 1.4rem;
-		font-weight: 700;
-		text-decoration: none;
-		transition: all 0.2s ease;
-	}
-
-	.narrative-btn:hover {
-		background-color: #941518;
-		color: #dfb75f;
-	}
 	/* Reduces the bottom space of the curriculum section */
 	#curriculum-architecture {
 		margin-bottom: 0;
