@@ -25,19 +25,42 @@
 		}
 	];
 
+	/* Each paragraph is a list of segments; `strong` segments render as red highlights. */
 	const detailContent = {
 		paragraphs: [
-			'Welcome to the Bachelor of Science in Information Technology program of our Sintang Paaralan, Polytechnic University of the Philippines, where education is empowered by excellence, innovation, and service to the nation.',
-			'The BSIT program is committed to developing competent, adaptive, and socially responsible technology professionals equipped with the knowledge and practical skills needed in today’s rapidly evolving digital world. Through quality instruction, relevant training, hands-on experiences, and industry-aligned learning, students are prepared in the fields of software development, networking, database systems, cybersecurity, systems analysis, and emerging technologies.',
-			'True to the PUP tradition of producing Iskolar para sa Bayan, the program nurtures not only technical competence but also discipline, leadership, creativity, and a deep sense of public service. Our students are challenged to become innovators and problem-solvers who will contribute meaningful solutions to communities, industries, and the country.',
-			'As you begin your journey with us, we welcome you to a community that values perseverance, excellence, and lifelong learning.'
+			[
+				{
+					text: 'The College of Computer and Information Sciences (CCIS) is honored to welcome the Accrediting Agency for Chartered Colleges and Universities in the Philippines (AACCUP) for the Level IV Reaccreditation Survey of its '
+				},
+				{ text: 'Bachelor of Science in Computer Science', strong: true },
+				{ text: ' and ' },
+				{ text: 'Bachelor of Science in Information Technology', strong: true },
+				{ text: ' programs.' }
+			],
+			[
+				{
+					text: 'This visit affirms CCIS’s active partnership with the University in pursuing its mission of providing excellence and quality education—one important mechanism of which is its steadfast adherence to quality assurance through accreditation.'
+				}
+			],
+			[
+				{
+					text: 'For four decades, CCIS has steadily hurdled accreditation surveys one after another, treating each as an opportunity to ensure continuous compliance, strengthen its academic programs, and pursue meaningful improvement. This enduring commitment reflects the College’s belief that quality is not a single accomplishment, but a continuing responsibility shared by its faculty, staff, students, alumni, industry partners, and other stakeholders.'
+				}
+			],
+			[
+				{ text: 'The College’s recent award of ' },
+				{ text: 'PICAB-CAC Accreditation', strong: true },
+				{
+					text: ' further affirms the strength of its well-defined processes and the consistent execution of its plans. It demonstrates that, through disciplined quality assurance and a culture of continuous improvement, CCIS is well positioned to sustain its standards and pursue local and international accreditations in the years to come.'
+				}
+			],
+			[
+				{
+					text: 'As we begin this Level IV Reaccreditation journey, we warmly welcome the accreditors’ expertise, insights, recommendations, and constructive evaluation. May this engagement further inspire CCIS to advance the University’s mission, elevate the quality of its Computer Science and Information Technology programs, and continue developing graduates who are competent, ethical, innovative, and responsive to the needs of society.'
+				}
+			]
 		],
-		highlights: {
-			program: 'Bachelor of Science in Information Technology',
-			bayan: 'Iskolar para sa Bayan',
-			innovators: 'innovators and problem-solvers'
-		},
-		closing: 'Mula Sa’Yo, Para sa BAYAN'
+		closing: 'Welcome, and thank you for being part of CCIS’s continuing pursuit of excellence.'
 	};
 
 	const dustinContent = {
@@ -79,6 +102,7 @@
 	);
 
 	const displayedLeaderData = $derived(activeLeaderData ?? closingLeaderData);
+	const isDustin = $derived(displayedLeaderData?.id === 'dustin');
 
 	/* Deterministic binary rows -- avoids SSR hydration mismatch */
 	const binaryLayerA = [
@@ -177,8 +201,15 @@
 				</div>
 			</div>
 
+			<!-- Both messages share one grid cell so the panel always sizes to the
+			     longer one; the inactive message is hidden but still takes up space. -->
 			<div class="expanded-copy">
-				{#if displayedLeaderData.id === 'dustin'}
+				<div
+					class="message"
+					class:is-inactive={!isDustin}
+					aria-hidden={!isDustin}
+					inert={!isDustin}
+				>
 					<p>{dustinContent.paragraphs[0]}</p>
 					<p>
 						{dustinContent.paragraphs[1].split(dustinContent.highlights.program)[0]}
@@ -195,27 +226,17 @@
 					<p>{dustinContent.paragraphs[5]}</p>
 					<p>{dustinContent.paragraphs[6]}</p>
 					<p class="closing-line">{dustinContent.closing}</p>
-				{:else}
-					<p>
-						{detailContent.paragraphs[0].split(detailContent.highlights.program)[0]}
-						<span class="highlight-red">{detailContent.highlights.program}</span>
-						{detailContent.paragraphs[0].split(detailContent.highlights.program)[1]}
-					</p>
-					<p>{detailContent.paragraphs[1]}</p>
-					<p>
-						{detailContent.paragraphs[2].split(detailContent.highlights.bayan)[0]}
-						<span class="highlight-red">{detailContent.highlights.bayan}</span>
-						{detailContent.paragraphs[2]
-							.split(detailContent.highlights.bayan)[1]
-							.split(detailContent.highlights.innovators)[0]}
-						<span class="highlight-red">{detailContent.highlights.innovators}</span>
-						{detailContent.paragraphs[2].split(detailContent.highlights.innovators)[1]}
-					</p>
-					<p>{detailContent.paragraphs[3]}</p>
-					<p class="closing-line">
-						<span class="highlight-gold">{detailContent.closing}</span>
-					</p>
-				{/if}
+				</div>
+				<div class="message" class:is-inactive={isDustin} aria-hidden={isDustin} inert={isDustin}>
+					{#each detailContent.paragraphs as segments, i (i)}
+						<p>
+							{#each segments as segment, j (j)}{#if segment.strong}<span class="highlight-red">
+										{segment.text}
+									</span>{:else}{segment.text}{/if}{/each}
+						</p>
+					{/each}
+					<p class="closing-line">{detailContent.closing}</p>
+				</div>
 			</div>
 		</div>
 	{:else if !isClosing}
@@ -234,9 +255,7 @@
 					<div class="card-info">
 						<h3>{leader.name}</h3>
 						<p>{leader.role}</p>
-						<span class="card-action" aria-hidden="true">
-							Read message
-						</span>
+						<span class="card-action" aria-hidden="true"> Read message </span>
 					</div>
 				</button>
 			{/each}
@@ -480,7 +499,6 @@
 		letter-spacing: 0.02em;
 	}
 
-
 	.leader-card:focus-visible .card-action {
 		color: #ffffff;
 		border-bottom-color: #fac549;
@@ -623,9 +641,16 @@
 	.expanded-copy {
 		background: linear-gradient(136deg, #ffddde 0%, #ffffff 50%, #eed4a7 100%);
 		padding: clamp(2.25rem, 5vw, 4.5rem) clamp(2rem, 5vw, 4rem);
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+		display: grid;
+		align-items: center;
+	}
+
+	.expanded-copy .message {
+		grid-area: 1 / 1;
+	}
+
+	.expanded-copy .message.is-inactive {
+		visibility: hidden;
 	}
 
 	.expanded-copy p {
@@ -651,15 +676,8 @@
 		font-family: 'Overpass', sans-serif;
 	}
 
-	.highlight-gold {
-		color: #941518;
-		font-weight: 700;
-		font-family: 'Overpass', sans-serif;
-	}
-
 	/* Reduced motion */
 	@media (prefers-reduced-motion: reduce) {
-
 		.leader-card,
 		.leader-card:hover,
 		.card-bg,

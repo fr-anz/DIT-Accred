@@ -11,7 +11,7 @@
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import { tick } from 'svelte';
-	import { reveal } from '#lib/actions/motion.ts';
+	import { countUp, reveal } from '#lib/actions/motion.ts';
 	import Footer from '#lib/components/footer.svelte';
 	import ditLogo from '#lib/assets/DIT Logo.svg';
 	import { facultyResearch, facultyResearchByYear } from '#lib/data/facultyResearch.ts';
@@ -60,30 +60,29 @@
 		}
 	];
 
-	const metricCards = [
+	/* Key Productivity, set as a feature: three headline figures between gold
+	   rules, then faculty engagement and indexed articles side by side. */
+	const metricFigures = [
 		{
-			label: 'Completed Research',
-			value: '70',
-			desc: 'Spanning 2018 to 2024 academic cycles',
-			longValue: false,
-			left: 323.5,
-			top: -19
+			label: 'Completed research',
+			value: 70,
+			decimals: 0,
+			suffix: '',
+			note: '2018–2024 academic cycles'
 		},
 		{
-			label: 'High-Impact Indexation Rate',
-			value: '89.13%',
-			desc: 'All published articles are indexed in premier global databases.',
-			longValue: true,
-			left: 540.87,
-			top: 375
+			label: 'Disseminated publications',
+			value: 46,
+			decimals: 0,
+			suffix: '',
+			note: 'Refereed and indexed platforms'
 		},
 		{
-			label: 'Disseminated Publications',
-			value: '46',
-			desc: 'Papers published in refereed and indexed platforms.',
-			longValue: false,
-			left: 106.13,
-			top: 375
+			label: 'High-impact indexation',
+			value: 89.13,
+			decimals: 2,
+			suffix: '%',
+			note: 'Premier global databases'
 		}
 	];
 
@@ -98,39 +97,51 @@
 		{ year: '2025', count: 10 }
 	];
 
-	const facultyStatus = [
-		{ label: 'Full time faculty', value: 15, note: '', tone: 'ft' },
-		{
-			label: 'Full time faculty engaged in research',
-			value: 11,
-			note: '73% of full-time',
-			tone: 'ft-engaged'
-		},
-		{ label: 'Part-time faculty', value: 27, note: '', tone: 'pt' },
-		{
-			label: 'Part-time faculty engaged in research',
-			value: 1,
-			note: '4% of part-time',
-			tone: 'pt-engaged'
-		}
+	const facultyGroups = [
+		{ key: 'full', label: 'Full-time', total: 15, engaged: 11 },
+		{ key: 'part', label: 'Part-time', total: 27, engaged: 1 }
 	];
+	const facultyTotal = facultyGroups.reduce((sum, group) => sum + group.total, 0);
+	const facultyEngaged = facultyGroups.reduce((sum, group) => sum + group.engaged, 0);
+	const indexedTotal = indexationByYear.reduce((sum, entry) => sum + entry.count, 0);
+	const indexedPeak = Math.max(...indexationByYear.map((entry) => entry.count));
 
-	const researchSeries = /** @type {const} */ ([
-		{ key: 'presentations', label: 'Presentations' },
-		{ key: 'publications', label: 'Publications' }
-	]);
-	const researchScale = Math.max(
-		...facultyResearchByYear.flatMap(({ presentations, publications }) => [
-			presentations,
-			publications
-		])
+	/* Research-by-year spines: each year is a card-style spine whose height
+	   follows that year's total output. */
+	const researchYears = facultyResearchByYear.map((entry) => ({
+		...entry,
+		total: entry.presentations + entry.publications
+	}));
+	const researchScale = Math.max(...researchYears.map((entry) => entry.total));
+	const researchYearSpan = `${facultyResearchByYear[0].year}–${facultyResearchByYear.at(-1)?.year}`;
+	const researchTotals = facultyResearchByYear.reduce(
+		(sum, entry) => ({
+			presentations: sum.presentations + entry.presentations,
+			publications: sum.publications + entry.publications
+		}),
+		{ presentations: 0, publications: 0 }
 	);
-	const researchUnits = Array.from({ length: researchScale }, (_, index) => index + 1);
 
-	const metricCardCount = metricCards.length;
+	/** @param {string} status */
+	const recordTone = (status) => {
+		const value = status.toLowerCase();
+		if (value.includes('published') || value.includes('indexed')) return 'published';
+		if (value.includes('presented')) return 'presented';
+		return 'pending';
+	};
+
+	/* Newest research first. */
+	const facultyRepository = facultyResearch.map((researcher) => ({
+		...researcher,
+		records: [...researcher.records]
+			.sort((a, b) => b.year - a.year)
+			.map((record) => ({
+				...record,
+				tone: record.status ? recordTone(record.status) : 'pending'
+			}))
+	}));
+
 	let activeIncentiveIndex = $state(incentiveTracks.length - 1);
-	let activeMetricIndex = $state(0);
-	let activePanelSlide = $state(0);
 	let activeFacultyIndex = $state(0);
 	/** @type {HTMLDivElement | null} */
 	let facultyStripEl = $state(null);
@@ -195,17 +206,6 @@
 	/** @param {number} index */
 	const selectIncentiveTrack = (index) => {
 		activeIncentiveIndex = index;
-	};
-
-	/** @param {number} direction */
-	const rotateMetrics = (direction) => {
-		activeMetricIndex = (activeMetricIndex + direction + metricCardCount) % metricCardCount;
-		activePanelSlide = (activePanelSlide + direction + 2) % 2;
-	};
-
-	/** @param {number} index */
-	const setActiveMetric = (index) => {
-		activeMetricIndex = index;
 	};
 </script>
 
@@ -287,185 +287,91 @@
 		</header>
 		<hr class="section_divider" />
 
-		<div
-			class="metrics_carousel"
-			id="metrics-ring"
-			role="group"
-			aria-roledescription="carousel"
-			aria-label="Research metrics"
-		>
-			<div class="metrics_stage" style="--metrics-orbit: {activeMetricIndex * -120}deg;">
-				<svg class="hex_web" viewBox="0 0 707 739" aria-hidden="true">
-					<defs>
-						<linearGradient
-							id="hexStroke"
-							x1="496.275"
-							y1="121.209"
-							x2="209.94"
-							y2="617.156"
-							gradientUnits="userSpaceOnUse"
-						>
-							<stop stop-color="#FAC549" />
-							<stop offset="1" stop-color="#CA8106" />
-						</linearGradient>
-					</defs>
-					<path
-						d="M444.215 696.215L680.215 287.451L631.737 199.418L173.126 196.756L120.375 287.451L346.875 696.215L444.215 696.215Z"
-						fill="#fff"
-						stroke="url(#hexStroke)"
-						stroke-width="6"
-					/>
-					<path d="M122 290L398 411" stroke="url(#hexStroke)" stroke-width="6" />
-					<path d="M171 196L398 409" stroke="url(#hexStroke)" stroke-width="6" />
-					<path d="M633.998 204.002L397.998 409.002" stroke="url(#hexStroke)" stroke-width="6" />
-					<path d="M681 289.999L398 408.999" stroke="url(#hexStroke)" stroke-width="6" />
-					<path d="M444.998 696.999L397.998 408.999" stroke="url(#hexStroke)" stroke-width="6" />
-					<path d="M346 697.001L398 409.001" stroke="url(#hexStroke)" stroke-width="6" />
-				</svg>
-
-				{#each metricCards as card, i (card.label)}
-					<button
-						type="button"
-						class="metric_card"
-						class:is_active={i === activeMetricIndex}
-						class:has_long_value={card.longValue}
-						style="--card-left: {card.left}px; --card-top: {card.top}px; --card-rotate: {i *
-							120}deg;"
-						aria-label={card.label}
-						aria-current={i === activeMetricIndex ? 'true' : 'false'}
-						onclick={() => setActiveMetric(i)}
-					>
-						<span class="metric_card_label">{card.label}</span>
-						<span class="metric_card_value">{card.value}</span>
-						<span class="metric_card_desc">{card.desc}</span>
-					</button>
-				{/each}
-
-				<img class="center_logo" src={ditLogo} alt="DIT logo" aria-hidden="true" />
+		<article class="productivity_feature">
+			<div class="feature_intro" use:reveal={{ threshold: 0.4 }}>
+				<h3 class="feature_headline">Seventy completed studies, forty-six of them published.</h3>
+				<p class="feature_lede">
+					Between 2018 and 2024 the department completed seventy studies. Forty-six were
+					disseminated through refereed and indexed platforms, with an 89.13% high-impact indexation
+					rate.
+				</p>
 			</div>
 
-			<button
-				class="metric_control metric_control_previous"
-				type="button"
-				aria-label="Rotate left"
-				aria-controls="metrics-ring"
-				onclick={() => rotateMetrics(-1)}
-			>
-				<ChevronLeft size={22} strokeWidth={3.2} />
-			</button>
-			<button
-				class="metric_control metric_control_next"
-				type="button"
-				aria-label="Rotate right"
-				aria-controls="metrics-ring"
-				onclick={() => rotateMetrics(1)}
-			>
-				<ChevronRight size={22} strokeWidth={3.2} />
-			</button>
-		</div>
-
-		<div class="distribution_panel" id="research-repository" aria-live="polite">
-			<div class="panel_slide" class:is_hidden={activePanelSlide !== 0}>
-				<h3>FACULTY RESEARCH ENGAGEMENT</h3>
-				<p>
-					The department's research quality is driven by a dedicated core of active faculty whose
-					sustained scholarly engagement continues to elevate the program's international academic
-					footprint.
-				</p>
-
-				<div class="engagement_row">
-					<svg
-						class="engagement_donut"
-						viewBox="0 0 340 340"
-						role="img"
-						aria-label="12 of 42 faculty engaged in research"
-					>
-						<g transform="translate(170 170) rotate(-90)">
-							<circle r="142" fill="none" stroke="#EFDADB" stroke-width="36" />
-							<circle
-								class="donut_outer"
-								r="142"
-								fill="none"
-								stroke="#9B1C1A"
-								stroke-width="36"
-								stroke-dasharray="654.29 892.21"
-							/>
-							<circle r="100" fill="none" stroke="#FAE8D6" stroke-width="36" />
-							<circle
-								class="donut_inner"
-								r="100"
-								fill="none"
-								stroke="#E5862A"
-								stroke-width="36"
-								stroke-dasharray="23.27 628.32"
-							/>
-						</g>
-						<text x="170" y="178" text-anchor="middle" class="donut_value">12</text>
-						<text x="170" y="206" text-anchor="middle" class="donut_sub">of 42 faculty</text>
-						<text x="170" y="225" text-anchor="middle" class="donut_note">engaged in research</text>
-					</svg>
-
-					<div class="faculty_status">
-						<div class="faculty_status_title">FACULTY STATUS</div>
-						{#each facultyStatus as row (row.label)}
-							<div class="status_row tone_{row.tone}">
-								<span class="status_dot" aria-hidden="true"></span>
-								<div class="status_text">
-									<span class="status_label">{row.label}</span>
-									{#if row.note}
-										<span class="status_note">{row.note}</span>
-									{/if}
-								</div>
-								<span class="status_value">{row.value}</span>
-							</div>
-						{/each}
+			<dl class="feature_figures" use:reveal={{ threshold: 0.3 }}>
+				{#each metricFigures as figure, index (figure.label)}
+					<div class="feature_figure" style:--figure-index={index}>
+						<dt class="feature_figure_label">{figure.label}</dt>
+						<dd class="feature_figure_value">
+							<span
+								use:countUp={{ to: figure.value, decimals: figure.decimals, delay: index * 150 }}
+							>
+								{figure.value.toFixed(figure.decimals)}
+							</span>{#if figure.suffix}<small>{figure.suffix}</small>{/if}
+						</dd>
+						<dd class="feature_figure_note">{figure.note}</dd>
 					</div>
-				</div>
-			</div>
+				{/each}
+			</dl>
 
-			<div class="panel_slide" class:is_hidden={activePanelSlide !== 1}>
-				<h3>INDEXATION BREAKDOWN BY CALENDAR YEAR</h3>
-				<p>
-					The BSIT program has consistently published across premier academic databases from 2018 to
-					2025, totaling 59 papers — 54 indexed in SCOPUS or Web of Science and 5 in other refereed
-					journals.
-				</p>
-
-				<svg
-					class="year_chart"
-					viewBox="0 0 700 300"
-					role="img"
-					aria-label="Articles per year bar chart"
+			<div class="feature_lower">
+				<section
+					class="feature_faculty"
+					aria-labelledby="faculty-engagement-title"
+					use:reveal={{ threshold: 0.3 }}
 				>
-					<defs>
-						<linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-							<stop offset="0" stop-color="#FCD97C" />
-							<stop offset="1" stop-color="#F2A53A" />
-						</linearGradient>
-					</defs>
-					<text x="0" y="14" class="chart_axis_title">ARTICLES PER YEAR</text>
-					<rect x="550" y="5" width="11" height="11" rx="3" fill="#F7B94A" />
-					<text x="567" y="14.5" class="chart_legend_text">Articles</text>
-					{#each [0, 5, 10, 15, 20] as tick (tick)}
-						{@const y = 246 - tick * 10.3}
-						<line x1="44" x2="684" y1={y} y2={y} class="grid_line" class:baseline={tick === 0} />
-						<text x="34" y={y + 4} text-anchor="end" class="chart_tick">{tick}</text>
+					<h4 class="feature_label" id="faculty-engagement-title">Faculty engaged in research</h4>
+					<p class="feature_stat">
+						<strong use:countUp={{ to: facultyEngaged, delay: 200 }}>{facultyEngaged}</strong> of {facultyTotal}
+						faculty
+					</p>
+					<p class="feature_body">
+						The department's research quality is driven by a dedicated core of active faculty whose
+						sustained scholarly engagement continues to elevate the program's international academic
+						footprint.
+					</p>
+					{#each facultyGroups as group (group.key)}
+						<div class="faculty_group">
+							<p class="feature_caption">
+								{group.label}: {group.engaged} of {group.total} engaged ({Math.round(
+									(group.engaged / group.total) * 100
+								)}%)
+							</p>
+							<div class="faculty_dots" aria-hidden="true">
+								{#each { length: group.total }, index (index)}
+									<span
+										class="faculty_dot is_{group.key}"
+										class:is_engaged={index < group.engaged}
+										style:--dot-index={index}
+									></span>
+								{/each}
+							</div>
+						</div>
 					{/each}
-					{#each indexationByYear as item, i (item.year)}
-						{@const h = item.count * 10.3}
-						{@const x = 61.6 + i * 80}
-						<g>
-							<rect x={x + 10} y={246 - h} width="45" height={h} rx="10" fill="url(#barGrad)" />
-							<text x={x + 32.5} y={246 - h - 8} text-anchor="middle" class="bar_value">
-								{item.count}
-							</text>
-							<text x={x + 32.5} y="268" text-anchor="middle" class="bar_year">{item.year}</text>
-						</g>
-					{/each}
-					<text x="364" y="290" text-anchor="middle" class="chart_axis_title">YEAR</text>
-				</svg>
+				</section>
+
+				<section class="feature_indexation" aria-labelledby="indexation-title">
+					<h4 class="feature_label" id="indexation-title">Indexed articles by year</h4>
+					<ol class="indexation_bars" use:reveal={{ threshold: 0.3 }}>
+						{#each indexationByYear as entry, index (entry.year)}
+							<li
+								class="indexation_bar"
+								class:is_peak={entry.count === indexedPeak}
+								style:--bar-share={entry.count / indexedPeak}
+								style:--bar-index={index}
+							>
+								<span class="indexation_value">{entry.count}</span>
+								<span class="indexation_column" aria-hidden="true"></span>
+								<span class="indexation_year">{entry.year}</span>
+							</li>
+						{/each}
+					</ol>
+					<p class="feature_foot">
+						{indexedTotal} papers, 2018–2025. 54 indexed in Scopus or Web of Science, 5 in other refereed
+						journals.
+					</p>
+				</section>
 			</div>
-		</div>
+		</article>
 	</section>
 
 	<section class="content_section faculty_section" id="published-research">
@@ -498,7 +404,7 @@
 		</div>
 
 		<div class="faculty_repository" bind:this={facultyStripEl}>
-			{#each facultyResearch as researcher, index (researcher.name)}
+			{#each facultyRepository as researcher, index (researcher.name)}
 				{@const isOpen = activeFacultyIndex === index}
 				<div class="faculty_panel" class:is_open={isOpen} data-faculty-index={index}>
 					<button
@@ -535,12 +441,16 @@
 						<strong class="faculty_page_name">{researcher.name}</strong>
 						<ul class="faculty_publications">
 							{#each researcher.records as record (`${record.year}:${record.title}`)}
-								<li>
-									<span class="faculty_record_meta">
-										{record.year}{#if record.status}
-											· {record.status}{/if}
-									</span>
-									{record.title}
+								<li class="faculty_record">
+									<p class="faculty_record_meta">
+										<time class="faculty_record_year" datetime={String(record.year)}>
+											{record.year}
+										</time>
+										{#if record.status}
+											<span class="faculty_record_status tone_{record.tone}">{record.status}</span>
+										{/if}
+									</p>
+									<p class="faculty_record_title">{record.title}</p>
 								</li>
 							{/each}
 						</ul>
@@ -549,42 +459,56 @@
 			{/each}
 		</div>
 
-		<table class="research_totals" use:reveal={{ threshold: 0.1 }}>
-			<caption id="faculty-research-by-year">BSIT faculty research by year</caption>
-			<thead>
-				<tr>
-					<th scope="col">Year</th>
-					{#each researchSeries as series (series.key)}
-						<th scope="col" class:publications={series.key === 'publications'}>
-							<span class="research_series_label">
-								<span class="research_unit is_filled" aria-hidden="true"></span>
-								{series.label}
-							</span>
-						</th>
-					{/each}
-				</tr>
-			</thead>
-			<tbody>
-				{#each facultyResearchByYear as year, rowIndex (year.year)}
-					<tr style:--research-row={rowIndex}>
-						<th scope="row">{year.year}</th>
-						{#each researchSeries as series (series.key)}
-							{@const count = year[series.key]}
-							<td class:publications={series.key === 'publications'}>
-								<span class="research_measure">
-									<span class="research_units" aria-hidden="true">
-										{#each researchUnits as unit (unit)}
-											<span class="research_unit" class:is_filled={unit <= count}></span>
-										{/each}
+		<figure
+			class="research_spines"
+			aria-labelledby="faculty-research-by-year"
+			use:reveal={{ threshold: 0.15 }}
+		>
+			<figcaption class="spines_summary">
+				<strong class="spines_title" id="faculty-research-by-year">
+					BSIT faculty research by year
+				</strong>
+				<span class="spines_span">{researchYearSpan}</span>
+			</figcaption>
+
+			<dl class="spines_totals">
+				<div class="spines_total is_publication">
+					<dd>{researchTotals.publications}</dd>
+					<dt>Publications</dt>
+				</div>
+				<div class="spines_total is_presentation">
+					<dd>{researchTotals.presentations}</dd>
+					<dt>Presentations</dt>
+				</div>
+			</dl>
+
+			<ol class="spines_chart">
+				{#each researchYears as entry, index (entry.year)}
+					<li class="spine_column" style:--spine-index={index}>
+						<span class="spine_year">{entry.year}</span>
+						<span class="spine_total" aria-hidden="true">{entry.total}</span>
+						<span class="spine" style:--spine-share={entry.total / researchScale}>
+							{#if entry.publications}
+								<span class="spine_segment is_publication" style:flex-grow={entry.publications}>
+									<strong>{entry.publications}</strong>
+									<span class="visually_hidden">
+										{entry.publications === 1 ? 'publication' : 'publications'},
 									</span>
-									<span class="research_value">{count}</span>
 								</span>
-							</td>
-						{/each}
-					</tr>
+							{/if}
+							{#if entry.presentations}
+								<span class="spine_segment is_presentation" style:flex-grow={entry.presentations}>
+									<strong>{entry.presentations}</strong>
+									<span class="visually_hidden">
+										{entry.presentations === 1 ? 'presentation' : 'presentations'}
+									</span>
+								</span>
+							{/if}
+						</span>
+					</li>
 				{/each}
-			</tbody>
-		</table>
+			</ol>
+		</figure>
 	</section>
 
 	<Footer />
@@ -904,391 +828,323 @@
 		padding-top: 11rem;
 	}
 
-	/* Key Productivity — hexagon metric carousel (ported from the Framer reference) */
-	.metrics_carousel {
-		--carousel-scale: 1.2;
-		--carousel-w: calc(866px * var(--carousel-scale));
-		--carousel-h: calc(704px * var(--carousel-scale));
-		position: relative;
-		width: var(--carousel-w);
-		max-width: 100%;
-		height: var(--carousel-h);
-		margin: 0 auto 3.5rem;
+	/* Key Productivity — set as an editorial feature in the site's type:
+	   headline and intro, three figures between gold rules, then faculty
+	   engagement and indexed articles side by side. */
+	.productivity_feature {
+		width: min(100%, 1444px);
+		margin: 0 auto;
+		font-family: var(--font-body);
+		color: var(--c-ink);
 	}
 
-	.metrics_stage {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: 866px;
-		height: 704px;
-		margin-left: -433px;
-		margin-top: -352px;
-		transform-origin: 50% 50%;
-		transform: rotate(var(--metrics-orbit, 0deg)) scale(var(--carousel-scale));
-		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-		z-index: 1;
-		pointer-events: none;
+	.feature_headline {
+		margin: 0;
+		max-width: 22ch;
+		font-family: var(--font-heading);
+		font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+		font-weight: 800;
+		line-height: 1.1;
+		color: var(--color-maroon);
+		text-wrap: balance;
 	}
 
-	.hex_web {
-		position: absolute;
-		left: 183.5px;
-		top: 117px;
-		width: 442px;
-		height: 462px;
-		display: block;
-		overflow: visible;
+	.feature_lede {
+		max-width: 62ch;
+		margin: clamp(0.9rem, 1.6vw, 1.25rem) 0 0;
+		font-size: clamp(1rem, 1.3vw, 1.2rem);
+		line-height: 1.6;
+		color: #2c2c2c;
 	}
 
-	.metric_card {
-		position: absolute;
-		left: var(--card-left);
-		top: var(--card-top);
-		width: 219px;
-		height: 247px;
-		box-sizing: border-box;
-		border-radius: 26px;
-		border: 4px solid transparent;
-		background:
-			linear-gradient(#fff, #fff) padding-box,
-			linear-gradient(0deg, #ca8106, #fac549) border-box;
-		padding: 0 14px;
+	.feature_figures {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin: clamp(2rem, 4vw, 3rem) 0;
+		border-top: 1.5px solid var(--color-gold);
+		border-bottom: 1.5px solid var(--color-gold);
+	}
+
+	.feature_figure {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		text-align: center;
-		cursor: pointer;
-		pointer-events: auto;
-		transform: rotate(var(--card-rotate, 0deg));
-		transform-origin: 50% 50%;
-		transition:
-			transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-			box-shadow 0.3s ease;
+		padding: clamp(1.25rem, 2.4vw, 2rem) clamp(1rem, 2.4vw, 2rem);
 	}
 
-	.metric_card.is_active {
-		box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25);
-		z-index: 120;
+	.feature_figure:first-child {
+		padding-left: 0;
 	}
 
-	.metric_card:not(.is_active) {
-		box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
-		z-index: 45;
+	.feature_figure + .feature_figure {
+		border-left: 1px solid rgba(212, 155, 29, 0.45);
 	}
 
-	.metric_card:focus-visible {
-		outline: 3px solid rgba(140, 15, 19, 0.35);
-		outline-offset: 4px;
+	.feature_figure {
+		position: relative;
 	}
 
-	.metric_card_label {
-		font-family: var(--font-body);
-		font-size: 17px;
-		font-weight: 700;
-		line-height: 1.2;
-		color: #1b1b1b;
-	}
-
-	.metric_card_value {
-		font-family: var(--font-body);
-		font-size: 58px;
-		font-weight: 800;
-		line-height: 1.05;
-		color: #6e0f12;
-	}
-
-	.metric_card.has_long_value .metric_card_value {
-		font-size: 46px;
-	}
-
-	.metric_card_desc {
-		font-family: var(--font-body);
-		font-size: 13.5px;
-		line-height: 1.35;
-		color: #555;
-	}
-
-	.center_logo {
+	/* Hover draws a gold rule in under the figure. */
+	.feature_figure::after {
+		content: '';
 		position: absolute;
-		left: 367px;
-		top: 307px;
-		width: 132px;
-		height: 132px;
-		object-fit: contain;
-		z-index: 250;
-		pointer-events: none;
+		left: clamp(1rem, 2.4vw, 2rem);
+		right: clamp(1rem, 2.4vw, 2rem);
+		bottom: -1.5px;
+		height: 3px;
+		background: linear-gradient(90deg, #ca8106, #fac549);
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.metric_control {
-		position: absolute;
-		top: 347px;
-		z-index: 300;
-		width: 52px;
-		height: 52px;
-		border-radius: 50%;
-		border: none;
-		padding: 0;
-		display: grid;
-		place-items: center;
-		cursor: pointer;
-		color: #fff;
-		background: linear-gradient(135deg, #fac549, #ca8106);
-		box-shadow: 0 6px 16px rgba(202, 129, 6, 0.4);
-		transition:
-			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-			filter 0.22s ease;
-	}
-
-	.metric_control:hover {
-		transform: scale(1.06);
-		filter: saturate(1.1);
-	}
-
-	.metric_control:active {
-		transform: scale(0.98);
-	}
-
-	.metric_control:focus-visible {
-		outline: 3px solid rgba(140, 15, 19, 0.35);
-		outline-offset: 3px;
-	}
-
-	.metric_control_previous {
+	.feature_figure:first-child::after {
 		left: 0;
 	}
 
-	.metric_control_next {
-		right: 0;
+	.feature_figure_value {
+		transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	/* Detail panel — gold-bordered slides (faculty engagement / indexation by year) */
-	.distribution_panel {
-		position: relative;
-		z-index: 2;
-		/* Matches the incentive stack and faculty repository widths (1444px)
-		   so the panel fills the section like the other blocks do. */
-		width: min(100%, 1444px);
-		height: 640px;
-		margin: -36px auto 0;
-		box-sizing: border-box;
-		border-radius: 34px;
-		border: 4px solid transparent;
-		background: linear-gradient(0deg, #ca8106, #fac549) border-box;
-		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
-		overflow: hidden;
+	@media (hover: hover) {
+		.feature_figure:hover::after {
+			transform: scaleX(1);
+		}
+
+		.feature_figure:hover .feature_figure_value {
+			transform: translateY(-4px);
+		}
 	}
 
-	.panel_slide {
-		background: #fff;
-	}
-
-	.panel_slide {
-		position: absolute;
-		inset: 0;
-		padding: 40px 56px;
-		box-sizing: border-box;
-		opacity: 1;
-		transform: translateX(0);
-		transition:
-			opacity 0.5s ease,
-			transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-		pointer-events: auto;
-	}
-
-	.panel_slide.is_hidden {
-		opacity: 0;
-		transform: translateX(-48px);
-		pointer-events: none;
-	}
-
-	.distribution_panel h3 {
-		margin: 0;
-		text-align: center;
-		font-family: var(--font-body);
-		font-size: 28px;
+	/* The figure reads first; the label stays first in the markup. */
+	.feature_figure_value {
+		order: -1;
+		margin: 0 0 0.6rem;
+		font-family: var(--font-heading);
+		font-size: clamp(3rem, 6vw, 5.5rem);
 		font-weight: 800;
-		letter-spacing: 0.05em;
-		color: #111;
+		line-height: 1;
+		color: var(--color-maroon);
+		font-variant-numeric: tabular-nums;
 	}
 
-	.distribution_panel p {
-		margin: 20px auto 24px;
-		max-width: 1100px;
-		font-family: var(--font-body);
-		font-size: 20px;
-		line-height: 1.55;
-		text-align: justify;
-		color: #222;
+	.feature_figure_value small {
+		font-size: 0.55em;
 	}
 
-	.engagement_row {
+	.feature_figure_label {
+		font-size: clamp(0.72rem, 0.9vw, 0.85rem);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		line-height: 1.3;
+		text-transform: uppercase;
+	}
+
+	.feature_figure_note {
+		margin: 0.3rem 0 0;
+		font-size: 0.95rem;
+		line-height: 1.45;
+		color: #555;
+	}
+
+	.feature_lower {
+		display: grid;
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+		gap: clamp(2rem, 4vw, 4rem);
+	}
+
+	.feature_indexation {
+		padding-left: clamp(2rem, 4vw, 4rem);
+		border-left: 1px solid rgba(212, 155, 29, 0.45);
+	}
+
+	.feature_label {
+		margin: 0 0 0.75rem;
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #555;
+	}
+
+	.feature_stat {
+		margin: 0;
+		font-family: var(--font-heading);
+		font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+		font-weight: 800;
+		color: var(--color-maroon);
+	}
+
+	.feature_stat strong {
+		font-size: 2em;
+		line-height: 1;
+	}
+
+	.feature_body {
+		max-width: 52ch;
+		margin: 0.75rem 0 1.5rem;
+		font-size: 0.98rem;
+		line-height: 1.6;
+		color: #2c2c2c;
+	}
+
+	.faculty_group + .faculty_group {
+		margin-top: 1.1rem;
+	}
+
+	.feature_caption {
+		margin: 0 0 0.5rem;
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: #2c2c2c;
+	}
+
+	/* One dot per faculty member; filled dots are engaged in research. */
+	.faculty_dots {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: 64px;
+		gap: 6px;
 	}
 
-	.engagement_donut {
-		width: 360px;
-		height: 360px;
-	}
-
-	.donut_outer {
-		transition: stroke-dasharray 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
-	}
-
-	.donut_inner {
-		transition: stroke-dasharray 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s;
-	}
-
-	.donut_value {
-		font-family: var(--font-body);
-		font-size: 72px;
-		font-weight: 800;
-		fill: #6e0f12;
-	}
-
-	.donut_sub {
-		font-family: var(--font-body);
-		font-size: 20px;
-		fill: #444;
-	}
-
-	.donut_note {
-		font-family: var(--font-body);
-		font-size: 15px;
-		fill: #777;
-	}
-
-	.faculty_status {
-		flex: 0 1 460px;
+	.faculty_dot {
+		width: 14px;
+		height: 14px;
 		box-sizing: border-box;
-		border: 2px solid #fac549;
-		border-radius: 26px;
-		padding: 28px 32px;
-		background: #fff;
+		border: 1.5px solid #e2cfa0;
+		border-radius: 50%;
 	}
 
-	.faculty_status_title {
-		font-family: var(--font-body);
-		font-size: 18px;
+	.faculty_dot {
+		transition:
+			transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+			background 0.3s ease,
+			border-color 0.3s ease;
+	}
+
+	/* Hovering a group lifts its engaged dots. */
+	@media (hover: hover) {
+		.faculty_group:hover .faculty_dot.is_engaged {
+			transform: scale(1.25);
+		}
+	}
+
+	.faculty_dot.is_full.is_engaged {
+		border-color: var(--color-maroon);
+		background: var(--color-maroon);
+	}
+
+	.faculty_dot.is_part.is_engaged {
+		border-color: var(--c-gold-dark);
+		background: var(--c-gold-dark);
+	}
+
+	.indexation_bars {
+		display: flex;
+		align-items: flex-end;
+		gap: clamp(0.35rem, 0.8vw, 0.6rem);
+		height: clamp(11rem, 16vw, 14rem);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.indexation_bar {
+		flex: 1 1 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		min-width: 0;
+		height: 100%;
+	}
+
+	.indexation_value {
+		margin-bottom: 0.3rem;
+		font-family: var(--font-heading);
+		font-size: 0.9rem;
+		font-weight: 800;
+		color: var(--color-maroon);
+	}
+
+	.indexation_column {
+		width: 100%;
+		height: calc((100% - 3.2rem) * var(--bar-share));
+		border-radius: 8px 8px 0 0;
+		background: linear-gradient(0deg, #ca8106, #fac549);
+		transform-origin: bottom center;
+	}
+
+	.indexation_bar {
+		cursor: default;
+		transition: opacity 0.3s ease;
+	}
+
+	.indexation_column,
+	.indexation_value {
+		transition:
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			filter 0.3s ease;
+	}
+
+	/* Hovering a year brings it forward and quiets the rest. */
+	@media (hover: hover) {
+		.indexation_bars:hover .indexation_bar:not(:hover) {
+			opacity: 0.4;
+		}
+
+		.indexation_bar:hover .indexation_value {
+			transform: translateY(-4px) scale(1.15);
+		}
+
+		.indexation_bar:hover .indexation_column {
+			filter: brightness(1.08) saturate(1.1);
+		}
+	}
+
+	.indexation_bar.is_peak .indexation_column {
+		background: linear-gradient(180deg, #941518, #3a0505);
+	}
+
+	.indexation_year {
+		width: 100%;
+		margin-top: 0;
+		padding-top: 0.4rem;
+		border-top: 1.5px solid var(--color-gold);
+		font-family: var(--font-heading);
+		font-size: clamp(0.68rem, 0.85vw, 0.8rem);
 		font-weight: 700;
 		letter-spacing: 0.06em;
-		margin-bottom: 8px;
+		text-align: center;
+		color: var(--color-maroon);
 	}
 
-	.status_row {
-		display: flex;
-		align-items: center;
-		gap: 14px;
-		padding: 14px 0;
-		border-top: 1px solid #222;
+	.feature_foot {
+		margin: 1rem 0 0;
+		font-size: 0.9rem;
+		line-height: 1.5;
+		color: #555;
 	}
 
-	.status_dot {
-		width: 15px;
-		height: 15px;
-		border-radius: 50%;
-		flex-shrink: 0;
-		box-sizing: border-box;
-	}
+	@media (max-width: 900px) {
+		.feature_figures,
+		.feature_lower {
+			grid-template-columns: minmax(0, 1fr);
+		}
 
-	.tone_ft .status_dot {
-		border: 2px solid #9b1c1a;
-		background: #f4e3e4;
-	}
+		.feature_figure,
+		.feature_figure:first-child {
+			padding: 1.25rem 0;
+		}
 
-	.tone_ft-engaged .status_dot {
-		background: #9b1c1a;
-	}
+		.feature_figure + .feature_figure {
+			border-left: 0;
+			border-top: 1px solid rgba(212, 155, 29, 0.45);
+		}
 
-	.tone_pt .status_dot {
-		border: 2px solid #f0b36b;
-		background: #fbebd9;
-	}
-
-	.tone_pt-engaged .status_dot {
-		background: #e5862a;
-	}
-
-	.status_text {
-		flex: 1;
-	}
-
-	.status_label {
-		display: block;
-		font-family: var(--font-body);
-		font-size: 15px;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: #1b1b1b;
-	}
-
-	.status_note {
-		display: block;
-		font-family: var(--font-body);
-		font-size: 13px;
-		color: #777;
-	}
-
-	.status_value {
-		font-family: var(--font-body);
-		font-size: 26px;
-		font-weight: 700;
-		color: #ca8106;
-	}
-
-	.year_chart {
-		display: block;
-		width: 100%;
-		height: calc(100% - 130px);
-	}
-
-	.chart_axis_title {
-		font-family: var(--font-body);
-		font-size: 10px;
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		fill: #666;
-	}
-
-	.chart_legend_text {
-		font-family: var(--font-body);
-		font-size: 13px;
-		fill: #444;
-	}
-
-	.chart_tick {
-		font-family: var(--font-body);
-		font-size: 12px;
-		fill: #555;
-	}
-
-	.grid_line {
-		stroke: #e4e4e4;
-		stroke-dasharray: 4 5;
-	}
-
-	.grid_line.baseline {
-		stroke: #b8b8b8;
-		stroke-dasharray: none;
-	}
-
-	.bar_value {
-		font-family: var(--font-body);
-		font-size: 17px;
-		font-weight: 700;
-		fill: #6e0f12;
-	}
-
-	.bar_year {
-		font-family: var(--font-body);
-		font-size: 13px;
-		fill: #333;
+		.feature_indexation {
+			padding: 2rem 0 0;
+			border-left: 0;
+			border-top: 1px solid rgba(212, 155, 29, 0.45);
+		}
 	}
 
 	.faculty_section {
@@ -1546,162 +1402,361 @@
 	.faculty_publications {
 		list-style: none;
 		margin: 1.1rem 0 0;
-		padding: 0.9rem 0 0;
+		padding: 0.4rem 0 0;
 		border-top: 1.5px solid var(--color-gold);
 		flex: 1 0 auto;
 	}
 
-	.faculty_publications li {
+	/* Each record: a meta line (year, then status tag) over the title.
+	   Spacing and a hairline separate records; no decorative markers. */
+	.faculty_record {
+		padding: 0.7rem 0;
 		font-family: var(--font-body);
-		font-size: 0.9rem;
-		line-height: 1.5;
-		color: #2c2c2c;
-		padding: 0.75rem 0;
-		border-bottom: 1px solid rgba(212, 155, 29, 0.45);
 	}
 
-	.faculty_publications li:last-child {
-		border-bottom: none;
+	.faculty_record + .faculty_record {
+		border-top: 1px solid rgba(212, 155, 29, 0.35);
 	}
 
 	.faculty_record_meta {
-		display: block;
-		margin-bottom: 0.2rem;
-		color: var(--c-maroon);
-		font-weight: 700;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3rem 0.6rem;
+		margin: 0 0 0.3rem;
 	}
 
-	.research_totals {
-		--chart-gutter: clamp(0.5rem, 2.5vw, 1.75rem);
-		--chart-tint: color-mix(in srgb, var(--c-gold-light) 12%, var(--c-surface));
-		width: min(100%, 55rem);
-		margin: clamp(2rem, 4vw, 4rem) auto 0;
-		border: 1px solid var(--c-shell);
-		border-block-start: 0;
-		border-radius: 0 0 1.25rem 1.25rem;
-		border-collapse: separate;
-		border-spacing: 0;
-		table-layout: fixed;
-		color: var(--c-ink);
+	.faculty_record_year {
+		font-family: var(--font-heading);
+		font-size: 0.95rem;
+		font-weight: 800;
+		line-height: 1.2;
+		color: var(--color-maroon);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.faculty_record_title {
+		margin: 0;
+		font-size: 0.93rem;
+		font-weight: 500;
+		line-height: 1.45;
+		color: #1f1a1a;
+		text-wrap: pretty;
+	}
+
+	.faculty_record_status {
+		display: inline-block;
+		padding: 0.12rem 0.55rem;
+		border: 1px solid;
+		border-radius: 999px;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		line-height: 1.4;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.faculty_record_status.tone_published {
+		border-color: #e0a93a;
+		background: rgba(250, 197, 73, 0.28);
+		color: #6b3f00;
+	}
+
+	.faculty_record_status.tone_presented {
+		border-color: rgba(148, 21, 24, 0.35);
+		background: rgba(148, 21, 24, 0.07);
+		color: var(--c-maroon);
+	}
+
+	.faculty_record_status.tone_pending {
+		border-color: #b9b2a6;
+		border-style: dashed;
+		background: transparent;
+		color: #57514a;
+	}
+
+	/* Faculty research by year — the same language as the repository strip:
+	   a cream page in the gold gradient frame, holding one maroon card-spine per
+	   year. Spine height follows the year's total; the gold top segment is
+	   publications, the maroon base is presentations. */
+	.research_spines {
+		--spines-h: clamp(14rem, 30vw, 28rem);
+		width: min(100%, 1444px);
+		margin: clamp(2.5rem, 5vw, 4.5rem) auto 0;
+		box-sizing: border-box;
+		display: grid;
+		grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+		gap: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 4rem);
+		align-items: end;
+		padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.5rem, 3.5vw, 3rem);
+		border: 2px solid transparent;
+		border-radius: 16px;
+		background:
+			linear-gradient(#fdf6e9, #fdf6e9) padding-box,
+			linear-gradient(0deg, #ca8106, #fac549) border-box;
 		font-family: var(--font-body);
 		font-variant-numeric: tabular-nums;
 	}
 
-	.research_totals caption {
+	.visually_hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	/* Title row spans the panel so the heading stays on one line. */
+	.spines_summary {
+		grid-column: 1 / -1;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.35rem 1.25rem;
+		padding-bottom: clamp(1rem, 2vw, 1.5rem);
+		border-bottom: 1.5px solid var(--color-gold);
+	}
+
+	.spines_title {
+		font-family: var(--font-heading);
+		font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+		font-weight: 800;
+		line-height: 1.2;
+		color: var(--color-maroon);
 		scroll-margin-top: 7rem;
-		padding: clamp(1rem, 3vw, 1.75rem) var(--chart-gutter);
-		border: 1px solid var(--c-shell);
-		border-block-start: 3px solid var(--c-gold-dark);
-		border-block-end: 0;
-		border-radius: 1.25rem 1.25rem 0 0;
-		background: var(--chart-tint);
-		color: var(--c-maroon-deep);
-		font: 700 var(--fs-xl) / var(--lh-snug) var(--font-heading);
-		text-align: left;
 	}
 
-	.research_totals th,
-	.research_totals td {
-		padding: 0.75rem var(--chart-gutter);
-		border-block-start: 1px solid var(--c-shell);
-		text-align: left;
+	.spines_span {
+		color: var(--c-maroon);
+		font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+		font-weight: 700;
+		letter-spacing: 0.08em;
 	}
 
-	.research_totals thead th {
-		vertical-align: bottom;
-		background: var(--chart-tint);
-		font-size: clamp(0.75rem, 2.75vw, 0.95rem);
+	.spines_totals {
+		display: grid;
+		gap: 0.9rem;
+		margin: 0;
 	}
 
-	.research_totals thead th:first-child {
-		width: clamp(3.25rem, 15vw, 8rem);
-	}
-
-	.research_totals tbody th {
-		color: var(--c-maroon-deep);
-		font: 700 clamp(0.85rem, 2.75vw, 1.15rem) / 1 var(--font-heading);
-	}
-
-	.research_series_label {
+	.spines_total {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
 	}
 
-	.research_series_label .research_unit {
-		flex: 0 0 0.75rem;
+	/* Small spine swatch doubles as the legend key. */
+	.spines_total::before {
+		content: '';
+		flex: 0 0 0.7rem;
+		height: 2.6rem;
+		border-radius: 4px;
+		background: var(--spine-fill);
 	}
 
-	.research_measure {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) 2ch;
-		align-items: center;
-		gap: clamp(0.25rem, 1.4vw, 0.85rem);
+	.spines_total dd {
+		margin: 0;
+		min-width: 2ch;
+		font-family: var(--font-heading);
+		font-size: 2.6rem;
+		font-weight: 800;
+		line-height: 1;
+		color: var(--color-maroon);
 	}
 
-	.research_units {
-		display: grid;
-		grid-auto-flow: column;
-		grid-auto-columns: minmax(0, 1fr);
-		gap: clamp(2px, 0.65vw, 6px);
-	}
-
-	.research_unit {
-		height: clamp(0.65rem, 1.5vw, 0.9rem);
-		border: 1px solid var(--c-shell);
-		border-radius: 2px;
-		transform-origin: left center;
-	}
-
-	.research_unit.is_filled {
-		border-color: var(--c-maroon);
-		background: var(--c-maroon);
-	}
-
-	.publications .research_unit {
-		border-radius: 999px;
-	}
-
-	.publications .research_unit.is_filled {
-		border-color: var(--c-gold-dark);
-		background: var(--c-gold-dark);
-	}
-
-	.research_value {
+	.spines_total dt {
+		font-size: 0.68rem;
 		font-weight: 700;
-		text-align: right;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #2c2c2c;
 	}
 
-	@media (max-width: 420px) {
-		.research_series_label {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 0.25rem;
+	.is_publication {
+		--spine-fill: linear-gradient(0deg, #ca8106, #fac549);
+	}
+
+	.is_presentation {
+		--spine-fill: linear-gradient(180deg, #941518 0%, #3a0505 100%);
+	}
+
+	.spines_chart {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		align-items: flex-end;
+		gap: 0.6rem;
+	}
+
+	/* Spines share the full chart width, with the faculty strip's gap. */
+	.spine_column {
+		flex: 1 1 0;
+		min-width: 0;
+		display: grid;
+		grid-template-areas: 'total' 'spine' 'year';
+		justify-items: stretch;
+		text-align: center;
+	}
+
+	.spine_total {
+		grid-area: total;
+		margin-bottom: 0.45rem;
+		font-family: var(--font-heading);
+		font-size: clamp(1rem, 1.8vw, 1.5rem);
+		font-weight: 800;
+		line-height: 1;
+		color: var(--color-maroon);
+	}
+
+	.spine {
+		grid-area: spine;
+		display: flex;
+		flex-direction: column;
+		height: calc(var(--spines-h) * var(--spine-share));
+		border-radius: 16px;
+		overflow: hidden;
+		transform-origin: bottom center;
+		box-shadow: 0 0 0 0 transparent;
+		transition:
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 0.35s ease;
+	}
+
+	.spine_segment {
+		flex: 1 1 0;
+		display: flex;
+		justify-content: center;
+		padding-top: 0.55rem;
+		background: var(--spine-fill);
+	}
+
+	.spine_segment + .spine_segment {
+		border-top: 2px solid #fdf6e9;
+	}
+
+	.spine_segment strong {
+		font-family: var(--font-heading);
+		font-size: clamp(0.8rem, 1.3vw, 1.1rem);
+		font-weight: 800;
+		line-height: 1;
+	}
+
+	.spine_segment.is_publication strong {
+		color: var(--color-maroon-deep);
+	}
+
+	.spine_segment.is_presentation strong {
+		color: var(--color-gold-bright);
+	}
+
+	.spine_year {
+		grid-area: year;
+		padding-top: 0.7rem;
+		font-family: var(--font-heading);
+		font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		color: var(--color-maroon);
+	}
+
+	@media (hover: hover) {
+		.spine_column:hover .spine {
+			transform: translateY(-6px);
+			box-shadow: 0 0 0 2px #fac549;
+		}
+	}
+
+	@media (max-width: 920px) {
+		.research_spines {
+			grid-template-columns: 1fr;
 		}
 
-		.research_series_label .research_unit {
-			flex: none;
-			width: 0.75rem;
+		.spines_totals {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 760px) {
+		.research_spines {
+			--spines-h: 14rem;
+			padding: 1.4rem 1rem 2.5rem;
+		}
+
+		.spines_title {
+			font-size: 1.6rem;
+		}
+
+		.spines_chart {
+			gap: 0.35rem;
+		}
+
+		.spine {
+			border-radius: 10px;
+		}
+
+		.spines_total {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr);
+			column-gap: 0.6rem;
+			row-gap: 0.3rem;
+		}
+
+		.spines_total::before {
+			grid-row: span 2;
+			height: 100%;
+		}
+
+		.spines_total dd,
+		.spines_total dt {
+			grid-column: 2;
+		}
+
+		.spines_total dd {
+			font-size: 2rem;
+		}
+
+		.spine_year {
+			letter-spacing: 0.02em;
 		}
 	}
 
 	@media (forced-colors: active) {
-		.research_unit.is_filled,
-		.publications .research_unit.is_filled {
+		.spine_segment,
+		.spines_total::before {
 			forced-color-adjust: none;
-			border-color: CanvasText;
 			background: CanvasText;
+			color: Canvas;
+		}
+
+		.spine_segment.is_publication,
+		.spines_total.is_publication::before {
+			background: Canvas;
+			border: 1px solid CanvasText;
+		}
+
+		.spine_segment strong {
+			color: inherit !important;
+		}
+
+		.spine_segment.is_publication strong {
+			color: CanvasText !important;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.incentive_row :global(svg),
-		.metrics_stage,
-		.metric_card,
-		.metric_control,
-		.panel_slide,
-		.donut_outer,
-		.donut_inner,
+		.feature_figure::after,
+		.feature_figure_value,
+		.faculty_dot,
+		.indexation_bar,
+		.indexation_column,
+		.indexation_value,
 		.faculty_nav_button,
 		.faculty_panel,
 		.faculty_portrait,
@@ -1709,7 +1764,8 @@
 		.faculty_portrait_gradient,
 		.faculty_portrait_name,
 		.faculty_portrait_count,
-		.faculty_page {
+		.faculty_page,
+		.spine {
 			transition: none !important;
 		}
 	}
@@ -1866,108 +1922,6 @@
 			padding-top: 5.5rem;
 		}
 
-		.metrics_carousel {
-			width: 100%;
-			height: auto;
-			margin: 0 0 2.5rem;
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			align-items: center;
-			justify-content: center;
-			gap: 1.25rem;
-		}
-
-		.metrics_stage {
-			position: static;
-			width: 100%;
-			height: auto;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 1rem;
-			transform: none;
-			pointer-events: auto;
-		}
-
-		.hex_web,
-		.center_logo {
-			display: none;
-		}
-
-		.metric_card {
-			position: static;
-			width: min(100%, 340px);
-			height: auto;
-			min-height: 200px;
-			padding: 2rem 1.25rem;
-			transform: none;
-		}
-
-		.metric_card_value {
-			font-size: 3.5rem;
-		}
-
-		.metric_card.has_long_value .metric_card_value {
-			font-size: 2.75rem;
-		}
-
-		.metric_control {
-			position: static;
-			transform: none;
-		}
-
-		.metric_control_previous,
-		.metric_control_next {
-			left: auto;
-			right: auto;
-		}
-
-		.distribution_panel {
-			width: 100%;
-			height: auto;
-			min-height: 560px;
-			margin: 0;
-		}
-
-		.panel_slide {
-			position: relative;
-			inset: auto;
-			padding: 1.75rem 1.25rem;
-		}
-
-		.panel_slide.is_hidden {
-			display: none;
-		}
-
-		.distribution_panel h3 {
-			font-size: 20px;
-		}
-
-		.distribution_panel p {
-			text-align: left;
-			font-size: 15px;
-			margin: 14px 0 18px;
-		}
-
-		.engagement_row {
-			gap: 28px;
-		}
-
-		.engagement_donut {
-			width: 240px;
-			height: 240px;
-		}
-
-		.donut_value {
-			font-size: 56px;
-		}
-
-		.faculty_status {
-			flex: 1 1 100%;
-			padding: 20px 22px;
-		}
-
 		.faculty_section {
 			padding-top: 5rem;
 			padding-bottom: 5rem;
@@ -1986,9 +1940,61 @@
 			animation: research-surface-in 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 		}
 
-		.research_totals:global(.reveal-pending.is-revealed) .research_units .is_filled {
-			animation: research-unit-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-			animation-delay: calc(var(--research-row) * 35ms);
+		/* Headline and intro rise in together. */
+		.feature_intro:global(.reveal-pending) > * {
+			opacity: 0;
+		}
+
+		.feature_intro:global(.reveal-pending.is-revealed) > * {
+			opacity: 1;
+			animation: metric-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+		}
+
+		.feature_intro:global(.reveal-pending.is-revealed) > :nth-child(2) {
+			animation-delay: 0.12s;
+		}
+
+		/* Engaged dots fill in one by one, like a tally. */
+		.feature_faculty:global(.reveal-pending:not(.is-revealed)) .faculty_dot.is_engaged {
+			border-color: #e2cfa0;
+			background: transparent;
+		}
+
+		.feature_faculty:global(.reveal-pending.is-revealed) .faculty_dot.is_engaged {
+			animation: dot-fill 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+			animation-delay: calc(0.3s + var(--dot-index) * 70ms);
+		}
+
+		/* Figures settle in one after another; the year columns rise. */
+		.feature_figures:global(.reveal-pending) .feature_figure {
+			opacity: 0;
+		}
+
+		.feature_figures:global(.reveal-pending.is-revealed) .feature_figure {
+			opacity: 1;
+			animation: metric-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+			animation-delay: calc(var(--figure-index) * 0.12s);
+		}
+
+		.indexation_bars:global(.reveal-pending) .indexation_column {
+			transform: scaleY(0);
+		}
+
+		.indexation_bars:global(.reveal-pending.is-revealed) .indexation_column {
+			transform: none;
+			animation: spine-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+			animation-delay: calc(var(--bar-index) * 60ms);
+		}
+
+		/* Spines rise from the baseline one year after another. */
+		.research_spines:global(.reveal-pending) .spine {
+			transform: scaleY(0);
+		}
+
+		.research_spines:global(.reveal-pending.is-revealed) .spine {
+			transform: none;
+			animation: spine-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+			animation-delay: calc(var(--spine-index) * 70ms);
 		}
 	}
 
@@ -1999,10 +2005,24 @@
 		}
 	}
 
-	@keyframes research-unit-in {
+	@keyframes dot-fill {
 		from {
-			opacity: 0.6;
-			transform: scaleX(0.7);
+			transform: scale(0.4);
+			border-color: #e2cfa0;
+			background: transparent;
+		}
+	}
+
+	@keyframes metric-in {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+	}
+
+	@keyframes spine-rise {
+		from {
+			transform: scaleY(0);
 		}
 	}
 </style>
