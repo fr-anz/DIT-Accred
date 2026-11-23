@@ -18,7 +18,7 @@ export const sections = [
   },
   {
     id: "community",
-    image: "/img/pages/Community.jpg",
+    image: "/img/pages/community-hero.webp",
     title: "Community",
     subtitle: "Technology for everyone.",
   },

@@ -207,13 +207,6 @@
 			{/each}
 		</div>
 	</section>
-	<section class="directory_pending" id="part-time" aria-labelledby="part-time-title">
-		<h2 id="part-time-title">Part-time Educators</h2>
-		<p>
-			The part-time faculty directory is being updated. Profiles and teaching specializations will
-			be published once confirmed.
-		</p>
-	</section>
 	{#if selectedFaculty}
 		<button
 			class="fmodal_overlay"
@@ -389,22 +382,6 @@
 		display: block;
 		font: italic 500 clamp(14px, 1.25vw, 24px)/1.3 var(--font-body);
 		color: var(--c-gold-light);
-	}
-	.directory_pending {
-		padding: clamp(50px, 5.208vw, 100px) var(--page-gutter);
-		background: var(--panel-paper);
-		text-align: center;
-	}
-	.directory_pending h2 {
-		font: 700 clamp(28px, 2.5vw, 48px)/1.3 var(--font-heading);
-		color: var(--c-maroon);
-		margin: 0 0 24px;
-	}
-	.directory_pending p {
-		font-size: clamp(16px, 1.146vw, 22px);
-		max-width: 700px;
-		margin: 0 auto;
-		line-height: 1.5;
 	}
 	.fmodal_overlay {
 		position: fixed;

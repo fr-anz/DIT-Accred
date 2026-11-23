@@ -17,11 +17,8 @@ export const navItems: NavItem[] = [
 		label: 'Research',
 		subItems: [
 			{ label: 'Research Development & Policy Framework', href: '/research#policy' },
-			{ label: 'Key Productivity Metrics & Faculty Engagement', href: '/research#productivity' },
-			{
-				label: 'Faculty Researcher and Research Repository',
-				href: '/research#published-research'
-			}
+			{ label: 'Research Productivity & Indexation', href: '/research#productivity' },
+			{ label: 'Faculty Research Repository', href: '/research#published-research' }
 		]
 	},
 	{
