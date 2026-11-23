@@ -2,11 +2,12 @@ type ResearchRecord = {
 	year: number;
 	title: string;
 	status?: string;
+	publication?: { journal: string; year: number; url: string };
 };
 
 type FacultyResearcher = {
 	name: string;
-	image?: string;
+	image?: { src: string; focusX: string; focusY: string };
 	records: ResearchRecord[];
 };
 
@@ -15,7 +16,7 @@ const presentedAndPublished = 'Presented and published';
 export const facultyResearch: FacultyResearcher[] = [
 	{
 		name: 'Ma. Leonila Amata',
-		image: '/teaching-learning/faculty/figma/amata.png',
+		image: { src: '/research/faculty/amata.webp', focusX: '59%', focusY: '25%' },
 		records: [
 			{
 				year: 2024,
@@ -27,7 +28,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Benilda Eleonor V. Comendador',
-		image: '/teaching-learning/faculty/figma/comendador.png',
+		image: { src: '/research/faculty/comendador.webp', focusX: '60%', focusY: '30%' },
 		records: [
 			{
 				year: 2022,
@@ -44,7 +45,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Illuminada Vivien R. Domingo',
-		image: 'https://cdn.theavenir.dev/images/teaching-learning/faculty/originals/domingo.png',
+		image: { src: '/research/faculty/domingo.webp', focusX: '59%', focusY: '25%' },
 		records: [
 			{
 				year: 2020,
@@ -91,7 +92,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Juancho Espineli',
-		image: '/teaching-learning/faculty/figma/espineli.png',
+		image: { src: '/research/faculty/espineli.webp', focusX: '55%', focusY: '26%' },
 		records: [
 			{
 				year: 2020,
@@ -136,7 +137,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Jayson James M. Mayor',
-		image: '/teaching-learning/faculty/figma/mayor.png',
+		image: { src: '/research/faculty/mayor.webp', focusX: '65%', focusY: '24%' },
 		records: [
 			{
 				year: 2021,
@@ -157,7 +158,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Rachel A. Nayre',
-		image: 'https://cdn.theavenir.dev/images/teaching-learning/faculty/originals/nayre.png',
+		image: { src: '/research/faculty/nayre.webp', focusX: '62%', focusY: '27%' },
 		records: [
 			{
 				year: 2023,
@@ -175,6 +176,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Janelle Kyra A. Sagum',
+		image: { src: '/research/faculty/sagum.webp', focusX: '57%', focusY: '28%' },
 		records: [
 			{
 				year: 2021,
@@ -205,17 +207,29 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'John Dustin D. Santos',
-		image: '/about/chairpersons/john-dustin-santos.webp',
+		image: { src: '/research/faculty/santos.webp', focusX: '66%', focusY: '27%' },
 		records: [
 			{
 				year: 2020,
 				title: 'PUP Herbarium Management Information System PSUCCESS',
 				status: 'Presented'
+			},
+			{
+				year: 2023,
+				title:
+					'Utilization of Convolutional Neural Networks on Coin Grading for BSP Series One Peso Coins',
+				status: presentedAndPublished,
+				publication: {
+					journal: 'Technologique',
+					year: 2024,
+					url: 'https://doi.org/10.62718/vmca.tech-gjtdsi.2.1.SC-0624-027'
+				}
 			}
 		]
 	},
 	{
-		name: 'Leo Violeta',
+		name: 'Mariel Leo T. Violeta',
+		image: { src: '/research/faculty/violeta.webp', focusX: '68%', focusY: '28%' },
 		records: [
 			{
 				year: 2024,

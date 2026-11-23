@@ -1,4 +1,7 @@
 <script>
+	import { ArrowUpRight, FileBadge } from '@lucide/svelte';
+	import { asset } from '$app/paths';
+
 	const logos = [
 		{ src: '/img/DIT-logo.jpg', alt: 'Department of Information Technology logo' },
 		{ src: '/img/PUP.png', alt: 'Polytechnic University of the Philippines logo' },
@@ -23,6 +26,24 @@
 	</div>
 
 	<p class="visit-subtitle">Level IV Cycle II Accreditation Visit - November 2026</p>
+
+	<a
+		class="certificate-link"
+		href={asset('accreditation/certificate-of-authenticity-november-2026.pdf')}
+		type="application/pdf"
+		target="_blank"
+		rel="noopener"
+	>
+		<span class="certificate-icon" aria-hidden="true">
+			<FileBadge size={22} strokeWidth={1.8} />
+		</span>
+		<span class="certificate-label">
+			<strong>Certificate of Authenticity</strong>
+			<small>Quality Assurance Center · PDF</small>
+		</span>
+		<ArrowUpRight size={18} strokeWidth={2} aria-hidden="true" />
+		<span class="sr-only">(opens in a new tab)</span>
+	</a>
 </section>
 
 <style>
@@ -88,6 +109,56 @@
 		color: #000000;
 		text-align: center;
 		margin: clamp(1.25rem, 2.4vw, 1.65rem) var(--page-pad) 0 var(--page-pad);
+	}
+
+	.certificate-link {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 0.75rem;
+		max-width: calc(100% - 2 * var(--page-pad));
+		margin-top: clamp(1.5rem, 3vw, 2.25rem);
+		padding: 0.625rem 0.875rem 0.625rem 0.625rem;
+		border: 1px solid var(--c-gold);
+		border-radius: 0.875rem;
+		background: var(--c-surface);
+		color: var(--c-maroon);
+		text-decoration: none;
+	}
+
+	.certificate-icon {
+		display: grid;
+		place-items: center;
+		inline-size: 2.5rem;
+		block-size: 2.5rem;
+		border-radius: 0.5rem;
+		background: color-mix(in srgb, var(--c-gold-light) 22%, var(--c-surface));
+	}
+
+	.certificate-label {
+		display: grid;
+		gap: 0.125rem;
+		padding-inline-end: clamp(0rem, 1vw, 0.5rem);
+		font-family: var(--font-heading);
+		font-size: var(--fs-sm);
+		line-height: var(--lh-snug);
+	}
+
+	.certificate-label small {
+		color: var(--c-ink);
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+	}
+
+	.certificate-link:hover,
+	.certificate-link:focus-visible {
+		border-color: var(--c-maroon);
+		background: color-mix(in srgb, var(--c-gold-light) 10%, var(--c-surface));
+	}
+
+	.certificate-link:focus-visible {
+		outline: 2px solid var(--c-maroon);
+		outline-offset: 3px;
 	}
 
 	@media (max-width: 768px) {

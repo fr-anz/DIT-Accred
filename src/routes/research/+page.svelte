@@ -60,8 +60,6 @@
 		}
 	];
 
-	/* Key Productivity, set as a feature: three headline figures between gold
-	   rules, then faculty engagement and indexed articles side by side. */
 	const metricFigures = [
 		{
 			label: 'Completed research',
@@ -97,12 +95,6 @@
 		{ year: '2025', count: 10 }
 	];
 
-	const facultyGroups = [
-		{ key: 'full', label: 'Full-time', total: 15, engaged: 11 },
-		{ key: 'part', label: 'Part-time', total: 27, engaged: 1 }
-	];
-	const facultyTotal = facultyGroups.reduce((sum, group) => sum + group.total, 0);
-	const facultyEngaged = facultyGroups.reduce((sum, group) => sum + group.engaged, 0);
 	const indexedTotal = indexationByYear.reduce((sum, entry) => sum + entry.count, 0);
 	const indexedPeak = Math.max(...indexationByYear.map((entry) => entry.count));
 
@@ -213,7 +205,7 @@
 	<title>Research | DIT-PUP</title>
 	<meta
 		name="description"
-		content="Explore DIT-PUP research governance, productivity metrics, faculty engagement, and research repository evidence."
+		content="Explore DIT-PUP research policies, productivity metrics, publication indexation, and the faculty research repository."
 	/>
 </svelte:head>
 
@@ -283,7 +275,7 @@
 	<section class="content_section productivity_section" id="productivity">
 		<header class="section_header reveal_surface" use:reveal>
 			<KeyRound size={26} strokeWidth={1.5} class="section_icon maroon" />
-			<h2 class="t_eyebrow">Key Productivity Metrics &amp; Faculty Engagement</h2>
+			<h2 class="t_eyebrow">Research Productivity &amp; Indexation</h2>
 		</header>
 		<hr class="section_divider" />
 
@@ -313,71 +305,36 @@
 				{/each}
 			</dl>
 
-			<div class="feature_lower">
-				<section
-					class="feature_faculty"
-					aria-labelledby="faculty-engagement-title"
-					use:reveal={{ threshold: 0.3 }}
-				>
-					<h4 class="feature_label" id="faculty-engagement-title">Faculty engaged in research</h4>
-					<p class="feature_stat">
-						<strong use:countUp={{ to: facultyEngaged, delay: 200 }}>{facultyEngaged}</strong> of {facultyTotal}
-						faculty
+			<section class="feature_indexation" aria-labelledby="indexation-title">
+				<div class="indexation_summary">
+					<h4 id="indexation-title">Indexed articles by year</h4>
+					<p>
+						Of {indexedTotal} articles from 2018 to 2025, 54 were indexed in Scopus or Web of Science
+						and 5 appeared in other refereed journals.
 					</p>
-					<p class="feature_body">
-						The department's research quality is driven by a dedicated core of active faculty whose
-						sustained scholarly engagement continues to elevate the program's international academic
-						footprint.
-					</p>
-					{#each facultyGroups as group (group.key)}
-						<div class="faculty_group">
-							<p class="feature_caption">
-								{group.label}: {group.engaged} of {group.total} engaged ({Math.round(
-									(group.engaged / group.total) * 100
-								)}%)
-							</p>
-							<div class="faculty_dots" aria-hidden="true">
-								{#each { length: group.total }, index (index)}
-									<span
-										class="faculty_dot is_{group.key}"
-										class:is_engaged={index < group.engaged}
-										style:--dot-index={index}
-									></span>
-								{/each}
-							</div>
-						</div>
+				</div>
+				<ol class="indexation_bars" use:reveal={{ threshold: 0.3 }}>
+					{#each indexationByYear as entry, index (entry.year)}
+						<li
+							class="indexation_bar"
+							class:is_peak={entry.count === indexedPeak}
+							style:--bar-share={entry.count / indexedPeak}
+							style:--bar-index={index}
+						>
+							<span class="indexation_value">{entry.count}</span>
+							<span class="indexation_column" aria-hidden="true"></span>
+							<span class="indexation_year">{entry.year}</span>
+						</li>
 					{/each}
-				</section>
-
-				<section class="feature_indexation" aria-labelledby="indexation-title">
-					<h4 class="feature_label" id="indexation-title">Indexed articles by year</h4>
-					<ol class="indexation_bars" use:reveal={{ threshold: 0.3 }}>
-						{#each indexationByYear as entry, index (entry.year)}
-							<li
-								class="indexation_bar"
-								class:is_peak={entry.count === indexedPeak}
-								style:--bar-share={entry.count / indexedPeak}
-								style:--bar-index={index}
-							>
-								<span class="indexation_value">{entry.count}</span>
-								<span class="indexation_column" aria-hidden="true"></span>
-								<span class="indexation_year">{entry.year}</span>
-							</li>
-						{/each}
-					</ol>
-					<p class="feature_foot">
-						{indexedTotal} papers, 2018–2025. 54 indexed in Scopus or Web of Science, 5 in other refereed
-						journals.
-					</p>
-				</section>
-			</div>
+				</ol>
+			</section>
 		</article>
 	</section>
 
 	<section class="content_section faculty_section" id="published-research">
 		<header class="section_header reveal_surface" use:reveal>
 			<Network size={26} strokeWidth={1.5} class="section_icon maroon" />
-			<h2 class="t_eyebrow">Faculty Researcher and Research Repository</h2>
+			<h2 class="t_eyebrow">Faculty Research Repository</h2>
 		</header>
 		<hr class="section_divider" />
 
@@ -416,7 +373,13 @@
 						onclick={() => toggleFacultyCard(index)}
 					>
 						{#if researcher.image}
-							<img src={researcher.image} alt="" loading="lazy" />
+							<img
+								src={researcher.image.src}
+								alt="Portrait of {researcher.name}"
+								style:--portrait-x={researcher.image.focusX}
+								style:--portrait-y={researcher.image.focusY}
+								loading="lazy"
+							/>
 						{:else}
 							<span class="faculty_portrait_symbol" aria-hidden="true">
 								<BookOpen strokeWidth={1} />
@@ -434,23 +397,31 @@
 						class="faculty_page"
 						id="faculty-repository-{index}"
 						role="region"
-						aria-hidden={!isOpen}
+						inert={!isOpen}
 						aria-label="Research by {researcher.name}"
 						tabindex={isOpen ? 0 : undefined}
 					>
 						<strong class="faculty_page_name">{researcher.name}</strong>
 						<ul class="faculty_publications">
 							{#each researcher.records as record (`${record.year}:${record.title}`)}
+								{@const publication = record.publication}
 								<li class="faculty_record">
 									<p class="faculty_record_meta">
-										<time class="faculty_record_year" datetime={String(record.year)}>
-											{record.year}
-										</time>
+										<span class="faculty_record_year">
+											{#if publication}Presented{/if}
+											<time datetime={String(record.year)}>{record.year}</time>
+										</span>
 										{#if record.status}
 											<span class="faculty_record_status tone_{record.tone}">{record.status}</span>
 										{/if}
 									</p>
 									<p class="faculty_record_title">{record.title}</p>
+									{#if publication}
+										<a class="faculty_record_publication" href={publication.url} rel="external">
+											Published in {publication.journal} in
+											<time datetime={String(publication.year)}>{publication.year}</time>
+										</a>
+									{/if}
 								</li>
 							{/each}
 						</ul>
@@ -828,9 +799,6 @@
 		padding-top: 11rem;
 	}
 
-	/* Key Productivity — set as an editorial feature in the site's type:
-	   headline and intro, three figures between gold rules, then faculty
-	   engagement and indexed articles side by side. */
 	.productivity_feature {
 		width: min(100%, 1444px);
 		margin: 0 auto;
@@ -946,95 +914,33 @@
 		color: #555;
 	}
 
-	.feature_lower {
-		display: grid;
-		grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-		gap: clamp(2rem, 4vw, 4rem);
-	}
-
 	.feature_indexation {
-		padding-left: clamp(2rem, 4vw, 4rem);
-		border-left: 1px solid rgba(212, 155, 29, 0.45);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+		align-items: center;
+		gap: clamp(1.5rem, 4vw, 4rem);
+		padding: clamp(1.25rem, 3vw, 2.5rem);
+		border: 1px solid rgba(212, 155, 29, 0.45);
+		border-radius: 16px;
+		background: #fffaf0;
 	}
 
-	.feature_label {
-		margin: 0 0 0.75rem;
-		font-size: 0.8rem;
-		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: #555;
-	}
-
-	.feature_stat {
+	.indexation_summary h4 {
 		margin: 0;
 		font-family: var(--font-heading);
-		font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+		font-size: clamp(1.25rem, 2vw, 1.85rem);
 		font-weight: 800;
+		line-height: 1.2;
 		color: var(--color-maroon);
+		text-wrap: balance;
 	}
 
-	.feature_stat strong {
-		font-size: 2em;
-		line-height: 1;
-	}
-
-	.feature_body {
-		max-width: 52ch;
-		margin: 0.75rem 0 1.5rem;
+	.indexation_summary p {
+		max-width: 44ch;
+		margin: 0.65rem 0 0;
 		font-size: 0.98rem;
-		line-height: 1.6;
-		color: #2c2c2c;
-	}
-
-	.faculty_group + .faculty_group {
-		margin-top: 1.1rem;
-	}
-
-	.feature_caption {
-		margin: 0 0 0.5rem;
-		font-size: 0.85rem;
-		font-weight: 600;
-		color: #2c2c2c;
-	}
-
-	/* One dot per faculty member; filled dots are engaged in research. */
-	.faculty_dots {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-	}
-
-	.faculty_dot {
-		width: 14px;
-		height: 14px;
-		box-sizing: border-box;
-		border: 1.5px solid #e2cfa0;
-		border-radius: 50%;
-	}
-
-	.faculty_dot {
-		transition:
-			transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-			background 0.3s ease,
-			border-color 0.3s ease;
-	}
-
-	/* Hovering a group lifts its engaged dots. */
-	@media (hover: hover) {
-		.faculty_group:hover .faculty_dot.is_engaged {
-			transform: scale(1.25);
-		}
-	}
-
-	.faculty_dot.is_full.is_engaged {
-		border-color: var(--color-maroon);
-		background: var(--color-maroon);
-	}
-
-	.faculty_dot.is_part.is_engaged {
-		border-color: var(--c-gold-dark);
-		background: var(--c-gold-dark);
+		line-height: 1.55;
+		color: #555;
 	}
 
 	.indexation_bars {
@@ -1066,9 +972,9 @@
 	}
 
 	.indexation_column {
-		width: 100%;
+		width: 75%;
 		height: calc((100% - 3.2rem) * var(--bar-share));
-		border-radius: 8px 8px 0 0;
+		border-radius: 6px 6px 0 0;
 		background: linear-gradient(0deg, #ca8106, #fac549);
 		transform-origin: bottom center;
 	}
@@ -1117,16 +1023,8 @@
 		color: var(--color-maroon);
 	}
 
-	.feature_foot {
-		margin: 1rem 0 0;
-		font-size: 0.9rem;
-		line-height: 1.5;
-		color: #555;
-	}
-
-	@media (max-width: 900px) {
-		.feature_figures,
-		.feature_lower {
+	@media (max-width: 760px) {
+		.feature_figures {
 			grid-template-columns: minmax(0, 1fr);
 		}
 
@@ -1141,9 +1039,12 @@
 		}
 
 		.feature_indexation {
-			padding: 2rem 0 0;
-			border-left: 0;
-			border-top: 1px solid rgba(212, 155, 29, 0.45);
+			grid-template-columns: minmax(0, 1fr);
+			padding-inline: clamp(0.7rem, 3.5vw, 1.25rem);
+		}
+
+		.indexation_year {
+			letter-spacing: 0;
 		}
 	}
 
@@ -1152,7 +1053,7 @@
 		padding-bottom: 9.5rem;
 	}
 
-	/* Faculty Researcher and Research Repository — expanding portrait strip.
+	/* Faculty Research Repository — expanding portrait strip.
 	   Closed panels are fixed-width slices; one open panel grows like a book
 	   opening (portrait shrinks left + returns to color, cream repository page
 	   slides in on the right). */
@@ -1270,9 +1171,16 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		object-position: var(--portrait-x) var(--portrait-y);
 		display: block;
 		filter: grayscale(1) sepia(0.35);
 		transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	@media (max-width: 540px) {
+		.faculty_panel.is_open .faculty_portrait img {
+			object-position: var(--portrait-x) 7%;
+		}
 	}
 
 	.faculty_portrait_symbol {
@@ -1442,6 +1350,16 @@
 		line-height: 1.45;
 		color: #1f1a1a;
 		text-wrap: pretty;
+	}
+
+	.faculty_record_publication {
+		display: inline-block;
+		margin-top: 0.35rem;
+		font-size: 0.85rem;
+		line-height: 1.4;
+		color: var(--color-maroon);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
 	}
 
 	.faculty_record_status {
@@ -1753,7 +1671,6 @@
 		.incentive_row :global(svg),
 		.feature_figure::after,
 		.feature_figure_value,
-		.faculty_dot,
 		.indexation_bar,
 		.indexation_column,
 		.indexation_value,
@@ -1954,17 +1871,6 @@
 			animation-delay: 0.12s;
 		}
 
-		/* Engaged dots fill in one by one, like a tally. */
-		.feature_faculty:global(.reveal-pending:not(.is-revealed)) .faculty_dot.is_engaged {
-			border-color: #e2cfa0;
-			background: transparent;
-		}
-
-		.feature_faculty:global(.reveal-pending.is-revealed) .faculty_dot.is_engaged {
-			animation: dot-fill 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-			animation-delay: calc(0.3s + var(--dot-index) * 70ms);
-		}
-
 		/* Figures settle in one after another; the year columns rise. */
 		.feature_figures:global(.reveal-pending) .feature_figure {
 			opacity: 0;
@@ -2002,14 +1908,6 @@
 		from {
 			opacity: 0.75;
 			transform: translateY(8px);
-		}
-	}
-
-	@keyframes dot-fill {
-		from {
-			transform: scale(0.4);
-			border-color: #e2cfa0;
-			background: transparent;
 		}
 	}
 

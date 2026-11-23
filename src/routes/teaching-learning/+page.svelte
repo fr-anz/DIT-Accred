@@ -954,79 +954,39 @@
 		</div>
 		<hr class="section_divider" />
 
-		<div class="faculty_grid">
-			<!-- Full-Time Card (links to the faculty directory subpage, full-time section) -->
-			<a class="faculty_profile_card" href={resolve('/teaching-learning/faculty#full-time')}>
-				<div class="card_decor_strip red_strip"></div>
-				<div class="faculty_header">
-					<div class="faculty_icon_box red_bg">
-						<Users size={24} class="faculty_icon" />
-					</div>
-					<div class="header_titles">
-						<h3 class="faculty_type">FULL-TIME FACULTY</h3>
-						<span class="faculty_sub">RESEARCH LEADERS</span>
-					</div>
+		<a class="faculty_profile_card" href={resolve('/teaching-learning/faculty#full-time')}>
+			<div class="faculty_header">
+				<div class="faculty_icon_box">
+					<Users size={24} />
 				</div>
-
-				<p class="faculty_desc">
-					Dedicated faculty members with some Ph.D., Masteral, and Bachelors credentials focusing on
-					pedagogical innovation and institutional research trajectories. Expertise spans across
-					Data Science, AI Ethics, and Network Engineering.
-				</p>
-
-				<ul class="faculty_checklist">
-					<li class="checklist_item">
-						<CheckCircle2 size={18} class="check_icon red_check" />
-						<span>85% with Advanced Degrees</span>
-					</li>
-					<li class="checklist_item">
-						<CheckCircle2 size={18} class="check_icon red_check" />
-						<span>Published Research in IEEE/ACM</span>
-					</li>
-				</ul>
-
-				<span class="faculty_cta">
-					View Full-time Faculty
-					<ChevronRight size={18} strokeWidth={2.5} class="faculty_cta_icon" />
-				</span>
-			</a>
-
-			<!-- Part-Time Card (links to the faculty directory subpage, part-time section) -->
-			<a class="faculty_profile_card" href={resolve('/teaching-learning/faculty#part-time')}>
-				<div class="card_decor_strip gold_strip"></div>
-				<div class="faculty_header">
-					<div class="faculty_icon_box gold_bg">
-						<Target size={24} class="faculty_icon" />
-					</div>
-					<div class="header_titles">
-						<h3 class="faculty_type">PART-TIME EDUCATOR</h3>
-						<span class="faculty_sub">PRACTITIONER-EDUCATORS</span>
-					</div>
+				<div>
+					<h3 class="faculty_type">FULL-TIME FACULTY</h3>
+					<span class="faculty_sub">RESEARCH LEADERS</span>
 				</div>
+			</div>
 
-				<p class="faculty_desc">
-					Active industry professionals bringing real-world DevOps, Cloud Architecture, and Software
-					Engineering methodologies directly into the classroom. Bridging the gap between theory and
-					production.
-				</p>
+			<p class="faculty_desc">
+				Dedicated faculty members with some Ph.D., Masteral, and Bachelors credentials focusing on
+				pedagogical innovation and institutional research trajectories. Expertise spans across Data
+				Science, AI Ethics, and Network Engineering.
+			</p>
 
-				<ul class="faculty_checklist">
-					<li class="checklist_item">
-						<CheckCircle2 size={18} class="check_icon gold_check" />
-						<span>Active Industry Certifications</span>
-					</li>
-					<li class="checklist_item">
-						<CheckCircle2 size={18} class="check_icon gold_check" />
-						<span>Direct Liaison for OJT Programs</span>
-					</li>
-				</ul>
+			<ul class="faculty_checklist">
+				<li class="checklist_item">
+					<CheckCircle2 size={18} />
+					<span>85% with Advanced Degrees</span>
+				</li>
+				<li class="checklist_item">
+					<CheckCircle2 size={18} />
+					<span>Published Research in IEEE/ACM</span>
+				</li>
+			</ul>
 
-				<span class="faculty_cta">
-					View Part-time Faculty
-					<ChevronRight size={18} strokeWidth={2.5} class="faculty_cta_icon" />
-				</span>
-			</a>
-		</div>
+			<span class="faculty_cta">
+				View Full-time Faculty
+				<ChevronRight size={18} strokeWidth={2.5} />
+			</span>
+		</a>
 	</section>
 
 	<!-- ─────────────────────────────────────────────
@@ -1686,25 +1646,19 @@
 		flex-direction: column;
 		gap: clamp(28px, 2.188vw, 42px);
 	}
-	.faculty_grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: clamp(28px, 2.604vw, 50px);
-	}
 	.faculty_profile_card {
+		display: block;
+		max-width: 960px;
+		margin-inline: auto;
 		border: 2px solid var(--c-gold);
 		border-radius: 25px;
 		padding: clamp(28px, 3.177vw, 61px);
 		color: inherit;
 		text-decoration: none;
-		position: relative;
 		transition: box-shadow 0.2s;
 	}
 	.faculty_profile_card:hover {
 		box-shadow: 0 12px 30px #5c0f1612;
-	}
-	.card_decor_strip {
-		display: none;
 	}
 	.faculty_header {
 		display: flex;
@@ -1757,7 +1711,12 @@
 		height: clamp(20px, 1.823vw, 35px);
 	}
 	.faculty_cta {
-		display: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: clamp(24px, 2.083vw, 40px);
+		color: var(--c-maroon);
+		font-weight: 700;
 	}
 	.org_card {
 		aspect-ratio: 395 / 678;
@@ -2019,7 +1978,6 @@
 	}
 	@media (max-width: 800px) {
 		.curriculum_columns,
-		.faculty_grid,
 		.tracer_grid {
 			grid-template-columns: 1fr;
 		}

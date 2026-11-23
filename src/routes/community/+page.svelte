@@ -21,6 +21,7 @@
 	import aiCarousel7 from '#lib/assets/community/Carousel7.jpg';
 	import aiCarousel8 from '#lib/assets/community/Carousel8.jpg';
 	import aiCarousel9 from '#lib/assets/community/Carousel9.jpg';
+	import responsibleAiPhoto from '#lib/assets/community/responsible-ai-workshop.webp';
 
 	const aiTrainingPhotos = [
 		{
@@ -185,6 +186,7 @@
 			started = true;
 			const startTime = performance.now();
 
+			/** @param {number} now */
 			const step = (now) => {
 				const t = Math.min(1, (now - startTime) / duration);
 				const eased = 1 - Math.pow(1 - t, 3);
@@ -296,8 +298,11 @@
 			partner: 'CUMC • DTI Negosyo Center Mandaluyong • MIPO',
 			summary:
 				'Formalized via a Memorandum of Agreement with CUMC and extended on August 19, 2025 with DTI Negosyo Center Mandaluyong and MIPO—delivering presentation software training, an ongoing e-commerce seminar series, and Responsible AI prompt engineering workshops.',
-			image: ivote2,
-			caption: 'CCIS Extension Project in cooperation with DTI Negosyo Center Mandaluyong & CUMC'
+			image: responsibleAiPhoto,
+			imagePosition: '62% center',
+			alt: 'An instructor presents AI applications while participants watch from computer workstations',
+			caption:
+				'Responsible AI literacy workshop in cooperation with DTI Negosyo Center Mandaluyong and MIPO'
 		},
 		{
 			number: '05',
@@ -549,7 +554,12 @@
 <main class="community_page">
 	<!-- ══ 1. HERO SECTION ══ -->
 	<section class="community-hero">
-		<div class="hero-bg"></div>
+		<img
+			class="hero-bg"
+			src="/img/pages/community-hero.webp"
+			alt="Participants pose in front of a computer literacy training banner in Mandaluyong"
+			fetchpriority="high"
+		/>
 		<h1 class="t_display hero-title">COMMUNITY</h1>
 	</section>
 
@@ -824,7 +834,12 @@
 				>
 					<div class="chronicle_media_col">
 						<div class="chronicle_frame">
-							<img src={chap.image} alt={chap.caption} loading="lazy" />
+							<img
+								src={chap.image}
+								alt={chap.alt ?? chap.caption}
+								style:object-position={chap.imagePosition}
+								loading="lazy"
+							/>
 						</div>
 						<p class="chronicle_caption">{chap.caption}</p>
 					</div>
@@ -1377,13 +1392,11 @@
 
 	.hero-bg {
 		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-image: url('/img/pages/Community.jpg');
-		background-size: cover;
-		background-position: center;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 62%;
 		opacity: 0.3;
 		z-index: 0;
 	}
