@@ -789,7 +789,11 @@
 
 	.narrative_link {
 		display: flex;
+		width: min(100%, clamp(18rem, 28vw, 26rem));
+		min-height: clamp(3.25rem, 4.75vw, 4.25rem);
+		justify-content: center;
 		margin-inline: auto;
+		font-size: clamp(1rem, 1.35vw, 1.25rem);
 	}
 
 	.productivity_section {
