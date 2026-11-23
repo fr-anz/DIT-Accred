@@ -1,4 +1,5 @@
 <script>
+	import { ArrowUpRight } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import Footer from '#lib/components/footer.svelte';
 
@@ -1095,11 +1096,12 @@
 		<div class="narrative-action-wrapper" use:reveal>
 			<a
 				href="https://bit.ly/ITL4Area3"
-				class="narrative-btn"
+				class="report-button"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				View Full Narrative Report
+				<span>View Full Narrative Report</span>
+				<ArrowUpRight size={19} aria-hidden="true" />
 			</a>
 		</div>
 	</section>
@@ -1352,30 +1354,6 @@
 		width: 100%;
 		margin-top: 2.25rem;
 		margin-bottom: 0;
-	}
-
-	.narrative-btn {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		max-width: 700px;
-		padding: 18px 32px;
-		border: 3px solid #941518;
-		border-radius: 12px;
-		background-color: transparent;
-		color: #941518;
-		font-family: var(--font-heading, 'Overpass', sans-serif);
-		font-size: 1.4rem;
-		font-weight: 700;
-		text-decoration: none;
-		transition: all 0.25s var(--ease);
-	}
-
-	.narrative-btn:hover {
-		background-color: #941518;
-		color: #dfb75f;
-		translate: 0 -2px;
 	}
 
 	/* --- HERO SECTION --- */
