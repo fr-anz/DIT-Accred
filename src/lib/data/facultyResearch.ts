@@ -157,6 +157,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Rachel A. Nayre',
+		image: 'https://cdn.theavenir.dev/images/teaching-learning/faculty/originals/nayre.png',
 		records: [
 			{
 				year: 2023,
@@ -203,7 +204,8 @@ export const facultyResearch: FacultyResearcher[] = [
 		]
 	},
 	{
-		name: 'Santos',
+		name: 'John Dustin D. Santos',
+		image: '/about/chairpersons/john-dustin-santos.webp',
 		records: [
 			{
 				year: 2020,
@@ -213,7 +215,7 @@ export const facultyResearch: FacultyResearcher[] = [
 		]
 	},
 	{
-		name: 'Violeta',
+		name: 'Leo Violeta',
 		records: [
 			{
 				year: 2024,

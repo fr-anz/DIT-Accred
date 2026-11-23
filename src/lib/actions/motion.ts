@@ -48,24 +48,32 @@ export function reveal(node: HTMLElement, options: RevealOptions = undefined) {
 	};
 }
 
-type CountOptions = { to: number; from?: number; duration?: number; delay?: number };
+type CountOptions = {
+	to: number;
+	from?: number;
+	duration?: number;
+	delay?: number;
+	/** Digits after the decimal point, e.g. 2 for 89.13. */
+	decimals?: number;
+};
 
 /* Counts the element's text from `from` to `to` once it enters the viewport.
    The final value is server-rendered, so only the animation depends on JS. */
-export function countUp(node: HTMLElement, options: CountOptions) {
-	const { to, from = 0, duration = 1400, delay = 0 } = options;
+export function countUp(node: Element, options: CountOptions) {
+	const { to, from = 0, duration = 1400, delay = 0, decimals = 0 } = options;
+	const format = (value: number) => value.toFixed(decimals);
 	if (prefersReducedMotion() || !('IntersectionObserver' in window)) return {};
 
 	let frame = 0;
 	let timer = 0;
-	node.textContent = String(from);
+	node.textContent = format(from);
 
 	const run = () => {
 		const start = performance.now();
 		const tick = (now: number) => {
 			const progress = Math.min(1, (now - start) / duration);
 			const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-			node.textContent = String(Math.round(from + (to - from) * eased));
+			node.textContent = format(from + (to - from) * eased);
 			if (progress < 1) frame = requestAnimationFrame(tick);
 		};
 		frame = requestAnimationFrame(tick);
@@ -86,7 +94,7 @@ export function countUp(node: HTMLElement, options: CountOptions) {
 			observer.disconnect();
 			cancelAnimationFrame(frame);
 			window.clearTimeout(timer);
-			node.textContent = String(to);
+			node.textContent = format(to);
 		}
 	};
 }
