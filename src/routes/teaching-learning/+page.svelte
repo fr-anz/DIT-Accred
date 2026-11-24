@@ -40,6 +40,7 @@
 	import '#lib/styles/accreditation-pages.css';
 	import '#lib/styles/assigned-page-motion.css';
 	import { alumniList } from '#lib/data/alumni.ts';
+	import { partTimeFaculty } from '#lib/data/faculty.ts';
 	import {
 		revisionSteps,
 		curriculumMinutes,
@@ -956,39 +957,68 @@
 		</div>
 		<hr class="section_divider" />
 
-		<a class="faculty_profile_card" href={resolve('/teaching-learning/faculty#full-time')}>
-			<div class="faculty_header">
-				<div class="faculty_icon_box">
-					<Users size={24} />
-				</div>
-				<div>
+		<div class="faculty_card_pair">
+			<a class="faculty_profile_card" href={resolve('/teaching-learning/faculty#full-time')}>
+				<div class="faculty_header">
+					<div class="faculty_icon_box">
+						<Users size={24} />
+					</div>
 					<h3 class="faculty_type">FULL-TIME FACULTY</h3>
-					<span class="faculty_sub">RESEARCH LEADERS</span>
 				</div>
-			</div>
 
-			<p class="faculty_desc">
-				Dedicated faculty members with some Ph.D., Masteral, and Bachelors credentials focusing on
-				pedagogical innovation and institutional research trajectories. Expertise spans across Data
-				Science, AI Ethics, and Network Engineering.
-			</p>
+				<p class="faculty_desc">
+					Dedicated faculty members with some Ph.D., Masteral, and Bachelors credentials focusing on
+					pedagogical innovation and institutional research trajectories. Expertise spans across
+					Data Science, AI Ethics, and Network Engineering.
+				</p>
 
-			<ul class="faculty_checklist">
-				<li class="checklist_item">
-					<CheckCircle2 size={18} />
-					<span>85% with Advanced Degrees</span>
-				</li>
-				<li class="checklist_item">
-					<CheckCircle2 size={18} />
-					<span>Published Research in IEEE/ACM</span>
-				</li>
-			</ul>
+				<ul class="faculty_checklist">
+					<li class="checklist_item">
+						<CheckCircle2 size={18} />
+						<span>85% with Advanced Degrees</span>
+					</li>
+					<li class="checklist_item">
+						<CheckCircle2 size={18} />
+						<span>Published Research in IEEE/ACM</span>
+					</li>
+				</ul>
 
-			<span class="faculty_cta">
-				View Full-time Faculty
-				<ChevronRight size={18} strokeWidth={2.5} />
-			</span>
-		</a>
+				<span class="faculty_cta">
+					View Full-time Faculty
+					<ChevronRight size={18} strokeWidth={2.5} />
+				</span>
+			</a>
+			<a class="faculty_profile_card" href={resolve('/teaching-learning/faculty#part-time')}>
+				<div class="faculty_header">
+					<div class="faculty_icon_box">
+						<Users size={24} />
+					</div>
+					<h3 class="faculty_type">PART-TIME FACULTY</h3>
+				</div>
+
+				<p class="faculty_desc">
+					Lecturers from various sectors of the IT industry who bring current technologies,
+					workplace standards, and real-world challenges into the classroom, complementing the
+					full-time faculty.
+				</p>
+
+				<ul class="faculty_checklist">
+					<li class="checklist_item">
+						<CheckCircle2 size={18} />
+						<span>{partTimeFaculty.length} Part-time Faculty Members</span>
+					</li>
+					<li class="checklist_item">
+						<CheckCircle2 size={18} />
+						<span>Expertise from Networking to Multimedia</span>
+					</li>
+				</ul>
+
+				<span class="faculty_cta">
+					View Part-time Faculty
+					<ChevronRight size={18} strokeWidth={2.5} />
+				</span>
+			</a>
+		</div>
 	</section>
 
 	<!-- ─────────────────────────────────────────────
@@ -1630,10 +1660,14 @@
 		flex-direction: column;
 		gap: clamp(28px, 2.188vw, 42px);
 	}
+	.faculty_card_pair {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(24px, 2.552vw, 49px);
+	}
 	.faculty_profile_card {
-		display: block;
-		max-width: 960px;
-		margin-inline: auto;
+		display: flex;
+		flex-direction: column;
 		border: 2px solid var(--c-gold);
 		border-radius: 25px;
 		padding: clamp(28px, 3.177vw, 61px);
@@ -1665,13 +1699,8 @@
 	.faculty_type {
 		font: 600 clamp(19px, 1.667vw, 32px)/1.3 var(--font-heading);
 		color: var(--c-maroon);
-		margin: 0 0 8px;
+		margin: 0;
 		letter-spacing: 0.04em;
-	}
-	.faculty_sub {
-		color: var(--c-gold-dark);
-		font-size: clamp(14px, 1.25vw, 24px);
-		font-style: italic;
 	}
 	.faculty_desc {
 		margin: 0 0 clamp(28px, 2.083vw, 40px);
@@ -1698,7 +1727,8 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		margin-top: clamp(24px, 2.083vw, 40px);
+		margin-top: auto;
+		padding-top: clamp(24px, 2.083vw, 40px);
 		color: var(--c-maroon);
 		font-weight: 700;
 	}
@@ -1985,6 +2015,9 @@
 	@media (max-width: 1000px) {
 		.faculty_header {
 			gap: 18px;
+		}
+		.faculty_card_pair {
+			grid-template-columns: 1fr;
 		}
 	}
 	@media (max-width: 800px) {

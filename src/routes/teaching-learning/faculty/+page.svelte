@@ -6,99 +6,55 @@
 	import '#lib/styles/accreditation-pages.css';
 	import '#lib/styles/assigned-page-motion.css';
 
-	// Names, specializations and cutout crops from Figma 880:1597.
-	// The Domingo card repeats Comendador's photo in Figma; use the supplied faculty original instead.
-	const fullTimeFaculty = [
+	import { fullTimeFaculty, partTimeFaculty } from '#lib/data/faculty.ts';
+
+	/** @typedef {import('#lib/data/faculty.ts').FacultyMember} FacultyMember */
+	/** @typedef {import('#lib/data/faculty.ts').FacultyStatus} FacultyStatus */
+
+	const facultyGroups = [
 		{
-			name: 'Aguila, Fermin',
-			specialization: 'NETWORKING & INFRASTRUCTURE',
-			photo: 'aguila',
-			width: 202.6,
-			height: 188.67,
-			left: -55.44,
-			top: -0.05
+			id: 'full-time',
+			status: /** @type {FacultyStatus} */ ('full-time'),
+			title: 'Full-time Faculty Profiles',
+			label: 'Full-time Faculty',
+			members: fullTimeFaculty
 		},
 		{
-			name: 'Amata, Marie Leonila',
-			specialization: 'IT SERVICE MANAGEMENT',
-			photo: 'amata',
-			width: 202.6,
-			height: 188.67,
-			left: -65.97,
-			top: -6.89
-		},
-		{
-			name: 'Canlas, Rosita',
-			specialization: 'SOFTWARE DEVELOPMENT',
-			photo: 'canlas',
-			width: 202.6,
-			height: 188.67,
-			left: -55.3,
-			top: -17.34
-		},
-		{
-			name: 'Comendador, Benilda',
-			specialization: 'IT SERVICE MANAGEMENT, SOFTWARE DEVELOPMENT',
-			photo: 'comendador',
-			width: 202.6,
-			height: 188.67,
-			left: -56.68,
-			top: -24.42
-		},
-		{
-			name: 'Domingo, Vivien',
-			specialization: 'IT SERVICE MANAGEMENT, DATA ANALYTICS',
-			photo: 'domingo',
-			width: 100,
-			height: 100,
-			left: 0,
-			top: 0,
-			original: true
-		},
-		{
-			name: 'Espineli, Juancho',
-			specialization: 'DATA ANALYTICS, WEB & CLOUD COMPUTING, SOFTWARE DEVELOPMENT',
-			photo: 'espineli',
-			width: 202.6,
-			height: 188.67,
-			left: -56.01,
-			top: 3.14
-		},
-		{
-			name: 'Mayor, Jayson James',
-			specialization: 'IT SERVICE MANAGEMENT, SOFTWARE MANAGEMENT',
-			photo: 'mayor',
-			width: 202.6,
-			height: 188.67,
-			left: -61.62,
-			top: -0.01
-		},
-		{
-			name: 'Miclat, Segundina',
-			specialization: 'DATA ANALYTICS',
-			photo: 'miclat',
-			width: 179.39,
-			height: 167.06,
-			left: -36.64,
-			top: -8.04
+			id: 'part-time',
+			status: /** @type {FacultyStatus} */ ('part-time'),
+			title: 'Part-time Faculty Profiles',
+			label: 'Part-time Faculty',
+			members: partTimeFaculty
 		}
 	];
-	/** @typedef {typeof fullTimeFaculty[number]} FacultyMember */
 	/** @type {FacultyMember | null} */
 	let selectedFaculty = $state(null);
+	let selectedLabel = $state('');
 	/** @type {HTMLDivElement | undefined} */
 	let modalEl = $state();
 	/** @type {HTMLElement | null} */
 	let lastFocused = null;
 	/** @param {FacultyMember} member */
-	const photoUrl = (member) =>
-		member.original
-			? 'https://cdn.theavenir.dev/images/teaching-learning/faculty/originals/domingo.png'
-			: '/teaching-learning/faculty/figma/' + member.photo + '.png';
-	/** @param {FacultyMember} member */
-	async function openFaculty(member) {
+	const cardStyle = (member) =>
+		member.cutout
+			? '--photo-width:' +
+				member.cutout.width +
+				'%;--photo-height:' +
+				member.cutout.height +
+				'%;--photo-left:' +
+				member.cutout.left +
+				'%;--photo-top:' +
+				member.cutout.top +
+				'%;'
+			: '--photo-position:' + (member.photoPosition ?? 'center 20%') + ';';
+	/**
+	 * @param {FacultyMember} member
+	 * @param {string} label
+	 */
+	async function openFaculty(member, label) {
 		lastFocused = /** @type {HTMLElement | null} */ (document.activeElement);
 		selectedFaculty = member;
+		selectedLabel = label;
 		await tick();
 		modalEl?.focus();
 	}
@@ -139,7 +95,7 @@
 <main class="assigned_page faculty_page">
 	<header class="directory_header">
 		<div class="directory_header_inner">
-			<a class="back_link" href={resolve('/teaching-learning')}>
+			<a class="back_link" href={resolve('/teaching-learning#staff-faculty-profile')}>
 				<ArrowLeft size={18} />Teaching &amp; Learning
 			</a>
 			<p class="t_eyebrow directory_eyebrow">TEACHING &amp; LEARNING</p>
@@ -151,62 +107,63 @@
 			</p>
 		</div>
 	</header>
-	<section class="directory_section" id="full-time" aria-labelledby="full-time-title">
-		<div class="directory_section_head">
-			<span class="t_stat directory_count">{String(fullTimeFaculty.length).padStart(2, '0')}</span>
-			<h2 class="t_stat_label directory_subhead" id="full-time-title">
-				Full-time Faculty Profiles
-			</h2>
-		</div>
-		<div class="directory_gallery" aria-label="Faculty activities">
-			{#each [1, 2, 3, 4] as index (index)}
-				<div class="gallery_frame">
-					<img
-						src={'/planning/figma/photo-strip-' + index + '.jpg'}
-						alt={[
-							'Faculty collaboration in the IT laboratory',
-							'Industry presentation at Converge ICT',
-							'Faculty community engagement',
-							'Department planning meeting'
-						][index - 1]}
-						loading="lazy"
-					/>
+	{#each facultyGroups as group (group.id)}
+		<section
+			class="directory_section"
+			class:part_time_section={group.status === 'part-time'}
+			id={group.id}
+			aria-labelledby={group.id + '-title'}
+		>
+			<div class="directory_section_head">
+				<span class="t_stat directory_count">{String(group.members.length).padStart(2, '0')}</span>
+				<h2 class="t_stat_label directory_subhead" id={group.id + '-title'}>
+					{group.title}
+				</h2>
+			</div>
+			{#if group.status === 'full-time'}
+				<div class="directory_gallery" aria-label="Faculty activities">
+					{#each [1, 2, 3, 4] as index (index)}
+						<div class="gallery_frame">
+							<img
+								src={'/planning/figma/photo-strip-' + index + '.jpg'}
+								alt={[
+									'Faculty collaboration in the IT laboratory',
+									'Industry presentation at Converge ICT',
+									'Faculty community engagement',
+									'Department planning meeting'
+								][index - 1]}
+								loading="lazy"
+							/>
+						</div>
+					{/each}
 				</div>
-			{/each}
-		</div>
-		<div class="faculty_card_grid">
-			{#each fullTimeFaculty as member (member.name)}
-				<button
-					class="faculty_portrait_card"
-					type="button"
-					onclick={() => openFaculty(member)}
-					style={'--photo-width:' +
-						member.width +
-						'%;--photo-height:' +
-						member.height +
-						'%;--photo-left:' +
-						member.left +
-						'%;--photo-top:' +
-						member.top +
-						'%;'}
-					aria-label={'View profile: ' + member.name}
-				>
-					<img
-						class="fp_photo"
-						class:original_photo={member.original}
-						src={photoUrl(member)}
-						alt={member.name}
-						loading="lazy"
-					/>
-					<span class="fp_overlay">
-						<span class="t_card_name fp_name">{member.name}</span><span class="fp_spec">
-							{member.specialization}
+			{/if}
+			<div class="faculty_card_grid">
+				{#each group.members as member (member.name)}
+					<button
+						class="faculty_portrait_card"
+						type="button"
+						onclick={() => openFaculty(member, group.label)}
+						style={cardStyle(member)}
+						aria-label={'View profile: ' + member.name}
+					>
+						<img
+							class="fp_photo"
+							class:original_photo={!member.cutout}
+							src={member.photo}
+							alt={member.name}
+							loading="lazy"
+						/>
+						<span class="fp_overlay">
+							<span class="t_card_name fp_name">{member.name}</span><span class="fp_spec">
+								{member.specialization}
+							</span>
 						</span>
-					</span>
-				</button>
-			{/each}
-		</div>
-	</section>
+					</button>
+				{/each}
+			</div>
+		</section>
+	{/each}
 	{#if selectedFaculty}
 		<button
 			class="fmodal_overlay"
@@ -226,18 +183,33 @@
 				<X size={24} />
 			</button>
 			<div class="fmodal_header">
-				<img class="fmodal_photo" src={photoUrl(selectedFaculty)} alt={selectedFaculty.name} />
+				<img
+					class="fmodal_photo"
+					src={selectedFaculty.photo}
+					alt={selectedFaculty.name}
+					style={'object-position:' + (selectedFaculty.photoPosition ?? 'center 20%')}
+				/>
 				<div>
-					<span class="fmodal_status">Full-time Faculty</span>
+					<span class="fmodal_status">{selectedLabel}</span>
 					<h3 class="t_card_name fmodal_name" id="fmodal_name">{selectedFaculty.name}</h3>
 					<p class="fmodal_spec">{selectedFaculty.specialization}</p>
 				</div>
 			</div>
 			<div class="fmodal_section">
-				<h4>Faculty Profile</h4>
-				<p>
-					Subject assignments, certifications, research and institutional roles are being updated.
-				</p>
+				<h4>Educational Background</h4>
+				<ul>
+					{#each selectedFaculty.education as degree (degree)}
+						<li>{degree}</li>
+					{/each}
+				</ul>
+			</div>
+			<div class="fmodal_section">
+				<h4>Courses Handled</h4>
+				<ul>
+					{#each selectedFaculty.courses as course (course)}
+						<li>{course}</li>
+					{/each}
+				</ul>
 			</div>
 		</div>
 	{/if}
@@ -361,7 +333,7 @@
 		top: 0;
 		left: 0;
 		object-fit: cover;
-		object-position: center 20%;
+		object-position: var(--photo-position, center 20%);
 	}
 	.fp_overlay {
 		position: absolute;
@@ -380,6 +352,7 @@
 	}
 	.fp_spec {
 		display: block;
+		text-transform: uppercase;
 		font: italic 500 clamp(14px, 1.25vw, 24px)/1.3 var(--font-body);
 		color: var(--c-gold-light);
 	}
@@ -454,8 +427,18 @@
 		font-size: 20px;
 		margin: 0 0 12px;
 	}
-	.fmodal_section p {
+	.fmodal_section ul {
 		margin: 0;
+		padding-left: 1.2em;
+	}
+	.fmodal_section li + li {
+		margin-top: 4px;
+	}
+	.fmodal_section + .fmodal_section {
+		margin-top: 24px;
+	}
+	.part_time_section {
+		padding-top: clamp(20px, 2.604vw, 50px);
 	}
 	@media (max-width: 800px) {
 		.faculty_card_grid {
