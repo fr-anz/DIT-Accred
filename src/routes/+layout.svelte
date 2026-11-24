@@ -2,7 +2,6 @@
 	import './layout.css';
 	import '#lib/styles/report-buttons.css';
 	import { page } from '$app/state';
-	import favicon from '#lib/assets/favicon.svg';
 	import Navbar from '#lib/components/Navbar.svelte';
 	import PageNavbar from '#lib/components/PageNavbar.svelte';
 
@@ -17,5 +16,9 @@
 	<PageNavbar></PageNavbar>
 {/if}
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href="/favicon.ico" sizes="48x48" />
+	<link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+</svelte:head>
 {@render children()}
