@@ -5,7 +5,7 @@
 	import { navItems } from '#lib/data/navigation.ts';
 	import DitherSkyline from './footer/DitherSkyline.svelte';
 
-	const email = 'dit@pup.edu.ph';
+	const email = 'dit_chair@pup.edu.ph';
 	const year = new Date().getFullYear();
 
 	function resolveHref(href: string) {
@@ -35,7 +35,7 @@
 			<section class="info_block" aria-labelledby="footer-visit">
 				<h2 id="footer-visit" class="info_label">Visit</h2>
 				<address class="info_text">
-					Room 508, South Wing<br />
+					Room S512, South Wing<br />
 					PUP Main Building<br />
 					Anonas St., Sta. Mesa, Manila
 				</address>
@@ -69,7 +69,9 @@
 		</div>
 	</div>
 
-	<DitherSkyline />
+	<div class="footer_art">
+		<DitherSkyline />
+	</div>
 </footer>
 
 <style>
@@ -84,12 +86,22 @@
 	}
 
 	.footer_body {
+		position: relative;
+		z-index: 1;
 		max-width: var(--container-max, 1280px);
 		margin: 0 auto;
 		padding: clamp(3.5rem, 7vw, 6rem) var(--page-pad, clamp(1rem, 4vw, 4rem)) 0;
 		display: grid;
 		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
 		gap: clamp(2.5rem, 5vw, 5rem);
+	}
+
+	/* Pull the skyline up under the footer bar: its sky is the footer colour, so the
+	   empty top band disappears and the Obelisk tip rises just under the bar's rule.
+	   0.25 × the skyline's own height keeps the overlap in step as it scales. */
+	.footer_art {
+		position: relative;
+		margin-top: calc(clamp(150px, 30vw, 500px) * -0.25);
 	}
 
 	.footer_seal {
@@ -121,7 +133,8 @@
 
 	.footer_info {
 		display: grid;
-		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+		/* The middle track is `auto` so it widens to keep the email on one line. */
+		grid-template-columns: minmax(0, 1.35fr) auto minmax(0, 1fr);
 		gap: clamp(1.75rem, 3vw, 3rem);
 		align-content: end;
 	}
@@ -145,11 +158,11 @@
 
 	.info_email {
 		font-family: var(--font-heading);
-		font-size: 1.15rem;
+		font-size: clamp(1rem, 0.85rem + 0.6vw, 1.15rem);
 		font-weight: 600;
 		color: var(--footer-paper);
 		text-decoration: none;
-		overflow-wrap: anywhere;
+		white-space: nowrap;
 		transition: color 160ms ease;
 	}
 
@@ -212,6 +225,8 @@
 		padding: 0.55rem 0.95rem;
 		border: 1px solid var(--footer-rule);
 		border-radius: 999px;
+		/* Solid fill so the pill stays legible where the skyline's sky shows behind it. */
+		background: var(--c-maroon-deep);
 		transition:
 			border-color 160ms ease,
 			background-color 160ms ease,
