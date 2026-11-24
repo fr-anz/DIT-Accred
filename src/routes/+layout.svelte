@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import Navbar from '#lib/components/Navbar.svelte';
 	import PageNavbar from '#lib/components/PageNavbar.svelte';
+	import BackToTop from '#lib/components/BackToTop.svelte';
 
 	let { children } = $props();
 
@@ -22,3 +23,5 @@
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 </svelte:head>
 {@render children()}
+
+<BackToTop />
