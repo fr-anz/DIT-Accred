@@ -1,0 +1,113 @@
+/* Low-key micro-interactions. Every rule is scoped to `html[data-fx='rich']`,
+   which `initPolish()` sets only on hover-capable, fine-pointer devices with
+   enough headroom and no reduced-motion request. Without it nothing changes. */
+
+:root {
+	--fx-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ── Scroll progress: a hairline at the top of the viewport (state indication).
+   Scroll-driven, so it runs off the main thread; skipped where unsupported. */
+@supports (animation-timeline: scroll()) {
+	html[data-fx='rich'] body::before {
+		content: '';
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 95;
+		height: 2px;
+		background: var(--grad-gold);
+		transform-origin: 0 50%;
+		transform: scaleX(0);
+		pointer-events: none;
+		animation: fx-progress linear both;
+		animation-timeline: scroll(root block);
+	}
+
+	@keyframes fx-progress {
+		to {
+			transform: scaleX(1);
+		}
+	}
+}
+
+/* ── Cursor spotlight on cards: a soft gold glow under the pointer, plus a
+   brighter 1px rim near it. The overlay is injected by `initPolish()`. */
+.fx_spotlight {
+	display: none;
+}
+
+html[data-fx='rich'] .fx_spotlight {
+	display: block;
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 200ms ease;
+	background: radial-gradient(
+		360px circle at var(--fx-x, 50%) var(--fx-y, 50%),
+		rgb(250 197 73 / 0.12),
+		transparent 70%
+	);
+}
+
+html[data-fx='rich'] .fx_spotlight::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	padding: 1px;
+	border-radius: inherit;
+	background: radial-gradient(
+		240px circle at var(--fx-x, 50%) var(--fx-y, 50%),
+		rgb(207 168 58 / 0.75),
+		transparent 70%
+	);
+	mask:
+		linear-gradient(#000 0 0) content-box exclude,
+		linear-gradient(#000 0 0);
+}
+
+html[data-fx='rich'] .fx_lit > .fx_spotlight {
+	opacity: 1;
+}
+
+/* ── Shine on gold report buttons: one diagonal sweep per hover. `isolation`
+   keeps the z-index -1 sheen above the button's own gold fill but under its text. */
+html[data-fx='rich'] a.report-button {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+}
+
+html[data-fx='rich'] a.report-button::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: linear-gradient(
+		105deg,
+		transparent 30%,
+		rgb(255 255 255 / 0.45) 50%,
+		transparent 70%
+	);
+	transform: translateX(-110%);
+	pointer-events: none;
+}
+
+html[data-fx='rich'] a.report-button:hover::after {
+	transform: translateX(110%);
+	transition: transform 650ms var(--fx-ease-out);
+}
+
+/* ── Footer links: an underline that draws in from the left. */
+html[data-fx='rich'] .site_footer .quick_link {
+	background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+	transition:
+		color 160ms ease,
+		background-size 220ms var(--fx-ease-out);
+}
+
+html[data-fx='rich'] .site_footer .quick_link:hover {
+	background-size: 100% 1px;
+}
