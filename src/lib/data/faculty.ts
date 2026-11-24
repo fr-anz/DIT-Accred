@@ -23,7 +23,6 @@ export interface FacultyMember {
 	photoPosition?: string;
 }
 
-const cutoutPhoto = (slug: string) => '/teaching-learning/faculty/figma/' + slug + '.png';
 const plainPhoto = (slug: string) => '/teaching-learning/faculty/photos/' + slug + '.jpg';
 
 export const fullTimeFaculty: FacultyMember[] = [
@@ -32,8 +31,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 		specialization: 'Network and Infrastructure',
 		education: ['Bachelor in Computer Data Processing Management (1989)'],
 		courses: ['Data Communications and Networking', 'Network Administration'],
-		photo: cutoutPhoto('aguila'),
-		cutout: { width: 202.6, height: 188.67, left: -55.44, top: -0.05 }
+		photo: plainPhoto('aguila'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Amata, Maria Leonila',
@@ -44,8 +43,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 			'Master of Science in Information Technology (ongoing)'
 		],
 		courses: ['Introduction to Computing', 'Social and Professional Issues in Computing'],
-		photo: cutoutPhoto('amata'),
-		cutout: { width: 202.6, height: 188.67, left: -65.97, top: -6.89 }
+		photo: plainPhoto('amata'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Canlas, Rosita',
@@ -55,8 +54,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 			'Master in Information Technology (2005)'
 		],
 		courses: ['Computer Programming 1 and 2'],
-		photo: cutoutPhoto('canlas'),
-		cutout: { width: 202.6, height: 188.67, left: -55.3, top: -17.34 }
+		photo: plainPhoto('canlas'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Comendador, Benilda Eleonor',
@@ -68,8 +67,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 			'Doctor in Information Technology (2017)'
 		],
 		courses: ['Fundamentals of Research'],
-		photo: cutoutPhoto('comendador'),
-		cutout: { width: 202.6, height: 188.67, left: -56.68, top: -24.42 }
+		photo: plainPhoto('comendador'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Domingo, Iluminada Vivien',
@@ -93,8 +92,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 			'Doctor in Information Technology (2019)'
 		],
 		courses: ['Information Management', 'Quantitative Methods with Modeling and Simulation'],
-		photo: cutoutPhoto('espineli'),
-		cutout: { width: 202.6, height: 188.67, left: -56.01, top: 3.14 }
+		photo: plainPhoto('espineli'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Mandigma, Jonnifer',
@@ -114,8 +113,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 			'Master in Information Technology (2026)'
 		],
 		courses: ['Computer Programming 1 and 2', 'Multimedia', 'Web Development'],
-		photo: cutoutPhoto('mayor'),
-		cutout: { width: 202.6, height: 188.67, left: -61.62, top: -0.01 }
+		photo: plainPhoto('mayor'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Miclat, Segundina',
@@ -126,8 +125,8 @@ export const fullTimeFaculty: FacultyMember[] = [
 			'Doctor in Educational Management (academic requirements completed)'
 		],
 		courses: ['Introduction to Computing', 'Social and Professional Issues in Computing'],
-		photo: cutoutPhoto('miclat'),
-		cutout: { width: 179.39, height: 167.06, left: -36.64, top: -8.04 }
+		photo: plainPhoto('miclat'),
+		photoPosition: 'center 5%'
 	},
 	{
 		name: 'Munsayac, Joel',

@@ -147,17 +147,14 @@
 						style={cardStyle(member)}
 						aria-label={'View profile: ' + member.name}
 					>
-						<img
-							class="fp_photo"
-							class:original_photo={!member.cutout}
-							src={member.photo}
-							alt={member.name}
-							loading="lazy"
-						/>
-						<span class="fp_overlay">
-							<span class="t_card_name fp_name">{member.name}</span><span class="fp_spec">
-								{member.specialization}
+						<span class="fp_portrait">
+							<span class="fp_frame" class:cutout_frame={member.cutout}>
+								<img class="fp_photo" src={member.photo} alt={member.name} loading="lazy" />
 							</span>
+						</span>
+						<span class="fp_details">
+							<span class="t_card_name fp_name">{member.name}</span>
+							<span class="fp_spec">{member.specialization}</span>
 						</span>
 					</button>
 				{/each}
@@ -296,65 +293,73 @@
 	}
 	.faculty_card_grid {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: clamp(30px, 2.552vw, 49px) clamp(25px, 2.552vw, 49px);
-		max-width: 1634px;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: clamp(12px, 1.5vw, 24px);
 		margin: 0 auto;
-		width: calc(100% - 13.854vw);
+		width: min(1120px, calc(100% - clamp(32px, 8vw, 96px)));
 		padding-bottom: clamp(60px, 6.25vw, 120px);
 	}
 	.faculty_portrait_card {
-		position: relative;
-		aspect-ratio: 512 / 747;
-		border: 2px solid var(--c-maroon);
-		border-radius: 25px;
-		background: linear-gradient(146.92deg, #000 1.93%, #941518 101.7%);
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--c-maroon);
+		border-radius: 16px;
+		background: var(--c-surface);
 		overflow: hidden;
 		cursor: pointer;
 		padding: 0;
 		text-align: left;
-		color: white;
 		transition: box-shadow 0.2s;
 	}
 	.faculty_portrait_card:hover {
 		box-shadow: 0 12px 30px #5c0f1630;
 	}
+	.fp_portrait {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background: var(--grad-title);
+	}
+	.fp_frame {
+		position: absolute;
+		inset: 0;
+	}
+	/* The saved Figma cutout positions are relative to the original portrait proportions. */
+	.fp_frame.cutout_frame {
+		bottom: auto;
+		aspect-ratio: 512 / 747;
+	}
 	.fp_photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--photo-position, center 20%);
+	}
+	.cutout_frame .fp_photo {
 		position: absolute;
 		width: var(--photo-width);
 		height: var(--photo-height);
 		max-width: none;
 		left: var(--photo-left);
 		top: var(--photo-top);
+		object-fit: fill;
 	}
-	.fp_photo.original_photo {
+	.fp_details {
+		display: grid;
+		gap: 4px;
 		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		object-fit: cover;
-		object-position: var(--photo-position, center 20%);
-	}
-	.fp_overlay {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: clamp(22px, 2.03vw, 39px);
-		background: linear-gradient(0deg, #5c0f16bb, transparent);
+		padding: clamp(12px, 1.25vw, 18px);
+		border-top: 1px solid var(--c-gold);
+		overflow-wrap: anywhere;
 	}
 	.fp_name {
-		display: block;
-		font-size: clamp(22px, 2.083vw, 40px);
-		line-height: 1.25;
-		color: white;
-		margin-bottom: 14px;
+		font-size: clamp(16px, 1.45vw, 21px);
+		color: var(--c-maroon-deep);
 	}
 	.fp_spec {
-		display: block;
-		text-transform: uppercase;
-		font: italic 500 clamp(14px, 1.25vw, 24px)/1.3 var(--font-body);
-		color: var(--c-gold-light);
+		font: 400 clamp(13px, 1vw, 15px) / 1.4 var(--font-body);
+		color: var(--c-ink);
 	}
 	.fmodal_overlay {
 		position: fixed;
@@ -440,20 +445,19 @@
 	.part_time_section {
 		padding-top: clamp(20px, 2.604vw, 50px);
 	}
-	@media (max-width: 800px) {
+	@media (max-width: 900px) {
 		.faculty_card_grid {
-			grid-template-columns: 1fr 1fr;
-			width: calc(100% - 40px);
-			gap: 24px;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
+	}
+	@media (max-width: 640px) {
+		.faculty_card_grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 800px) {
 		.directory_intro {
 			width: 80%;
-		}
-		.fp_overlay {
-			padding: 22px;
-		}
-		.fp_name {
-			font-size: 25px;
 		}
 	}
 	@media (max-width: 520px) {
@@ -470,19 +474,6 @@
 		.directory_gallery {
 			height: 240px;
 			grid-template-columns: 1fr 1fr;
-		}
-		.faculty_card_grid {
-			grid-template-columns: 1fr;
-			width: calc(100% - 56px);
-		}
-		.fp_name {
-			font-size: 30px;
-		}
-		.fp_spec {
-			font-size: 17px;
-		}
-		.fp_overlay {
-			padding: 30px;
 		}
 		.fmodal_header {
 			flex-direction: column;
