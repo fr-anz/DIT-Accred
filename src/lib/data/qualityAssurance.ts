@@ -125,16 +125,16 @@ export type DevelopmentPlan = { unit: string; name: string; level: string; url: 
 /* A plan without a url renders as an inert button until its link is filled in. */
 export const developmentPlans: DevelopmentPlan[] = [
 	{
+		unit: 'CCIS',
+		name: 'CCIS Development Plan',
+		level: 'College',
+		url: 'https://drive.google.com/file/d/1aID8nwylFb5w-gI2X6GJUgA8uYGRWJBz/view?usp=sharing'
+	},
+	{
 		unit: 'DIT',
 		name: 'DIT Development Plan',
 		level: 'Department',
 		url: 'https://drive.google.com/file/d/1Mw99kuVGl7rVMF7pmUu00s9Co5wv2QJb/view?usp=sharing'
-	},
-	{
-		unit: 'Dept',
-		name: 'Department Development Plan',
-		level: 'Department',
-		url: 'https://drive.google.com/file/d/1aID8nwylFb5w-gI2X6GJUgA8uYGRWJBz/view?usp=sharing'
 	}
 ];
 
