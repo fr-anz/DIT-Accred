@@ -3,7 +3,7 @@
 		{
 			id: 'melvin',
 			name: 'Melvin C. Roxas, MSGITS',
-			role: 'Dean of College of Computer Information and Sciences',
+			role: 'Dean of College of Computer and Information Sciences',
 			img: '/img/sir-melvin.jpg',
 			/* Head top sits ~6.7% from the image top; with cover-cropping the
 			   card shows the head near the top edge (0% = crop from top). */

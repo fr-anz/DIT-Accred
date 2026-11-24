@@ -139,7 +139,6 @@
 
 <style>
 	.achievements {
-		margin-top: clamp(45px, 4.688vw, 90px);
 		scroll-margin-top: 32px;
 	}
 

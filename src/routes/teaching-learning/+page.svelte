@@ -992,15 +992,16 @@
 	</section>
 
 	<!-- ─────────────────────────────────────────────
-  SECTION 4: STUDENT OUTCOMES & ECO-SYSTEM
+  SECTION 4: STUDENT ECO-SYSTEM
 ───────────────────────────────────────────── -->
 	<section class="content_section" id="student-outcomes">
 		<div class="section_label">
 			<Target size={26} strokeWidth={1.5} class="section_icon maroon" />
-			<span class="t_eyebrow">STUDENT OUTCOMES &amp; ECO-SYSTEM</span>
+			<span class="t_eyebrow">STUDENT ECO-SYSTEM</span>
 		</div>
 		<hr class="section_divider" />
 
+		<h2 class="eco_subsection_title" id="student-organizations">STUDENT ORGANIZATIONS</h2>
 		<div class="orgs_marquee_wrapper">
 			<div class="orgs_marquee_track">
 				{#each [false, true] as duplicate (duplicate)}
@@ -1018,6 +1019,9 @@
 				{/each}
 			</div>
 		</div>
+		<h2 class="eco_subsection_title eco_subsection_next" id="student-achievements">
+			STUDENT ACHIEVEMENTS
+		</h2>
 		<StudentAchievementsGallery />
 	</section>
 
@@ -1725,14 +1729,41 @@
 		font: italic 500 clamp(12px, 1.25vw, 24px)/1.1 var(--font-heading);
 		letter-spacing: 0.05em;
 	}
+	/* Sub-section headings sit one step below the gold section eyebrow:
+	   smaller maroon type between a short gold tick and a rule that fades out. */
+	.eco_subsection_title {
+		scroll-margin-top: 32px;
+	}
+	.eco_subsection_title,
 	.notable_alumni_title {
-		color: var(--c-gold-dark);
+		display: flex;
+		align-items: center;
+		gap: clamp(12px, 0.938vw, 18px);
+		margin: 0 0 clamp(22px, 1.875vw, 36px);
+		color: var(--c-maroon);
+		font: 700 clamp(16px, 1.25vw, 24px)/1.2 var(--font-heading);
+		letter-spacing: 0.14em;
+	}
+	.eco_subsection_title::before,
+	.notable_alumni_title::before {
+		content: '';
+		flex: none;
+		width: clamp(22px, 1.667vw, 32px);
+		height: 4px;
+		border-radius: 2px;
 		background: var(--grad-gold);
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-		margin: 0 0 clamp(30px, 2.604vw, 50px);
-		font: 700 clamp(32px, 4.167vw, 80px)/1.2 var(--font-heading);
-		letter-spacing: 0.06em;
+	}
+	.eco_subsection_title::after,
+	.notable_alumni_title::after {
+		content: '';
+		flex: 1;
+		min-width: 24px;
+		height: 1px;
+		background: linear-gradient(90deg, rgb(207 168 58 / 0.7), rgb(207 168 58 / 0));
+	}
+	/* After the shared heading rule, so its `margin` shorthand doesn't reset this. */
+	.eco_subsection_title.eco_subsection_next {
+		margin-top: clamp(45px, 4.688vw, 90px);
 	}
 	.alumni_section_container {
 		margin-bottom: clamp(45px, 4.688vw, 90px);

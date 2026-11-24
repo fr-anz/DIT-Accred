@@ -34,7 +34,7 @@ export const navItems: NavItem[] = [
 				label: 'Academic Staff & Faculty Profiles',
 				href: '/teaching-learning#staff-faculty-profile'
 			},
-			{ label: 'Student Outcomes', href: '/teaching-learning#student-outcomes' },
+			{ label: 'Student Eco-System', href: '/teaching-learning#student-outcomes' },
 			{ label: 'Learning & Graduates Outcome', href: '/teaching-learning#learner-graduate-qa' }
 		]
 	},

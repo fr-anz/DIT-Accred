@@ -146,9 +146,9 @@
 						</ul>
 						{#if stage.plans}
 							<div class="stage_plans" id="development-plans">
-								<p class="plans_label">Development plan</p>
+								<p class="plans_label">Development plans</p>
 								<ul class="plans_list">
-									{#each stage.plans as plan (plan.unit)}
+									{#each stage.plans as plan (plan.name)}
 										<li>
 											<a
 												class="plan_row"
