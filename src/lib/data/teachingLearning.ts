@@ -300,15 +300,17 @@ export const competitionHonors = [
 	}
 ];
 
-/** 2024 Graduate Tracer Study of Batch 2022, conducted by IDSA. */
+/** BSIT results from the PUP Online Graduate Tracer Study 2022 (Tables 1–4.2). */
 export const tracerStudy = {
-	responseRate: 53.33,
-	respondents: 192,
-	graduates: 360,
-	employedWithin12: 95.31,
-	employedWithin24: 99.48,
-	aligned: 86.39,
-	hiredByHte: 11.52
+	reportUrl: 'https://drive.google.com/file/d/1uq0OCiW0IKn8q6E4gpmnbcnq0yWBnOVP/view',
+	graduates: 199,
+	respondents: 83,
+	hiredWithin: [
+		{ months: 12, count: 78 },
+		{ months: 24, count: 81 }
+	],
+	currentlyEmployed: 79,
+	currentJobAligned: 68
 };
 
 export const alumniCertificates = [

@@ -596,6 +596,11 @@
 			padding: 8px 10px 8px 14px;
 		}
 
+		.brand-link {
+			min-width: 0;
+			flex-shrink: 1;
+		}
+
 		.brand-logo {
 			width: 36px;
 			height: 36px;
@@ -607,6 +612,8 @@
 
 		.brand-title {
 			font-size: 12px;
+			line-height: 1.15;
+			white-space: normal;
 		}
 
 		.brand-subtitle {
