@@ -47,6 +47,7 @@ export const navItems: NavItem[] = [
 				href: '/community#community-extension-agenda'
 			},
 			{ label: 'Technical Profiles', href: '/community#technical-profiles' },
+			{ label: 'External Impact Assessment', href: '/community#external-impact-assessment' },
 			{ label: 'PUP iVote++ System', href: '/community#ivote-showcase' }
 		]
 	},

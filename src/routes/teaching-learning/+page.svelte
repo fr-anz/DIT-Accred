@@ -1252,18 +1252,19 @@
 
 		<!-- Tracer Grid -->
 		<div class="tracer_grid">
-			<!-- 2024 Graduate Tracer Study, Batch 2022 (IDSA) -->
-			<div class="employment_horizon_card">
-				<h3 class="horizon_title">GRADUATE TRACER STUDY</h3>
-				<p class="horizon_source">2024 Graduate Tracer Study · Batch 2022 · conducted by IDSA</p>
+			<div class="employment_horizon_card" id="graduate-tracer-study">
+				<h3 class="horizon_title">BSIT GRADUATE TRACER STUDY</h3>
+				<p class="horizon_source">Batch 2022 · PUP Institute for Data and Statistical Analysis</p>
 
+				<p class="tracer_basis">Share of BSIT respondents</p>
 				<div class="tracer_climb">
-					{#each [{ months: 12, value: tracerStudy.employedWithin12 }, { months: 24, value: tracerStudy.employedWithin24 }] as row (row.months)}
+					{#each tracerStudy.hiredWithin as { months, count } (months)}
+						{@const share = (count / tracerStudy.respondents) * 100}
 						<div class="climb_row">
-							<span class="climb_value">{pct(row.value)}</span>
-							<span class="climb_label">employed or self-employed within {row.months} months</span>
+							<span class="climb_value">{pct(share)}</span>
+							<span class="climb_label">Hired within {months} months of graduation</span>
 							<div class="climb_track" aria-hidden="true">
-								<div class="climb_bar" style="width: {row.value}%"></div>
+								<div class="climb_bar" style:width={pct(share)}></div>
 							</div>
 						</div>
 					{/each}
@@ -1271,21 +1272,34 @@
 
 				<dl class="tracer_facts">
 					<div class="tracer_fact">
-						<dt>Jobs aligned with the degree</dt>
-						<dd>{pct(tracerStudy.aligned)}</dd>
-						<span class="fact_note">of graduates employed within 24 months</span>
+						<dt>Employed when surveyed</dt>
+						<dd>{pct((tracerStudy.currentlyEmployed / tracerStudy.respondents) * 100)}</dd>
+						<dd class="fact_note">
+							{tracerStudy.currentlyEmployed} of {tracerStudy.respondents} respondents
+						</dd>
 					</div>
 					<div class="tracer_fact">
-						<dt>Hired by their practicum hosts (HTEs)</dt>
-						<dd>{pct(tracerStudy.hiredByHte)}</dd>
-						<span class="fact_note">highest among Main Campus colleges</span>
+						<dt>Current job aligned with BSIT</dt>
+						<dd>{pct((tracerStudy.currentJobAligned / tracerStudy.currentlyEmployed) * 100)}</dd>
+						<dd class="fact_note">
+							{tracerStudy.currentJobAligned} of {tracerStudy.currentlyEmployed} employed respondents
+						</dd>
 					</div>
 				</dl>
 
 				<p class="tracer_footnote">
-					{pct(tracerStudy.responseRate)} response rate ({tracerStudy.respondents} of {tracerStudy.graduates}
-					graduates), significantly above the Main Campus average.
+					{pct((tracerStudy.respondents / tracerStudy.graduates) * 100)} response rate ({tracerStudy.respondents}
+					of {tracerStudy.graduates} BSIT graduates).
 				</p>
+				<a
+					class="report-button tracer_report"
+					href={tracerStudy.reportUrl}
+					target="_blank"
+					rel="external noopener noreferrer"
+				>
+					<span>View tracer report (PDF)</span>
+					<ArrowUpRight size={19} aria-hidden="true" />
+				</a>
 			</div>
 
 			<!-- PEO Attainment Card -->
@@ -3396,11 +3410,15 @@
 		margin-bottom: 8px;
 	}
 	.horizon_source {
-		margin: 0 0 clamp(24px, 2.344vw, 45px);
-		color: var(--c-gold-dark);
-		font-style: italic;
-		font-size: clamp(12px, 0.938vw, 18px);
+		margin: 0 0 clamp(20px, 2vw, 32px);
+		color: var(--c-maroon-mid);
+		font-size: clamp(13px, 0.938vw, 17px);
 		letter-spacing: 0;
+	}
+	.tracer_basis {
+		margin: 0 0 12px;
+		color: var(--c-ink);
+		font: 600 clamp(13px, 0.938vw, 17px)/1.4 var(--font-heading);
 	}
 	.tracer_climb {
 		display: grid;
@@ -3409,8 +3427,8 @@
 	.climb_row {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		align-items: baseline;
-		gap: 6px 16px;
+		align-items: center;
+		gap: 8px 16px;
 	}
 	.climb_value {
 		color: var(--c-maroon);
@@ -3418,7 +3436,7 @@
 		font-variant-numeric: tabular-nums;
 	}
 	.climb_label {
-		font-size: clamp(12px, 0.938vw, 18px);
+		font-size: clamp(13px, 0.938vw, 18px);
 		letter-spacing: 0;
 		line-height: 1.3;
 	}
@@ -3441,8 +3459,16 @@
 		margin: clamp(28px, 2.604vw, 50px) 0 0;
 	}
 	.tracer_fact {
-		padding-top: 14px;
+		padding-top: 12px;
 		border-top: 2px solid var(--c-gold);
+	}
+	@media (width > 700px) {
+		.tracer_fact {
+			display: grid;
+			grid-row: span 3;
+			grid-template-rows: subgrid;
+			row-gap: 4px;
+		}
 	}
 	.tracer_fact dt {
 		font-size: clamp(11px, 0.833vw, 16px);
@@ -3451,25 +3477,26 @@
 		text-transform: uppercase;
 	}
 	.tracer_fact dd {
-		margin: 8px 0 4px;
-		color: var(--c-gold-dark);
+		margin: 4px 0;
+		color: var(--c-maroon);
 		font: 700 clamp(28px, 2.5vw, 48px)/1 var(--font-heading);
 		font-variant-numeric: tabular-nums;
 	}
-	.fact_note {
+	.tracer_fact .fact_note {
 		color: #555;
-		font-size: clamp(11px, 0.833vw, 16px);
-		font-style: italic;
+		font: clamp(12px, 0.833vw, 16px)/1.4 var(--font-body);
 		letter-spacing: 0;
 	}
 	.tracer_footnote {
 		margin: clamp(24px, 2.083vw, 40px) 0 0;
-		padding-top: 14px;
+		padding-top: 12px;
 		border-top: 1px dashed #c9bfb3;
 		color: #555;
-		font-size: clamp(11px, 0.833vw, 16px);
-		font-style: italic;
+		font-size: clamp(12px, 0.833vw, 16px);
 		letter-spacing: 0;
+	}
+	.tracer_report {
+		margin-top: 16px;
 	}
 
 	/* ── Minutes excerpt dialog ── */

@@ -1,5 +1,5 @@
 <script>
-	import { ArrowUpRight } from '@lucide/svelte';
+	import { ArrowUpRight, ClipboardCheck } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import Footer from '#lib/components/footer.svelte';
 
@@ -1106,6 +1106,73 @@
 		</div>
 	</section>
 
+	<section
+		id="external-impact-assessment"
+		class="impact-assessment"
+		aria-labelledby="impact-assessment-title"
+	>
+		<header class="section-header impact-header">
+			<span class="icon-box">
+				<ClipboardCheck size={26} strokeWidth={1.5} aria-hidden="true" />
+			</span>
+			<h2 id="impact-assessment-title" class="t_eyebrow">External Impact Assessment</h2>
+		</header>
+
+		<div class="impact-content">
+			<div class="impact-intro">
+				<p class="impact-period">2023–November 2026</p>
+				<p>
+					The Technological University of the Philippines reviewed selected PUP-CCIS extension
+					initiatives using project records, surveys, and participant follow-up forms.
+				</p>
+				<a
+					class="report-button"
+					href="https://drive.google.com/file/d/1grKj4GDiRm8dMq5Dr_f5BWDbK9l7NCr4/view"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<span>View Impact Assessment (PDF)</span>
+					<ArrowUpRight size={19} aria-hidden="true" />
+				</a>
+			</div>
+
+			<div>
+				<ul class="impact-findings" role="list">
+					<li class="impact-finding">
+						<h3>BSCS Computer Literacy Training</h3>
+						<p class="impact-metric">4.88 <span>out of 5</span></p>
+						<p class="impact-detail">
+							Average satisfaction from 28 respondents. The December 2023 training reached 28
+							verified beneficiaries and covered video presentations and cybersecurity.
+						</p>
+					</li>
+					<li class="impact-finding">
+						<h3>BSIT Examination Management System</h3>
+						<p class="impact-metric">9 <span>of 10</span></p>
+						<p class="impact-detail">
+							Claro M. Recto High School needs-assessment respondents reported time-consuming test
+							preparation. School use of the proposed system still needs verification.
+						</p>
+					</li>
+					<li class="impact-finding">
+						<h3>CCIS iVote++ Deployment</h3>
+						<p class="impact-metric">606 <span>of 610</span></p>
+						<p class="impact-detail">
+							Survey respondents agreed or strongly agreed that voting was a pleasant experience
+							after the March 2023 PUP Provident Fund election, an internal university deployment.
+						</p>
+					</li>
+				</ul>
+				<p class="impact-summary">
+					All five people who answered the college-wide question on applying training said they used
+					what they learned. The evaluator recommended linking future responses to specific
+					activities, verifying school use of the examination system, and obtaining assessment
+					results for the August 2025 Responsible AI training.
+				</p>
+			</div>
+		</div>
+	</section>
+
 	<!-- ══ 5. PUP IVOTE++ SHOWCASE ══ -->
 	<section id="ivote-showcase" class="ivote-showcase">
 		<div class="ivote-left">
@@ -1354,6 +1421,96 @@
 		width: 100%;
 		margin-top: 2.25rem;
 		margin-bottom: 0;
+	}
+
+	.impact-assessment {
+		padding: clamp(48px, 5.6vw, 84px) 10%;
+		background: color-mix(in srgb, var(--c-shell) 30%, var(--c-surface));
+		color: var(--c-ink);
+	}
+	.impact-header .icon-box {
+		flex-shrink: 0;
+	}
+	.impact-header h2 {
+		margin: 0;
+		color: var(--c-maroon);
+		-webkit-text-fill-color: currentColor;
+		background-image: none;
+	}
+	.impact-content {
+		display: grid;
+		gap: clamp(24px, 4vw, 64px);
+		padding-top: 24px;
+		border-top: 1px solid var(--rule);
+	}
+	.impact-intro {
+		display: grid;
+		align-content: start;
+		justify-items: start;
+		gap: 12px;
+	}
+	.impact-intro p,
+	.impact-detail,
+	.impact-summary {
+		margin: 0;
+		line-height: 1.6;
+	}
+	.impact-intro .impact-period {
+		color: var(--c-maroon);
+		font: 700 1rem/1.3 var(--font-heading);
+		font-variant-numeric: tabular-nums;
+	}
+	.impact-intro a {
+		margin-top: 4px;
+	}
+	.impact-findings {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.impact-finding {
+		display: grid;
+		gap: 8px;
+		padding-block: 16px;
+		border-bottom: 1px solid var(--rule);
+	}
+	.impact-finding:first-child {
+		padding-top: 0;
+	}
+	.impact-finding h3 {
+		margin: 0;
+		font: 700 clamp(1.125rem, 1.4vw, 1.375rem)/1.25 var(--font-heading);
+	}
+	.impact-metric {
+		margin: 0;
+		color: var(--c-maroon);
+		font: 700 clamp(1.75rem, 2.5vw, 2.5rem)/1 var(--font-heading);
+		font-variant-numeric: tabular-nums;
+	}
+	.impact-metric span {
+		font-size: 0.55em;
+		white-space: nowrap;
+	}
+	.impact-summary {
+		margin-top: 16px;
+		color: var(--muted);
+	}
+	@media (min-width: 600px) {
+		.impact-finding {
+			grid-template-columns: minmax(0, 1fr) 8.75rem;
+			column-gap: 24px;
+		}
+		.impact-metric {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+			justify-self: end;
+			white-space: nowrap;
+		}
+	}
+	@media (min-width: 960px) {
+		.impact-content {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+		}
 	}
 
 	/* --- HERO SECTION --- */
