@@ -287,12 +287,6 @@ export const electiveTracks = [
 /** Additional distinctions not already represented by the team photo features. */
 export const competitionHonors = [
 	{
-		place: 'Champion',
-		event: 'Zero Vector Philippines Hackathon',
-		title: 'Zero Vector',
-		detail: 'Philippines Hackathon'
-	},
-	{
 		place: 'Top 12',
 		event: 'OGIS IGNITE PH Hackathon 2026',
 		title: 'OGIS IGNITE',
