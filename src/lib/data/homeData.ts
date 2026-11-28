@@ -90,13 +90,13 @@ export const missionVision = [
 export const departmentStats = [
   {
     id: "students",
-    count: 2000,
+    count: 1500,
     suffix: "+",
     label: "students enrolled across all year levels",
   },
   {
     id: "faculty",
-    count: 30,
+    count: 31,
     suffix: "",
     label: "faculty members in the department",
   },
