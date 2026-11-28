@@ -35,6 +35,16 @@ export const studentAchievementPhotos: AchievementPhoto[] = [
 		alt: 'Team Appsolutely (Donita Salonga, Viviene Tricia Rabano, Ayen Mejorada, Troy Lazaro and Justin Carl Encio), First Place at Future Builders: From Ideas to Impact, ICS x IBM Bobathon'
 	},
 	{
+		src: '/teaching-learning/area2/photo-zero-vector.jpg',
+		photo: '/teaching-learning/area2/photo-zero-vector.jpg',
+		width: 1400,
+		height: 770,
+		team: 'Zero Vector',
+		result: 'Champion',
+		event: 'Zero Vector Philippines Hackathon',
+		alt: 'A student holding the ₱10,000 Zero Vector Ventures Studio prize cheque as Champion of the Zero Vector Philippines Hackathon'
+	},
+	{
 		src: 'https://cdn.theavenir.dev/images/Winners/agrikalinga.jpg',
 		photo: '/teaching-learning/area2/photo-agrikalinga.jpg',
 		width: 1403,

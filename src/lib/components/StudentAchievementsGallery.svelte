@@ -40,7 +40,7 @@
 >
 	<div class="award_spread">
 		{#each studentAchievementPhotos as photo, index (photo.src)}
-			<figure class="award_item" class:award_feature={index < 2} class:award_champion={index === 0}>
+			<figure class="award_item" class:award_feature={index < 3} class:award_champion={index === 0}>
 				<button
 					class="award_media"
 					type="button"
@@ -277,10 +277,10 @@
 		max-width: 25ch;
 		padding-top: 8px;
 	}
-	.award_item:nth-child(4) {
+	.award_item:nth-child(5) {
 		padding-top: clamp(30px, 4vw, 76px);
 	}
-	.award_item:nth-child(5) {
+	.award_item:nth-child(6) {
 		padding-top: clamp(60px, 8vw, 152px);
 	}
 	.honors_index {
@@ -404,8 +404,8 @@
 		.award_feature:not(.award_champion) .award_media {
 			border-radius: 4px 4px 40px 4px;
 		}
-		.award_item:nth-child(4),
-		.award_item:nth-child(5) {
+		.award_item:nth-child(5),
+		.award_item:nth-child(6) {
 			padding-top: 0;
 		}
 		.award_team {

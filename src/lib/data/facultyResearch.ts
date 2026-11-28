@@ -115,6 +115,7 @@ export const facultyResearch: FacultyResearcher[] = [
 	},
 	{
 		name: 'Jonnifer Mandigma',
+		image: { src: '/research/faculty/mandigma.webp', focusX: '57%', focusY: '28%' },
 		records: [
 			{
 				year: 2024,
